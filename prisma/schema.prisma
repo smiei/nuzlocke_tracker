@@ -1,0 +1,95 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Player {
+  PLAYER1
+  PLAYER2
+}
+
+enum EncounterStatus {
+  CAUGHT
+  KILLED
+  FLED
+}
+
+enum LinkStatus {
+  ALIVE
+  DEAD
+}
+
+// A single playthrough. All Encounters/SoulLinks/LevelCapProgress are scoped
+// to one Run so multiple playthroughs can coexist in the same database.
+model Run {
+  id               Int                @id @default(autoincrement())
+  name             String
+  createdAt        DateTime           @default(now())
+  soulLinks        SoulLink[]
+  encounters       Encounter[]
+  levelCapProgress LevelCapProgress[]
+}
+
+// One SoulLink per (run, route), created once at least one player has a
+// CAUGHT encounter there. Holds 1 encounter (single catch, e.g. static) or 2
+// (both players caught) — "Tot" cascades LinkStatus to all its encounters.
+model SoulLink {
+  id         Int         @id @default(autoincrement())
+  runId      Int
+  routeId    Int
+  status     LinkStatus  @default(ALIVE)
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  run        Run         @relation(fields: [runId], references: [id], onDelete: Cascade)
+  encounters Encounter[]
+
+  @@unique([runId, routeId])
+}
+
+// One row per player per route encounter attempt. familyId is denormalized
+// from pokemon.json at write time so the Species Clause check is a single
+// indexed query instead of joining against the static JSON on every check.
+//
+// pokemonId is what was actually caught on the route and never changes after
+// the fact - the Tracker tab always shows this. currentPokemonId starts out
+// equal to it but is the only field evolve/revert touch, so evolving in the
+// Links tab never affects what the Tracker tab displays.
+model Encounter {
+  id               Int             @id @default(autoincrement())
+  runId            Int
+  routeId          Int
+  player           Player
+  pokemonId        Int
+  currentPokemonId Int
+  familyId         Int
+  status           EncounterStatus @default(CAUGHT)
+  isStatic         Boolean         @default(false)
+  soulLinkId       Int?
+  run              Run             @relation(fields: [runId], references: [id], onDelete: Cascade)
+  soulLink         SoulLink?       @relation(fields: [soulLinkId], references: [id], onDelete: SetNull)
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+
+  @@unique([runId, routeId, player])
+  @@index([runId, familyId])
+}
+
+// Per-run "have we beaten this trainer yet" toggle for a levelcaps.json entry.
+model LevelCapProgress {
+  id         Int      @id @default(autoincrement())
+  runId      Int
+  levelCapId Int
+  defeated   Boolean  @default(false)
+  updatedAt  DateTime @updatedAt
+  run        Run      @relation(fields: [runId], references: [id], onDelete: Cascade)
+
+  @@unique([runId, levelCapId])
+}

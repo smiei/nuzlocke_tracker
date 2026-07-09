@@ -1,0 +1,14 @@
+services:
+  nuzlocke-tracker:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - db-data:/app/db
+      - ./data:/app/data:ro
+    environment:
+      - DATABASE_URL=file:/app/db/nuzlocke.db
+    restart: unless-stopped
+
+volumes:
+  db-data:

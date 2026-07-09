@@ -1,0 +1,93 @@
+[
+  {
+    "id": 1,
+    "name": "Rocko",
+    "location": "Marmoria City",
+    "badge": "Felsorden",
+    "max_level": 14
+  },
+  {
+    "id": 2,
+    "name": "Misty",
+    "location": "Azuria City",
+    "badge": "Quellorden",
+    "max_level": 21
+  },
+  {
+    "id": 3,
+    "name": "Major Bob",
+    "location": "Orania City",
+    "badge": "Donnerorden",
+    "max_level": 24
+  },
+  {
+    "id": 4,
+    "name": "Erika",
+    "location": "Prismania City",
+    "badge": "Farborden",
+    "max_level": 29
+  },
+  {
+    "id": 5,
+    "name": "Koga",
+    "location": "Fuchsania City",
+    "badge": "Seelenorden",
+    "max_level": 43
+  },
+  {
+    "id": 6,
+    "name": "Sabrina",
+    "location": "Saffronia City",
+    "badge": "Sumpforden",
+    "max_level": 43
+  },
+  {
+    "id": 7,
+    "name": "Pyro",
+    "location": "Zinnoberinsel",
+    "badge": "Vulkanorden",
+    "max_level": 47
+  },
+  {
+    "id": 8,
+    "name": "Giovanni",
+    "location": "Vertania City",
+    "badge": "Erdorden",
+    "max_level": 50
+  },
+  {
+    "id": 9,
+    "name": "Lorelei",
+    "location": "Top 4",
+    "badge": null,
+    "max_level": 54
+  },
+  {
+    "id": 10,
+    "name": "Bruno",
+    "location": "Top 4",
+    "badge": null,
+    "max_level": 56
+  },
+  {
+    "id": 11,
+    "name": "Agathe",
+    "location": "Top 4",
+    "badge": null,
+    "max_level": 58
+  },
+  {
+    "id": 12,
+    "name": "Siegfried",
+    "location": "Top 4",
+    "badge": null,
+    "max_level": 60
+  },
+  {
+    "id": 13,
+    "name": "Champ",
+    "location": "Top 4",
+    "badge": null,
+    "max_level": 63
+  }
+]
