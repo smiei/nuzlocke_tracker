@@ -1,0 +1,135 @@
+"use client";
+
+import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import ReactMarkdown from "react-markdown";
+import { saveRules } from "@/lib/actions";
+import { formatActionError } from "@/lib/actionErrors";
+import { useDialog } from "@/components/DialogProvider";
+import type { Lang } from "@/lib/i18n/dictionary";
+import { translations } from "@/lib/i18n/dictionary";
+
+// react-markdown emits bare elements and Tailwind's preflight strips all
+// default styles, so every rendered element gets its look via this mapping.
+const markdownComponents = {
+  h1: (props: React.ComponentProps<"h1">) => (
+    <h1 className="mb-3 mt-6 text-2xl font-bold first:mt-0" {...props} />
+  ),
+  h2: (props: React.ComponentProps<"h2">) => (
+    <h2
+      className="mb-2 mt-6 border-b border-zinc-200 pb-1 text-xl font-semibold first:mt-0 dark:border-zinc-800"
+      {...props}
+    />
+  ),
+  h3: (props: React.ComponentProps<"h3">) => (
+    <h3 className="mb-2 mt-4 text-lg font-semibold first:mt-0" {...props} />
+  ),
+  p: (props: React.ComponentProps<"p">) => <p className="my-2 leading-relaxed" {...props} />,
+  ul: (props: React.ComponentProps<"ul">) => (
+    <ul className="my-2 list-disc space-y-1 pl-6" {...props} />
+  ),
+  ol: (props: React.ComponentProps<"ol">) => (
+    <ol className="my-2 list-decimal space-y-1 pl-6" {...props} />
+  ),
+  li: (props: React.ComponentProps<"li">) => <li className="leading-relaxed" {...props} />,
+  code: (props: React.ComponentProps<"code">) => (
+    <code
+      className="rounded bg-zinc-100 px-1 py-0.5 text-sm dark:bg-zinc-800"
+      {...props}
+    />
+  ),
+  blockquote: (props: React.ComponentProps<"blockquote">) => (
+    <blockquote
+      className="my-2 border-l-4 border-zinc-300 pl-3 italic text-zinc-500 dark:border-zinc-700 dark:text-zinc-400"
+      {...props}
+    />
+  ),
+  a: (props: React.ComponentProps<"a">) => (
+    <a className="underline underline-offset-2" {...props} />
+  ),
+  hr: () => <hr className="my-4 border-zinc-200 dark:border-zinc-800" />,
+};
+
+export function RulesView({
+  runId,
+  lang,
+  markdown,
+}: {
+  runId: number;
+  lang: Lang;
+  markdown: string;
+}) {
+  const router = useRouter();
+  const { alert } = useDialog();
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState(markdown);
+  const [pending, startTransition] = useTransition();
+  const t = translations[lang].rules;
+
+  function handleEdit() {
+    setDraft(markdown);
+    setEditing(true);
+  }
+
+  function handleSave() {
+    startTransition(async () => {
+      const result = await saveRules(runId, draft);
+      if (result.success) {
+        setEditing(false);
+        router.refresh();
+      } else {
+        await alert({ message: formatActionError(result.error, lang) });
+      }
+    });
+  }
+
+  return (
+    <div>
+      <div className="mb-4 flex items-center justify-between gap-2">
+        <h2 className="text-xl font-semibold">{t.heading}</h2>
+        {editing ? (
+          <div className="flex gap-2">
+            <button
+              type="button"
+              disabled={pending}
+              onClick={() => setEditing(false)}
+              className="rounded-md border border-zinc-300 px-3 py-1.5 text-sm font-medium text-zinc-600 transition-colors hover:bg-zinc-50 disabled:opacity-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+            >
+              {t.cancel}
+            </button>
+            <button
+              type="button"
+              disabled={pending}
+              onClick={handleSave}
+              className="rounded-md bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-zinc-700 disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200"
+            >
+              {t.save}
+            </button>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={handleEdit}
+            className="rounded-md border border-zinc-200 px-3 py-1.5 text-sm font-medium text-zinc-600 transition-colors hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+          >
+            {t.edit}
+          </button>
+        )}
+      </div>
+
+      {editing ? (
+        <textarea
+          value={draft}
+          disabled={pending}
+          onChange={(e) => setDraft(e.target.value)}
+          spellCheck={false}
+          className="h-[32rem] w-full rounded-lg border border-zinc-300 bg-white p-3 font-mono text-sm outline-none focus:border-zinc-500 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-950 dark:focus:border-zinc-400"
+        />
+      ) : (
+        <div className="max-w-3xl rounded-lg border border-zinc-200 p-5 dark:border-zinc-800">
+          <ReactMarkdown components={markdownComponents}>{markdown}</ReactMarkdown>
+        </div>
+      )}
+    </div>
+  );
+}

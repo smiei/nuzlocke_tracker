@@ -3,14 +3,19 @@
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { evolveEncounter, revertEvolution } from "@/lib/actions";
+import { formatActionError } from "@/lib/actionErrors";
+import type { Lang } from "@/lib/i18n/dictionary";
+import { translations } from "@/lib/i18n/dictionary";
 import { PokemonSprite } from "@/components/PokemonSprite";
 
 export function EvolveButton({
   runId,
+  lang,
   encounterId,
   targets,
 }: {
   runId: number;
+  lang: Lang;
   encounterId: number;
   targets: { id: number; name: string }[];
 }) {
@@ -19,6 +24,7 @@ export function EvolveButton({
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const containerRef = useRef<HTMLDivElement>(null);
+  const t = translations[lang].links;
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -40,7 +46,7 @@ export function EvolveButton({
         setOpen(false);
         router.refresh();
       } else {
-        setError(result.error);
+        setError(formatActionError(result.error, lang));
       }
     });
   }
@@ -53,19 +59,19 @@ export function EvolveButton({
         onClick={() => setOpen((o) => !o)}
         className="rounded border border-zinc-300 px-2 py-1 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-50 disabled:opacity-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
       >
-        Entwickeln
+        {t.evolve}
       </button>
       {open && (
         <ul className="absolute z-10 mt-1 min-w-[160px] overflow-hidden rounded-md border border-zinc-200 bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
-          {targets.map((t) => (
-            <li key={t.id}>
+          {targets.map((target) => (
+            <li key={target.id}>
               <button
                 type="button"
-                onClick={() => handlePick(t.id)}
+                onClick={() => handlePick(target.id)}
                 className="flex w-full items-center gap-2 px-2 py-1.5 text-left text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800"
               >
-                <PokemonSprite pokemonId={t.id} name={t.name} size="sm" />
-                <span>{t.name}</span>
+                <PokemonSprite pokemonId={target.id} name={target.name} size="sm" />
+                <span>{target.name}</span>
               </button>
             </li>
           ))}
@@ -76,10 +82,19 @@ export function EvolveButton({
   );
 }
 
-export function RevertButton({ runId, encounterId }: { runId: number; encounterId: number }) {
+export function RevertButton({
+  runId,
+  lang,
+  encounterId,
+}: {
+  runId: number;
+  lang: Lang;
+  encounterId: number;
+}) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+  const t = translations[lang].links;
 
   function handleClick() {
     setError(null);
@@ -88,7 +103,7 @@ export function RevertButton({ runId, encounterId }: { runId: number; encounterI
       if (result.success) {
         router.refresh();
       } else {
-        setError(result.error);
+        setError(formatActionError(result.error, lang));
       }
     });
   }
@@ -101,7 +116,7 @@ export function RevertButton({ runId, encounterId }: { runId: number; encounterI
         onClick={handleClick}
         className="rounded border border-zinc-300 px-2 py-1 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-50 disabled:opacity-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
       >
-        Zurückentwickeln
+        {t.revert}
       </button>
       {error && <p className="mt-1 text-xs text-red-500 dark:text-red-400">{error}</p>}
     </div>

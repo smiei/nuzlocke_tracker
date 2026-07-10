@@ -2,57 +2,63 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Pokemon } from "@/lib/data";
+import type { Lang } from "@/lib/i18n/dictionary";
+import { translations } from "@/lib/i18n/dictionary";
+import { pokemonName } from "@/lib/i18n/localize";
 import { PokemonSprite } from "@/components/PokemonSprite";
 
 export function PokemonCombobox({
+  lang,
   pokemonList,
   selectedId,
   onSelect,
   lockedFamilyIds,
   disabled,
 }: {
+  lang: Lang;
   pokemonList: Pokemon[];
   selectedId: number | null;
   onSelect: (pokemonId: number) => void;
   lockedFamilyIds: Set<number>;
   disabled?: boolean;
 }) {
+  const t = translations[lang].tracker;
   const selected = pokemonList.find((p) => p.id === selectedId) ?? null;
-  const [query, setQuery] = useState(selected?.name_de ?? "");
+  const [query, setQuery] = useState(selected ? pokemonName(selected, lang) : "");
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Keep the input text in sync when the selection changes from the outside
   // (e.g. an optimistic update gets reverted after a failed save).
   useEffect(() => {
-    setQuery(selected?.name_de ?? "");
+    setQuery(selected ? pokemonName(selected, lang) : "");
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedId]);
+  }, [selectedId, lang]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
         setOpen(false);
-        setQuery(selected?.name_de ?? "");
+        setQuery(selected ? pokemonName(selected, lang) : "");
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selected?.name_de]);
+  }, [selected, lang]);
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
     const filtered = q
-      ? pokemonList.filter((p) => p.name_de.toLowerCase().includes(q))
+      ? pokemonList.filter((p) => pokemonName(p, lang).toLowerCase().includes(q))
       : pokemonList;
     // Capped low to avoid firing off a burst of sprite requests just from
     // opening the dropdown (searching narrows this further anyway).
     return filtered.slice(0, 15);
-  }, [pokemonList, query]);
+  }, [pokemonList, query, lang]);
 
   function handlePick(p: Pokemon) {
-    setQuery(p.name_de);
+    setQuery(pokemonName(p, lang));
     setOpen(false);
     onSelect(p.id);
   }
@@ -60,7 +66,9 @@ export function PokemonCombobox({
   return (
     <div ref={containerRef} className="relative">
       <div className="flex items-center gap-1.5 rounded-md border border-zinc-300 bg-white pl-1.5 pr-2 focus-within:border-zinc-500 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-900 dark:focus-within:border-zinc-400">
-        {selected && <PokemonSprite pokemonId={selected.id} name={selected.name_de} size="sm" />}
+        {selected && (
+          <PokemonSprite pokemonId={selected.id} name={pokemonName(selected, lang)} size="sm" />
+        )}
         <input
           type="text"
           value={query}
@@ -73,20 +81,21 @@ export function PokemonCombobox({
           onKeyDown={(e) => {
             if (e.key === "Escape") {
               setOpen(false);
-              setQuery(selected?.name_de ?? "");
+              setQuery(selected ? pokemonName(selected, lang) : "");
             }
           }}
-          placeholder="Pokémon suchen..."
+          placeholder={t.searchPlaceholder}
           className="w-full bg-transparent py-1.5 text-sm outline-none"
         />
       </div>
       {open && !disabled && (
         <ul className="absolute z-10 mt-1 max-h-64 w-full min-w-[220px] overflow-y-auto rounded-md border border-zinc-200 bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
           {results.length === 0 && (
-            <li className="px-3 py-2 text-sm text-zinc-400">Keine Treffer</li>
+            <li className="px-3 py-2 text-sm text-zinc-400">{t.noResults}</li>
           )}
           {results.map((p) => {
             const locked = lockedFamilyIds.has(p.family_id);
+            const name = pokemonName(p, lang);
             return (
               <li key={p.id}>
                 <button
@@ -96,10 +105,10 @@ export function PokemonCombobox({
                     p.id === selectedId ? "bg-zinc-100 dark:bg-zinc-800" : ""
                   }`}
                 >
-                  <PokemonSprite pokemonId={p.id} name={p.name_de} size="sm" />
-                  <span className="flex-1">{p.name_de}</span>
+                  <PokemonSprite pokemonId={p.id} name={name} size="sm" />
+                  <span className="flex-1">{name}</span>
                   {locked && (
-                    <span className="ml-2 text-xs text-red-500 dark:text-red-400">gesperrt</span>
+                    <span className="ml-2 text-xs text-red-500 dark:text-red-400">{t.locked}</span>
                   )}
                 </button>
               </li>

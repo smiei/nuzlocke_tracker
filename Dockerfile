@@ -32,6 +32,10 @@ RUN npm ci --omit=dev
 
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next
+# Static reference data (routes/pokemon/levelcaps/evolutions/effectiveness).
+# Baked into the image so the app runs standalone; can still be overridden by
+# bind-mounting a host directory over /app/data (e.g. via docker-compose).
+COPY --from=builder /app/data ./data
 # The generated Prisma client (incl. the native query engine binary for this
 # platform) lives outside node_modules; Next's build doesn't bundle it, so it
 # must be copied explicitly or the client can't find its query engine.
@@ -43,11 +47,8 @@ COPY docker-entrypoint.sh ./
 RUN chmod +x docker-entrypoint.sh
 
 RUN addgroup --system --gid 1001 nodejs \
-  && adduser --system --uid 1001 nextjs \
-  && mkdir -p /app/db \
-  && chown -R nextjs:nodejs /app
+  && adduser --system --uid 1001 nextjs
 
-USER nextjs
 EXPOSE 3000
 ENV PORT=3000
 ENTRYPOINT ["./docker-entrypoint.sh"]

@@ -27,11 +27,23 @@ enum LinkStatus {
   DEAD
 }
 
+// SOULLINK = two players catching in parallel (original mode). CLASSIC =
+// solo play - only ever one Encounter (Player.PLAYER1) per route. Fixed at
+// Run creation, never changed afterwards.
+enum RunMode {
+  SOULLINK
+  CLASSIC
+}
+
 // A single playthrough. All Encounters/SoulLinks/LevelCapProgress are scoped
 // to one Run so multiple playthroughs can coexist in the same database.
 model Run {
   id               Int                @id @default(autoincrement())
   name             String
+  mode             RunMode            @default(SOULLINK)
+  // Raw markdown shown on the Rules tab. Copied from the most recent run on
+  // creation (falling back to the built-in default ruleset in code).
+  rulesMarkdown    String             @default("")
   createdAt        DateTime           @default(now())
   soulLinks        SoulLink[]
   encounters       Encounter[]
@@ -46,12 +58,16 @@ model SoulLink {
   runId      Int
   routeId    Int
   status     LinkStatus  @default(ALIVE)
+  // 0-5 when this link occupies a slot of the run's 6-slot team, else null.
+  // Unique per run so a slot holds at most one link (and a link one slot).
+  teamPosition Int?
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
   run        Run         @relation(fields: [runId], references: [id], onDelete: Cascade)
   encounters Encounter[]
 
   @@unique([runId, routeId])
+  @@unique([runId, teamPosition])
 }
 
 // One row per player per route encounter attempt. familyId is denormalized

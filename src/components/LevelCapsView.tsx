@@ -3,6 +3,9 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { LevelCap } from "@/lib/data";
+import type { Lang } from "@/lib/i18n/dictionary";
+import { translations } from "@/lib/i18n/dictionary";
+import { levelCapName, levelCapLocation, levelCapBadge } from "@/lib/i18n/localize";
 import { TrainerSprite } from "@/components/TrainerSprite";
 import { toggleLevelCapDefeated } from "@/lib/actions";
 
@@ -10,12 +13,15 @@ type LevelCapWithProgress = LevelCap & { defeated: boolean };
 
 export function LevelCapsView({
   runId,
+  lang,
   levelCaps,
 }: {
   runId: number;
+  lang: Lang;
   levelCaps: LevelCapWithProgress[];
 }) {
   const router = useRouter();
+  const t = translations[lang].levelcaps;
   const [overrides, setOverrides] = useState<Record<number, boolean>>({});
   const [pendingId, setPendingId] = useState<number | null>(null);
   const [, startTransition] = useTransition();
@@ -40,6 +46,9 @@ export function LevelCapsView({
     <div className="flex flex-col divide-y divide-zinc-200 rounded-md border border-zinc-200 dark:divide-zinc-800 dark:border-zinc-800">
       {levelCaps.map((cap) => {
         const defeated = overrides[cap.id] ?? cap.defeated;
+        const name = levelCapName(cap, lang);
+        const location = levelCapLocation(cap, lang);
+        const badge = levelCapBadge(cap, lang);
         return (
           <button
             key={cap.id}
@@ -52,23 +61,23 @@ export function LevelCapsView({
                 : "hover:bg-zinc-50 dark:hover:bg-zinc-900"
             }`}
           >
-            <TrainerSprite name={cap.name} size={88} />
+            <TrainerSprite canonicalName={cap.name} displayName={name} size={88} />
             <div className="min-w-0 flex-1">
               <div
                 className={`truncate font-medium ${
                   defeated ? "text-zinc-400 line-through dark:text-zinc-600" : ""
                 }`}
               >
-                {cap.name}
+                {name}
               </div>
               <div className="truncate text-xs text-zinc-500 dark:text-zinc-400">
-                {cap.location}
-                {cap.badge ? ` · ${cap.badge}` : ""}
+                {location}
+                {badge ? ` · ${badge}` : ""}
               </div>
             </div>
             <div className="shrink-0 text-right">
               <div className="text-lg font-semibold tabular-nums">{cap.max_level}</div>
-              <div className="text-xs text-zinc-400 dark:text-zinc-500">Max. Level</div>
+              <div className="text-xs text-zinc-400 dark:text-zinc-500">{t.maxLevel}</div>
             </div>
           </button>
         );

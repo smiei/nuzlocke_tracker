@@ -3,12 +3,15 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Pokemon } from "@/lib/data";
 import { computePokemonRanks } from "@/lib/ranking";
+import { useLanguage } from "@/lib/i18n/LanguageProvider";
+import { translations } from "@/lib/i18n/dictionary";
+import { pokemonName } from "@/lib/i18n/localize";
 import { TypeBadge } from "@/components/TypeBadge";
 import { PokemonSprite } from "@/components/PokemonSprite";
 
 type ColumnKey =
   | "id"
-  | "name_de"
+  | "name"
   | "types"
   | "KP"
   | "Ang."
@@ -19,30 +22,17 @@ type ColumnKey =
   | "rang"
   | "Summe";
 
-const COLUMNS: { key: ColumnKey; label: string; align?: "right"; hideClass?: string }[] = [
-  { key: "id", label: "ID", hideClass: "hidden md:table-cell" },
-  { key: "name_de", label: "Name" },
-  { key: "types", label: "Typen", hideClass: "hidden sm:table-cell" },
-  { key: "KP", label: "KP", align: "right", hideClass: "hidden md:table-cell" },
-  { key: "Ang.", label: "Ang.", align: "right", hideClass: "hidden lg:table-cell" },
-  { key: "Vert.", label: "Vert.", align: "right", hideClass: "hidden lg:table-cell" },
-  { key: "Sp.-A.", label: "Sp.-A.", align: "right", hideClass: "hidden lg:table-cell" },
-  { key: "Sp.-V.", label: "Sp.-V.", align: "right", hideClass: "hidden lg:table-cell" },
-  { key: "Init.", label: "Init.", align: "right", hideClass: "hidden md:table-cell" },
-  { key: "rang", label: "Rang", align: "right" },
-  { key: "Summe", label: "Summe", align: "right" },
-];
-
 function getSortValue(
   pokemon: Pokemon,
   key: ColumnKey,
   ranks: Map<number, number>,
+  lang: "de" | "en",
 ): number | string {
   switch (key) {
     case "id":
       return pokemon.id;
-    case "name_de":
-      return pokemon.name_de;
+    case "name":
+      return pokemonName(pokemon, lang);
     case "types":
       return pokemon.types.join(", ");
     case "rang":
@@ -53,6 +43,24 @@ function getSortValue(
 }
 
 export function PokedexTable({ pokemon }: { pokemon: Pokemon[] }) {
+  const { lang } = useLanguage();
+  const t = translations[lang].pokedex;
+  const columns = t.columns;
+
+  const COLUMNS: { key: ColumnKey; label: string; align?: "right"; hideClass?: string }[] = [
+    { key: "id", label: columns.id, hideClass: "hidden md:table-cell" },
+    { key: "name", label: columns.name },
+    { key: "types", label: columns.types, hideClass: "hidden sm:table-cell" },
+    { key: "KP", label: columns.kp, align: "right", hideClass: "hidden md:table-cell" },
+    { key: "Ang.", label: columns.ang, align: "right", hideClass: "hidden lg:table-cell" },
+    { key: "Vert.", label: columns.vert, align: "right", hideClass: "hidden lg:table-cell" },
+    { key: "Sp.-A.", label: columns.spA, align: "right", hideClass: "hidden lg:table-cell" },
+    { key: "Sp.-V.", label: columns.spV, align: "right", hideClass: "hidden lg:table-cell" },
+    { key: "Init.", label: columns.init, align: "right", hideClass: "hidden md:table-cell" },
+    { key: "rang", label: columns.rang, align: "right" },
+    { key: "Summe", label: columns.summe, align: "right" },
+  ];
+
   const [sortKey, setSortKey] = useState<ColumnKey>("id");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
   const [search, setSearch] = useState("");
@@ -84,25 +92,25 @@ export function PokedexTable({ pokemon }: { pokemon: Pokemon[] }) {
   const sorted = useMemo(() => {
     const copy = [...pokemon];
     copy.sort((a, b) => {
-      const va = getSortValue(a, sortKey, ranks);
-      const vb = getSortValue(b, sortKey, ranks);
+      const va = getSortValue(a, sortKey, ranks, lang);
+      const vb = getSortValue(b, sortKey, ranks, lang);
       const cmp =
         typeof va === "number" && typeof vb === "number"
           ? va - vb
-          : String(va).localeCompare(String(vb), "de");
+          : String(va).localeCompare(String(vb), lang);
       return sortDir === "asc" ? cmp : -cmp;
     });
     return copy;
-  }, [pokemon, sortKey, sortDir, ranks]);
+  }, [pokemon, sortKey, sortDir, ranks, lang]);
 
   const query = search.trim().toLowerCase();
   const suggestions = useMemo(() => {
     if (!query) return [];
-    return pokemon.filter((p) => p.name_de.toLowerCase().includes(query)).slice(0, 8);
-  }, [pokemon, query]);
+    return pokemon.filter((p) => pokemonName(p, lang).toLowerCase().includes(query)).slice(0, 8);
+  }, [pokemon, query, lang]);
 
   function handlePickSuggestion(p: Pokemon) {
-    setSearch(p.name_de);
+    setSearch(pokemonName(p, lang));
     setSuggestionsOpen(false);
     setSelectedId(p.id);
     document
@@ -122,7 +130,7 @@ export function PokedexTable({ pokemon }: { pokemon: Pokemon[] }) {
             setSelectedId(null);
           }}
           onFocus={() => setSuggestionsOpen(true)}
-          placeholder="Pokémon suchen..."
+          placeholder={t.searchPlaceholder}
           className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:focus:border-zinc-400"
         />
         {suggestionsOpen && suggestions.length > 0 && (
@@ -134,8 +142,8 @@ export function PokedexTable({ pokemon }: { pokemon: Pokemon[] }) {
                   onClick={() => handlePickSuggestion(p)}
                   className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800"
                 >
-                  <PokemonSprite pokemonId={p.id} name={p.name_de} size="sm" />
-                  <span>{p.name_de}</span>
+                  <PokemonSprite pokemonId={p.id} name={pokemonName(p, lang)} size="sm" />
+                  <span>{pokemonName(p, lang)}</span>
                 </button>
               </li>
             ))}
@@ -170,7 +178,8 @@ export function PokedexTable({ pokemon }: { pokemon: Pokemon[] }) {
           </thead>
           <tbody>
             {sorted.map((p) => {
-              const isMatch = query.length > 0 && p.name_de.toLowerCase().includes(query);
+              const name = pokemonName(p, lang);
+              const isMatch = query.length > 0 && name.toLowerCase().includes(query);
               const isSelected = p.id === selectedId;
               return (
                 <tr
@@ -185,16 +194,16 @@ export function PokedexTable({ pokemon }: { pokemon: Pokemon[] }) {
                   }`}
                 >
                   <td className="px-2 py-2">
-                    <PokemonSprite pokemonId={p.id} name={p.name_de} size="sm" />
+                    <PokemonSprite pokemonId={p.id} name={name} size="sm" />
                   </td>
                   <td className="px-3 py-2 text-zinc-500 dark:text-zinc-400 hidden md:table-cell">
                     {p.id}
                   </td>
-                  <td className="px-3 py-2 font-medium">{p.name_de}</td>
+                  <td className="px-3 py-2 font-medium">{name}</td>
                   <td className="px-3 py-2 hidden sm:table-cell">
                     <div className="flex flex-wrap gap-1">
-                      {p.types.map((t) => (
-                        <TypeBadge key={t} type={t} />
+                      {p.types.map((type) => (
+                        <TypeBadge key={type} type={type} lang={lang} />
                       ))}
                     </div>
                   </td>

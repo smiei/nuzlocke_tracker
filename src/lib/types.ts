@@ -1,10 +1,17 @@
-import type { EncounterStatus, LinkStatus, Player } from "@/generated/prisma/client";
+import type { EncounterStatus, LinkStatus, Player, RunMode } from "@/generated/prisma/client";
+
+export type RunSummary = {
+  id: number;
+  name: string;
+  mode: RunMode;
+};
 
 export type SoulLinkView = {
   id: number;
   routeId: number;
   routeName: string;
   status: LinkStatus;
+  teamPosition: number | null;
   encounters: {
     id: number;
     player: Player;
@@ -19,3 +26,5 @@ export type SoulLinkView = {
     evolvesFrom: { id: number; name: string } | null;
   }[];
 };
+
+export type EncounterView = SoulLinkView["encounters"][number];

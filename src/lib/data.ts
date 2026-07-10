@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import type { EffectivenessTable } from "@/lib/effectiveness";
 
 // Static reference data lives in /data as JSON, not in the DB (see project spec).
 // Read fresh from disk on every call (no in-memory caching) so the bind-mounted
@@ -9,6 +10,7 @@ const DATA_DIR = path.join(process.cwd(), "data");
 export type Route = {
   id: number;
   name: string;
+  name_en: string;
 };
 
 export type PokemonStats = {
@@ -33,8 +35,11 @@ export type Pokemon = {
 export type LevelCap = {
   id: number;
   name: string;
+  name_en: string;
   location: string;
+  location_en: string;
   badge: string | null;
+  badge_en: string | null;
   max_level: number;
 };
 
@@ -75,4 +80,19 @@ export function getEvolutions(): EvolutionEntry[] {
 
 export function getEvolutionById(pokemonId: number): EvolutionEntry | undefined {
   return getEvolutions().find((entry) => entry.id === pokemonId);
+}
+
+export function getEffectiveness(): EffectivenessTable {
+  return readJson<EffectivenessTable>("effectiveness.json");
+}
+
+export type CatchRateEntry = {
+  id: number;
+  catch_rate: number;
+};
+
+// Base capture rates (1-255), fetched once from PokeAPI via
+// scripts/download-catchrates.mjs so the Catchrate tab works offline.
+export function getCatchRates(): CatchRateEntry[] {
+  return readJson<CatchRateEntry[]>("catchrates.json");
 }

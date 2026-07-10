@@ -8,9 +8,22 @@ import { slugify } from "@/lib/slug";
 // PokeAPI sprite repo. This reads from /public/trainers/<slug>.png instead;
 // if that file isn't there, it quietly falls back to an initial-letter badge
 // rather than a broken image icon.
-export function TrainerSprite({ name, size = 40 }: { name: string; size?: number }) {
+//
+// canonicalName (always the original German name) drives the file lookup -
+// the user's sprite files are named by German slugs (rocko.png, not
+// brock.png) - while displayName is whatever language the UI is currently
+// showing, used only for the alt text / fallback initial.
+export function TrainerSprite({
+  canonicalName,
+  displayName,
+  size = 40,
+}: {
+  canonicalName: string;
+  displayName: string;
+  size?: number;
+}) {
   const [errored, setErrored] = useState(false);
-  const slug = slugify(name);
+  const slug = slugify(canonicalName);
 
   if (errored) {
     return (
@@ -18,7 +31,7 @@ export function TrainerSprite({ name, size = 40 }: { name: string; size?: number
         style={{ width: size, height: size }}
         className="flex shrink-0 items-center justify-center rounded-full bg-zinc-100 text-sm font-medium text-zinc-400 dark:bg-zinc-800 dark:text-zinc-600"
       >
-        {name.charAt(0).toUpperCase()}
+        {displayName.charAt(0).toUpperCase()}
       </div>
     );
   }
@@ -27,7 +40,7 @@ export function TrainerSprite({ name, size = 40 }: { name: string; size?: number
     // eslint-disable-next-line @next/next/no-img-element
     <img
       src={`/trainers/${slug}.png`}
-      alt={name}
+      alt={displayName}
       width={size}
       height={size}
       loading="lazy"

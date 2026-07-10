@@ -1,34 +1,66 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { SoulLinkView } from "@/lib/types";
-import { LinkStatus } from "@/generated/prisma/enums";
+import { LinkStatus, RunMode } from "@/generated/prisma/enums";
 import { markDead, markAlive } from "@/lib/actions";
-import { TypeBadge } from "@/components/TypeBadge";
-import { PokemonSprite } from "@/components/PokemonSprite";
+import { formatActionError } from "@/lib/actionErrors";
+import { useDialog } from "@/components/DialogProvider";
+import type { Lang } from "@/lib/i18n/dictionary";
+import { translations } from "@/lib/i18n/dictionary";
+import { AddToTeamButton } from "@/components/AddToTeamButton";
+import { EncounterTile } from "@/components/EncounterTile";
 import { EvolveButton, RevertButton } from "@/components/EvolveControls";
+import { TeamBar } from "@/components/TeamBar";
 
-const STATUS_LABELS_DE: Record<string, string> = {
-  CAUGHT: "Gefangen",
-  KILLED: "Getötet",
-  FLED: "Geflohen",
-};
+const SORT_STORAGE_KEY = "nuzlocke:linksSortBySumme";
 
-const PLAYER_LABELS: Record<string, string> = {
-  PLAYER1: "Spieler 1",
-  PLAYER2: "Spieler 2",
-};
-
-export function LinksView({ runId, soulLinks }: { runId: number; soulLinks: SoulLinkView[] }) {
+export function LinksView({
+  runId,
+  mode,
+  lang,
+  soulLinks,
+}: {
+  runId: number;
+  mode: RunMode;
+  lang: Lang;
+  soulLinks: SoulLinkView[];
+}) {
   const router = useRouter();
+  const { alert } = useDialog();
   const [pendingId, setPendingId] = useState<number | null>(null);
   const [, startTransition] = useTransition();
+  const [sortBySumme, setSortBySumme] = useState(false);
+  const t = translations[lang];
+  const isClassic = mode === RunMode.CLASSIC;
+
+  useEffect(() => {
+    setSortBySumme(localStorage.getItem(SORT_STORAGE_KEY) === "true");
+  }, []);
+
+  function handleSortChange(value: boolean) {
+    setSortBySumme(value);
+    localStorage.setItem(SORT_STORAGE_KEY, String(value));
+  }
+
+  function totalSumme(link: SoulLinkView) {
+    return link.encounters.reduce((sum, e) => sum + e.summe, 0);
+  }
+
+  const teamLinks = soulLinks.filter(
+    (l) => l.teamPosition !== null && l.status !== LinkStatus.DEAD,
+  );
+
+  const sortedLinks = sortBySumme
+    ? [...soulLinks].sort((a, b) => totalSumme(b) - totalSumme(a))
+    : soulLinks;
 
   function handleMarkDead(id: number) {
     setPendingId(id);
     startTransition(async () => {
-      await markDead(runId, id);
+      const result = await markDead(runId, id);
+      if (!result.success) await alert({ message: formatActionError(result.error, lang) });
       router.refresh();
       setPendingId(null);
     });
@@ -37,7 +69,8 @@ export function LinksView({ runId, soulLinks }: { runId: number; soulLinks: Soul
   function handleMarkAlive(id: number) {
     setPendingId(id);
     startTransition(async () => {
-      await markAlive(runId, id);
+      const result = await markAlive(runId, id);
+      if (!result.success) await alert({ message: formatActionError(result.error, lang) });
       router.refresh();
       setPendingId(null);
     });
@@ -46,90 +79,113 @@ export function LinksView({ runId, soulLinks }: { runId: number; soulLinks: Soul
   if (soulLinks.length === 0) {
     return (
       <p className="text-zinc-500 dark:text-zinc-400">
-        Noch keine SoulLinks – fange im Tracker-Tab dein erstes Pokémon.
+        {isClassic ? t.links.emptyClassic : t.links.emptySoullink}
       </p>
     );
   }
 
   return (
-    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-      {soulLinks.map((link) => {
-        const isDead = link.status === LinkStatus.DEAD;
-        const paired = link.encounters.length > 1;
-        return (
-          <div
-            key={link.id}
-            className={`rounded-lg border p-4 ${
-              isDead
-                ? "border-red-200 bg-red-50/50 opacity-60 dark:border-red-900/50 dark:bg-red-950/20"
-                : "border-zinc-200 dark:border-zinc-800"
-            }`}
-          >
-            <div className="mb-3 flex items-center justify-between gap-2">
-              <h3 className="font-medium">{link.routeName}</h3>
-              {isDead ? (
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-semibold text-red-500 dark:text-red-400">
-                    Tot
-                  </span>
-                  <button
-                    type="button"
-                    disabled={pendingId === link.id}
-                    onClick={() => handleMarkAlive(link.id)}
-                    className="rounded border border-zinc-300 px-2 py-1 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-50 disabled:opacity-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
-                  >
-                    Wiederbeleben
-                  </button>
-                </div>
-              ) : (
-                <button
-                  type="button"
-                  disabled={pendingId === link.id}
-                  onClick={() => handleMarkDead(link.id)}
-                  className="rounded border border-red-300 px-2 py-1 text-xs font-medium text-red-600 transition-colors hover:bg-red-50 disabled:opacity-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950/40"
-                >
-                  Als tot markieren
-                </button>
-              )}
-            </div>
-            <div className={paired ? "grid grid-cols-2 gap-3" : "flex justify-center"}>
-              {link.encounters.map((e) => (
-                <div
-                  key={e.id}
-                  className="flex w-full max-w-[160px] flex-col items-center gap-1 text-center"
-                >
-                  <PokemonSprite pokemonId={e.pokemonId} name={e.pokemonName} size="xl" />
-                  <span
-                    className={`font-medium ${
-                      isDead ? "text-zinc-400 line-through dark:text-zinc-600" : ""
-                    }`}
-                  >
-                    {e.pokemonName}
-                  </span>
-                  <div className="flex flex-wrap justify-center gap-1">
-                    {e.types.map((t) => (
-                      <TypeBadge key={t} type={t} />
-                    ))}
+    <div>
+      <TeamBar runId={runId} mode={mode} lang={lang} links={soulLinks} />
+      <div className="mb-3 flex items-center gap-2">
+        <label
+          htmlFor="links-sort"
+          className="text-sm font-medium text-zinc-500 dark:text-zinc-400"
+        >
+          {t.links.sortLabel}
+        </label>
+        <select
+          id="links-sort"
+          value={sortBySumme ? "summe" : "default"}
+          onChange={(e) => handleSortChange(e.target.value === "summe")}
+          className="rounded-md border border-zinc-200 bg-white px-2 py-1.5 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+        >
+          <option value="default">{t.links.sortDefault}</option>
+          <option value="summe">{t.links.sortSumme}</option>
+        </select>
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        {sortedLinks.map((link) => {
+          const isDead = link.status === LinkStatus.DEAD;
+          const onTeam = link.teamPosition !== null;
+          const paired = link.encounters.length > 1;
+          return (
+            <div
+              key={link.id}
+              className={`rounded-lg border p-4 ${
+                isDead
+                  ? "border-red-200 bg-red-50/50 opacity-60 dark:border-red-900/50 dark:bg-red-950/20"
+                  : onTeam
+                    ? "border-emerald-400 bg-emerald-50/40 dark:border-emerald-700 dark:bg-emerald-950/20"
+                    : "border-zinc-200 dark:border-zinc-800"
+              }`}
+            >
+              <div className="mb-3 flex items-center justify-between gap-2">
+                <h3 className="font-medium">{link.routeName}</h3>
+                {isDead ? (
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-semibold text-red-500 dark:text-red-400">
+                      {t.links.dead}
+                    </span>
+                    <button
+                      type="button"
+                      disabled={pendingId === link.id}
+                      onClick={() => handleMarkAlive(link.id)}
+                      className="rounded border border-zinc-300 px-2 py-1 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-50 disabled:opacity-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                    >
+                      {t.links.revive}
+                    </button>
                   </div>
-                  <span className="text-xs text-zinc-400 dark:text-zinc-500">
-                    {PLAYER_LABELS[e.player]} · {STATUS_LABELS_DE[e.status]}
-                    {e.isStatic ? " · statisch" : ""}
-                  </span>
-                  <span className="text-xs text-zinc-400 dark:text-zinc-500">
-                    Rang #{e.rang} · Summe {e.summe}
-                  </span>
-                  {!isDead && (
-                    <div className="mt-1 flex flex-wrap justify-center gap-1.5">
-                      <EvolveButton runId={runId} encounterId={e.id} targets={e.evolvesTo} />
-                      {e.evolvesFrom && <RevertButton runId={runId} encounterId={e.id} />}
-                    </div>
-                  )}
-                </div>
-              ))}
+                ) : (
+                  <div className="flex items-center gap-1.5">
+                    {!onTeam && (
+                      <AddToTeamButton
+                        runId={runId}
+                        lang={lang}
+                        linkId={link.id}
+                        teamLinks={teamLinks}
+                      />
+                    )}
+                    <button
+                      type="button"
+                      disabled={pendingId === link.id}
+                      onClick={() => handleMarkDead(link.id)}
+                      className="rounded border border-red-300 px-2 py-1 text-xs font-medium text-red-600 transition-colors hover:bg-red-50 disabled:opacity-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950/40"
+                    >
+                      {t.links.markDead}
+                    </button>
+                  </div>
+                )}
+              </div>
+              <div className={paired ? "grid grid-cols-2 gap-3" : "flex justify-center"}>
+                {link.encounters.map((e) => (
+                  <EncounterTile
+                    key={e.id}
+                    encounter={e}
+                    isDead={isDead}
+                    isClassic={isClassic}
+                    lang={lang}
+                  >
+                    {!isDead && (
+                      <div className="mt-1 flex flex-wrap justify-center gap-1.5">
+                        <EvolveButton
+                          runId={runId}
+                          lang={lang}
+                          encounterId={e.id}
+                          targets={e.evolvesTo}
+                        />
+                        {e.evolvesFrom && (
+                          <RevertButton runId={runId} lang={lang} encounterId={e.id} />
+                        )}
+                      </div>
+                    )}
+                  </EncounterTile>
+                ))}
+              </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
     </div>
   );
 }

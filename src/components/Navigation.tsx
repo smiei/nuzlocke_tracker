@@ -3,17 +3,21 @@
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { NAV_ITEMS } from "@/lib/nav";
+import { useLanguage } from "@/lib/i18n/LanguageProvider";
+import { translations } from "@/lib/i18n/dictionary";
 
 export function Navigation() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const run = searchParams.get("run");
+  const { lang } = useLanguage();
+  const t = translations[lang].nav;
 
   return (
     <nav className="flex gap-1 overflow-x-auto px-4 sm:px-6">
       {NAV_ITEMS.map((item) => {
         const isActive = pathname === item.href;
-        const href = item.runScoped && run ? `${item.href}?run=${run}` : item.href;
+        const href = run ? `${item.href}?run=${run}` : item.href;
         return (
           <Link
             key={item.href}
@@ -24,7 +28,7 @@ export function Navigation() {
                 : "border-transparent text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
             }`}
           >
-            {item.label}
+            {t[item.labelKey]}
           </Link>
         );
       })}

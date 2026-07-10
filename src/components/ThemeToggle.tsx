@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
+import { useLanguage } from "@/lib/i18n/LanguageProvider";
+import { translations } from "@/lib/i18n/dictionary";
 
 function SunIcon({ className }: { className?: string }) {
   return (
@@ -26,6 +28,8 @@ function MoonIcon({ className }: { className?: string }) {
 export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const { lang } = useLanguage();
+  const t = translations[lang].theme;
 
   // Theme is only known client-side after hydration; render a neutral
   // placeholder first to avoid a light/dark mismatch flash.
@@ -37,13 +41,7 @@ export function ThemeToggle() {
     <button
       type="button"
       onClick={() => setTheme(isDark ? "light" : "dark")}
-      aria-label={
-        mounted
-          ? isDark
-            ? "Zu hellem Design wechseln"
-            : "Zu dunklem Design wechseln"
-          : "Design wechseln"
-      }
+      aria-label={mounted ? (isDark ? t.toLight : t.toDark) : t.toggleNeutral}
       className="flex h-9 w-9 items-center justify-center rounded-md border border-zinc-200 text-zinc-600 transition-colors hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
     >
       {mounted ? (

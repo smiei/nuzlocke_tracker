@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { getPokemonSpriteUrl } from "@/lib/sprites";
 
 const SIZES = {
@@ -10,13 +10,17 @@ const SIZES = {
   xl: 140,
 } as const;
 
-// This page can fire off a few hundred sprite requests at once (e.g. the full
-// Pokédex table). If GitHub's raw-content CDN stalls/throttles under that
-// load, a plain <img> sits in "loading" state and the browser shows the alt
-// text in its place - a word truncated to the tiny image box instead of the
-// sprite. Keeping the image invisible until it actually finishes (success or
-// error) avoids that ever being visible, while still keeping the alt text
-// for screen readers.
+// Sprites are served locally from /public/pokemon-sprites (downloaded once via
+// scripts/download-sprites.mjs), so they load instantly and reliably.
+//
+// We deliberately do NOT hide the <img> until onLoad. That old guard - added
+// back when sprites were hotlinked from a throttling CDN and the browser would
+// flash the alt text - actually breaks with local images: a cached sprite can
+// finish loading before React attaches the onLoad handler, so the event never
+// fires and the element stayed stuck at visibility:hidden (blank until the
+// component happened to remount, e.g. on a tab switch). Rendering the image
+// directly avoids that race entirely; we only swap in a "?" tile on a genuine
+// load error, tracked per-id so an evolution to a working sprite recovers.
 export function PokemonSprite({
   pokemonId,
   name,
@@ -28,14 +32,10 @@ export function PokemonSprite({
   size?: keyof typeof SIZES;
   className?: string;
 }) {
-  const [status, setStatus] = useState<"loading" | "loaded" | "failed">("loading");
+  const [failedId, setFailedId] = useState<number | null>(null);
   const px = SIZES[size];
 
-  useEffect(() => {
-    setStatus("loading");
-  }, [pokemonId]);
-
-  if (status === "failed") {
+  if (failedId === pokemonId) {
     return (
       <div
         style={{ width: px, height: px }}
@@ -54,12 +54,9 @@ export function PokemonSprite({
       width={px}
       height={px}
       loading="lazy"
-      onLoad={() => setStatus("loaded")}
-      onError={() => setStatus("failed")}
-      style={{
-        imageRendering: "pixelated",
-        visibility: status === "loading" ? "hidden" : "visible",
-      }}
+      decoding="async"
+      onError={() => setFailedId(pokemonId)}
+      style={{ imageRendering: "pixelated" }}
       className={`shrink-0 ${className}`}
     />
   );

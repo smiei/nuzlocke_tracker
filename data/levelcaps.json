@@ -2,92 +2,131 @@
   {
     "id": 1,
     "name": "Rocko",
+    "name_en": "Brock",
     "location": "Marmoria City",
+    "location_en": "Pewter City",
     "badge": "Felsorden",
+    "badge_en": "Boulder Badge",
     "max_level": 14
   },
   {
     "id": 2,
     "name": "Misty",
+    "name_en": "Misty",
     "location": "Azuria City",
+    "location_en": "Cerulean City",
     "badge": "Quellorden",
+    "badge_en": "Cascade Badge",
     "max_level": 21
   },
   {
     "id": 3,
     "name": "Major Bob",
+    "name_en": "Lt. Surge",
     "location": "Orania City",
+    "location_en": "Vermilion City",
     "badge": "Donnerorden",
+    "badge_en": "Thunder Badge",
     "max_level": 24
   },
   {
     "id": 4,
     "name": "Erika",
+    "name_en": "Erika",
     "location": "Prismania City",
+    "location_en": "Celadon City",
     "badge": "Farborden",
+    "badge_en": "Rainbow Badge",
     "max_level": 29
   },
   {
     "id": 5,
     "name": "Koga",
+    "name_en": "Koga",
     "location": "Fuchsania City",
+    "location_en": "Fuchsia City",
     "badge": "Seelenorden",
+    "badge_en": "Soul Badge",
     "max_level": 43
   },
   {
     "id": 6,
     "name": "Sabrina",
+    "name_en": "Sabrina",
     "location": "Saffronia City",
+    "location_en": "Saffron City",
     "badge": "Sumpforden",
+    "badge_en": "Marsh Badge",
     "max_level": 43
   },
   {
     "id": 7,
     "name": "Pyro",
+    "name_en": "Blaine",
     "location": "Zinnoberinsel",
+    "location_en": "Cinnabar Island",
     "badge": "Vulkanorden",
+    "badge_en": "Volcano Badge",
     "max_level": 47
   },
   {
     "id": 8,
     "name": "Giovanni",
+    "name_en": "Giovanni",
     "location": "Vertania City",
+    "location_en": "Viridian City",
     "badge": "Erdorden",
+    "badge_en": "Earth Badge",
     "max_level": 50
   },
   {
     "id": 9,
     "name": "Lorelei",
+    "name_en": "Lorelei",
     "location": "Top 4",
+    "location_en": "Elite Four",
     "badge": null,
+    "badge_en": null,
     "max_level": 54
   },
   {
     "id": 10,
     "name": "Bruno",
+    "name_en": "Bruno",
     "location": "Top 4",
+    "location_en": "Elite Four",
     "badge": null,
+    "badge_en": null,
     "max_level": 56
   },
   {
     "id": 11,
     "name": "Agathe",
+    "name_en": "Agatha",
     "location": "Top 4",
+    "location_en": "Elite Four",
     "badge": null,
+    "badge_en": null,
     "max_level": 58
   },
   {
     "id": 12,
     "name": "Siegfried",
+    "name_en": "Lance",
     "location": "Top 4",
+    "location_en": "Elite Four",
     "badge": null,
+    "badge_en": null,
     "max_level": 60
   },
   {
     "id": 13,
     "name": "Champ",
+    "name_en": "Champion",
     "location": "Top 4",
+    "location_en": "Elite Four",
     "badge": null,
+    "badge_en": null,
     "max_level": 63
   }
 ]
