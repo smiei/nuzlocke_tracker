@@ -21,7 +21,8 @@ export type ActionError =
   | { key: "nameRequired" }
   | { key: "backupInvalid" }
   | { key: "backupEmpty" }
-  | { key: "invalidTeamSlot" };
+  | { key: "invalidTeamSlot" }
+  | { key: "unexpected" };
 
 export function formatActionError(error: ActionError, lang: Lang): string {
   const t = translations[lang].actions;
@@ -58,5 +59,7 @@ export function formatActionError(error: ActionError, lang: Lang): string {
       return t.backupEmpty;
     case "invalidTeamSlot":
       return t.invalidTeamSlot;
+    case "unexpected":
+      return t.unexpected;
   }
 }

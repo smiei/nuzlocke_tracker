@@ -215,6 +215,7 @@ const de = {
     backupInvalid: "Ungültige oder beschädigte Backup-Datei.",
     backupEmpty: "Die Backup-Datei enthält keine Runs.",
     invalidTeamSlot: "Ungültiger Team-Platz.",
+    unexpected: "Unerwarteter Fehler - Aktion wurde nicht ausgeführt. Details stehen im Server-Log.",
   },
 };
 
@@ -433,6 +434,7 @@ const en: Dictionary = {
     backupInvalid: "Invalid or corrupted backup file.",
     backupEmpty: "The backup file contains no runs.",
     invalidTeamSlot: "Invalid team slot.",
+    unexpected: "Unexpected error - the action was not applied. See the server log for details.",
   },
 };
 

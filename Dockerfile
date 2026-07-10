@@ -28,7 +28,9 @@ WORKDIR /app
 ENV NODE_ENV=production
 
 COPY package.json package-lock.json ./
-RUN npm ci --omit=dev
+# Cache clean in the SAME layer: npm's download cache (~245 MB) would
+# otherwise be baked into the image for no runtime benefit.
+RUN npm ci --omit=dev && npm cache clean --force
 
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next

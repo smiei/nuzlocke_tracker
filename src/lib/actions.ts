@@ -383,7 +383,15 @@ export async function importBackup(json: string): Promise<ImportBackupResult> {
     return { success: false, error: { key: "backupEmpty" } };
   }
 
-  const runCount = await applyBackup(parsed);
+  // Catch unexpected failures (e.g. filesystem/permission problems) so the
+  // user gets a dialog message instead of a crashed error page.
+  let runCount: number;
+  try {
+    runCount = await applyBackup(parsed);
+  } catch (error) {
+    console.error("importBackup failed:", error);
+    return { success: false, error: { key: "unexpected" } };
+  }
   revalidatePath("/", "layout");
   // Imports add whole runs - no single runId; 0 = "anything changed".
   publishChange(0);
