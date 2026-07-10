@@ -7,10 +7,19 @@ import type { EffectivenessTable } from "@/lib/effectiveness";
 // files in Docker can be edited without rebuilding or restarting the container.
 const DATA_DIR = path.join(process.cwd(), "data");
 
+// "route" = normal wild encounter; "static" = fixed encounter (NPC gift,
+// purchase, fossil, Snorlax, legendaries). Statics are exempt from the
+// Species Clause and need no manual flag in the UI.
+export type RouteType = "route" | "static";
+
 export type Route = {
   id: number;
   name: string;
   name_en: string;
+  type: RouteType;
+  // Only reachable after the Elite Four (Sevii Islands 4-7, Cerulean Cave).
+  // The Encounter tab collapses these behind a "post-game" toggle by default.
+  postgame?: boolean;
 };
 
 export type PokemonStats = {
@@ -40,7 +49,11 @@ export type LevelCap = {
   location_en: string;
   badge: string | null;
   badge_en: string | null;
-  max_level: number;
+  // null for fights without a level cap (rival / Team Rocket boss battles).
+  max_level: number | null;
+  // Optional sprite-file override (German slug) when it differs from `name`,
+  // e.g. the rival reuses the champion's sprite ("champ").
+  sprite?: string;
 };
 
 function readJson<T>(filename: string): T {

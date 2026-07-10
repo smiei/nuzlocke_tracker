@@ -1,5 +1,27 @@
 [
   {
+    "id": 14,
+    "name": "Rivale",
+    "name_en": "Rival",
+    "location": "Alabastia",
+    "location_en": "Pallet Town",
+    "badge": null,
+    "badge_en": null,
+    "sprite": "champ",
+    "max_level": null
+  },
+  {
+    "id": 15,
+    "name": "Rivale",
+    "name_en": "Rival",
+    "location": "Route 22",
+    "location_en": "Route 22",
+    "badge": null,
+    "badge_en": null,
+    "sprite": "champ",
+    "max_level": null
+  },
+  {
     "id": 1,
     "name": "Rocko",
     "name_en": "Brock",
@@ -18,6 +40,28 @@
     "badge": "Quellorden",
     "badge_en": "Cascade Badge",
     "max_level": 21
+  },
+  {
+    "id": 16,
+    "name": "Rivale",
+    "name_en": "Rival",
+    "location": "Azuria City",
+    "location_en": "Cerulean City",
+    "badge": null,
+    "badge_en": null,
+    "sprite": "champ",
+    "max_level": null
+  },
+  {
+    "id": 17,
+    "name": "Rivale",
+    "name_en": "Rival",
+    "location": "S.S. Anne, Orania City",
+    "location_en": "S.S. Anne, Vermilion City",
+    "badge": null,
+    "badge_en": null,
+    "sprite": "champ",
+    "max_level": null
   },
   {
     "id": 3,
@@ -40,14 +84,48 @@
     "max_level": 29
   },
   {
-    "id": 5,
-    "name": "Koga",
-    "name_en": "Koga",
-    "location": "Fuchsania City",
-    "location_en": "Fuchsia City",
-    "badge": "Seelenorden",
-    "badge_en": "Soul Badge",
-    "max_level": 43
+    "id": 18,
+    "name": "Giovanni",
+    "name_en": "Giovanni",
+    "location": "Rocket-Versteck, Prismania City",
+    "location_en": "Rocket Hideout, Celadon City",
+    "badge": null,
+    "badge_en": null,
+    "sprite": "giovanni",
+    "max_level": null
+  },
+  {
+    "id": 19,
+    "name": "Rivale",
+    "name_en": "Rival",
+    "location": "Pokémon-Turm, Lavandia",
+    "location_en": "Pokémon Tower, Lavender Town",
+    "badge": null,
+    "badge_en": null,
+    "sprite": "champ",
+    "max_level": null
+  },
+  {
+    "id": 20,
+    "name": "Rivale",
+    "name_en": "Rival",
+    "location": "Silph Co., Saffronia City",
+    "location_en": "Silph Co., Saffron City",
+    "badge": null,
+    "badge_en": null,
+    "sprite": "champ",
+    "max_level": null
+  },
+  {
+    "id": 21,
+    "name": "Giovanni",
+    "name_en": "Giovanni",
+    "location": "Silph Co., Saffronia City",
+    "location_en": "Silph Co., Saffron City",
+    "badge": null,
+    "badge_en": null,
+    "sprite": "giovanni",
+    "max_level": null
   },
   {
     "id": 6,
@@ -57,6 +135,16 @@
     "location_en": "Saffron City",
     "badge": "Sumpforden",
     "badge_en": "Marsh Badge",
+    "max_level": 43
+  },
+  {
+    "id": 5,
+    "name": "Koga",
+    "name_en": "Koga",
+    "location": "Fuchsania City",
+    "location_en": "Fuchsia City",
+    "badge": "Seelenorden",
+    "badge_en": "Soul Badge",
     "max_level": 43
   },
   {
@@ -78,6 +166,17 @@
     "badge": "Erdorden",
     "badge_en": "Earth Badge",
     "max_level": 50
+  },
+  {
+    "id": 22,
+    "name": "Rivale",
+    "name_en": "Rival",
+    "location": "Route 22",
+    "location_en": "Route 22",
+    "badge": null,
+    "badge_en": null,
+    "sprite": "champ",
+    "max_level": null
   },
   {
     "id": 9,
@@ -127,6 +226,7 @@
     "location_en": "Elite Four",
     "badge": null,
     "badge_en": null,
+    "sprite": "champ",
     "max_level": 63
   }
 ]

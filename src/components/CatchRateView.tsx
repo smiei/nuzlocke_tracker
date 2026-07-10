@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type { Pokemon } from "@/lib/data";
 import type { BallId, StatusId } from "@/lib/catchrate";
 import { BALL_IDS, STATUS_IDS, computeCatchChance } from "@/lib/catchrate";
@@ -10,8 +10,6 @@ import { pokemonName } from "@/lib/i18n/localize";
 import { PokemonCombobox } from "@/components/PokemonCombobox";
 import { PokemonSprite } from "@/components/PokemonSprite";
 import { TypeBadge } from "@/components/TypeBadge";
-
-const EMPTY_LOCKS = new Set<number>();
 
 function clampInt(raw: string, min: number, max: number, fallback: number): number {
   const n = Number(raw);
@@ -34,12 +32,15 @@ function hpBarColor(hpPercent: number): string {
 export function CatchRateView({
   pokemonList,
   catchRates,
+  lockedFamilyIds,
 }: {
   pokemonList: Pokemon[];
   catchRates: Record<number, number>;
+  lockedFamilyIds: number[];
 }) {
   const { lang } = useLanguage();
   const t = translations[lang].catchrate;
+  const lockedFamilies = useMemo(() => new Set(lockedFamilyIds), [lockedFamilyIds]);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [ball, setBall] = useState<BallId>("poke");
   const [hpPercent, setHpPercent] = useState(100);
@@ -49,6 +50,7 @@ export function CatchRateView({
 
   const selected = pokemonList.find((p) => p.id === selectedId) ?? null;
   const baseRate = selected ? catchRates[selected.id] : undefined;
+  const isLocked = selected ? lockedFamilies.has(selected.family_id) : false;
 
   const result =
     selected && baseRate !== undefined
@@ -76,8 +78,11 @@ export function CatchRateView({
             pokemonList={pokemonList}
             selectedId={selectedId}
             onSelect={setSelectedId}
-            lockedFamilyIds={EMPTY_LOCKS}
+            lockedFamilyIds={lockedFamilies}
           />
+          {isLocked && (
+            <p className="mt-2 text-xs text-amber-600 dark:text-amber-400">⚠ {t.lockWarning}</p>
+          )}
         </div>
 
         <div className="grid grid-cols-2 gap-3">

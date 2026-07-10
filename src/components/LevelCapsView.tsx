@@ -61,7 +61,7 @@ export function LevelCapsView({
                 : "hover:bg-zinc-50 dark:hover:bg-zinc-900"
             }`}
           >
-            <TrainerSprite canonicalName={cap.name} displayName={name} size={88} />
+            <TrainerSprite canonicalName={cap.sprite ?? cap.name} displayName={name} size={88} />
             <div className="min-w-0 flex-1">
               <div
                 className={`truncate font-medium ${
@@ -75,10 +75,12 @@ export function LevelCapsView({
                 {badge ? ` · ${badge}` : ""}
               </div>
             </div>
-            <div className="shrink-0 text-right">
-              <div className="text-lg font-semibold tabular-nums">{cap.max_level}</div>
-              <div className="text-xs text-zinc-400 dark:text-zinc-500">{t.maxLevel}</div>
-            </div>
+            {cap.max_level !== null && (
+              <div className="shrink-0 text-right">
+                <div className="text-lg font-semibold tabular-nums">{cap.max_level}</div>
+                <div className="text-xs text-zinc-400 dark:text-zinc-500">{t.maxLevel}</div>
+              </div>
+            )}
           </button>
         );
       })}

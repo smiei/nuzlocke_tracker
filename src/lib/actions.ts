@@ -15,7 +15,6 @@ export type SaveEncounterInput = {
   player: Player;
   pokemonId: number;
   status: EncounterStatus;
-  isStatic: boolean;
 };
 
 export type SaveEncounterResult = { success: true } | { success: false; error: ActionError };
@@ -23,15 +22,19 @@ export type SaveEncounterResult = { success: true } | { success: false; error: A
 export async function saveEncounter(
   input: SaveEncounterInput,
 ): Promise<SaveEncounterResult> {
-  const { runId, routeId, player, pokemonId, status, isStatic } = input;
+  const { runId, routeId, player, pokemonId, status } = input;
 
   const pokemon = getPokemonById(pokemonId);
   if (!pokemon) {
     return { success: false, error: { key: "unknownPokemon", id: pokemonId } };
   }
-  if (!getRouteById(routeId)) {
+  const route = getRouteById(routeId);
+  if (!route) {
     return { success: false, error: { key: "unknownRoute", id: routeId } };
   }
+  // Whether an encounter is static/gift is a fixed property of the location
+  // (routes.json `type`), not a per-catch user choice.
+  const isStatic = route.type !== "route";
 
   if (player === Player.PLAYER2) {
     const run = await prisma.run.findUnique({ where: { id: runId } });

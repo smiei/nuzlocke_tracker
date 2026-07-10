@@ -1,28 +1,30 @@
 # SoulLink Nuzlocke Tracker
 
-Self-hosted Web-App zum Tracken von Pokémon Nuzlocke Runs – als SoulLink für zwei Spieler oder Solo (Classic). Läuft als Docker-Container, Daten liegen lokal in SQLite.
+Self-hosted web app for tracking Pokémon Nuzlocke runs – as a two-player SoulLink or solo (Classic). Runs as a Docker container, all data is stored locally in SQLite.
 
-## Tech-Stack
+> **Disclaimer:** This is an unofficial fan project and is not affiliated with, endorsed by, or connected to Nintendo, Game Freak, Creatures Inc., or The Pokémon Company in any way. Pokémon names, game data, and artwork are the property of their respective owners. This repository and the published Docker image deliberately contain **no** copyrighted artwork: Pokémon sprites are fetched from [PokeAPI](https://github.com/PokeAPI/sprites) at setup time, trainer images are provided by the user. This project is strictly non-commercial.
+
+## Tech stack
 
 - Next.js 16 (App Router) + TypeScript
 - Tailwind CSS v4
 - Prisma 6 + SQLite
 - Docker / Docker Compose
 
-## Features (Tabs)
+## Features (tabs)
 
-- **Encounter**: pro Route (und Spieler) ein Pokémon fangen, Status (Gefangen/Getötet/Geflohen), Species-Clause-Warnung inklusive Static-Ausnahme.
-- **Pokémon**: aktives 6er-Team plus alle Links/Fänge als Kacheln, "Als tot markieren" (mit Rückgängig), Entwickeln/Zurückentwickeln (auch bei Verzweigungen wie Evoli), Sortierung nach Encounter-Reihenfolge oder Statuswert-Summe.
-- **Typeneffektivität**: Schwächen/Resistenzen eines Pokémon (Verteidiger-Sicht) plus vollständige Gen-3-Typen-Matrix.
-- **Catchrate**: Fangchancen-Rechner (Gen-3-Formel) mit Ball-, KP-, Level- und Status-Eingabe.
-- **Pokédex**: sortierbare Tabelle mit Rang (nach Gesamt-Statuswert, Standard-Wettkampf-Ranking), Suche mit Vorschlägen + Scroll-zu-Zeile.
-- **Meilensteine**: Gegner-Übersicht mit Level Caps, per Klick als besiegt markierbar.
-- **Regeln**: Markdown-Regelwerk pro Run, direkt im Browser editierbar; neue Runs übernehmen die Regeln des letzten Runs.
-- **Mehrere Runs**: pro Run komplett getrennter Fortschritt (SoulLink oder Solo), Wechsel/Anlegen/Löschen über den Header.
-- **Backup & Import**: aktueller Run oder alle Runs als JSON-Datei exportieren; Import legt die Runs zusätzlich an (inklusive Team-Zuordnung und Regelwerk), ohne Bestehendes zu überschreiben.
-- **Zweisprachig**: UI, Pokémon-, Routen- und Trainernamen auf Deutsch/Englisch umschaltbar (rechts oben).
+- **Encounter**: catch one Pokémon per route (and player), with status (Caught/Killed/Fled). Static/gift locations are pre-marked from the data files. Species Clause conflicts show a warning without ever blocking a save; post-game areas are collapsed by default.
+- **Pokémon**: the active 6-slot team plus all links/catches as cards, "mark as dead" (with undo), evolve/devolve (including branching evolutions like Eevee), add-to-team with replace picker, sorting by encounter order or base-stat total.
+- **Type Effectiveness**: weaknesses/resistances of any Pokémon (defender's perspective) plus the full Gen 3 type matrix.
+- **Catchrate**: catch chance calculator (Gen 3 formula) with ball, HP, level, and status condition inputs.
+- **Pokédex**: sortable table with rank (by base-stat total, standard competition ranking), search with suggestions and scroll-to-row.
+- **Milestones**: boss battles (gym leaders, rival, Team Rocket, Elite Four) with level caps, click to mark as defeated.
+- **Rules**: per-run markdown ruleset, editable right in the browser; new runs inherit the rules of the most recent run.
+- **Multiple runs**: fully separate progress per run (SoulLink or solo), switch/create/delete via the header.
+- **Backup & import**: export the current run or all runs as a JSON file; import adds the contained runs (including team assignments and rules) without ever overwriting existing data.
+- **Bilingual**: UI, Pokémon, route, and trainer names switchable between German and English (top right).
 
-## Erste Einrichtung
+## First-time setup (local development)
 
 ```bash
 npm install
@@ -32,28 +34,30 @@ npm run download:sprites
 npm run dev
 ```
 
-Danach [http://localhost:3000](http://localhost:3000) öffnen.
+Then open [http://localhost:3000](http://localhost:3000).
 
-### Die npm-Skripte
+### npm scripts
 
-| Skript | Zweck |
+| Script | Purpose |
 | --- | --- |
-| `npm run dev` | Dev-Server mit Hot Reload |
-| `npm run build` / `npm run start` | Produktions-Build / -Start |
-| `npm run download:sprites` | Lädt alle Pokémon-Sprites (Gen-3-Emerald-Stil) einmalig von der PokéAPI herunter und speichert sie lokal unter `public/pokemon-sprites/`. **Muss nach `npm install` einmal manuell laufen** – die Sprites sind bewusst nicht im Git-Repo (siehe `.gitignore`), damit keine 386 Bilddateien versioniert werden. Ohne diesen Schritt fehlen im UI überall die Pokémon-Bilder. Erneut ausführen, falls `data/pokemon.json` sich ändert (z. B. neue Einträge). |
-| `npm run generate:evolutions` | Erzeugt `data/evolutions.json` (Entwicklungslinien) aus der PokéAPI. Ist bereits im Repo enthalten – nur nötig, wenn sich `data/pokemon.json` ändert und die Entwicklungsdaten neu abgeglichen werden müssen. |
-| `npm run download:catchrates` | Erzeugt `data/catchrates.json` (Basis-Fangraten für den Catchrate-Tab) aus der PokéAPI. Ist bereits im Repo enthalten – nur nötig, wenn sich `data/pokemon.json` ändert. |
+| `npm run dev` | Dev server with hot reload |
+| `npm run build` / `npm run start` | Production build / start |
+| `npm run download:sprites` | Downloads all Pokémon sprites (Gen 3 Emerald style) once from PokeAPI into `public/pokemon-sprites/`. **Must be run once after `npm install`** – the sprites are deliberately not part of this repo (copyrighted artwork, see `.gitignore`). Without this step, Pokémon images are missing across the UI. Re-run if `data/pokemon.json` changes. |
+| `npm run generate:evolutions` | Regenerates `data/evolutions.json` (evolution lines) from PokeAPI. Already included in the repo – only needed when `data/pokemon.json` changes. |
+| `npm run download:catchrates` | Regenerates `data/catchrates.json` (base catch rates for the Catchrate tab) from PokeAPI. Already included in the repo – only needed when `data/pokemon.json` changes. |
 | `npm run lint` | ESLint |
 
-Beide Download-Skripte brauchen einmalig Internetzugriff (PokéAPI); die App selbst läuft danach komplett offline/lokal.
+The download scripts need internet access once (PokeAPI); after that the app runs fully offline.
 
-### Trainer-Sprites (optional, manuell)
+### Trainer sprites (optional, manual)
 
-Für die Meilensteine-Seite können eigene Trainer-Bilder unter `public/trainers/<name>.png` abgelegt werden (Kreis-Avatar neben dem Namen). Es gibt dafür keine automatisierte Quelle – fehlt eine Datei, wird stattdessen ein Anfangsbuchstaben-Platzhalter angezeigt. Erwartete Dateinamen stehen in `public/trainers/LIESMICH.txt`.
+The Milestones page can show trainer avatars from `public/trainers/<slug>.png` (circular avatar next to the name). There is no automated, legally clean source for these – if a file is missing, an initial-letter placeholder is shown instead. The expected file names are listed in `public/trainers/README.txt`. These images are not part of the repo or the Docker image; provide them yourself.
 
-## Statische Daten
+## Static data
 
-`data/routes.json`, `data/pokemon.json`, `data/levelcaps.json`, `data/evolutions.json`, `data/effectiveness.json` und `data/catchrates.json` werden zur Laufzeit direkt von der Festplatte gelesen (nicht in die Datenbank kopiert). Änderungen daran wirken sofort, auch im laufenden Docker-Container, ohne Rebuild. (Ausnahme: die statisch vorgerenderten Seiten Pokédex/Typeneffektivität/Catchrate backen ihre Daten beim Build ein.)
+`data/routes.json`, `data/pokemon.json`, `data/levelcaps.json`, `data/evolutions.json`, `data/effectiveness.json`, and `data/catchrates.json` are read straight from disk at runtime (not copied into the database). Edits take effect immediately, even inside a running Docker container, without a rebuild. (Exception: the statically pre-rendered Pokédex/Type Effectiveness pages bake their data in at build time.)
+
+Route entries carry a `type` (`"route"` = regular wild encounter, `"static"` = fixed encounter such as gifts, fossils, Snorlax, legendaries – exempt from the Species Clause) and an optional `"postgame": true` flag (collapsed by default on the Encounter tab).
 
 ## Docker
 
@@ -61,15 +65,26 @@ Für die Meilensteine-Seite können eigene Trainer-Bilder unter `public/trainers
 docker compose up --build
 ```
 
-- SQLite-Datenbank liegt in einem benannten Docker-Volume (`db-data`) und übersteht Rebuilds/Neustarts.
-- `data/` wird read-only in den Container gemountet – Routen/Pokémon/Level-Caps/Entwicklungen lassen sich also editieren, ohne das Image neu zu bauen.
-- Datenbank-Migrationen laufen automatisch beim Container-Start (`docker-entrypoint.sh`).
-- Pokémon-Sprites sind fest im Image gebacken (kein Internetzugriff zur Laufzeit nötig).
+- The SQLite database lives in a named volume (`db-data`) and survives rebuilds/restarts.
+- `data/` is mounted read-only into the container – routes/Pokémon/milestones/evolutions can be edited without rebuilding the image.
+- Database migrations run automatically on container start (`docker-entrypoint.sh`).
+- **Sprites are not part of the image** (copyrighted artwork, public registry). On first start the entrypoint downloads the Pokémon sprites from PokeAPI into `/app/public/pokemon-sprites` (one-time internet access needed; a volume mount persists them across updates). Trainer sprites are user-provided via the `/app/public/trainers` mount.
 
-## Datenbank-Migrationen
+### Volume layout (e.g. Unraid)
+
+| Container path | Purpose |
+| --- | --- |
+| `/app/db` | SQLite database (required) |
+| `/app/public/pokemon-sprites` | Pokémon sprites – auto-filled on first start, persists across image updates (recommended) |
+| `/app/public/trainers` | Trainer avatars – place your own `<slug>.png` files here (optional) |
+| `/app/data` | Static reference data override (optional; omit to use the data baked into the image) |
+
+Required environment variable: `DATABASE_URL=file:/app/db/nuzlocke.db`. The app listens on container port `3000`.
+
+## Database migrations
 
 ```bash
-npx prisma migrate dev --name <beschreibung>
+npx prisma migrate dev --name <description>
 ```
 
-erzeugt und wendet eine neue Migration lokal an. In Docker werden ausstehende Migrationen beim Start automatisch angewendet (`prisma migrate deploy`).
+creates and applies a new migration locally. In Docker, pending migrations are applied automatically on container start (`prisma migrate deploy`).

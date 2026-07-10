@@ -6,6 +6,9 @@ services:
     volumes:
       - db-data:/app/db
       - ./data:/app/data:ro
+      # Sprites live outside the image (copyright) - mount the local copies.
+      - ./public/pokemon-sprites:/app/public/pokemon-sprites
+      - ./public/trainers:/app/public/trainers:ro
     environment:
       - DATABASE_URL=file:/app/db/nuzlocke.db
     restart: unless-stopped

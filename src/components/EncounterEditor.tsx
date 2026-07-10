@@ -12,6 +12,16 @@ import { translations } from "@/lib/i18n/dictionary";
 import { pokemonName, routeName } from "@/lib/i18n/localize";
 import { PokemonCombobox } from "@/components/PokemonCombobox";
 
+// Colour the status control so a route's outcome is readable at a glance:
+// green = caught, red = killed, amber = fled.
+const STATUS_STYLES: Record<EncounterStatus, string> = {
+  CAUGHT:
+    "border-green-400 bg-green-50 text-green-700 dark:border-green-700 dark:bg-green-950/40 dark:text-green-300",
+  KILLED:
+    "border-red-400 bg-red-50 text-red-700 dark:border-red-700 dark:bg-red-950/40 dark:text-red-300",
+  FLED: "border-amber-400 bg-amber-50 text-amber-700 dark:border-amber-600 dark:bg-amber-950/40 dark:text-amber-300",
+};
+
 export function EncounterEditor({
   runId,
   lang,
@@ -37,12 +47,14 @@ export function EncounterEditor({
     [encounters, routeId, player],
   );
 
-  // Every non-static encounter elsewhere already "uses up" its family_id,
-  // except this exact slot (so re-saving the same pick doesn't lock itself).
+  // EVERY encounter elsewhere - static or not, regardless of outcome
+  // (caught/killed/fled) - "uses up" its family_id. Only this exact slot is
+  // excluded, so re-saving the same pick doesn't mark itself. Locked families
+  // are marked in the dropdown on every route, including static ones (static
+  // only means "safe to pick anyway", not "not locked").
   const lockedFamilyIds = useMemo(() => {
     const set = new Set<number>();
     for (const e of encounters) {
-      if (e.isStatic) continue;
       if (e.routeId === routeId && e.player === player) continue;
       set.add(e.familyId);
     }
@@ -60,29 +72,31 @@ export function EncounterEditor({
 
   const [selectedId, setSelectedId] = useState<number | null>(current?.pokemonId ?? null);
   const [status, setStatus] = useState<EncounterStatus>(current?.status ?? EncounterStatus.CAUGHT);
-  const [isStatic, setIsStatic] = useState<boolean>(current?.isStatic ?? false);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
   useEffect(() => {
     setSelectedId(current?.pokemonId ?? null);
     setStatus(current?.status ?? EncounterStatus.CAUGHT);
-    setIsStatic(current?.isStatic ?? false);
-  }, [current?.pokemonId, current?.status, current?.isStatic]);
+  }, [current?.pokemonId, current?.status]);
+
+  // Static/gift is a fixed property of the location (routes.json `type`),
+  // no longer a user-set checkbox.
+  const routeIsStatic = (routes.find((r) => r.id === routeId)?.type ?? "route") !== "route";
 
   // Purely informational Species Clause warning, derived from the run's
   // encounters: the pick is SAVED either way (the server never rejects it).
-  // Disappears when "Static" is ticked (statics are exempt) or the conflict
-  // elsewhere goes away.
+  // Conflicts count ALL other entries of the family, including statics.
+  // Static routes themselves never warn ("safe to pick anyway"); on normal
+  // routes the warning shows on BOTH sides of a conflict for as long as it
+  // exists - a deliberate, stateless rule (no "who was first" timestamp
+  // heuristics that could flip when entries are edited later).
   const lockWarning = useMemo(() => {
-    if (selectedId === null || isStatic) return null;
+    if (selectedId === null || routeIsStatic) return null;
     const picked = pokemonList.find((p) => p.id === selectedId);
     if (!picked) return null;
     const conflict = encounters.find(
-      (e) =>
-        !e.isStatic &&
-        e.familyId === picked.family_id &&
-        !(e.routeId === routeId && e.player === player),
+      (e) => e.familyId === picked.family_id && !(e.routeId === routeId && e.player === player),
     );
     if (!conflict) return null;
     const conflictRoute = routes.find((r) => r.id === conflict.routeId);
@@ -91,9 +105,9 @@ export function EncounterEditor({
       t.player[conflict.player],
       conflictRoute ? routeName(conflictRoute, lang) : `Route #${conflict.routeId}`,
     );
-  }, [selectedId, isStatic, encounters, routeId, player, pokemonList, routes, lang, t]);
+  }, [selectedId, routeIsStatic, encounters, routeId, player, pokemonList, routes, lang, t]);
 
-  function persist(next: { pokemonId: number; status: EncounterStatus; isStatic: boolean }) {
+  function persist(next: { pokemonId: number; status: EncounterStatus }) {
     setError(null);
     startTransition(async () => {
       const result = await saveEncounter({ runId, routeId, player, ...next });
@@ -104,24 +118,18 @@ export function EncounterEditor({
         // Revert the optimistic UI change - the save was rejected server-side.
         setSelectedId(current?.pokemonId ?? null);
         setStatus(current?.status ?? EncounterStatus.CAUGHT);
-        setIsStatic(current?.isStatic ?? false);
       }
     });
   }
 
   function handleSelectPokemon(pokemonId: number) {
     setSelectedId(pokemonId);
-    persist({ pokemonId, status, isStatic });
+    persist({ pokemonId, status });
   }
 
   function handleStatusChange(next: EncounterStatus) {
     setStatus(next);
-    if (selectedId !== null) persist({ pokemonId: selectedId, status: next, isStatic });
-  }
-
-  function handleStaticChange(next: boolean) {
-    setIsStatic(next);
-    if (selectedId !== null) persist({ pokemonId: selectedId, status, isStatic: next });
+    if (selectedId !== null) persist({ pokemonId: selectedId, status: next });
   }
 
   return (
@@ -143,7 +151,7 @@ export function EncounterEditor({
             value={status}
             disabled={pending}
             onChange={(e) => handleStatusChange(e.target.value as EncounterStatus)}
-            className="rounded border border-zinc-300 bg-white px-1.5 py-1 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-900"
+            className={`rounded border px-1.5 py-1 font-medium disabled:opacity-50 ${STATUS_STYLES[status]}`}
           >
             {Object.values(EncounterStatus).map((s) => (
               <option key={s} value={s}>
@@ -151,15 +159,6 @@ export function EncounterEditor({
               </option>
             ))}
           </select>
-          <label className="flex items-center gap-1 text-zinc-500 dark:text-zinc-400">
-            <input
-              type="checkbox"
-              checked={isStatic}
-              disabled={pending}
-              onChange={(e) => handleStaticChange(e.target.checked)}
-            />
-            {t.tracker.isStatic}
-          </label>
         </div>
       )}
       {lockWarning && (

@@ -71,7 +71,9 @@ const de = {
     searchPlaceholder: "Pokémon suchen...",
     noResults: "Keine Treffer",
     locked: "gesperrt",
-    isStatic: "Statisch (NPC)",
+    typeStatic: "Statisch",
+    postgameShow: (n: number) => `Post-Game Content anzeigen (${n} Gebiete)`,
+    postgameHide: "Post-Game Content ausblenden",
   },
   links: {
     emptySoullink: "Noch keine SoulLinks – fange im Encounter-Tab dein erstes Pokémon.",
@@ -124,6 +126,7 @@ const de = {
   catchrate: {
     heading: "Catchrate",
     hint: "Wähle ein Pokémon, um die Fangchance zu berechnen.",
+    lockWarning: "Dieses Pokémon ist in diesem Run durch die Species Clause gesperrt.",
     ballLabel: "Pokéball",
     hpLabel: "KP (%)",
     levelLabel: "Level",
@@ -268,7 +271,9 @@ const en: Dictionary = {
     searchPlaceholder: "Search Pokémon...",
     noResults: "No matches",
     locked: "locked",
-    isStatic: "Static (gift)",
+    typeStatic: "Static",
+    postgameShow: (n: number) => `Show post-game content (${n} areas)`,
+    postgameHide: "Hide post-game content",
   },
   links: {
     emptySoullink: "No SoulLinks yet – catch your first Pokémon in the Encounter tab.",
@@ -321,6 +326,7 @@ const en: Dictionary = {
   catchrate: {
     heading: "Catchrate",
     hint: "Select a Pokémon to calculate the catch chance.",
+    lockWarning: "This Pokémon is locked by the Species Clause in this run.",
     ballLabel: "Poké Ball",
     hpLabel: "HP (%)",
     levelLabel: "Level",
