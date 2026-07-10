@@ -18,9 +18,9 @@ Self-hosted web app for tracking Pokémon Nuzlocke runs – as a two-player Soul
 - **Type Effectiveness**: weaknesses/resistances of any Pokémon (defender's perspective) plus the full Gen 3 type matrix.
 - **Catchrate**: catch chance calculator (Gen 3 formula) with ball, HP, level, and status condition inputs.
 - **Pokédex**: sortable table with rank (by base-stat total, standard competition ranking), search with suggestions and scroll-to-row.
-- **Milestones**: boss battles (gym leaders, rival, Team Rocket, Elite Four) with level caps, click to mark as defeated.
+- **Journey**: boss battles (gym leaders, rival, Team Rocket, Elite Four) with level caps, click to mark as defeated.
 - **Rules**: per-run markdown ruleset, editable right in the browser; new runs inherit the rules of the most recent run.
-- **Multiple runs**: fully separate progress per run (SoulLink or solo), switch/create/delete via the header.
+- **Multiple runs**: fully separate progress per run (SoulLink or solo), switch/create/rename/delete via the header.
 - **Backup & import**: export the current run or all runs as a JSON file; import adds the contained runs (including team assignments and rules) without ever overwriting existing data.
 - **Bilingual**: UI, Pokémon, route, and trainer names switchable between German and English (top right).
 
@@ -43,7 +43,7 @@ Then open [http://localhost:3000](http://localhost:3000).
 | `npm run dev` | Dev server with hot reload |
 | `npm run build` / `npm run start` | Production build / start |
 | `npm run download:sprites` | Downloads all Pokémon sprites (Gen 3 Emerald style) once from PokeAPI into `public/pokemon-sprites/`. **Must be run once after `npm install`** – the sprites are deliberately not part of this repo (copyrighted artwork, see `.gitignore`). Without this step, Pokémon images are missing across the UI. Re-run if `data/pokemon.json` changes. |
-| `npm run generate:evolutions` | Regenerates `data/evolutions.json` (evolution lines) from PokeAPI. Already included in the repo – only needed when `data/pokemon.json` changes. |
+| `npm run generate:evolutions` | Regenerates `data/evolutions.json` (evolution lines incl. evolution methods: level/item/trade/friendship) from PokeAPI. Already included in the repo – only needed when `data/pokemon.json` changes. ROM-specific evolution changes (e.g. from a randomizer's "change impossible evolutions") live in `data/evolution-overrides.json` and are merged at runtime, so they survive regeneration. |
 | `npm run download:catchrates` | Regenerates `data/catchrates.json` (base catch rates for the Catchrate tab) from PokeAPI. Already included in the repo – only needed when `data/pokemon.json` changes. |
 | `npm run lint` | ESLint |
 
@@ -51,11 +51,11 @@ The download scripts need internet access once (PokeAPI); after that the app run
 
 ### Trainer sprites (optional, manual)
 
-The Milestones page can show trainer avatars from `public/trainers/<slug>.png` (circular avatar next to the name). There is no automated, legally clean source for these – if a file is missing, an initial-letter placeholder is shown instead. The expected file names are listed in `public/trainers/README.txt`. These images are not part of the repo or the Docker image; provide them yourself.
+The Journey page can show trainer avatars from `public/trainers/<slug>.png` (circular avatar next to the name). There is no automated, legally clean source for these – if a file is missing, an initial-letter placeholder is shown instead. The expected file names are listed in `public/trainers/README.txt`. These images are not part of the repo or the Docker image; provide them yourself.
 
 ## Static data
 
-`data/routes.json`, `data/pokemon.json`, `data/levelcaps.json`, `data/evolutions.json`, `data/effectiveness.json`, and `data/catchrates.json` are read straight from disk at runtime (not copied into the database). Edits take effect immediately, even inside a running Docker container, without a rebuild. (Exception: the statically pre-rendered Pokédex/Type Effectiveness pages bake their data in at build time.)
+`data/routes.json`, `data/pokemon.json`, `data/levelcaps.json`, `data/evolutions.json`, `data/evolution-overrides.json`, `data/effectiveness.json`, and `data/catchrates.json` are read straight from disk at runtime (not copied into the database). Edits take effect immediately, even inside a running Docker container, without a rebuild. (Exception: the statically pre-rendered Pokédex/Type Effectiveness pages bake their data in at build time.)
 
 Route entries carry a `type` (`"route"` = regular wild encounter, `"static"` = fixed encounter such as gifts, fossils, Snorlax, legendaries – exempt from the Species Clause) and an optional `"postgame": true` flag (collapsed by default on the Encounter tab).
 

@@ -50,9 +50,11 @@ export default async function RootLayout({
             <DialogProvider>
             <TabOrderProvider>
               <header className="border-b border-zinc-200 dark:border-zinc-800">
-                <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
+                {/* flex-wrap: on narrow screens the controls wrap to a second
+                    line instead of widening the page (horizontal scroll). */}
+                <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-3 gap-y-2 px-4 py-3 sm:px-6">
                   <HeaderTitle />
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     <Suspense
                       fallback={
                         <div className="h-9 w-32 rounded-md border border-zinc-200 dark:border-zinc-700" />

@@ -319,6 +319,24 @@ export async function createRun(name: string, mode: RunMode): Promise<CreateRunR
   return { success: true, runId: run.id };
 }
 
+export type RenameRunResult = { success: true } | { success: false; error: ActionError };
+
+export async function renameRun(runId: number, name: string): Promise<RenameRunResult> {
+  const trimmed = name.trim();
+  if (!trimmed) {
+    return { success: false, error: { key: "nameRequired" } };
+  }
+  const run = await prisma.run.findUnique({ where: { id: runId } });
+  if (!run) {
+    return { success: false, error: { key: "runNotFound", id: runId } };
+  }
+
+  await prisma.run.update({ where: { id: runId }, data: { name: trimmed } });
+  revalidatePath("/", "layout");
+  publishChange(runId);
+  return { success: true };
+}
+
 export type SaveRulesResult = { success: true } | { success: false; error: ActionError };
 
 export async function saveRules(runId: number, markdown: string): Promise<SaveRulesResult> {

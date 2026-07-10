@@ -13,7 +13,7 @@ export const DEFAULT_RULES = `# Nuzlocke-Regelwerk
 
 4. **Seelenpartner:** Die Fänge beider Spieler auf derselben Route sind miteinander **verlinkt**.
 5. **Gemeinsames Schicksal:** Stirbt ein Pokémon, stirbt auch sein Link-Partner. Beide werden aus dem Team entfernt.
-6. **Species Clause:** Jede Evolutionsfamilie darf im gesamten Run nur **einmal** verwendet werden – über beide Spieler hinweg. Statische Geschenk-Pokémon sind davon ausgenommen.
+6. **Species Clause:** Jede Evolutionsfamilie darf im gesamten Run nur **einmal** verwendet werden – über beide Spieler hinweg. Static-Encounter (Geschenke, Fossilien, Legendäre) sind davon ausgenommen.
 7. **Team-Paarung:** Ein Pokémon darf nur im Team stehen, wenn auch sein Link-Partner im Team ist.
 
 ## Meilensteine / Level Caps

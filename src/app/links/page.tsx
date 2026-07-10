@@ -6,6 +6,7 @@ import { resolveRunId } from "@/lib/runs";
 import { getLang } from "@/lib/i18n/getLang";
 import { translations } from "@/lib/i18n/dictionary";
 import { routeName, pokemonName } from "@/lib/i18n/localize";
+import { formatEvolutionMethod } from "@/lib/evolutionMethods";
 import { LinksView } from "@/components/LinksView";
 import type { SoulLinkView } from "@/lib/types";
 
@@ -54,7 +55,12 @@ export default async function LinksPage({
         isStatic: e.isStatic,
         evolvesTo: (evo?.evolvesTo ?? []).map((id) => {
           const p = getPokemonById(id);
-          return { id, name: p ? pokemonName(p, lang) : `#${id}` };
+          const targetEvo = getEvolutionById(id);
+          return {
+            id,
+            name: p ? pokemonName(p, lang) : `#${id}`,
+            method: targetEvo?.method ? formatEvolutionMethod(targetEvo.method, lang) : null,
+          };
         }),
         evolvesFrom: (() => {
           if (!evo?.evolvesFrom) return null;

@@ -30,11 +30,11 @@ function cellStyle(multiplier: number): { text: string; className: string } {
 }
 
 // Larger stand-alone type badge (the shared TypeBadge is sized for compact
-// card captions - this view is deliberately twice as big).
+// card captions); scales down below `sm` so the table fits phone screens.
 function BigTypeBadge({ type, lang }: { type: string; lang: Lang }) {
   return (
     <span
-      className="inline-block rounded px-2.5 py-1 text-sm font-medium text-white"
+      className="inline-block rounded px-1.5 py-0.5 text-xs font-medium text-white sm:px-2.5 sm:py-1 sm:text-sm"
       style={{ backgroundColor: TYPE_COLORS[type] ?? "#777" }}
     >
       {TYPE_LABELS[lang][type] ?? type}
@@ -73,21 +73,26 @@ function TeamTable({
 
   return (
     <div className="overflow-x-auto">
-      <table className="border-separate border-spacing-1">
+      <table className="border-separate border-spacing-0.5 sm:border-spacing-1">
         <thead>
           <tr>
-            <th className="pr-3 text-left text-xs font-medium text-zinc-400 dark:text-zinc-500">
+            <th className="pr-1.5 text-left text-[10px] font-medium text-zinc-400 sm:pr-3 sm:text-xs dark:text-zinc-500">
               {t.attackType}
             </th>
             {members.map((m) => (
               <th key={m.encounterId} className="p-0 pb-1 text-center" title={m.name}>
-                <PokemonSprite pokemonId={m.pokemonId} name={m.name} size="md" className="mx-auto" />
+                <PokemonSprite
+                  pokemonId={m.pokemonId}
+                  name={m.name}
+                  size="md"
+                  className="mx-auto h-8 w-8 sm:h-12 sm:w-12"
+                />
               </th>
             ))}
-            <th className="px-3 text-center text-xs font-medium text-red-500 dark:text-red-400">
+            <th className="px-1 text-center text-[10px] font-medium text-red-500 sm:px-3 sm:text-xs dark:text-red-400">
               {t.weakHeader}
             </th>
-            <th className="px-3 text-center text-xs font-medium text-green-600 dark:text-green-400">
+            <th className="px-1 text-center text-[10px] font-medium text-green-600 sm:px-3 sm:text-xs dark:text-green-400">
               {t.resistHeader}
             </th>
           </tr>
@@ -95,11 +100,14 @@ function TeamTable({
         <tbody>
           {rows.map((row) => (
             <tr key={row.attack}>
-              <td className="whitespace-nowrap py-1 pr-3">
+              <td className="whitespace-nowrap py-0.5 pr-1.5 sm:py-1 sm:pr-3">
                 {/* Critical marker on the label instead of a row background -
                     a <tr> bg bleeds through the border-spacing gaps. */}
                 {row.critical && (
-                  <span className="mr-1.5 text-base text-red-500 dark:text-red-400" title={t.criticalHint}>
+                  <span
+                    className="mr-1 text-xs text-red-500 sm:mr-1.5 sm:text-base dark:text-red-400"
+                    title={t.criticalHint}
+                  >
                     ⚠
                   </span>
                 )}
@@ -110,15 +118,15 @@ function TeamTable({
                 return (
                   <td
                     key={members[i].encounterId}
-                    className={`h-12 w-14 rounded-md text-center text-lg font-semibold ${className}`}
+                    className={`h-8 w-9 rounded text-center text-sm font-semibold sm:h-12 sm:w-14 sm:rounded-md sm:text-lg ${className}`}
                   >
                     {text}
                   </td>
                 );
               })}
-              <td className="px-3 text-center">
+              <td className="px-1 text-center sm:px-3">
                 <span
-                  className={`inline-block min-w-[2rem] rounded-md px-2 py-1 text-lg font-semibold tabular-nums ${
+                  className={`inline-block min-w-[1.5rem] rounded px-1 py-0.5 text-sm font-semibold tabular-nums sm:min-w-[2rem] sm:rounded-md sm:px-2 sm:py-1 sm:text-lg ${
                     row.critical
                       ? "bg-red-600 text-white"
                       : row.weak > 0
@@ -130,7 +138,7 @@ function TeamTable({
                 </span>
               </td>
               <td
-                className={`px-3 text-center text-lg font-semibold tabular-nums ${
+                className={`px-1 text-center text-sm font-semibold tabular-nums sm:px-3 sm:text-lg ${
                   row.resist > 0
                     ? "text-green-600 dark:text-green-400"
                     : "text-zinc-300 dark:text-zinc-700"

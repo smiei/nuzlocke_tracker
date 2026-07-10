@@ -1,0 +1,254 @@
+[
+  {
+    "from": 61,
+    "to": 186,
+    "comment": "Quaputzi -> Quaxo",
+    "method": {
+      "kind": "level",
+      "level": 37
+    }
+  },
+  {
+    "from": 64,
+    "to": 65,
+    "comment": "Kadabra -> Simsala",
+    "method": {
+      "kind": "level",
+      "level": 37
+    }
+  },
+  {
+    "from": 67,
+    "to": 68,
+    "comment": "Maschock -> Machomei",
+    "method": {
+      "kind": "level",
+      "level": 37
+    }
+  },
+  {
+    "from": 75,
+    "to": 76,
+    "comment": "Georok -> Geowaz",
+    "method": {
+      "kind": "level",
+      "level": 37
+    }
+  },
+  {
+    "from": 79,
+    "to": 199,
+    "comment": "Flegmon -> Laschoking",
+    "method": {
+      "kind": "item",
+      "item": "water-stone"
+    }
+  },
+  {
+    "from": 93,
+    "to": 94,
+    "comment": "Alpollo -> Gengar",
+    "method": {
+      "kind": "level",
+      "level": 37
+    }
+  },
+  {
+    "from": 95,
+    "to": 208,
+    "comment": "Onix -> Stahlos",
+    "method": {
+      "kind": "level",
+      "level": 30
+    }
+  },
+  {
+    "from": 117,
+    "to": 230,
+    "comment": "Seemon -> Seedraking",
+    "method": {
+      "kind": "level",
+      "level": 40
+    }
+  },
+  {
+    "from": 123,
+    "to": 212,
+    "comment": "Sichlor -> Scherox",
+    "method": {
+      "kind": "level",
+      "level": 30
+    }
+  },
+  {
+    "from": 133,
+    "to": 196,
+    "comment": "Evoli -> Psiana",
+    "method": {
+      "kind": "item",
+      "item": "sun-stone"
+    }
+  },
+  {
+    "from": 133,
+    "to": 197,
+    "comment": "Evoli -> Nachtara",
+    "method": {
+      "kind": "item",
+      "item": "moon-stone"
+    }
+  },
+  {
+    "from": 137,
+    "to": 233,
+    "comment": "Porygon -> Porygon2",
+    "method": {
+      "kind": "level",
+      "level": 30
+    }
+  },
+  {
+    "from": 349,
+    "to": 350,
+    "comment": "Barschwa -> Milotic",
+    "method": {
+      "kind": "level",
+      "level": 35
+    }
+  },
+  {
+    "from": 366,
+    "to": 367,
+    "comment": "Perlu -> Aalabyss",
+    "method": {
+      "kind": "level",
+      "level": 30
+    }
+  },
+  {
+    "from": 366,
+    "to": 368,
+    "comment": "Perlu -> Saganabyss",
+    "method": {
+      "kind": "item",
+      "item": "water-stone"
+    }
+  },
+  {
+    "from": 111,
+    "to": 112,
+    "comment": "Rihorn -> Rizeros",
+    "method": {
+      "kind": "level",
+      "level": 40
+    }
+  },
+  {
+    "from": 116,
+    "to": 117,
+    "comment": "Seeper -> Seemon",
+    "method": {
+      "kind": "level",
+      "level": 30
+    }
+  },
+  {
+    "from": 148,
+    "to": 149,
+    "comment": "Dragonir -> Dragoran",
+    "method": {
+      "kind": "level",
+      "level": 40
+    }
+  },
+  {
+    "from": 247,
+    "to": 248,
+    "comment": "Pupitar -> Despotar",
+    "method": {
+      "kind": "level",
+      "level": 40
+    }
+  },
+  {
+    "from": 304,
+    "to": 305,
+    "comment": "Stollunior -> Stollrak",
+    "method": {
+      "kind": "level",
+      "level": 30
+    }
+  },
+  {
+    "from": 305,
+    "to": 306,
+    "comment": "Stollrak -> Stolloss",
+    "method": {
+      "kind": "level",
+      "level": 40
+    }
+  },
+  {
+    "from": 328,
+    "to": 329,
+    "comment": "Knacklion -> Vibrava",
+    "method": {
+      "kind": "level",
+      "level": 30
+    }
+  },
+  {
+    "from": 329,
+    "to": 330,
+    "comment": "Vibrava -> Libelldra",
+    "method": {
+      "kind": "level",
+      "level": 40
+    }
+  },
+  {
+    "from": 361,
+    "to": 362,
+    "comment": "Schneppke -> Firnontor",
+    "method": {
+      "kind": "level",
+      "level": 40
+    }
+  },
+  {
+    "from": 363,
+    "to": 364,
+    "comment": "Seemops -> Seejong",
+    "method": {
+      "kind": "level",
+      "level": 30
+    }
+  },
+  {
+    "from": 364,
+    "to": 365,
+    "comment": "Seejong -> Walraisa",
+    "method": {
+      "kind": "level",
+      "level": 40
+    }
+  },
+  {
+    "from": 372,
+    "to": 373,
+    "comment": "Draschel -> Brutalanda",
+    "method": {
+      "kind": "level",
+      "level": 40
+    }
+  },
+  {
+    "from": 375,
+    "to": 376,
+    "comment": "Metang -> Metagross",
+    "method": {
+      "kind": "level",
+      "level": 40
+    }
+  }
+]

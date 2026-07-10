@@ -22,7 +22,7 @@ export type SoulLinkView = {
     rang: number;
     status: EncounterStatus;
     isStatic: boolean;
-    evolvesTo: { id: number; name: string }[];
+    evolvesTo: { id: number; name: string; method: string | null }[];
     evolvesFrom: { id: number; name: string } | null;
   }[];
 };

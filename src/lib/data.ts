@@ -81,14 +81,49 @@ export function getLevelCaps(): LevelCap[] {
   return readJson<LevelCap[]>("levelcaps.json");
 }
 
+// How a Pokémon evolves FROM its pre-evolution (rendered in the evolve
+// dropdown). Generated from PokeAPI by scripts/generate-evolutions.mjs;
+// ROM-specific changes live in data/evolution-overrides.json.
+export type EvolutionMethod =
+  | { kind: "level"; level: number }
+  | { kind: "item"; item: string }
+  | { kind: "happiness"; time?: string | null }
+  | { kind: "trade"; item?: string | null }
+  | { kind: "beauty" }
+  | { kind: "other" };
+
 export type EvolutionEntry = {
   id: number;
   evolvesFrom: number | null;
   evolvesTo: number[];
+  method?: EvolutionMethod | null;
 };
 
+type EvolutionOverride = {
+  from: number;
+  to: number;
+  method: EvolutionMethod;
+};
+
+// Overrides are merged at read time (not baked into evolutions.json), so
+// re-running the generator script never loses the ROM-specific changes and
+// the override file stays editable in /data like everything else.
 export function getEvolutions(): EvolutionEntry[] {
-  return readJson<EvolutionEntry[]>("evolutions.json");
+  const entries = readJson<EvolutionEntry[]>("evolutions.json");
+  let overrides: EvolutionOverride[] = [];
+  try {
+    overrides = readJson<EvolutionOverride[]>("evolution-overrides.json");
+  } catch {
+    // No override file - vanilla methods apply.
+  }
+  if (overrides.length === 0) return entries;
+
+  const byKey = new Map(overrides.map((o) => [`${o.from}->${o.to}`, o.method]));
+  return entries.map((entry) => {
+    const method =
+      entry.evolvesFrom !== null ? byKey.get(`${entry.evolvesFrom}->${entry.id}`) : undefined;
+    return method ? { ...entry, method } : entry;
+  });
 }
 
 export function getEvolutionById(pokemonId: number): EvolutionEntry | undefined {

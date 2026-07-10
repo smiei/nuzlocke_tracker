@@ -11,12 +11,20 @@
     "evolvesFrom": 1,
     "evolvesTo": [
       3
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 16
+    }
   },
   {
     "id": 3,
     "evolvesFrom": 2,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 32
+    }
   },
   {
     "id": 4,
@@ -30,12 +38,20 @@
     "evolvesFrom": 4,
     "evolvesTo": [
       6
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 16
+    }
   },
   {
     "id": 6,
     "evolvesFrom": 5,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 36
+    }
   },
   {
     "id": 7,
@@ -49,12 +65,20 @@
     "evolvesFrom": 7,
     "evolvesTo": [
       9
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 16
+    }
   },
   {
     "id": 9,
     "evolvesFrom": 8,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 36
+    }
   },
   {
     "id": 10,
@@ -68,12 +92,20 @@
     "evolvesFrom": 10,
     "evolvesTo": [
       12
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 7
+    }
   },
   {
     "id": 12,
     "evolvesFrom": 11,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 10
+    }
   },
   {
     "id": 13,
@@ -87,12 +119,20 @@
     "evolvesFrom": 13,
     "evolvesTo": [
       15
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 7
+    }
   },
   {
     "id": 15,
     "evolvesFrom": 14,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 10
+    }
   },
   {
     "id": 16,
@@ -106,12 +146,20 @@
     "evolvesFrom": 16,
     "evolvesTo": [
       18
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 18
+    }
   },
   {
     "id": 18,
     "evolvesFrom": 17,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 36
+    }
   },
   {
     "id": 19,
@@ -123,7 +171,11 @@
   {
     "id": 20,
     "evolvesFrom": 19,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 20
+    }
   },
   {
     "id": 21,
@@ -135,7 +187,11 @@
   {
     "id": 22,
     "evolvesFrom": 21,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 20
+    }
   },
   {
     "id": 23,
@@ -147,19 +203,31 @@
   {
     "id": 24,
     "evolvesFrom": 23,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 22
+    }
   },
   {
     "id": 25,
     "evolvesFrom": 172,
     "evolvesTo": [
       26
-    ]
+    ],
+    "method": {
+      "kind": "happiness",
+      "time": null
+    }
   },
   {
     "id": 26,
     "evolvesFrom": 25,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "item",
+      "item": "thunder-stone"
+    }
   },
   {
     "id": 27,
@@ -171,7 +239,11 @@
   {
     "id": 28,
     "evolvesFrom": 27,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 22
+    }
   },
   {
     "id": 29,
@@ -185,12 +257,20 @@
     "evolvesFrom": 29,
     "evolvesTo": [
       31
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 16
+    }
   },
   {
     "id": 31,
     "evolvesFrom": 30,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "item",
+      "item": "moon-stone"
+    }
   },
   {
     "id": 32,
@@ -204,24 +284,40 @@
     "evolvesFrom": 32,
     "evolvesTo": [
       34
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 16
+    }
   },
   {
     "id": 34,
     "evolvesFrom": 33,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "item",
+      "item": "moon-stone"
+    }
   },
   {
     "id": 35,
     "evolvesFrom": 173,
     "evolvesTo": [
       36
-    ]
+    ],
+    "method": {
+      "kind": "happiness",
+      "time": null
+    }
   },
   {
     "id": 36,
     "evolvesFrom": 35,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "item",
+      "item": "moon-stone"
+    }
   },
   {
     "id": 37,
@@ -233,19 +329,31 @@
   {
     "id": 38,
     "evolvesFrom": 37,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "item",
+      "item": "fire-stone"
+    }
   },
   {
     "id": 39,
     "evolvesFrom": 174,
     "evolvesTo": [
       40
-    ]
+    ],
+    "method": {
+      "kind": "happiness",
+      "time": null
+    }
   },
   {
     "id": 40,
     "evolvesFrom": 39,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "item",
+      "item": "moon-stone"
+    }
   },
   {
     "id": 41,
@@ -259,7 +367,11 @@
     "evolvesFrom": 41,
     "evolvesTo": [
       169
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 22
+    }
   },
   {
     "id": 43,
@@ -274,12 +386,20 @@
     "evolvesTo": [
       45,
       182
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 21
+    }
   },
   {
     "id": 45,
     "evolvesFrom": 44,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "item",
+      "item": "leaf-stone"
+    }
   },
   {
     "id": 46,
@@ -291,7 +411,11 @@
   {
     "id": 47,
     "evolvesFrom": 46,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 24
+    }
   },
   {
     "id": 48,
@@ -303,7 +427,11 @@
   {
     "id": 49,
     "evolvesFrom": 48,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 31
+    }
   },
   {
     "id": 50,
@@ -315,7 +443,11 @@
   {
     "id": 51,
     "evolvesFrom": 50,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 26
+    }
   },
   {
     "id": 52,
@@ -327,7 +459,11 @@
   {
     "id": 53,
     "evolvesFrom": 52,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 28
+    }
   },
   {
     "id": 54,
@@ -339,7 +475,11 @@
   {
     "id": 55,
     "evolvesFrom": 54,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 33
+    }
   },
   {
     "id": 56,
@@ -351,7 +491,11 @@
   {
     "id": 57,
     "evolvesFrom": 56,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 28
+    }
   },
   {
     "id": 58,
@@ -363,7 +507,11 @@
   {
     "id": 59,
     "evolvesFrom": 58,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "item",
+      "item": "fire-stone"
+    }
   },
   {
     "id": 60,
@@ -378,12 +526,20 @@
     "evolvesTo": [
       62,
       186
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 25
+    }
   },
   {
     "id": 62,
     "evolvesFrom": 61,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "item",
+      "item": "water-stone"
+    }
   },
   {
     "id": 63,
@@ -397,12 +553,19 @@
     "evolvesFrom": 63,
     "evolvesTo": [
       65
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 16
+    }
   },
   {
     "id": 65,
     "evolvesFrom": 64,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "trade"
+    }
   },
   {
     "id": 66,
@@ -416,12 +579,19 @@
     "evolvesFrom": 66,
     "evolvesTo": [
       68
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 28
+    }
   },
   {
     "id": 68,
     "evolvesFrom": 67,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "trade"
+    }
   },
   {
     "id": 69,
@@ -435,12 +605,20 @@
     "evolvesFrom": 69,
     "evolvesTo": [
       71
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 21
+    }
   },
   {
     "id": 71,
     "evolvesFrom": 70,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "item",
+      "item": "leaf-stone"
+    }
   },
   {
     "id": 72,
@@ -452,7 +630,11 @@
   {
     "id": 73,
     "evolvesFrom": 72,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 30
+    }
   },
   {
     "id": 74,
@@ -466,12 +648,19 @@
     "evolvesFrom": 74,
     "evolvesTo": [
       76
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 25
+    }
   },
   {
     "id": 76,
     "evolvesFrom": 75,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "trade"
+    }
   },
   {
     "id": 77,
@@ -483,7 +672,11 @@
   {
     "id": 78,
     "evolvesFrom": 77,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 40
+    }
   },
   {
     "id": 79,
@@ -496,7 +689,11 @@
   {
     "id": 80,
     "evolvesFrom": 79,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 37
+    }
   },
   {
     "id": 81,
@@ -508,7 +705,11 @@
   {
     "id": 82,
     "evolvesFrom": 81,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 30
+    }
   },
   {
     "id": 83,
@@ -525,7 +726,11 @@
   {
     "id": 85,
     "evolvesFrom": 84,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 31
+    }
   },
   {
     "id": 86,
@@ -537,7 +742,11 @@
   {
     "id": 87,
     "evolvesFrom": 86,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 34
+    }
   },
   {
     "id": 88,
@@ -549,7 +758,11 @@
   {
     "id": 89,
     "evolvesFrom": 88,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 38
+    }
   },
   {
     "id": 90,
@@ -561,7 +774,11 @@
   {
     "id": 91,
     "evolvesFrom": 90,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "item",
+      "item": "water-stone"
+    }
   },
   {
     "id": 92,
@@ -575,12 +792,19 @@
     "evolvesFrom": 92,
     "evolvesTo": [
       94
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 25
+    }
   },
   {
     "id": 94,
     "evolvesFrom": 93,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "trade"
+    }
   },
   {
     "id": 95,
@@ -599,7 +823,11 @@
   {
     "id": 97,
     "evolvesFrom": 96,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 26
+    }
   },
   {
     "id": 98,
@@ -611,7 +839,11 @@
   {
     "id": 99,
     "evolvesFrom": 98,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 28
+    }
   },
   {
     "id": 100,
@@ -623,7 +855,11 @@
   {
     "id": 101,
     "evolvesFrom": 100,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 30
+    }
   },
   {
     "id": 102,
@@ -635,7 +871,11 @@
   {
     "id": 103,
     "evolvesFrom": 102,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "item",
+      "item": "leaf-stone"
+    }
   },
   {
     "id": 104,
@@ -647,17 +887,29 @@
   {
     "id": 105,
     "evolvesFrom": 104,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 28
+    }
   },
   {
     "id": 106,
     "evolvesFrom": 236,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 20
+    }
   },
   {
     "id": 107,
     "evolvesFrom": 236,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 20
+    }
   },
   {
     "id": 108,
@@ -674,7 +926,11 @@
   {
     "id": 110,
     "evolvesFrom": 109,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 35
+    }
   },
   {
     "id": 111,
@@ -686,7 +942,11 @@
   {
     "id": 112,
     "evolvesFrom": 111,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 42
+    }
   },
   {
     "id": 113,
@@ -717,7 +977,11 @@
     "evolvesFrom": 116,
     "evolvesTo": [
       230
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 32
+    }
   },
   {
     "id": 118,
@@ -729,7 +993,11 @@
   {
     "id": 119,
     "evolvesFrom": 118,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 33
+    }
   },
   {
     "id": 120,
@@ -741,7 +1009,11 @@
   {
     "id": 121,
     "evolvesFrom": 120,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "item",
+      "item": "water-stone"
+    }
   },
   {
     "id": 122,
@@ -758,17 +1030,29 @@
   {
     "id": 124,
     "evolvesFrom": 238,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 30
+    }
   },
   {
     "id": 125,
     "evolvesFrom": 239,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 30
+    }
   },
   {
     "id": 126,
     "evolvesFrom": 240,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 30
+    }
   },
   {
     "id": 127,
@@ -790,7 +1074,11 @@
   {
     "id": 130,
     "evolvesFrom": 129,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 20
+    }
   },
   {
     "id": 131,
@@ -816,17 +1104,29 @@
   {
     "id": 134,
     "evolvesFrom": 133,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "item",
+      "item": "water-stone"
+    }
   },
   {
     "id": 135,
     "evolvesFrom": 133,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "item",
+      "item": "thunder-stone"
+    }
   },
   {
     "id": 136,
     "evolvesFrom": 133,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "item",
+      "item": "fire-stone"
+    }
   },
   {
     "id": 137,
@@ -845,7 +1145,11 @@
   {
     "id": 139,
     "evolvesFrom": 138,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 40
+    }
   },
   {
     "id": 140,
@@ -857,7 +1161,11 @@
   {
     "id": 141,
     "evolvesFrom": 140,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 40
+    }
   },
   {
     "id": 142,
@@ -896,12 +1204,20 @@
     "evolvesFrom": 147,
     "evolvesTo": [
       149
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 30
+    }
   },
   {
     "id": 149,
     "evolvesFrom": 148,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 55
+    }
   },
   {
     "id": 150,
@@ -925,12 +1241,20 @@
     "evolvesFrom": 152,
     "evolvesTo": [
       154
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 16
+    }
   },
   {
     "id": 154,
     "evolvesFrom": 153,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 32
+    }
   },
   {
     "id": 155,
@@ -944,12 +1268,20 @@
     "evolvesFrom": 155,
     "evolvesTo": [
       157
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 14
+    }
   },
   {
     "id": 157,
     "evolvesFrom": 156,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 36
+    }
   },
   {
     "id": 158,
@@ -963,12 +1295,20 @@
     "evolvesFrom": 158,
     "evolvesTo": [
       160
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 18
+    }
   },
   {
     "id": 160,
     "evolvesFrom": 159,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 30
+    }
   },
   {
     "id": 161,
@@ -980,7 +1320,11 @@
   {
     "id": 162,
     "evolvesFrom": 161,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 15
+    }
   },
   {
     "id": 163,
@@ -992,7 +1336,11 @@
   {
     "id": 164,
     "evolvesFrom": 163,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 20
+    }
   },
   {
     "id": 165,
@@ -1004,7 +1352,11 @@
   {
     "id": 166,
     "evolvesFrom": 165,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 18
+    }
   },
   {
     "id": 167,
@@ -1016,12 +1368,20 @@
   {
     "id": 168,
     "evolvesFrom": 167,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 22
+    }
   },
   {
     "id": 169,
     "evolvesFrom": 42,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "happiness",
+      "time": null
+    }
   },
   {
     "id": 170,
@@ -1033,7 +1393,11 @@
   {
     "id": 171,
     "evolvesFrom": 170,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 27
+    }
   },
   {
     "id": 172,
@@ -1066,7 +1430,11 @@
   {
     "id": 176,
     "evolvesFrom": 175,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "happiness",
+      "time": null
+    }
   },
   {
     "id": 177,
@@ -1078,7 +1446,11 @@
   {
     "id": 178,
     "evolvesFrom": 177,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 25
+    }
   },
   {
     "id": 179,
@@ -1092,29 +1464,49 @@
     "evolvesFrom": 179,
     "evolvesTo": [
       181
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 15
+    }
   },
   {
     "id": 181,
     "evolvesFrom": 180,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 30
+    }
   },
   {
     "id": 182,
     "evolvesFrom": 44,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "item",
+      "item": "sun-stone"
+    }
   },
   {
     "id": 183,
     "evolvesFrom": 298,
     "evolvesTo": [
       184
-    ]
+    ],
+    "method": {
+      "kind": "happiness",
+      "time": null
+    }
   },
   {
     "id": 184,
     "evolvesFrom": 183,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 18
+    }
   },
   {
     "id": 185,
@@ -1124,7 +1516,11 @@
   {
     "id": 186,
     "evolvesFrom": 61,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "trade",
+      "item": "kings-rock"
+    }
   },
   {
     "id": 187,
@@ -1138,12 +1534,20 @@
     "evolvesFrom": 187,
     "evolvesTo": [
       189
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 18
+    }
   },
   {
     "id": 189,
     "evolvesFrom": 188,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 27
+    }
   },
   {
     "id": 190,
@@ -1160,7 +1564,11 @@
   {
     "id": 192,
     "evolvesFrom": 191,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "item",
+      "item": "sun-stone"
+    }
   },
   {
     "id": 193,
@@ -1177,17 +1585,29 @@
   {
     "id": 195,
     "evolvesFrom": 194,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 20
+    }
   },
   {
     "id": 196,
     "evolvesFrom": 133,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "happiness",
+      "time": "day"
+    }
   },
   {
     "id": 197,
     "evolvesFrom": 133,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "happiness",
+      "time": "night"
+    }
   },
   {
     "id": 198,
@@ -1197,7 +1617,11 @@
   {
     "id": 199,
     "evolvesFrom": 79,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "trade",
+      "item": "kings-rock"
+    }
   },
   {
     "id": 200,
@@ -1212,7 +1636,11 @@
   {
     "id": 202,
     "evolvesFrom": 360,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 15
+    }
   },
   {
     "id": 203,
@@ -1229,7 +1657,11 @@
   {
     "id": 205,
     "evolvesFrom": 204,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 31
+    }
   },
   {
     "id": 206,
@@ -1244,7 +1676,11 @@
   {
     "id": 208,
     "evolvesFrom": 95,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "trade",
+      "item": "metal-coat"
+    }
   },
   {
     "id": 209,
@@ -1256,7 +1692,11 @@
   {
     "id": 210,
     "evolvesFrom": 209,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 23
+    }
   },
   {
     "id": 211,
@@ -1266,7 +1706,11 @@
   {
     "id": 212,
     "evolvesFrom": 123,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "trade",
+      "item": "metal-coat"
+    }
   },
   {
     "id": 213,
@@ -1293,7 +1737,11 @@
   {
     "id": 217,
     "evolvesFrom": 216,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 30
+    }
   },
   {
     "id": 218,
@@ -1305,7 +1753,11 @@
   {
     "id": 219,
     "evolvesFrom": 218,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 38
+    }
   },
   {
     "id": 220,
@@ -1317,7 +1769,11 @@
   {
     "id": 221,
     "evolvesFrom": 220,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 33
+    }
   },
   {
     "id": 222,
@@ -1334,7 +1790,11 @@
   {
     "id": 224,
     "evolvesFrom": 223,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 25
+    }
   },
   {
     "id": 225,
@@ -1361,12 +1821,20 @@
   {
     "id": 229,
     "evolvesFrom": 228,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 24
+    }
   },
   {
     "id": 230,
     "evolvesFrom": 117,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "trade",
+      "item": "dragon-scale"
+    }
   },
   {
     "id": 231,
@@ -1378,12 +1846,20 @@
   {
     "id": 232,
     "evolvesFrom": 231,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 25
+    }
   },
   {
     "id": 233,
     "evolvesFrom": 137,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "trade",
+      "item": "up-grade"
+    }
   },
   {
     "id": 234,
@@ -1407,7 +1883,11 @@
   {
     "id": 237,
     "evolvesFrom": 236,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 20
+    }
   },
   {
     "id": 238,
@@ -1438,7 +1918,11 @@
   {
     "id": 242,
     "evolvesFrom": 113,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "happiness",
+      "time": null
+    }
   },
   {
     "id": 243,
@@ -1467,12 +1951,20 @@
     "evolvesFrom": 246,
     "evolvesTo": [
       248
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 30
+    }
   },
   {
     "id": 248,
     "evolvesFrom": 247,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 55
+    }
   },
   {
     "id": 249,
@@ -1501,12 +1993,20 @@
     "evolvesFrom": 252,
     "evolvesTo": [
       254
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 16
+    }
   },
   {
     "id": 254,
     "evolvesFrom": 253,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 36
+    }
   },
   {
     "id": 255,
@@ -1520,12 +2020,20 @@
     "evolvesFrom": 255,
     "evolvesTo": [
       257
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 16
+    }
   },
   {
     "id": 257,
     "evolvesFrom": 256,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 36
+    }
   },
   {
     "id": 258,
@@ -1539,12 +2047,20 @@
     "evolvesFrom": 258,
     "evolvesTo": [
       260
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 16
+    }
   },
   {
     "id": 260,
     "evolvesFrom": 259,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 36
+    }
   },
   {
     "id": 261,
@@ -1556,7 +2072,11 @@
   {
     "id": 262,
     "evolvesFrom": 261,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 18
+    }
   },
   {
     "id": 263,
@@ -1568,7 +2088,11 @@
   {
     "id": 264,
     "evolvesFrom": 263,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 20
+    }
   },
   {
     "id": 265,
@@ -1583,24 +2107,40 @@
     "evolvesFrom": 265,
     "evolvesTo": [
       267
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 7
+    }
   },
   {
     "id": 267,
     "evolvesFrom": 266,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 10
+    }
   },
   {
     "id": 268,
     "evolvesFrom": 265,
     "evolvesTo": [
       269
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 7
+    }
   },
   {
     "id": 269,
     "evolvesFrom": 268,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 10
+    }
   },
   {
     "id": 270,
@@ -1614,12 +2154,20 @@
     "evolvesFrom": 270,
     "evolvesTo": [
       272
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 14
+    }
   },
   {
     "id": 272,
     "evolvesFrom": 271,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "item",
+      "item": "water-stone"
+    }
   },
   {
     "id": 273,
@@ -1633,12 +2181,20 @@
     "evolvesFrom": 273,
     "evolvesTo": [
       275
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 14
+    }
   },
   {
     "id": 275,
     "evolvesFrom": 274,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "item",
+      "item": "leaf-stone"
+    }
   },
   {
     "id": 276,
@@ -1650,7 +2206,11 @@
   {
     "id": 277,
     "evolvesFrom": 276,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 22
+    }
   },
   {
     "id": 278,
@@ -1662,7 +2222,11 @@
   {
     "id": 279,
     "evolvesFrom": 278,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 25
+    }
   },
   {
     "id": 280,
@@ -1676,12 +2240,20 @@
     "evolvesFrom": 280,
     "evolvesTo": [
       282
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 20
+    }
   },
   {
     "id": 282,
     "evolvesFrom": 281,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 30
+    }
   },
   {
     "id": 283,
@@ -1693,7 +2265,11 @@
   {
     "id": 284,
     "evolvesFrom": 283,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 22
+    }
   },
   {
     "id": 285,
@@ -1705,7 +2281,11 @@
   {
     "id": 286,
     "evolvesFrom": 285,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 23
+    }
   },
   {
     "id": 287,
@@ -1719,12 +2299,20 @@
     "evolvesFrom": 287,
     "evolvesTo": [
       289
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 18
+    }
   },
   {
     "id": 289,
     "evolvesFrom": 288,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 36
+    }
   },
   {
     "id": 290,
@@ -1737,12 +2325,19 @@
   {
     "id": 291,
     "evolvesFrom": 290,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 20
+    }
   },
   {
     "id": 292,
     "evolvesFrom": 290,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "other"
+    }
   },
   {
     "id": 293,
@@ -1756,12 +2351,20 @@
     "evolvesFrom": 293,
     "evolvesTo": [
       295
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 20
+    }
   },
   {
     "id": 295,
     "evolvesFrom": 294,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 40
+    }
   },
   {
     "id": 296,
@@ -1773,7 +2376,11 @@
   {
     "id": 297,
     "evolvesFrom": 296,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 24
+    }
   },
   {
     "id": 298,
@@ -1797,7 +2404,11 @@
   {
     "id": 301,
     "evolvesFrom": 300,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "item",
+      "item": "moon-stone"
+    }
   },
   {
     "id": 302,
@@ -1821,12 +2432,20 @@
     "evolvesFrom": 304,
     "evolvesTo": [
       306
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 32
+    }
   },
   {
     "id": 306,
     "evolvesFrom": 305,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 42
+    }
   },
   {
     "id": 307,
@@ -1838,7 +2457,11 @@
   {
     "id": 308,
     "evolvesFrom": 307,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 37
+    }
   },
   {
     "id": 309,
@@ -1850,7 +2473,11 @@
   {
     "id": 310,
     "evolvesFrom": 309,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 26
+    }
   },
   {
     "id": 311,
@@ -1887,7 +2514,11 @@
   {
     "id": 317,
     "evolvesFrom": 316,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 26
+    }
   },
   {
     "id": 318,
@@ -1899,7 +2530,11 @@
   {
     "id": 319,
     "evolvesFrom": 318,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 30
+    }
   },
   {
     "id": 320,
@@ -1911,7 +2546,11 @@
   {
     "id": 321,
     "evolvesFrom": 320,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 40
+    }
   },
   {
     "id": 322,
@@ -1923,7 +2562,11 @@
   {
     "id": 323,
     "evolvesFrom": 322,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 33
+    }
   },
   {
     "id": 324,
@@ -1940,7 +2583,11 @@
   {
     "id": 326,
     "evolvesFrom": 325,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 32
+    }
   },
   {
     "id": 327,
@@ -1959,12 +2606,20 @@
     "evolvesFrom": 328,
     "evolvesTo": [
       330
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 35
+    }
   },
   {
     "id": 330,
     "evolvesFrom": 329,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 45
+    }
   },
   {
     "id": 331,
@@ -1976,7 +2631,11 @@
   {
     "id": 332,
     "evolvesFrom": 331,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 32
+    }
   },
   {
     "id": 333,
@@ -1988,7 +2647,11 @@
   {
     "id": 334,
     "evolvesFrom": 333,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 35
+    }
   },
   {
     "id": 335,
@@ -2020,7 +2683,11 @@
   {
     "id": 340,
     "evolvesFrom": 339,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 30
+    }
   },
   {
     "id": 341,
@@ -2032,7 +2699,11 @@
   {
     "id": 342,
     "evolvesFrom": 341,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 30
+    }
   },
   {
     "id": 343,
@@ -2044,7 +2715,11 @@
   {
     "id": 344,
     "evolvesFrom": 343,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 36
+    }
   },
   {
     "id": 345,
@@ -2056,7 +2731,11 @@
   {
     "id": 346,
     "evolvesFrom": 345,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 40
+    }
   },
   {
     "id": 347,
@@ -2068,7 +2747,11 @@
   {
     "id": 348,
     "evolvesFrom": 347,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 40
+    }
   },
   {
     "id": 349,
@@ -2080,7 +2763,10 @@
   {
     "id": 350,
     "evolvesFrom": 349,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "beauty"
+    }
   },
   {
     "id": 351,
@@ -2102,7 +2788,11 @@
   {
     "id": 354,
     "evolvesFrom": 353,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 37
+    }
   },
   {
     "id": 355,
@@ -2114,7 +2804,11 @@
   {
     "id": 356,
     "evolvesFrom": 355,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 37
+    }
   },
   {
     "id": 357,
@@ -2148,7 +2842,11 @@
   {
     "id": 362,
     "evolvesFrom": 361,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 42
+    }
   },
   {
     "id": 363,
@@ -2162,12 +2860,20 @@
     "evolvesFrom": 363,
     "evolvesTo": [
       365
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 32
+    }
   },
   {
     "id": 365,
     "evolvesFrom": 364,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 44
+    }
   },
   {
     "id": 366,
@@ -2180,12 +2886,20 @@
   {
     "id": 367,
     "evolvesFrom": 366,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "trade",
+      "item": "deep-sea-tooth"
+    }
   },
   {
     "id": 368,
     "evolvesFrom": 366,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "trade",
+      "item": "deep-sea-scale"
+    }
   },
   {
     "id": 369,
@@ -2209,12 +2923,20 @@
     "evolvesFrom": 371,
     "evolvesTo": [
       373
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 30
+    }
   },
   {
     "id": 373,
     "evolvesFrom": 372,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 50
+    }
   },
   {
     "id": 374,
@@ -2228,12 +2950,20 @@
     "evolvesFrom": 374,
     "evolvesTo": [
       376
-    ]
+    ],
+    "method": {
+      "kind": "level",
+      "level": 20
+    }
   },
   {
     "id": 376,
     "evolvesFrom": 375,
-    "evolvesTo": []
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 45
+    }
   },
   {
     "id": 377,

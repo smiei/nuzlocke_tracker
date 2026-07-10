@@ -17,7 +17,7 @@ export function EvolveButton({
   runId: number;
   lang: Lang;
   encounterId: number;
-  targets: { id: number; name: string }[];
+  targets: { id: number; name: string; method: string | null }[];
 }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -62,7 +62,7 @@ export function EvolveButton({
         {t.evolve}
       </button>
       {open && (
-        <ul className="absolute z-10 mt-1 min-w-[160px] overflow-hidden rounded-md border border-zinc-200 bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
+        <ul className="absolute z-10 mt-1 min-w-[180px] overflow-hidden rounded-md border border-zinc-200 bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
           {targets.map((target) => (
             <li key={target.id}>
               <button
@@ -71,7 +71,14 @@ export function EvolveButton({
                 className="flex w-full items-center gap-2 px-2 py-1.5 text-left text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800"
               >
                 <PokemonSprite pokemonId={target.id} name={target.name} size="sm" />
-                <span>{target.name}</span>
+                <span className="flex min-w-0 flex-col">
+                  <span>{target.name}</span>
+                  {target.method && (
+                    <span className="text-xs text-zinc-400 dark:text-zinc-500">
+                      {target.method}
+                    </span>
+                  )}
+                </span>
               </button>
             </li>
           ))}
