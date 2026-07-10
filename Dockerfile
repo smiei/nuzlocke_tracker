@@ -40,7 +40,7 @@ COPY --from=builder /app/data ./data
 # scripts/download-sprites.mjs if they're missing (they are deliberately NOT
 # in this image - see .dockerignore).
 COPY --from=builder /app/scripts ./scripts
-RUN mkdir -p /app/public/pokemon-sprites /app/public/trainers
+RUN mkdir -p /app/public/pokemon-sprites /app/public/ball-sprites /app/public/trainers
 # The generated Prisma client (incl. the native query engine binary for this
 # platform) lives outside node_modules; Next's build doesn't bundle it, so it
 # must be copied explicitly or the client can't find its query engine.

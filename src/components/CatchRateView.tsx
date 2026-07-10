@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { Pokemon } from "@/lib/data";
 import type { BallId, StatusId } from "@/lib/catchrate";
 import { BALL_IDS, STATUS_IDS, computeCatchChance } from "@/lib/catchrate";
@@ -27,6 +27,89 @@ function hpBarColor(hpPercent: number): string {
   if (hpPercent > 50) return "bg-green-500";
   if (hpPercent > 20) return "bg-amber-400";
   return "bg-red-500";
+}
+
+// Item sprites live in /public/ball-sprites (downloaded via
+// scripts/download-sprites.mjs, kept out of repo/image like all artwork).
+function BallSprite({ ball, size = 24 }: { ball: BallId; size?: number }) {
+  const [failed, setFailed] = useState(false);
+  if (failed) return <span style={{ width: size, height: size }} className="inline-block shrink-0" />;
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={`/ball-sprites/${ball}.png`}
+      alt=""
+      width={size}
+      height={size}
+      loading="lazy"
+      onError={() => setFailed(true)}
+      style={{ imageRendering: "pixelated" }}
+      className="shrink-0"
+    />
+  );
+}
+
+// Custom dropdown instead of a native <select> so every option can show its
+// ball sprite - same pattern as the evolve/team pickers.
+function BallPicker({
+  ball,
+  labels,
+  onPick,
+}: {
+  ball: BallId;
+  labels: Record<BallId, string>;
+  onPick: (ball: BallId) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  return (
+    <div ref={containerRef} className="relative">
+      <button
+        type="button"
+        id="cr-ball"
+        onClick={() => setOpen((o) => !o)}
+        className="flex w-full items-center justify-between gap-2 rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-left text-sm dark:border-zinc-700 dark:bg-zinc-900"
+      >
+        <span className="flex min-w-0 items-center gap-2">
+          <BallSprite ball={ball} />
+          <span className="truncate">{labels[ball]}</span>
+        </span>
+        <span className="shrink-0 text-xs text-zinc-400">▾</span>
+      </button>
+      {open && (
+        <ul className="absolute z-10 mt-1 max-h-72 w-full overflow-y-auto rounded-md border border-zinc-200 bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
+          {BALL_IDS.map((id) => (
+            <li key={id}>
+              <button
+                type="button"
+                onClick={() => {
+                  setOpen(false);
+                  onPick(id);
+                }}
+                className={`flex w-full items-center gap-2 px-2 py-1.5 text-left text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800 ${
+                  id === ball ? "bg-zinc-100 dark:bg-zinc-800" : ""
+                }`}
+              >
+                <BallSprite ball={id} />
+                <span>{labels[id]}</span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
 }
 
 export function CatchRateView({
@@ -90,18 +173,7 @@ export function CatchRateView({
             <label className={labelClass} htmlFor="cr-ball">
               {t.ballLabel}
             </label>
-            <select
-              id="cr-ball"
-              value={ball}
-              onChange={(e) => setBall(e.target.value as BallId)}
-              className={inputClass}
-            >
-              {BALL_IDS.map((id) => (
-                <option key={id} value={id}>
-                  {t.balls[id]}
-                </option>
-              ))}
-            </select>
+            <BallPicker ball={ball} labels={t.balls} onPick={setBall} />
           </div>
 
           <div className="col-span-2 sm:col-span-1">

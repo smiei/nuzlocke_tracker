@@ -77,7 +77,12 @@ export function LevelCapsView({
             </div>
             {cap.max_level !== null && (
               <div className="shrink-0 text-right">
-                <div className="text-lg font-semibold tabular-nums">{cap.max_level}</div>
+                {/* "cap / cap-2": one team member may reach the cap, the rest
+                    stay two levels below (house rule). */}
+                <div className="text-lg font-semibold tabular-nums">
+                  {cap.max_level}
+                  <span className="text-zinc-400 dark:text-zinc-500"> / {cap.max_level - 2}</span>
+                </div>
                 <div className="text-xs text-zinc-400 dark:text-zinc-500">{t.maxLevel}</div>
               </div>
             )}

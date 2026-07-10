@@ -1,6 +1,6 @@
 "use client";
 
-import { useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { SoulLinkView } from "@/lib/types";
 import { LinkStatus, RunMode } from "@/generated/prisma/enums";
@@ -10,12 +10,106 @@ import { useDialog } from "@/components/DialogProvider";
 import type { Lang } from "@/lib/i18n/dictionary";
 import { translations } from "@/lib/i18n/dictionary";
 import { EncounterTile } from "@/components/EncounterTile";
+import { PokemonSprite } from "@/components/PokemonSprite";
 
 const TEAM_SIZE = 6;
 
 function linkLabel(link: SoulLinkView): string {
   const names = link.encounters.map((e) => e.pokemonName);
   return names.length ? names.join(" & ") : link.routeName;
+}
+
+// Custom dropdown instead of a native <select> so each option can show the
+// link's Pokémon sprites - same pattern as the evolve dropdown.
+function SlotPicker({
+  slotLabel,
+  placeholder,
+  current,
+  options,
+  pending,
+  onPick,
+}: {
+  slotLabel: string;
+  placeholder: string;
+  current: SoulLinkView | null;
+  options: SoulLinkView[];
+  pending: boolean;
+  onPick: (soulLinkId: number | null) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  function pick(id: number | null) {
+    setOpen(false);
+    onPick(id);
+  }
+
+  return (
+    <div ref={containerRef} className="relative">
+      <button
+        type="button"
+        aria-label={slotLabel}
+        disabled={pending}
+        onClick={() => setOpen((o) => !o)}
+        className="flex w-full items-center justify-between gap-2 rounded-md border border-zinc-200 bg-white px-2 py-1.5 text-left text-sm disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-900"
+      >
+        <span className="flex min-w-0 items-center gap-1.5">
+          {current ? (
+            <>
+              {current.encounters.map((e) => (
+                <PokemonSprite key={e.id} pokemonId={e.pokemonId} name={e.pokemonName} size="sm" />
+              ))}
+              <span className="truncate">{linkLabel(current)}</span>
+            </>
+          ) : (
+            <span className="text-zinc-400 dark:text-zinc-500">{placeholder}</span>
+          )}
+        </span>
+        <span className="shrink-0 text-xs text-zinc-400">▾</span>
+      </button>
+      {open && (
+        <ul className="absolute bottom-full z-10 mb-1 max-h-64 w-full min-w-[200px] overflow-y-auto rounded-md border border-zinc-200 bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
+          {current && (
+            <li>
+              <button
+                type="button"
+                onClick={() => pick(null)}
+                className="block w-full px-2 py-1.5 text-left text-sm text-zinc-400 hover:bg-zinc-100 dark:text-zinc-500 dark:hover:bg-zinc-800"
+              >
+                {placeholder}
+              </button>
+            </li>
+          )}
+          {options.map((l) => (
+            <li key={l.id}>
+              <button
+                type="button"
+                onClick={() => pick(l.id)}
+                className={`flex w-full items-center gap-2 px-2 py-1.5 text-left text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800 ${
+                  current?.id === l.id ? "bg-zinc-100 dark:bg-zinc-800" : ""
+                }`}
+              >
+                {l.encounters.map((e) => (
+                  <PokemonSprite key={e.id} pokemonId={e.pokemonId} name={e.pokemonName} size="sm" />
+                ))}
+                <span className="truncate">{linkLabel(l)}</span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
 }
 
 export function TeamBar({
@@ -43,8 +137,7 @@ export function TeamBar({
     (_, i) => aliveLinks.find((l) => l.teamPosition === i) ?? null,
   );
 
-  function handleSelect(position: number, value: string) {
-    const soulLinkId = value === "" ? null : Number(value);
+  function handleSelect(position: number, soulLinkId: number | null) {
     startTransition(async () => {
       const result = await setTeamSlot(runId, position, soulLinkId);
       if (!result.success) await alert({ message: formatActionError(result.error, lang) });
@@ -111,20 +204,14 @@ export function TeamBar({
                 </div>
               )}
               <div className="mt-auto pt-3">
-                <select
-                  aria-label={t.links.teamSlotLabel(i + 1)}
-                  value={link ? String(link.id) : ""}
-                  disabled={pending}
-                  onChange={(e) => handleSelect(i, e.target.value)}
-                  className="w-full rounded-md border border-zinc-200 bg-white px-2 py-1.5 text-sm disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-900"
-                >
-                  <option value="">{t.links.teamSelectPlaceholder}</option>
-                  {aliveLinks.map((l) => (
-                    <option key={l.id} value={l.id}>
-                      {linkLabel(l)}
-                    </option>
-                  ))}
-                </select>
+                <SlotPicker
+                  slotLabel={t.links.teamSlotLabel(i + 1)}
+                  placeholder={t.links.teamSelectPlaceholder}
+                  current={link}
+                  options={aliveLinks}
+                  pending={pending}
+                  onPick={(id) => handleSelect(i, id)}
+                />
               </div>
             </div>
           );

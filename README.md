@@ -76,6 +76,7 @@ docker compose up --build
 | --- | --- |
 | `/app/db` | SQLite database (required) |
 | `/app/public/pokemon-sprites` | Pokémon sprites – auto-filled on first start, persists across image updates (recommended) |
+| `/app/public/ball-sprites` | Poké Ball item sprites – auto-filled on first start (optional; simply re-downloaded when missing) |
 | `/app/public/trainers` | Trainer avatars – place your own `<slug>.png` files here (optional) |
 | `/app/data` | Static reference data override (optional; omit to use the data baked into the image) |
 

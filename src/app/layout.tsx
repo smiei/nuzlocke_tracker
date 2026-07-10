@@ -9,6 +9,9 @@ import { HeaderTitle } from "@/components/HeaderTitle";
 import { RunSwitcher } from "@/components/RunSwitcher";
 import { BackupControls } from "@/components/BackupControls";
 import { DialogProvider } from "@/components/DialogProvider";
+import { LiveRefresh } from "@/components/LiveRefresh";
+import { TabOrderButton } from "@/components/TabOrderButton";
+import { TabOrderProvider } from "@/components/TabOrderProvider";
 import { LanguageProvider } from "@/lib/i18n/LanguageProvider";
 import { prisma } from "@/lib/prisma";
 import "./globals.css";
@@ -45,6 +48,7 @@ export default async function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <LanguageProvider>
             <DialogProvider>
+            <TabOrderProvider>
               <header className="border-b border-zinc-200 dark:border-zinc-800">
                 <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
                   <HeaderTitle />
@@ -59,6 +63,7 @@ export default async function RootLayout({
                     <Suspense fallback={<div className="h-9 w-9 rounded-md border border-zinc-200 dark:border-zinc-700" />}>
                       <BackupControls runs={runs} />
                     </Suspense>
+                    <TabOrderButton />
                     <LanguageSwitcher />
                     <ThemeToggle />
                   </div>
@@ -70,6 +75,8 @@ export default async function RootLayout({
                 </div>
               </header>
               <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-6">{children}</main>
+              <LiveRefresh />
+            </TabOrderProvider>
             </DialogProvider>
           </LanguageProvider>
         </ThemeProvider>

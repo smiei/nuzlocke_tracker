@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { NAV_ITEMS } from "@/lib/nav";
+import { useTabOrder } from "@/components/TabOrderProvider";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import { translations } from "@/lib/i18n/dictionary";
 
@@ -11,11 +12,16 @@ export function Navigation() {
   const searchParams = useSearchParams();
   const run = searchParams.get("run");
   const { lang } = useLanguage();
+  const { order } = useTabOrder();
   const t = translations[lang].nav;
+
+  const items = order
+    .map((href) => NAV_ITEMS.find((item) => item.href === href))
+    .filter((item): item is (typeof NAV_ITEMS)[number] => item !== undefined);
 
   return (
     <nav className="flex gap-1 overflow-x-auto px-4 sm:px-6">
-      {NAV_ITEMS.map((item) => {
+      {items.map((item) => {
         const isActive = pathname === item.href;
         const href = run ? `${item.href}?run=${run}` : item.href;
         return (

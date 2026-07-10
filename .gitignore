@@ -50,7 +50,11 @@ next-env.d.ts
 # pokemon sprites - downloaded via scripts/download-sprites.mjs, regenerable,
 # not worth committing (386 binary files)
 /public/pokemon-sprites/
+/public/ball-sprites/
 
 # trainer sprites - copyrighted game artwork, user-provided (see
 # public/trainers/README.txt); kept out of the repo for publication
 /public/trainers/*.png
+
+# Claude Code local settings (machine-specific, never committed)
+.claude/

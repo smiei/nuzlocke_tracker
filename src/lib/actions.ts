@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { publishChange } from "@/lib/liveBus";
 import { prisma } from "@/lib/prisma";
 import { getPokemonById, getRouteById, getEvolutionById, getLevelCaps } from "@/lib/data";
 import { EncounterStatus, LinkStatus, Player, RunMode } from "@/generated/prisma/client";
@@ -103,6 +104,7 @@ export async function saveEncounter(
 
   revalidatePath("/tracker");
   revalidatePath("/links");
+  publishChange(runId);
   return { success: true };
 }
 
@@ -128,6 +130,7 @@ export async function markDead(runId: number, soulLinkId: number): Promise<MarkD
 
   revalidatePath("/tracker");
   revalidatePath("/links");
+  publishChange(runId);
   return { success: true };
 }
 
@@ -153,6 +156,7 @@ export async function markAlive(runId: number, soulLinkId: number): Promise<Mark
 
   revalidatePath("/tracker");
   revalidatePath("/links");
+  publishChange(runId);
   return { success: true };
 }
 
@@ -193,6 +197,7 @@ export async function evolveEncounter(
   });
 
   revalidatePath("/links");
+  publishChange(runId);
   return { success: true };
 }
 
@@ -219,6 +224,7 @@ export async function revertEvolution(runId: number, encounterId: number): Promi
   });
 
   revalidatePath("/links");
+  publishChange(runId);
   return { success: true };
 }
 
@@ -246,6 +252,7 @@ export async function toggleLevelCapDefeated(
   });
 
   revalidatePath("/levelcaps");
+  publishChange(runId);
   return { success: true, defeated: nextDefeated };
 }
 
@@ -284,6 +291,7 @@ export async function setTeamSlot(
   });
 
   revalidatePath("/links");
+  publishChange(runId);
   return { success: true };
 }
 
@@ -307,6 +315,7 @@ export async function createRun(name: string, mode: RunMode): Promise<CreateRunR
 
   const run = await prisma.run.create({ data: { name: trimmed, mode, rulesMarkdown } });
   revalidatePath("/", "layout");
+  publishChange(run.id);
   return { success: true, runId: run.id };
 }
 
@@ -320,6 +329,7 @@ export async function saveRules(runId: number, markdown: string): Promise<SaveRu
 
   await prisma.run.update({ where: { id: runId }, data: { rulesMarkdown: markdown } });
   revalidatePath("/rules");
+  publishChange(runId);
   return { success: true };
 }
 
@@ -336,6 +346,7 @@ export async function deleteRun(runId: number): Promise<DeleteRunResult> {
 
   await prisma.run.delete({ where: { id: runId } });
   revalidatePath("/", "layout");
+  publishChange(runId);
   return { success: true };
 }
 
@@ -374,5 +385,7 @@ export async function importBackup(json: string): Promise<ImportBackupResult> {
 
   const runCount = await applyBackup(parsed);
   revalidatePath("/", "layout");
+  // Imports add whole runs - no single runId; 0 = "anything changed".
+  publishChange(0);
   return { success: true, runCount };
 }

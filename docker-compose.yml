@@ -8,6 +8,7 @@ services:
       - ./data:/app/data:ro
       # Sprites live outside the image (copyright) - mount the local copies.
       - ./public/pokemon-sprites:/app/public/pokemon-sprites
+      - ./public/ball-sprites:/app/public/ball-sprites
       - ./public/trainers:/app/public/trainers:ro
     environment:
       - DATABASE_URL=file:/app/db/nuzlocke.db

@@ -5,6 +5,7 @@ export const NAV_ITEMS = [
   { href: "/tracker", labelKey: "tracker" },
   { href: "/links", labelKey: "links" },
   { href: "/typen", labelKey: "typen" },
+  { href: "/weaknesses", labelKey: "weaknesses" },
   { href: "/catchrate", labelKey: "catchrate" },
   { href: "/pokedex", labelKey: "pokedex" },
   { href: "/levelcaps", labelKey: "levelcaps" },
