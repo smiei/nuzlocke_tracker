@@ -160,7 +160,6 @@ export function TeamBar({
       </h3>
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {slots.map((link, i) => {
-          const paired = (link?.encounters.length ?? 0) > 1;
           return (
             <div
               key={i}
@@ -183,7 +182,7 @@ export function TeamBar({
                       {t.links.markDead}
                     </button>
                   </div>
-                  <div className={paired ? "grid grid-cols-2 gap-3" : "flex justify-center"}>
+                  <div className="flex flex-col gap-3">
                     {link.encounters.map((e) => (
                       <EncounterTile
                         key={e.id}

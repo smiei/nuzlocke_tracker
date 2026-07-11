@@ -32,6 +32,7 @@ export function LinksView({
   const [pendingId, setPendingId] = useState<number | null>(null);
   const [, startTransition] = useTransition();
   const [sortBySumme, setSortBySumme] = useState(false);
+  const [evolvableOnly, setEvolvableOnly] = useState(false);
   const t = translations[lang];
   const isClassic = mode === RunMode.CLASSIC;
 
@@ -52,9 +53,19 @@ export function LinksView({
     (l) => l.teamPosition !== null && l.status !== LinkStatus.DEAD,
   );
 
-  const sortedLinks = sortBySumme
-    ? [...soulLinks].sort((a, b) => totalSumme(b) - totalSumme(a))
-    : soulLinks;
+  // Dead links always sink to the end; within alive/dead groups the chosen
+  // sort applies (server order already has dead last for the default sort).
+  const sortedLinks = [...soulLinks].sort(
+    (a, b) =>
+      Number(a.status === LinkStatus.DEAD) - Number(b.status === LinkStatus.DEAD) ||
+      (sortBySumme ? totalSumme(b) - totalSumme(a) : 0),
+  );
+
+  const visibleLinks = evolvableOnly
+    ? sortedLinks.filter((link) =>
+        link.encounters.some((e) => e.evolvesTo.some((target) => target.available)),
+      )
+    : sortedLinks;
 
   function handleMarkDead(id: number) {
     setPendingId(id);
@@ -103,12 +114,23 @@ export function LinksView({
           <option value="default">{t.links.sortDefault}</option>
           <option value="summe">{t.links.sortSumme}</option>
         </select>
+        <button
+          type="button"
+          onClick={() => setEvolvableOnly((v) => !v)}
+          title={t.links.filterEvolvableTitle}
+          className={`rounded-md border px-2 py-1.5 text-sm font-medium transition-colors ${
+            evolvableOnly
+              ? "border-emerald-400 bg-emerald-50 text-emerald-700 dark:border-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300"
+              : "border-zinc-200 text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+          }`}
+        >
+          {t.links.filterEvolvable}
+        </button>
       </div>
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        {sortedLinks.map((link) => {
+        {visibleLinks.map((link) => {
           const isDead = link.status === LinkStatus.DEAD;
           const onTeam = link.teamPosition !== null;
-          const paired = link.encounters.length > 1;
           return (
             <div
               key={link.id}
@@ -157,7 +179,7 @@ export function LinksView({
                   </div>
                 )}
               </div>
-              <div className={paired ? "grid grid-cols-2 gap-3" : "flex justify-center"}>
+              <div className="flex flex-col gap-3">
                 {link.encounters.map((e) => (
                   <EncounterTile
                     key={e.id}
@@ -167,7 +189,7 @@ export function LinksView({
                     lang={lang}
                   >
                     {!isDead && (
-                      <div className="mt-1 flex flex-wrap justify-center gap-1.5">
+                      <div className="mt-1 flex flex-wrap gap-1.5">
                         <EvolveButton
                           runId={runId}
                           lang={lang}

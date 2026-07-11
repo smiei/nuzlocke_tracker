@@ -13,14 +13,14 @@ Self-hosted web app for tracking Pokémon Nuzlocke runs – as a two-player Soul
 
 ## Features (tabs)
 
-- **Encounter**: catch one Pokémon per route (and player), with status (Caught/Killed/Fled). Static/gift locations are pre-marked from the data files. Species Clause conflicts show a warning without ever blocking a save; post-game areas are collapsed by default.
-- **Pokémon**: the active 6-slot team plus all links/catches as cards, "mark as dead" (with undo), evolve/devolve (including branching evolutions like Eevee), add-to-team with replace picker, sorting by encounter order or base-stat total.
+- **Encounter**: catch one Pokémon per route (and player), with the catch-time status (Caught/Killed/Fled). Static locations are pre-marked from the data files. Species Clause conflicts show a warning without ever blocking a save; post-game areas are collapsed by default; an "open only" toggle hides completed routes and SoulLink rows missing one player's entry are tinted as a reminder.
+- **Pokémon**: the active 6-slot team plus all links/catches as cards, "mark as dead" (with undo; the catch-time status stays untouched), evolve/devolve incl. evolution methods, a glowing evolve button when a level evolution is reachable within the earned level cap, an "evolvable only" filter, sorting by encounter order or BST (dead links always sink to the end).
 - **Type Effectiveness**: weaknesses/resistances of any Pokémon (defender's perspective) plus the full Gen 3 type matrix.
 - **Catchrate**: catch chance calculator (Gen 3 formula) with ball, HP, level, and status condition inputs.
 - **Pokédex**: sortable table with rank (by base-stat total, standard competition ranking), search with suggestions and scroll-to-row.
 - **Journey**: boss battles (gym leaders, rival, Team Rocket, Elite Four) with level caps, click to mark as defeated.
 - **Rules**: per-run markdown ruleset, editable right in the browser; new runs inherit the rules of the most recent run.
-- **Multiple runs**: fully separate progress per run (SoulLink or solo), switch/create/rename/delete via the header.
+- **Multiple runs**: fully separate progress per run (SoulLink or solo); switch and create via the header, rename/delete plus backup and settings behind the header gear menu.
 - **Backup & import**: export the current run or all runs as a JSON file; import adds the contained runs (including team assignments and rules) without ever overwriting existing data.
 - **Bilingual**: UI, Pokémon, route, and trainer names switchable between German and English (top right).
 

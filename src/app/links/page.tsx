@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { getRouteById, getPokemonById, getPokemonList, getEvolutionById } from "@/lib/data";
+import { getRouteById, getPokemonById, getPokemonList, getEvolutionById, getLevelCaps } from "@/lib/data";
 import { computePokemonRanks } from "@/lib/ranking";
 import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
@@ -29,6 +29,18 @@ export default async function LinksPage({
   });
   const ranks = computePokemonRanks(getPokemonList());
 
+  // Current level cap = the LAST DEFEATED Journey milestone with a cap (the
+  // cap you have earned). House rule: only one Pokémon may reach the cap
+  // itself, everyone else stays at cap-2 - so evolution availability is
+  // judged against cap-2. Nothing defeated yet -> no cap earned, nothing
+  // highlights.
+  const progress = await prisma.levelCapProgress.findMany({ where: { runId } });
+  const defeatedIds = new Set(progress.filter((p) => p.defeated).map((p) => p.levelCapId));
+  const lastDefeatedCap = getLevelCaps()
+    .filter((c) => c.max_level !== null && defeatedIds.has(c.id))
+    .at(-1);
+  const allowedLevel = lastDefeatedCap?.max_level != null ? lastDefeatedCap.max_level - 2 : 0;
+
   const views: SoulLinkView[] = soulLinks.map((link) => ({
     id: link.id,
     routeId: link.routeId,
@@ -56,10 +68,14 @@ export default async function LinksPage({
         evolvesTo: (evo?.evolvesTo ?? []).map((id) => {
           const p = getPokemonById(id);
           const targetEvo = getEvolutionById(id);
+          const method = targetEvo?.method ?? null;
           return {
             id,
             name: p ? pokemonName(p, lang) : `#${id}`,
-            method: targetEvo?.method ? formatEvolutionMethod(targetEvo.method, lang) : null,
+            method: method ? formatEvolutionMethod(method, lang) : null,
+            // Only plain level evolutions count as "reachable now" -
+            // item/trade/friendship evolutions have no level gate.
+            available: method?.kind === "level" && method.level <= allowedLevel,
           };
         }),
         evolvesFrom: (() => {

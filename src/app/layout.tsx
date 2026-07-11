@@ -4,13 +4,11 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import { Navigation } from "@/components/Navigation";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { HeaderTitle } from "@/components/HeaderTitle";
 import { RunSwitcher } from "@/components/RunSwitcher";
-import { BackupControls } from "@/components/BackupControls";
+import { HeaderMenu } from "@/components/HeaderMenu";
 import { DialogProvider } from "@/components/DialogProvider";
 import { LiveRefresh } from "@/components/LiveRefresh";
-import { TabOrderButton } from "@/components/TabOrderButton";
 import { TabOrderProvider } from "@/components/TabOrderProvider";
 import { LanguageProvider } from "@/lib/i18n/LanguageProvider";
 import { prisma } from "@/lib/prisma";
@@ -63,10 +61,8 @@ export default async function RootLayout({
                       <RunSwitcher runs={runs} />
                     </Suspense>
                     <Suspense fallback={<div className="h-9 w-9 rounded-md border border-zinc-200 dark:border-zinc-700" />}>
-                      <BackupControls runs={runs} />
+                      <HeaderMenu runs={runs} />
                     </Suspense>
-                    <TabOrderButton />
-                    <LanguageSwitcher />
                     <ThemeToggle />
                   </div>
                 </div>

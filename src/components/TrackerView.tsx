@@ -30,17 +30,44 @@ export function TrackerView({
   // Post-game areas (Sevii 4-7, Cerulean Cave) are collapsed by default so
   // the main-game list stays tidy until the league is beaten.
   const [showPostgame, setShowPostgame] = useState(false);
+  const [openOnly, setOpenOnly] = useState(false);
 
-  const mainRoutes = routes.filter((r) => !r.postgame);
-  const postgameRoutes = routes.filter((r) => r.postgame);
+  // A route counts as "done" once every player slot has an entry (any
+  // status): both players in SoulLink, player 1 in Classic.
+  function isRouteDone(route: Route): boolean {
+    const p1 = encounters.some((e) => e.routeId === route.id && e.player === Player.PLAYER1);
+    if (isClassic) return p1;
+    const p2 = encounters.some((e) => e.routeId === route.id && e.player === Player.PLAYER2);
+    return p1 && p2;
+  }
+
+  const visible = openOnly ? routes.filter((r) => !isRouteDone(r)) : routes;
+  const mainRoutes = visible.filter((r) => !r.postgame);
+  const postgameRoutes = visible.filter((r) => r.postgame);
 
   function renderRoute(route: Route) {
+    // SoulLink: exactly one of the two players has an entry -> the other
+    // one still owes theirs; tint the row as a gentle reminder.
+    const halfDone =
+      !isClassic &&
+      encounters.some((e) => e.routeId === route.id && e.player === Player.PLAYER1) !==
+        encounters.some((e) => e.routeId === route.id && e.player === Player.PLAYER2);
     return (
       <div
         key={route.id}
-        className="flex flex-col gap-3 p-3 sm:flex-row sm:items-start sm:gap-4 sm:p-4"
+        className={`flex flex-col gap-3 p-3 sm:flex-row sm:items-start sm:gap-4 sm:p-4 ${
+          halfDone ? "border-l-2 border-l-amber-400 bg-amber-50/40 dark:bg-amber-950/10" : ""
+        }`}
       >
         <div className="shrink-0 pt-1.5 sm:w-40">
+          {halfDone && (
+            <span
+              className="mr-1 text-sm text-amber-500 dark:text-amber-400"
+              title={tTracker.missingPlayer}
+            >
+              ⚠
+            </span>
+          )}
           <span className="font-medium">{routeName(route, lang)}</span>
           {route.type === "static" && (
             <span className="ml-1.5 inline-block rounded bg-sky-100 px-1.5 py-0.5 align-middle text-[10px] font-medium text-sky-700 dark:bg-sky-950/50 dark:text-sky-300">
@@ -101,7 +128,22 @@ export function TrackerView({
   }
 
   return (
-    <div className="flex flex-col divide-y divide-zinc-200 rounded-md border border-zinc-200 dark:divide-zinc-800 dark:border-zinc-800">
+    <div>
+      <div className="mb-3 flex items-center gap-2">
+        <button
+          type="button"
+          onClick={() => setOpenOnly((v) => !v)}
+          title={tTracker.openOnlyTitle}
+          className={`rounded-md border px-2 py-1.5 text-sm font-medium transition-colors ${
+            openOnly
+              ? "border-amber-400 bg-amber-50 text-amber-700 dark:border-amber-600 dark:bg-amber-950/40 dark:text-amber-300"
+              : "border-zinc-200 text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+          }`}
+        >
+          {tTracker.openOnly}
+        </button>
+      </div>
+      <div className="flex flex-col divide-y divide-zinc-200 rounded-md border border-zinc-200 dark:divide-zinc-800 dark:border-zinc-800">
       {mainRoutes.map(renderRoute)}
       {postgameRoutes.length > 0 && (
         <>
@@ -122,6 +164,7 @@ export function TrackerView({
           {showPostgame && postgameRoutes.map(renderRoute)}
         </>
       )}
+      </div>
     </div>
   );
 }

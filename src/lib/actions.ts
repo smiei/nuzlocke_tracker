@@ -116,17 +116,14 @@ export async function markDead(runId: number, soulLinkId: number): Promise<MarkD
     return { success: false, error: { key: "soulLinkNotFound", id: soulLinkId } };
   }
 
-  await prisma.$transaction([
-    prisma.encounter.updateMany({
-      where: { soulLinkId },
-      data: { status: EncounterStatus.KILLED },
-    }),
-    // A dead link leaves the team automatically (teamPosition -> null).
-    prisma.soulLink.update({
-      where: { id: soulLinkId },
-      data: { status: LinkStatus.DEAD, teamPosition: null },
-    }),
-  ]);
+  // Deliberately does NOT touch the encounters' status: the Encounter tab
+  // tracks what happened at catch time (stays CAUGHT), while the link's
+  // DEAD/ALIVE state lives on the SoulLink alone. A dead link also leaves
+  // the team automatically (teamPosition -> null).
+  await prisma.soulLink.update({
+    where: { id: soulLinkId },
+    data: { status: LinkStatus.DEAD, teamPosition: null },
+  });
 
   revalidatePath("/tracker");
   revalidatePath("/links");
@@ -134,25 +131,18 @@ export async function markDead(runId: number, soulLinkId: number): Promise<MarkD
   return { success: true };
 }
 
-// Safe/lossless: encounters attached to an ALIVE SoulLink are always CAUGHT
-// (the only way an encounter joins a link at all - see saveEncounter above),
-// so reverting to CAUGHT is always the correct prior state, no history needed.
+// Counterpart to markDead - only flips the link's own status back, the
+// encounters' catch status was never touched.
 export async function markAlive(runId: number, soulLinkId: number): Promise<MarkDeadResult> {
   const soulLink = await prisma.soulLink.findUnique({ where: { id: soulLinkId } });
   if (!soulLink || soulLink.runId !== runId) {
     return { success: false, error: { key: "soulLinkNotFound", id: soulLinkId } };
   }
 
-  await prisma.$transaction([
-    prisma.encounter.updateMany({
-      where: { soulLinkId },
-      data: { status: EncounterStatus.CAUGHT },
-    }),
-    prisma.soulLink.update({
-      where: { id: soulLinkId },
-      data: { status: LinkStatus.ALIVE },
-    }),
-  ]);
+  await prisma.soulLink.update({
+    where: { id: soulLinkId },
+    data: { status: LinkStatus.ALIVE },
+  });
 
   revalidatePath("/tracker");
   revalidatePath("/links");
