@@ -128,6 +128,56 @@ export async function saveEncounter(
   return { success: true };
 }
 
+export type QuickCatchResult =
+  | { success: true; addedToTeam: boolean }
+  | { success: false; error: ActionError };
+
+// One-tap "caught it" from the Catchrate tab: records a CAUGHT encounter on
+// the given route/player (reusing saveEncounter) and drops the route's link
+// into the lowest free team slot (0-5). A full team is not an error - the
+// catch stands, it just doesn't get a slot (addedToTeam: false).
+export async function quickCatch(
+  runId: number,
+  routeId: number,
+  player: Player,
+  pokemonId: number,
+): Promise<QuickCatchResult> {
+  const saved = await saveEncounter({
+    runId,
+    routeId,
+    player,
+    pokemonId,
+    status: EncounterStatus.CAUGHT,
+  });
+  if (!saved.success) return saved;
+
+  const link = await prisma.soulLink.findUnique({
+    where: { runId_routeId: { runId, routeId } },
+  });
+  if (!link) return { success: true, addedToTeam: false };
+  if (link.teamPosition !== null) return { success: true, addedToTeam: true };
+
+  const occupied = new Set(
+    (
+      await prisma.soulLink.findMany({
+        where: { runId, teamPosition: { not: null } },
+        select: { teamPosition: true },
+      })
+    ).map((l) => l.teamPosition as number),
+  );
+  let freeSlot: number | null = null;
+  for (let i = 0; i <= 5; i++) {
+    if (!occupied.has(i)) {
+      freeSlot = i;
+      break;
+    }
+  }
+  if (freeSlot === null) return { success: true, addedToTeam: false };
+
+  const assigned = await setTeamSlot(runId, freeSlot, link.id);
+  return { success: true, addedToTeam: assigned.success };
+}
+
 export type MarkDeadResult = { success: true } | { success: false; error: ActionError };
 
 export async function markDead(runId: number, soulLinkId: number): Promise<MarkDeadResult> {

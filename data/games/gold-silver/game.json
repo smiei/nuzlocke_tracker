@@ -4,6 +4,7 @@
   "generation": 2,
   "dexLimit": 251,
   "spriteSet": "crystal",
+  "versionGroup": "crystal",
   "names": {
     "de": "Gold / Silber / Kristall",
     "en": "Gold / Silver / Crystal",

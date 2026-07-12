@@ -1,13 +1,15 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { Pokemon } from "@/lib/data";
+import type { Pokemon, EvolutionEntry } from "@/lib/data";
+import type { Learnset } from "@/lib/learnset";
 import { computePokemonRanks } from "@/lib/ranking";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import { translations, type Lang } from "@/lib/i18n/dictionary";
-import { localizeName, pokemonName, type LocalizedNames } from "@/lib/i18n/localize";
+import { pokemonName } from "@/lib/i18n/localize";
 import { TypeBadge } from "@/components/TypeBadge";
 import { PokemonSprite } from "@/components/PokemonSprite";
+import { PokemonDetailModal } from "@/components/PokemonDetailModal";
 
 type ColumnKey =
   | "id"
@@ -42,40 +44,23 @@ function getSortValue(
   }
 }
 
-type PokedexGame = { id: string; names: LocalizedNames; dexLimit: number };
-
-const GAME_STORAGE_KEY = "nuzlocke:pokedexGame";
-
 export function PokedexTable({
-  pokemon: allPokemon,
-  games,
+  pokemon,
+  evolutions,
+  learnset,
+  generation,
+  dexLimit,
 }: {
+  // Already dex-filtered server-side (the page is run-scoped now).
   pokemon: Pokemon[];
-  games: PokedexGame[];
+  evolutions: EvolutionEntry[];
+  learnset: Learnset;
+  generation: number;
+  dexLimit: number;
 }) {
   const { lang } = useLanguage();
   const t = translations[lang].pokedex;
   const columns = t.columns;
-
-  // Client-side game filter (the page itself is statically prerendered and
-  // knows no run). Per-device preference, like the sort/tab-order prefs.
-  const [gameId, setGameId] = useState(games[0]?.id ?? "");
-  useEffect(() => {
-    const stored = localStorage.getItem(GAME_STORAGE_KEY);
-    if (stored && games.some((g) => g.id === stored)) setGameId(stored);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  function handleGameChange(next: string) {
-    setGameId(next);
-    localStorage.setItem(GAME_STORAGE_KEY, next);
-  }
-
-  const dexLimit = games.find((g) => g.id === gameId)?.dexLimit ?? Infinity;
-  const pokemon = useMemo(
-    () => allPokemon.filter((p) => p.id <= dexLimit),
-    [allPokemon, dexLimit],
-  );
 
   const COLUMNS: { key: ColumnKey; label: string; align?: "right"; hideClass?: string }[] = [
     { key: "id", label: columns.id, hideClass: "hidden md:table-cell" },
@@ -96,6 +81,7 @@ export function PokedexTable({
   const [search, setSearch] = useState("");
   const [suggestionsOpen, setSuggestionsOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [detailId, setDetailId] = useState<number | null>(null);
   const searchRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -150,19 +136,7 @@ export function PokedexTable({
 
   return (
     <div>
-      <div className="mb-4 flex flex-wrap items-center gap-2">
-        <select
-          value={gameId}
-          onChange={(e) => handleGameChange(e.target.value)}
-          className="rounded-md border border-zinc-200 bg-white px-2 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
-        >
-          {games.map((g) => (
-            <option key={g.id} value={g.id}>
-              {localizeName(g.names, lang)}
-            </option>
-          ))}
-        </select>
-      <div ref={searchRef} className="relative max-w-sm flex-1">
+      <div ref={searchRef} className="relative mb-4 max-w-sm">
         <input
           type="text"
           value={search}
@@ -191,7 +165,6 @@ export function PokedexTable({
             ))}
           </ul>
         )}
-      </div>
       </div>
       <div className="overflow-x-auto rounded-md border border-zinc-200 dark:border-zinc-800">
         <table className="w-full border-collapse text-sm">
@@ -228,7 +201,8 @@ export function PokedexTable({
                 <tr
                   key={p.id}
                   id={`pokemon-row-${p.id}`}
-                  className={`border-b border-zinc-100 last:border-0 dark:border-zinc-900 ${
+                  onClick={() => setDetailId(p.id)}
+                  className={`cursor-pointer border-b border-zinc-100 last:border-0 hover:bg-zinc-50 dark:border-zinc-900 dark:hover:bg-zinc-800/50 ${
                     isSelected
                       ? "bg-blue-50 ring-1 ring-inset ring-blue-400 dark:bg-blue-950/40"
                       : isMatch
@@ -280,6 +254,23 @@ export function PokedexTable({
           </tbody>
         </table>
       </div>
+
+      {detailId !== null &&
+        (() => {
+          const p = pokemon.find((x) => x.id === detailId);
+          return p ? (
+            <PokemonDetailModal
+              pokemon={p}
+              allPokemon={pokemon}
+              evolutions={evolutions}
+              learnset={learnset}
+              generation={generation}
+              dexLimit={dexLimit}
+              lang={lang}
+              onClose={() => setDetailId(null)}
+            />
+          ) : null;
+        })()}
     </div>
   );
 }

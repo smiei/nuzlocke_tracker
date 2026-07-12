@@ -1,9 +1,13 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import type { Pokemon } from "@/lib/data";
 import type { BallId, StatusId } from "@/lib/catchrate";
 import { getBallIdsForGeneration, STATUS_IDS, computeCatchChance } from "@/lib/catchrate";
+import { quickCatch } from "@/lib/actions";
+import { formatActionError } from "@/lib/actionErrors";
+import { Player, RunMode } from "@/generated/prisma/enums";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import { translations } from "@/lib/i18n/dictionary";
 import { pokemonName } from "@/lib/i18n/localize";
@@ -11,6 +15,8 @@ import { typesForGeneration } from "@/lib/pokemonTypes";
 import { PokemonCombobox } from "@/components/PokemonCombobox";
 import { PokemonSprite } from "@/components/PokemonSprite";
 import { TypeBadge } from "@/components/TypeBadge";
+
+export type OpenSlot = { routeId: number; player: Player; routeName: string };
 
 function clampInt(raw: string, min: number, max: number, fallback: number): number {
   const n = Number(raw);
@@ -116,16 +122,23 @@ function BallPicker({
 }
 
 export function CatchRateView({
+  runId,
+  mode,
   pokemonList,
   catchRates,
   lockedFamilyIds,
   generation,
+  openSlots,
 }: {
+  runId: number;
+  mode: RunMode;
   pokemonList: Pokemon[];
   catchRates: Record<number, number>;
   lockedFamilyIds: number[];
   generation: number;
+  openSlots: OpenSlot[];
 }) {
+  const router = useRouter();
   const { lang } = useLanguage();
   const t = translations[lang].catchrate;
   const lockedFamilies = useMemo(() => new Set(lockedFamilyIds), [lockedFamilyIds]);
@@ -136,6 +149,8 @@ export function CatchRateView({
   const [level, setLevel] = useState(50);
   const [status, setStatus] = useState<StatusId>("none");
   const [turn, setTurn] = useState(1);
+  const [caughtMsg, setCaughtMsg] = useState<string | null>(null);
+  const [catching, startCatch] = useTransition();
 
   const selected = pokemonList.find((p) => p.id === selectedId) ?? null;
   const baseRate = selected ? catchRates[selected.id] : undefined;
@@ -158,6 +173,48 @@ export function CatchRateView({
       : null;
 
   const ballNote = (t.ballNotes as Partial<Record<BallId, string>>)[ball];
+
+  function handleQuickCatch(routeId: number, player: Player) {
+    if (selected === null) return;
+    const slot = openSlots.find((s) => s.routeId === routeId && s.player === player);
+    if (!slot) return;
+    const name = pokemonName(selected, lang);
+    setCaughtMsg(null);
+    startCatch(async () => {
+      const res = await quickCatch(runId, routeId, player, selected.id);
+      if (res.success) {
+        setCaughtMsg(t.caughtDone(name, slot.routeName));
+        router.refresh();
+      } else {
+        setCaughtMsg(formatActionError(res.error, lang));
+      }
+    });
+  }
+
+  // Solo lists routes in one dropdown; SoulLink splits them per player.
+  // Plain render function (not a nested component) to satisfy the compiler.
+  const renderQuickCatchSelect = (player: Player) => {
+    const slots = openSlots.filter((s) => s.player === player);
+    return (
+      <select
+        value=""
+        disabled={catching || selectedId === null || slots.length === 0}
+        onChange={(e) => {
+          if (e.target.value) handleQuickCatch(Number(e.target.value), player);
+        }}
+        className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-zinc-500 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-900 dark:focus:border-zinc-400"
+      >
+        <option value="">{t.selectRoute}</option>
+        {slots.map((s) => (
+          <option key={s.routeId} value={s.routeId}>
+            {s.routeName}
+          </option>
+        ))}
+      </select>
+    );
+  };
+
+  const isSoulLink = mode === RunMode.SOULLINK;
 
   return (
     <div>
@@ -298,6 +355,33 @@ export function CatchRateView({
               </div>
             </div>
           </div>
+        )}
+      </div>
+
+      {/* Quick-catch: record the selected Pokémon as caught on an open route
+          (and drop it into a free team slot). */}
+      <div className="mt-4 max-w-xl rounded-lg border border-zinc-200 p-4 dark:border-zinc-800">
+        <h3 className="mb-2 text-sm font-semibold">{t.caughtHeading}</h3>
+        {selectedId === null ? (
+          <p className="text-xs text-zinc-400 dark:text-zinc-500">{t.caughtNeedSelection}</p>
+        ) : openSlots.length === 0 ? (
+          <p className="text-xs text-zinc-400 dark:text-zinc-500">{t.caughtNoRoutes}</p>
+        ) : isSoulLink ? (
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div>
+              <label className={labelClass}>{translations[lang].player.PLAYER1}</label>
+              {renderQuickCatchSelect(Player.PLAYER1)}
+            </div>
+            <div>
+              <label className={labelClass}>{translations[lang].player.PLAYER2}</label>
+              {renderQuickCatchSelect(Player.PLAYER2)}
+            </div>
+          </div>
+        ) : (
+          renderQuickCatchSelect(Player.PLAYER1)
+        )}
+        {caughtMsg && (
+          <p className="mt-2 text-xs text-emerald-600 dark:text-emerald-400">{caughtMsg}</p>
         )}
       </div>
     </div>

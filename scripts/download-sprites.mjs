@@ -17,9 +17,12 @@ const ballOutDir = path.join(__dirname, "..", "public", "ball-sprites");
 
 // Sprite set name (game.json `spriteSet`) -> PokeAPI path + highest id the
 // set contains.
+// Gen 1/2 use the `transparent/` sub-folders: the default gen-i/gen-ii
+// sprites carry a solid background, only the transparent variants have an
+// alpha channel. Gen 3+ default sprites are already transparent.
 const SPRITE_SETS = {
-  "red-blue": { path: "versions/generation-i/red-blue", maxId: 151 },
-  crystal: { path: "versions/generation-ii/crystal", maxId: 251 },
+  "red-blue": { path: "versions/generation-i/red-blue/transparent", maxId: 151 },
+  crystal: { path: "versions/generation-ii/crystal/transparent", maxId: 251 },
   emerald: { path: "versions/generation-iii/emerald", maxId: 386 },
   "firered-leafgreen": { path: "versions/generation-iii/firered-leafgreen", maxId: 386 },
   platinum: { path: "versions/generation-iv/platinum", maxId: 493 },

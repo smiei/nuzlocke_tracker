@@ -1,16 +1,46 @@
-import { getGames, getPokemonList } from "@/lib/data";
+import { redirect } from "next/navigation";
+import { getEvolutions, getGameOrDefault, getLearnset, getPokemonList } from "@/lib/data";
+import { resolveRunId } from "@/lib/runs";
+import { getLang } from "@/lib/i18n/getLang";
+import { translations } from "@/lib/i18n/dictionary";
 import { PokedexTable } from "@/components/PokedexTable";
+import { SpriteSetProvider } from "@/components/SpriteSetProvider";
 
-export default function PokedexPage() {
-  // Statically prerendered - no run context here. The table filters by game
-  // client-side (dexLimit), defaulting to the first (default) game pack.
-  const pokemon = getPokemonList();
-  const games = getGames().map((g) => ({ id: g.id, names: g.names, dexLimit: g.dexLimit }));
+// Run-scoped: the Pokédex reflects the current run's game (dex scope, sprites,
+// generation, and the game's evolution methods for the detail card).
+export const dynamic = "force-dynamic";
+
+export default async function PokedexPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ run?: string }>;
+}) {
+  const { run } = await searchParams;
+  const { runId, gameId, settings, canonical } = await resolveRunId(run);
+  if (!canonical) redirect(`/pokedex?run=${runId}`);
+
+  const lang = await getLang();
+  const game = getGameOrDefault(gameId);
+  const pokemon = getPokemonList(game.dexLimit);
+  const evolutions = getEvolutions({
+    gameId,
+    impossible: settings.evolutionOverridesImpossible,
+    easier: settings.evolutionOverridesEasier,
+  });
+  const learnset = getLearnset(game.versionGroup);
 
   return (
-    <div>
-      <h2 className="mb-4 text-xl font-semibold">Pokédex</h2>
-      <PokedexTable pokemon={pokemon} games={games} />
-    </div>
+    <SpriteSetProvider spriteSet={game.spriteSet}>
+      <div>
+        <h2 className="mb-4 text-xl font-semibold">{translations[lang].pokedex.heading}</h2>
+        <PokedexTable
+          pokemon={pokemon}
+          evolutions={evolutions}
+          learnset={learnset}
+          generation={game.generation}
+          dexLimit={game.dexLimit}
+        />
+      </div>
+    </SpriteSetProvider>
   );
 }

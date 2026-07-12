@@ -4,6 +4,7 @@
   "generation": 3,
   "dexLimit": 386,
   "spriteSet": "emerald",
+  "versionGroup": "emerald",
   "names": {
     "de": "Smaragd",
     "en": "Emerald",

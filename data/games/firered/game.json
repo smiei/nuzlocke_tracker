@@ -4,6 +4,7 @@
   "generation": 3,
   "dexLimit": 386,
   "spriteSet": "emerald",
+  "versionGroup": "firered-leafgreen",
   "names": {
     "de": "Feuerrot / Blattgrün",
     "en": "FireRed / LeafGreen",

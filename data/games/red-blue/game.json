@@ -4,6 +4,7 @@
   "generation": 1,
   "dexLimit": 151,
   "spriteSet": "red-blue",
+  "versionGroup": "red-blue",
   "names": {
     "de": "Rot / Blau / Gelb",
     "en": "Red / Blue / Yellow",
