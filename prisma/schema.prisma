@@ -41,6 +41,9 @@ model Run {
   id               Int                @id @default(autoincrement())
   name             String
   mode             RunMode            @default(SOULLINK)
+  // Which game data pack (data/games/<gameId>/) this run plays - fixed at
+  // creation. Unknown ids fall back to "firered" at read time in data.ts.
+  gameId           String             @default("firered")
   // Raw markdown shown on the Rules tab. Copied from the most recent run on
   // creation (falling back to the built-in default ruleset in code).
   rulesMarkdown    String             @default("")

@@ -1,0 +1,453 @@
+[
+  {
+    "id": 1,
+    "names": {
+      "de": "Rivale",
+      "en": "Rival",
+      "fr": "Rival",
+      "es": "Rival",
+      "it": "Rivale"
+    },
+    "location": {
+      "de": "Route 103",
+      "en": "Route 103",
+      "fr": "Route 103",
+      "es": "Ruta 103",
+      "it": "Percorso 103"
+    },
+    "badge": null,
+    "max_level": null,
+    "sprite": "rivale"
+  },
+  {
+    "id": 2,
+    "names": {
+      "de": "Felizia",
+      "en": "Roxanne",
+      "fr": "Roxanne",
+      "es": "Petra",
+      "it": "Roxanne"
+    },
+    "location": {
+      "de": "Metarost City",
+      "en": "Rustboro City",
+      "fr": "Mérouville",
+      "es": "Ciudad Férrica",
+      "it": "Ferrugipoli"
+    },
+    "badge": {
+      "de": "Steinorden",
+      "en": "Stone Badge",
+      "fr": "Badge Roc",
+      "es": "Medalla Piedra",
+      "it": "Medaglia Roccia"
+    },
+    "max_level": 15
+  },
+  {
+    "id": 3,
+    "names": {
+      "de": "Kamillo",
+      "en": "Brawly",
+      "fr": "Bastien",
+      "es": "Marcial",
+      "it": "Brawly"
+    },
+    "location": {
+      "de": "Faustauhaven",
+      "en": "Dewford Town",
+      "fr": "Myokara",
+      "es": "Pueblo Azuliza",
+      "it": "Bluruvia"
+    },
+    "badge": {
+      "de": "Faustorden",
+      "en": "Knuckle Badge",
+      "fr": "Badge Poing",
+      "es": "Medalla Puño",
+      "it": "Medaglia Pugno"
+    },
+    "max_level": 19
+  },
+  {
+    "id": 4,
+    "names": {
+      "de": "Rivale",
+      "en": "Rival",
+      "fr": "Rival",
+      "es": "Rival",
+      "it": "Rivale"
+    },
+    "location": {
+      "de": "Route 110",
+      "en": "Route 110",
+      "fr": "Route 110",
+      "es": "Ruta 110",
+      "it": "Percorso 110"
+    },
+    "badge": null,
+    "max_level": null,
+    "sprite": "rivale"
+  },
+  {
+    "id": 5,
+    "names": {
+      "de": "Walter",
+      "en": "Wattson",
+      "fr": "Voltère",
+      "es": "Erico",
+      "it": "Wattson"
+    },
+    "location": {
+      "de": "Malvenfroh City",
+      "en": "Mauville City",
+      "fr": "Lavandia",
+      "es": "Ciudad Malvalona",
+      "it": "Ciclamipoli"
+    },
+    "badge": {
+      "de": "Dynamoorden",
+      "en": "Dynamo Badge",
+      "fr": "Badge Dynamo",
+      "es": "Medalla Dinamo",
+      "it": "Medaglia Dinamo"
+    },
+    "max_level": 24
+  },
+  {
+    "id": 6,
+    "names": {
+      "de": "Maxie",
+      "en": "Maxie",
+      "fr": "Max",
+      "es": "Magno",
+      "it": "Maxie"
+    },
+    "location": {
+      "de": "Schlackenberg",
+      "en": "Mt. Chimney",
+      "fr": "Mont Chimnée",
+      "es": "Monte Cenizo",
+      "it": "Monte Camino"
+    },
+    "badge": null,
+    "max_level": null
+  },
+  {
+    "id": 7,
+    "names": {
+      "de": "Flavia",
+      "en": "Flannery",
+      "fr": "Adriane",
+      "es": "Candela",
+      "it": "Flannery"
+    },
+    "location": {
+      "de": "Bad Lavastadt",
+      "en": "Lavaridge Town",
+      "fr": "Vermilava",
+      "es": "Pueblo Lavacalda",
+      "it": "Cuordilava"
+    },
+    "badge": {
+      "de": "Hitzeorden",
+      "en": "Heat Badge",
+      "fr": "Badge Chaleur",
+      "es": "Medalla Calor",
+      "it": "Medaglia Calore"
+    },
+    "max_level": 29
+  },
+  {
+    "id": 8,
+    "names": {
+      "de": "Norman",
+      "en": "Norman",
+      "fr": "Norman",
+      "es": "Norman",
+      "it": "Norman"
+    },
+    "location": {
+      "de": "Blütenburg City",
+      "en": "Petalburg City",
+      "fr": "Clémenti-Ville",
+      "es": "Ciudad Petalia",
+      "it": "Petalipoli"
+    },
+    "badge": {
+      "de": "Balanceorden",
+      "en": "Balance Badge",
+      "fr": "Badge Équilibre",
+      "es": "Medalla Equilibrio",
+      "it": "Medaglia Equilibrio"
+    },
+    "max_level": 31
+  },
+  {
+    "id": 9,
+    "names": {
+      "de": "Rivale",
+      "en": "Rival",
+      "fr": "Rival",
+      "es": "Rival",
+      "it": "Rivale"
+    },
+    "location": {
+      "de": "Route 119",
+      "en": "Route 119",
+      "fr": "Route 119",
+      "es": "Ruta 119",
+      "it": "Percorso 119"
+    },
+    "badge": null,
+    "max_level": null,
+    "sprite": "rivale"
+  },
+  {
+    "id": 10,
+    "names": {
+      "de": "Wibke",
+      "en": "Winona",
+      "fr": "Alizée",
+      "es": "Alana",
+      "it": "Winona"
+    },
+    "location": {
+      "de": "Baumhausen City",
+      "en": "Fortree City",
+      "fr": "Cimetronelle",
+      "es": "Ciudad Arborada",
+      "it": "Forestopoli"
+    },
+    "badge": {
+      "de": "Federorden",
+      "en": "Feather Badge",
+      "fr": "Badge Plume",
+      "es": "Medalla Pluma",
+      "it": "Medaglia Piuma"
+    },
+    "max_level": 33
+  },
+  {
+    "id": 11,
+    "names": {
+      "de": "Rivale",
+      "en": "Rival",
+      "fr": "Rival",
+      "es": "Rival",
+      "it": "Rivale"
+    },
+    "location": {
+      "de": "Seegrasulb City",
+      "en": "Lilycove City",
+      "fr": "Nénucrique",
+      "es": "Ciudad Calagua",
+      "it": "Porto Alghepoli"
+    },
+    "badge": null,
+    "max_level": null,
+    "sprite": "rivale"
+  },
+  {
+    "id": 12,
+    "names": {
+      "de": "Maxie",
+      "en": "Maxie",
+      "fr": "Max",
+      "es": "Magno",
+      "it": "Maxie"
+    },
+    "location": {
+      "de": "Magma-Versteck",
+      "en": "Magma Hideout",
+      "fr": "Planque Magma",
+      "es": "Guarida Magma",
+      "it": "Covo Magma"
+    },
+    "badge": null,
+    "max_level": null
+  },
+  {
+    "id": 13,
+    "names": {
+      "de": "Ben & Svenja",
+      "en": "Tate & Liza",
+      "fr": "Lévy & Tatia",
+      "es": "Vito & Leti",
+      "it": "Tate & Liza"
+    },
+    "location": {
+      "de": "Moosbach City",
+      "en": "Mossdeep City",
+      "fr": "Algatia",
+      "es": "Ciudad Algaria",
+      "it": "Verdeazzupoli"
+    },
+    "badge": {
+      "de": "Psychoorden",
+      "en": "Mind Badge",
+      "fr": "Badge Esprit",
+      "es": "Medalla Mente",
+      "it": "Medaglia Mente"
+    },
+    "max_level": 42
+  },
+  {
+    "id": 14,
+    "names": {
+      "de": "Archie",
+      "en": "Archie",
+      "fr": "Arthur",
+      "es": "Aquiles",
+      "it": "Archie"
+    },
+    "location": {
+      "de": "Tiefseehöhle",
+      "en": "Seafloor Cavern",
+      "fr": "Caverne Fondmer",
+      "es": "Caverna Abisal",
+      "it": "Antro Abissale"
+    },
+    "badge": null,
+    "max_level": null
+  },
+  {
+    "id": 15,
+    "names": {
+      "de": "Juan",
+      "en": "Juan",
+      "fr": "Juan",
+      "es": "Galano",
+      "it": "Juan"
+    },
+    "location": {
+      "de": "Xeneroville",
+      "en": "Sootopolis City",
+      "fr": "Atalanopolis",
+      "es": "Arrecípolis",
+      "it": "Ceneride"
+    },
+    "badge": {
+      "de": "Regenorden",
+      "en": "Rain Badge",
+      "fr": "Badge Pluie",
+      "es": "Medalla Lluvia",
+      "it": "Medaglia Pioggia"
+    },
+    "max_level": 46
+  },
+  {
+    "id": 16,
+    "names": {
+      "de": "Heiko",
+      "en": "Wally",
+      "fr": "Timmy",
+      "es": "Blasco",
+      "it": "Wally"
+    },
+    "location": {
+      "de": "Siegesstraße",
+      "en": "Victory Road",
+      "fr": "Route Victoire",
+      "es": "Calle Victoria",
+      "it": "Via Vittoria"
+    },
+    "badge": null,
+    "max_level": null
+  },
+  {
+    "id": 17,
+    "names": {
+      "de": "Ulrich",
+      "en": "Sidney",
+      "fr": "Damien",
+      "es": "Sixto",
+      "it": "Sidney"
+    },
+    "location": {
+      "de": "Top 4",
+      "en": "Elite Four",
+      "fr": "Conseil 4",
+      "es": "Alto Mando",
+      "it": "Superquattro"
+    },
+    "badge": null,
+    "max_level": 49
+  },
+  {
+    "id": 18,
+    "names": {
+      "de": "Antonia",
+      "en": "Phoebe",
+      "fr": "Spectra",
+      "es": "Fátima",
+      "it": "Phoebe"
+    },
+    "location": {
+      "de": "Top 4",
+      "en": "Elite Four",
+      "fr": "Conseil 4",
+      "es": "Alto Mando",
+      "it": "Superquattro"
+    },
+    "badge": null,
+    "max_level": 51
+  },
+  {
+    "id": 19,
+    "names": {
+      "de": "Frosina",
+      "en": "Glacia",
+      "fr": "Glacia",
+      "es": "Nívea",
+      "it": "Glacia"
+    },
+    "location": {
+      "de": "Top 4",
+      "en": "Elite Four",
+      "fr": "Conseil 4",
+      "es": "Alto Mando",
+      "it": "Superquattro"
+    },
+    "badge": null,
+    "max_level": 53
+  },
+  {
+    "id": 20,
+    "names": {
+      "de": "Dragan",
+      "en": "Drake",
+      "fr": "Aragon",
+      "es": "Dracón",
+      "it": "Drake"
+    },
+    "location": {
+      "de": "Top 4",
+      "en": "Elite Four",
+      "fr": "Conseil 4",
+      "es": "Alto Mando",
+      "it": "Superquattro"
+    },
+    "badge": null,
+    "max_level": 55
+  },
+  {
+    "id": 21,
+    "names": {
+      "de": "Wassili",
+      "en": "Wallace",
+      "fr": "Marc",
+      "es": "Plubio",
+      "it": "Wallace"
+    },
+    "location": {
+      "de": "Top 4",
+      "en": "Elite Four",
+      "fr": "Conseil 4",
+      "es": "Alto Mando",
+      "it": "Superquattro"
+    },
+    "badge": null,
+    "max_level": 58
+  }
+]

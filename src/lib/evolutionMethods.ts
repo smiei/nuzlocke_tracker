@@ -32,36 +32,140 @@ const ITEM_LABELS: Record<Lang, Record<string, string>> = {
     "deep-sea-tooth": "Deep Sea Tooth",
     "deep-sea-scale": "Deep Sea Scale",
   },
+  fr: {
+    "fire-stone": "Pierre Feu",
+    "water-stone": "Pierre Eau",
+    "thunder-stone": "Pierre Foudre",
+    "leaf-stone": "Pierre Plante",
+    "moon-stone": "Pierre Lune",
+    "sun-stone": "Pierre Soleil",
+    "kings-rock": "Roche Royale",
+    "metal-coat": "Peau Métal",
+    "dragon-scale": "Écaille Draco",
+    "up-grade": "Améliorator",
+    "deep-sea-tooth": "Dent Océan",
+    "deep-sea-scale": "Écaille Océan",
+  },
+  es: {
+    "fire-stone": "Piedra Fuego",
+    "water-stone": "Piedra Agua",
+    "thunder-stone": "Piedra Trueno",
+    "leaf-stone": "Piedra Hoja",
+    "moon-stone": "Piedra Lunar",
+    "sun-stone": "Piedra Solar",
+    "kings-rock": "Roca del Rey",
+    "metal-coat": "Rev. Metálico",
+    "dragon-scale": "Escama Dragón",
+    "up-grade": "Mejora",
+    "deep-sea-tooth": "Diente Marino",
+    "deep-sea-scale": "Escama Marina",
+  },
+  it: {
+    "fire-stone": "Pietrafocaia",
+    "water-stone": "Pietraidrica",
+    "thunder-stone": "Pietratuono",
+    "leaf-stone": "Pietrafoglia",
+    "moon-stone": "Pietralunare",
+    "sun-stone": "Pietrasolare",
+    "kings-rock": "Roccia di Re",
+    "metal-coat": "Metalcopertura",
+    "dragon-scale": "Squama Drago",
+    "up-grade": "Upgrade",
+    "deep-sea-tooth": "Dente Abissale",
+    "deep-sea-scale": "Squama Abissale",
+  },
 };
 
 function itemLabel(slug: string, lang: Lang): string {
   return ITEM_LABELS[lang][slug] ?? slug;
 }
 
+// Per-language sentence fragments for the evolve dropdown, e.g.
+// "ab Level 36" / "with Water Stone" / "par échange".
+const TEMPLATES: Record<
+  Lang,
+  {
+    level: (n: number) => string;
+    item: (item: string) => string;
+    happiness: string;
+    day: string;
+    night: string;
+    tradeItem: (item: string) => string;
+    trade: string;
+    beauty: string;
+  }
+> = {
+  de: {
+    level: (n) => `ab Level ${n}`,
+    item: (item) => `mit ${item}`,
+    happiness: "durch Freundschaft",
+    day: " (tagsüber)",
+    night: " (nachts)",
+    tradeItem: (item) => `Tausch mit ${item}`,
+    trade: "durch Tausch",
+    beauty: "hohe Schönheit",
+  },
+  en: {
+    level: (n) => `at level ${n}`,
+    item: (item) => `with ${item}`,
+    happiness: "by friendship",
+    day: " (day)",
+    night: " (night)",
+    tradeItem: (item) => `trade holding ${item}`,
+    trade: "by trade",
+    beauty: "high beauty",
+  },
+  fr: {
+    level: (n) => `au niveau ${n}`,
+    item: (item) => `avec ${item}`,
+    happiness: "par bonheur",
+    day: " (jour)",
+    night: " (nuit)",
+    tradeItem: (item) => `échange avec ${item}`,
+    trade: "par échange",
+    beauty: "grande beauté",
+  },
+  es: {
+    level: (n) => `al nivel ${n}`,
+    item: (item) => `con ${item}`,
+    happiness: "por amistad",
+    day: " (de día)",
+    night: " (de noche)",
+    tradeItem: (item) => `intercambio con ${item}`,
+    trade: "por intercambio",
+    beauty: "gran belleza",
+  },
+  it: {
+    level: (n) => `al livello ${n}`,
+    item: (item) => `con ${item}`,
+    happiness: "per amicizia",
+    day: " (giorno)",
+    night: " (notte)",
+    tradeItem: (item) => `scambio con ${item}`,
+    trade: "tramite scambio",
+    beauty: "alta bellezza",
+  },
+};
+
 // Short human-readable description shown under each option in the evolve
 // dropdown, e.g. "ab Level 36" / "mit Wasserstein".
 export function formatEvolutionMethod(method: EvolutionMethod, lang: Lang): string | null {
-  const de = lang === "de";
+  const t = TEMPLATES[lang];
   switch (method.kind) {
     case "level":
-      return de ? `ab Level ${method.level}` : `at level ${method.level}`;
+      return t.level(method.level);
     case "item":
-      return de ? `mit ${itemLabel(method.item, lang)}` : `with ${itemLabel(method.item, lang)}`;
+      return t.item(itemLabel(method.item, lang));
     case "happiness": {
-      const base = de ? "durch Freundschaft" : "by friendship";
-      if (method.time === "day") return `${base}${de ? " (tagsüber)" : " (day)"}`;
-      if (method.time === "night") return `${base}${de ? " (nachts)" : " (night)"}`;
-      return base;
+      if (method.time === "day") return `${t.happiness}${t.day}`;
+      if (method.time === "night") return `${t.happiness}${t.night}`;
+      return t.happiness;
     }
     case "trade":
-      if (method.item) {
-        return de
-          ? `Tausch mit ${itemLabel(method.item, lang)}`
-          : `trade holding ${itemLabel(method.item, lang)}`;
-      }
-      return de ? "durch Tausch" : "by trade";
+      if (method.item) return t.tradeItem(itemLabel(method.item, lang));
+      return t.trade;
     case "beauty":
-      return de ? "hohe Schönheit" : "high beauty";
+      return t.beauty;
     case "other":
       return null;
   }

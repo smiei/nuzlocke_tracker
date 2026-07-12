@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "generate:evolutions": "node scripts/generate-evolutions.mjs",
+    "generate:names": "node scripts/generate-names.mjs",
     "download:sprites": "node scripts/download-sprites.mjs",
     "download:catchrates": "node scripts/download-catchrates.mjs"
   },

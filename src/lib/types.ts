@@ -1,9 +1,18 @@
 import type { EncounterStatus, LinkStatus, Player, RunMode } from "@/generated/prisma/client";
+import type { LocalizedNames } from "@/lib/i18n/localize";
 
 export type RunSummary = {
   id: number;
   name: string;
   mode: RunMode;
+  gameId: string;
+};
+
+// Client-safe slice of data.ts's GameInfo (components can't import data.ts -
+// it reads from node:fs). games[0] is the default pack (lowest sort).
+export type GameSummary = {
+  id: string;
+  names: LocalizedNames;
 };
 
 export type SoulLinkView = {

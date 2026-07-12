@@ -1,11 +1,29 @@
 import fs from "node:fs";
 import path from "node:path";
 import type { EffectivenessTable } from "@/lib/effectiveness";
+import type { LocalizedNames } from "@/lib/i18n/localize";
 
 // Static reference data lives in /data as JSON, not in the DB (see project spec).
 // Read fresh from disk on every call (no in-memory caching) so the bind-mounted
 // files in Docker can be edited without rebuilding or restarting the container.
+//
+// Layout: game-independent data (pokemon, evolutions, effectiveness,
+// catchrates) sits in /data directly; everything tied to one playthrough's
+// world (routes, levelcaps, evolution-overrides) lives in a game pack under
+// /data/games/<gameId>/ next to its game.json metadata. Which pack a run
+// uses is Run.gameId.
 const DATA_DIR = path.join(process.cwd(), "data");
+const GAMES_DIR = path.join(DATA_DIR, "games");
+
+export const DEFAULT_GAME_ID = "firered";
+
+export type GameInfo = {
+  id: string;
+  // Display order in the game picker.
+  sort: number;
+  generation: number;
+  names: LocalizedNames;
+};
 
 // "route" = normal wild encounter; "static" = fixed encounter (NPC gift,
 // purchase, fossil, Snorlax, legendaries). Statics are exempt from the
@@ -14,8 +32,9 @@ export type RouteType = "route" | "static";
 
 export type Route = {
   id: number;
-  name: string;
-  name_en: string;
+  // Localized display names (de/en curated, rest generated - see
+  // scripts/generate-names.mjs and localizeName()).
+  names: LocalizedNames;
   type: RouteType;
   // Only reachable after the Elite Four (Sevii Islands 4-7, Cerulean Cave).
   // The Encounter tab collapses these behind a "post-game" toggle by default.
@@ -34,8 +53,7 @@ export type PokemonStats = {
 
 export type Pokemon = {
   id: number;
-  name_de: string;
-  name_en: string;
+  names: LocalizedNames;
   types: string[];
   family_id: number;
   stats: PokemonStats;
@@ -43,16 +61,13 @@ export type Pokemon = {
 
 export type LevelCap = {
   id: number;
-  name: string;
-  name_en: string;
-  location: string;
-  location_en: string;
-  badge: string | null;
-  badge_en: string | null;
+  names: LocalizedNames;
+  location: LocalizedNames;
+  badge: LocalizedNames | null;
   // null for fights without a level cap (rival / Team Rocket boss battles).
   max_level: number | null;
-  // Optional sprite-file override (German slug) when it differs from `name`,
-  // e.g. the rival reuses the champion's sprite ("champ").
+  // Optional sprite-file override (German slug) when it differs from the
+  // canonical German name, e.g. the rival reuses the champion's sprite.
   sprite?: string;
 };
 
@@ -61,12 +76,44 @@ function readJson<T>(filename: string): T {
   return JSON.parse(raw) as T;
 }
 
-export function getRoutes(): Route[] {
-  return readJson<Route[]>("routes.json");
+// Reads a file from a game pack, falling back to the default pack when the
+// requested one doesn't have it - a run whose pack was removed from a
+// live-edited /data keeps working instead of crashing every page.
+function readGameJson<T>(gameId: string, filename: string): T {
+  const primary = path.join(GAMES_DIR, gameId, filename);
+  if (fs.existsSync(primary)) {
+    return JSON.parse(fs.readFileSync(primary, "utf-8")) as T;
+  }
+  if (gameId !== DEFAULT_GAME_ID) {
+    console.warn(`[data] missing ${filename} for game "${gameId}" - falling back to ${DEFAULT_GAME_ID}`);
+    return readGameJson<T>(DEFAULT_GAME_ID, filename);
+  }
+  throw new Error(`Missing game data file: ${primary}`);
 }
 
-export function getRouteById(routeId: number): Route | undefined {
-  return getRoutes().find((route) => route.id === routeId);
+export function getGames(): GameInfo[] {
+  return fs
+    .readdirSync(GAMES_DIR, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .map(
+      (entry) =>
+        JSON.parse(
+          fs.readFileSync(path.join(GAMES_DIR, entry.name, "game.json"), "utf-8"),
+        ) as GameInfo,
+    )
+    .sort((a, b) => a.sort - b.sort);
+}
+
+export function getGameById(gameId: string): GameInfo | undefined {
+  return getGames().find((game) => game.id === gameId);
+}
+
+export function getRoutes(gameId: string): Route[] {
+  return readGameJson<Route[]>(gameId, "routes.json");
+}
+
+export function getRouteById(gameId: string, routeId: number): Route | undefined {
+  return getRoutes(gameId).find((route) => route.id === routeId);
 }
 
 export function getPokemonList(): Pokemon[] {
@@ -77,8 +124,8 @@ export function getPokemonById(pokemonId: number): Pokemon | undefined {
   return getPokemonList().find((pokemon) => pokemon.id === pokemonId);
 }
 
-export function getLevelCaps(): LevelCap[] {
-  return readJson<LevelCap[]>("levelcaps.json");
+export function getLevelCaps(gameId: string): LevelCap[] {
+  return readGameJson<LevelCap[]>(gameId, "levelcaps.json");
 }
 
 // How a Pokémon evolves FROM its pre-evolution (rendered in the evolve
@@ -107,19 +154,28 @@ type EvolutionOverride = {
 
 // Overrides are merged at read time (not baked into evolutions.json), so
 // re-running the generator script never loses the ROM-specific changes and
-// the override file stays editable in /data like everything else.
+// the override file stays editable in /data like everything else. Each game
+// pack carries its own evolution-overrides.json (or none).
 // `applyOverrides: false` (the per-run "evolutionOverrides" rule toggle)
 // returns the vanilla methods instead. Overrides only ever swap `method`,
 // never the evolvesTo/evolvesFrom structure - so evolve/devolve validation
-// is unaffected by the toggle.
-export function getEvolutions(options?: { applyOverrides?: boolean }): EvolutionEntry[] {
+// is unaffected by the toggle (and by the gameId).
+export function getEvolutions(options?: {
+  gameId?: string;
+  applyOverrides?: boolean;
+}): EvolutionEntry[] {
   const entries = readJson<EvolutionEntry[]>("evolutions.json");
   if (options?.applyOverrides === false) return entries;
   let overrides: EvolutionOverride[] = [];
   try {
-    overrides = readJson<EvolutionOverride[]>("evolution-overrides.json");
+    overrides = JSON.parse(
+      fs.readFileSync(
+        path.join(GAMES_DIR, options?.gameId ?? DEFAULT_GAME_ID, "evolution-overrides.json"),
+        "utf-8",
+      ),
+    ) as EvolutionOverride[];
   } catch {
-    // No override file - vanilla methods apply.
+    // No override file for this pack - vanilla methods apply.
   }
   if (overrides.length === 0) return entries;
 
@@ -133,7 +189,7 @@ export function getEvolutions(options?: { applyOverrides?: boolean }): Evolution
 
 export function getEvolutionById(
   pokemonId: number,
-  options?: { applyOverrides?: boolean },
+  options?: { gameId?: string; applyOverrides?: boolean },
 ): EvolutionEntry | undefined {
   return getEvolutions(options).find((entry) => entry.id === pokemonId);
 }

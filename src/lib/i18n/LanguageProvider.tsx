@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { LANG_COOKIE, type Lang } from "@/lib/i18n/dictionary";
+import { LANG_COOKIE, isLang, type Lang } from "@/lib/i18n/dictionary";
 
 type LanguageContextValue = { lang: Lang; setLang: (lang: Lang) => void };
 
@@ -10,8 +10,8 @@ const LanguageContext = createContext<LanguageContextValue | null>(null);
 
 function readCookieLang(): Lang {
   if (typeof document === "undefined") return "de";
-  const match = document.cookie.match(/(?:^|; )lang=([^;]+)/);
-  return match?.[1] === "en" ? "en" : "de";
+  const value = document.cookie.match(/(?:^|; )lang=([^;]+)/)?.[1];
+  return isLang(value) ? value : "de";
 }
 
 export function LanguageProvider({ children }: { children: React.ReactNode }) {

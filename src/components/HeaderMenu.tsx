@@ -6,7 +6,7 @@ import { deleteRun, exportAllBackup, exportRunBackup, importBackup, renameRun } 
 import { formatActionError } from "@/lib/actionErrors";
 import { useDialog } from "@/components/DialogProvider";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
-import { translations } from "@/lib/i18n/dictionary";
+import { LANGS, translations } from "@/lib/i18n/dictionary";
 import type { RunSummary } from "@/lib/types";
 import { RenameRunDialog } from "@/components/RenameRunDialog";
 import { TabOrderDialog } from "@/components/TabOrderDialog";
@@ -187,16 +187,30 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
           >
             {t.tabOrder.label} …
           </button>
-          <button
-            type="button"
-            onClick={() => {
-              setOpen(false);
-              setLang(lang === "de" ? "en" : "de");
-            }}
-            className={itemClass}
-          >
-            {t.menu.language}
-          </button>
+          <div className="px-3 py-2">
+            <span className="mb-1.5 block text-xs font-medium text-zinc-400 dark:text-zinc-500">
+              {t.menu.language}
+            </span>
+            <div className="flex gap-1">
+              {LANGS.map((code) => (
+                <button
+                  key={code}
+                  type="button"
+                  onClick={() => {
+                    setLang(code);
+                    setOpen(false);
+                  }}
+                  className={`flex-1 rounded border px-1.5 py-1 text-xs font-semibold uppercase transition-colors ${
+                    code === lang
+                      ? "border-zinc-900 bg-zinc-900 text-white dark:border-zinc-50 dark:bg-zinc-50 dark:text-zinc-900"
+                      : "border-zinc-200 text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                  }`}
+                >
+                  {code}
+                </button>
+              ))}
+            </div>
+          </div>
           <div className="my-1 border-t border-zinc-200 dark:border-zinc-700" />
           <button
             type="button"

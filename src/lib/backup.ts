@@ -41,6 +41,9 @@ export type BackupLevelCapProgress = {
 export type BackupRun = {
   name: string;
   mode: RunMode;
+  // Game data pack the run plays (data/games/<gameId>/). Old backups
+  // without it restore as "firered" (the only game that existed back then).
+  gameId: string;
   rulesMarkdown: string;
   // Raw Run.settingsJson - kept as the stored string; parsing/defaulting
   // happens at read time via parseRunSettings, so old backups without it
@@ -75,6 +78,7 @@ export async function buildBackup(runIds?: number[]): Promise<BackupFile> {
       return {
         name: run.name,
         mode: run.mode,
+        gameId: run.gameId,
         rulesMarkdown: run.rulesMarkdown,
         settingsJson: run.settingsJson,
         createdAt: run.createdAt.toISOString(),
@@ -148,6 +152,7 @@ export function parseBackup(json: string): BackupFile | null {
     runs.push({
       name: typeof rawRun.name === "string" ? rawRun.name : "Imported Run",
       mode: isEnumValue(RunMode, rawRun.mode) ? rawRun.mode : RunMode.SOULLINK,
+      gameId: typeof rawRun.gameId === "string" && rawRun.gameId ? rawRun.gameId : "firered",
       rulesMarkdown: typeof rawRun.rulesMarkdown === "string" ? rawRun.rulesMarkdown : "",
       settingsJson: typeof rawRun.settingsJson === "string" ? rawRun.settingsJson : "{}",
       createdAt: isoString(rawRun.createdAt),
@@ -207,6 +212,7 @@ export async function applyBackup(backup: BackupFile): Promise<number> {
           data: {
             name: run.name,
             mode: run.mode,
+            gameId: run.gameId,
             rulesMarkdown: run.rulesMarkdown,
             settingsJson: run.settingsJson,
             createdAt: new Date(run.createdAt),

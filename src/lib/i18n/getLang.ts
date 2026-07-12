@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { LANG_COOKIE, type Lang } from "@/lib/i18n/dictionary";
+import { LANG_COOKIE, isLang, type Lang } from "@/lib/i18n/dictionary";
 
 // Only for pages that are already force-dynamic (tracker/links/levelcaps) -
 // cookies() is a request-time API and reading it anywhere in a route (even
@@ -8,5 +8,6 @@ import { LANG_COOKIE, type Lang } from "@/lib/i18n/dictionary";
 // or the pokedex/typen pages, or they'd lose static prerendering.
 export async function getLang(): Promise<Lang> {
   const store = await cookies();
-  return store.get(LANG_COOKIE)?.value === "en" ? "en" : "de";
+  const value = store.get(LANG_COOKIE)?.value;
+  return isLang(value) ? value : "de";
 }

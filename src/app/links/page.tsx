@@ -18,11 +18,11 @@ export default async function LinksPage({
   searchParams: Promise<{ run?: string }>;
 }) {
   const { run } = await searchParams;
-  const { runId, mode, settings, canonical } = await resolveRunId(run);
+  const { runId, mode, gameId, settings, canonical } = await resolveRunId(run);
   if (!canonical) redirect(`/links?run=${runId}`);
-  // The "evolutionOverrides" rule decides whether the ROM/randomizer methods
-  // from evolution-overrides.json or the vanilla ones are shown.
-  const evoOptions = { applyOverrides: settings.evolutionOverrides };
+  // The "evolutionOverrides" rule decides whether the game pack's ROM/
+  // randomizer methods from evolution-overrides.json or vanilla are shown.
+  const evoOptions = { gameId, applyOverrides: settings.evolutionOverrides };
 
   const lang = await getLang();
 
@@ -39,7 +39,7 @@ export default async function LinksPage({
   // highlights.
   const progress = await prisma.levelCapProgress.findMany({ where: { runId } });
   const defeatedIds = new Set(progress.filter((p) => p.defeated).map((p) => p.levelCapId));
-  const lastDefeatedCap = getLevelCaps()
+  const lastDefeatedCap = getLevelCaps(gameId)
     .filter((c) => c.max_level !== null && defeatedIds.has(c.id))
     .at(-1);
   const allowedLevel = lastDefeatedCap?.max_level != null ? lastDefeatedCap.max_level - 2 : 0;
@@ -48,7 +48,7 @@ export default async function LinksPage({
     id: link.id,
     routeId: link.routeId,
     routeName: (() => {
-      const route = getRouteById(link.routeId);
+      const route = getRouteById(gameId, link.routeId);
       return route ? routeName(route, lang) : `Route #${link.routeId}`;
     })(),
     status: link.status,

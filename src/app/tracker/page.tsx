@@ -16,11 +16,11 @@ export default async function TrackerPage({
   searchParams: Promise<{ run?: string }>;
 }) {
   const { run } = await searchParams;
-  const { runId, mode, settings, canonical } = await resolveRunId(run);
+  const { runId, mode, gameId, settings, canonical } = await resolveRunId(run);
   if (!canonical) redirect(`/tracker?run=${runId}`);
 
   const lang = await getLang();
-  const routes = getRoutes();
+  const routes = getRoutes(gameId);
   const pokemonList = getPokemonList();
   const encounters = await prisma.encounter.findMany({ where: { runId } });
 

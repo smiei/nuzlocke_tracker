@@ -14,11 +14,11 @@ export default async function LevelCapsPage({
   searchParams: Promise<{ run?: string }>;
 }) {
   const { run } = await searchParams;
-  const { runId, canonical } = await resolveRunId(run);
+  const { runId, gameId, canonical } = await resolveRunId(run);
   if (!canonical) redirect(`/levelcaps?run=${runId}`);
 
   const lang = await getLang();
-  const levelCaps = getLevelCaps();
+  const levelCaps = getLevelCaps(gameId);
   const progress = await prisma.levelCapProgress.findMany({ where: { runId } });
   const defeatedIds = new Set(progress.filter((p) => p.defeated).map((p) => p.levelCapId));
 

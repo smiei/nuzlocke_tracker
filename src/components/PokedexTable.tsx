@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { Pokemon } from "@/lib/data";
 import { computePokemonRanks } from "@/lib/ranking";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
-import { translations } from "@/lib/i18n/dictionary";
+import { translations, type Lang } from "@/lib/i18n/dictionary";
 import { pokemonName } from "@/lib/i18n/localize";
 import { TypeBadge } from "@/components/TypeBadge";
 import { PokemonSprite } from "@/components/PokemonSprite";
@@ -26,7 +26,7 @@ function getSortValue(
   pokemon: Pokemon,
   key: ColumnKey,
   ranks: Map<number, number>,
-  lang: "de" | "en",
+  lang: Lang,
 ): number | string {
   switch (key) {
     case "id":

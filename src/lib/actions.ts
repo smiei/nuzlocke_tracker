@@ -3,7 +3,14 @@
 import { revalidatePath } from "next/cache";
 import { publishChange } from "@/lib/liveBus";
 import { prisma } from "@/lib/prisma";
-import { getPokemonById, getRouteById, getEvolutionById, getLevelCaps } from "@/lib/data";
+import {
+  DEFAULT_GAME_ID,
+  getGameById,
+  getPokemonById,
+  getRouteById,
+  getEvolutionById,
+  getLevelCaps,
+} from "@/lib/data";
 import { EncounterStatus, LinkStatus, Player, RunMode } from "@/generated/prisma/client";
 import type { ActionError } from "@/lib/actionErrors";
 import type { BackupFile } from "@/lib/backup";
@@ -38,7 +45,12 @@ export async function saveEncounter(
   if (!pokemon) {
     return { success: false, error: { key: "unknownPokemon", id: pokemonId } };
   }
-  const route = getRouteById(routeId);
+  // The run decides which game pack the route id refers to.
+  const run = await prisma.run.findUnique({ where: { id: runId } });
+  if (!run) {
+    return { success: false, error: { key: "runNotFound", id: runId } };
+  }
+  const route = getRouteById(run.gameId, routeId);
   if (!route) {
     return { success: false, error: { key: "unknownRoute", id: routeId } };
   }
@@ -46,11 +58,8 @@ export async function saveEncounter(
   // (routes.json `type`), not a per-catch user choice.
   const isStatic = route.type !== "route";
 
-  if (player === Player.PLAYER2) {
-    const run = await prisma.run.findUnique({ where: { id: runId } });
-    if (run?.mode === RunMode.CLASSIC) {
-      return { success: false, error: { key: "classicNoSecondPlayer" } };
-    }
+  if (player === Player.PLAYER2 && run.mode === RunMode.CLASSIC) {
+    return { success: false, error: { key: "classicNoSecondPlayer" } };
   }
 
   // The Species Clause is deliberately NOT enforced here: locked picks save
@@ -237,7 +246,11 @@ export async function toggleLevelCapDefeated(
   runId: number,
   levelCapId: number,
 ): Promise<ToggleLevelCapResult> {
-  if (!getLevelCaps().some((cap) => cap.id === levelCapId)) {
+  const run = await prisma.run.findUnique({ where: { id: runId } });
+  if (!run) {
+    return { success: false, error: { key: "runNotFound", id: runId } };
+  }
+  if (!getLevelCaps(run.gameId).some((cap) => cap.id === levelCapId)) {
     return { success: false, error: { key: "unknownLevelCap", id: levelCapId } };
   }
 
@@ -304,11 +317,14 @@ export async function createRun(
   name: string,
   mode: RunMode,
   sourceRunId?: number | null,
+  gameId?: string,
 ): Promise<CreateRunResult> {
   const trimmed = name.trim();
   if (!trimmed) {
     return { success: false, error: { key: "nameRequired" } };
   }
+  // Unknown/missing game -> default pack instead of a broken run.
+  const game = gameId && getGameById(gameId) ? gameId : DEFAULT_GAME_ID;
 
   // New runs never start with an empty ruleset: inherit ruleset + rule
   // toggles from the run that was ACTIVE when the user hit "+" (what's
@@ -324,7 +340,9 @@ export async function createRun(
   const rulesMarkdown = source?.rulesMarkdown.trim() ? source.rulesMarkdown : DEFAULT_RULES;
   const settingsJson = source?.settingsJson ?? "{}";
 
-  const run = await prisma.run.create({ data: { name: trimmed, mode, rulesMarkdown, settingsJson } });
+  const run = await prisma.run.create({
+    data: { name: trimmed, mode, gameId: game, rulesMarkdown, settingsJson },
+  });
   revalidatePath("/", "layout");
   publishChange(run.id);
   return { success: true, runId: run.id };

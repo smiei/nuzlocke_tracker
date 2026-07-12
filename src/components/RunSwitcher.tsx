@@ -7,13 +7,14 @@ import { formatActionError } from "@/lib/actionErrors";
 import { useDialog } from "@/components/DialogProvider";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import { translations } from "@/lib/i18n/dictionary";
+import { localizeName } from "@/lib/i18n/localize";
 import { RunMode } from "@/generated/prisma/enums";
-import type { RunSummary } from "@/lib/types";
+import type { GameSummary, RunSummary } from "@/lib/types";
 import { NewRunDialog } from "@/components/NewRunDialog";
 
 // Run select + a compact "+" (new run). Rename/delete live in the header
 // menu (HeaderMenu) to keep this bar narrow on phones.
-export function RunSwitcher({ runs }: { runs: RunSummary[] }) {
+export function RunSwitcher({ runs, games }: { runs: RunSummary[]; games: GameSummary[] }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -24,16 +25,26 @@ export function RunSwitcher({ runs }: { runs: RunSummary[] }) {
   const t = translations[lang].runSwitcher;
 
   const activeId = Number(searchParams.get("run")) || runs[0]?.id;
+  const activeRun = runs.find((r) => r.id === activeId);
+  // games[0] is the default pack - only non-default games get a suffix in
+  // the dropdown, so the common case stays short.
+  const defaultGameId = games[0]?.id;
+
+  function gameSuffix(run: RunSummary): string {
+    if (run.gameId === defaultGameId) return "";
+    const game = games.find((g) => g.id === run.gameId);
+    return game ? ` · ${localizeName(game.names, lang)}` : "";
+  }
 
   function handleChange(value: string) {
     router.push(`${pathname}?run=${value}`);
   }
 
-  function handleCreate(name: string, mode: RunMode) {
+  function handleCreate(name: string, mode: RunMode, gameId: string) {
     startTransition(async () => {
       // Inherit ruleset + rule toggles from the run that's on screen right
       // now, then land on the Rules tab so they can be reviewed first.
-      const result = await createRun(name, mode, activeId ?? null);
+      const result = await createRun(name, mode, activeId ?? null, gameId);
       if (result.success) {
         setDialogOpen(false);
         router.push(`/rules?run=${result.runId}`);
@@ -55,6 +66,7 @@ export function RunSwitcher({ runs }: { runs: RunSummary[] }) {
           <option key={run.id} value={run.id}>
             {run.name}
             {run.mode === RunMode.CLASSIC ? t.soloSuffix : ""}
+            {gameSuffix(run)}
           </option>
         ))}
       </select>
@@ -72,6 +84,8 @@ export function RunSwitcher({ runs }: { runs: RunSummary[] }) {
         lang={lang}
         open={dialogOpen}
         pending={pending}
+        games={games}
+        initialGameId={activeRun?.gameId ?? defaultGameId ?? ""}
         onClose={() => setDialogOpen(false)}
         onCreate={handleCreate}
       />

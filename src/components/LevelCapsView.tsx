@@ -61,7 +61,8 @@ export function LevelCapsView({
                 : "hover:bg-zinc-50 dark:hover:bg-zinc-900"
             }`}
           >
-            <TrainerSprite canonicalName={cap.sprite ?? cap.name} displayName={name} size={88} />
+            {/* Sprite files are slugged from the canonical German name. */}
+            <TrainerSprite canonicalName={cap.sprite ?? cap.names.de} displayName={name} size={88} />
             <div className="min-w-0 flex-1">
               <div
                 className={`truncate font-medium ${

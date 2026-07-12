@@ -1,0 +1,478 @@
+[
+  {
+    "id": 14,
+    "names": {
+      "de": "Rivale",
+      "en": "Rival",
+      "fr": "Rival",
+      "es": "Rival",
+      "it": "Rivale"
+    },
+    "location": {
+      "de": "Alabastia",
+      "en": "Pallet Town",
+      "fr": "Bourg Palette",
+      "es": "Pueblo Paleta",
+      "it": "Biancavilla"
+    },
+    "badge": null,
+    "max_level": null,
+    "sprite": "champ"
+  },
+  {
+    "id": 15,
+    "names": {
+      "de": "Rivale",
+      "en": "Rival",
+      "fr": "Rival",
+      "es": "Rival",
+      "it": "Rivale"
+    },
+    "location": {
+      "de": "Route 22",
+      "en": "Route 22",
+      "fr": "Route 22",
+      "es": "Ruta 22",
+      "it": "Percorso 22"
+    },
+    "badge": null,
+    "max_level": null,
+    "sprite": "champ"
+  },
+  {
+    "id": 1,
+    "names": {
+      "de": "Rocko",
+      "en": "Brock",
+      "fr": "Pierre",
+      "es": "Brock",
+      "it": "Brock"
+    },
+    "location": {
+      "de": "Marmoria City",
+      "en": "Pewter City",
+      "fr": "Argenta",
+      "es": "Ciudad Plateada",
+      "it": "Plumbeopoli"
+    },
+    "badge": {
+      "de": "Felsorden",
+      "en": "Boulder Badge",
+      "fr": "Badge Roche",
+      "es": "Medalla Roca",
+      "it": "Medaglia Sasso"
+    },
+    "max_level": 14
+  },
+  {
+    "id": 2,
+    "names": {
+      "de": "Misty",
+      "en": "Misty",
+      "fr": "Ondine",
+      "es": "Misty",
+      "it": "Misty"
+    },
+    "location": {
+      "de": "Azuria City",
+      "en": "Cerulean City",
+      "fr": "Azuria",
+      "es": "Ciudad Celeste",
+      "it": "Celestopoli"
+    },
+    "badge": {
+      "de": "Quellorden",
+      "en": "Cascade Badge",
+      "fr": "Badge Cascade",
+      "es": "Medalla Cascada",
+      "it": "Medaglia Cascata"
+    },
+    "max_level": 21
+  },
+  {
+    "id": 16,
+    "names": {
+      "de": "Rivale",
+      "en": "Rival",
+      "fr": "Rival",
+      "es": "Rival",
+      "it": "Rivale"
+    },
+    "location": {
+      "de": "Azuria City",
+      "en": "Cerulean City",
+      "fr": "Azuria",
+      "es": "Ciudad Celeste",
+      "it": "Celestopoli"
+    },
+    "badge": null,
+    "max_level": null,
+    "sprite": "champ"
+  },
+  {
+    "id": 17,
+    "names": {
+      "de": "Rivale",
+      "en": "Rival",
+      "fr": "Rival",
+      "es": "Rival",
+      "it": "Rivale"
+    },
+    "location": {
+      "de": "S.S. Anne, Orania City",
+      "en": "S.S. Anne, Vermilion City",
+      "fr": "S.S. Anne, Carmin sur Mer",
+      "es": "S.S. Anne, Ciudad Carmín",
+      "it": "M/N Anna, Aranciopoli"
+    },
+    "badge": null,
+    "max_level": null,
+    "sprite": "champ"
+  },
+  {
+    "id": 3,
+    "names": {
+      "de": "Major Bob",
+      "en": "Lt. Surge",
+      "fr": "Major Bob",
+      "es": "Teniente Surge",
+      "it": "Lt. Surge"
+    },
+    "location": {
+      "de": "Orania City",
+      "en": "Vermilion City",
+      "fr": "Carmin sur Mer",
+      "es": "Ciudad Carmín",
+      "it": "Aranciopoli"
+    },
+    "badge": {
+      "de": "Donnerorden",
+      "en": "Thunder Badge",
+      "fr": "Badge Foudre",
+      "es": "Medalla Trueno",
+      "it": "Medaglia Tuono"
+    },
+    "max_level": 24
+  },
+  {
+    "id": 4,
+    "names": {
+      "de": "Erika",
+      "en": "Erika",
+      "fr": "Erika",
+      "es": "Erika",
+      "it": "Erika"
+    },
+    "location": {
+      "de": "Prismania City",
+      "en": "Celadon City",
+      "fr": "Céladopole",
+      "es": "Ciudad Azulona",
+      "it": "Azzurropoli"
+    },
+    "badge": {
+      "de": "Farborden",
+      "en": "Rainbow Badge",
+      "fr": "Badge Prisme",
+      "es": "Medalla Arcoíris",
+      "it": "Medaglia Arcobaleno"
+    },
+    "max_level": 29
+  },
+  {
+    "id": 18,
+    "names": {
+      "de": "Giovanni",
+      "en": "Giovanni",
+      "fr": "Giovanni",
+      "es": "Giovanni",
+      "it": "Giovanni"
+    },
+    "location": {
+      "de": "Rocket-Versteck, Prismania City",
+      "en": "Rocket Hideout, Celadon City",
+      "fr": "Repaire Rocket, Céladopole",
+      "es": "Guarida Rocket, Ciudad Azulona",
+      "it": "Covo Rocket, Azzurropoli"
+    },
+    "badge": null,
+    "max_level": null,
+    "sprite": "giovanni"
+  },
+  {
+    "id": 19,
+    "names": {
+      "de": "Rivale",
+      "en": "Rival",
+      "fr": "Rival",
+      "es": "Rival",
+      "it": "Rivale"
+    },
+    "location": {
+      "de": "Pokémon-Turm, Lavandia",
+      "en": "Pokémon Tower, Lavender Town",
+      "fr": "Tour Pokémon, Lavanville",
+      "es": "Torre Pokémon, Pueblo Lavanda",
+      "it": "Torre Pokémon, Lavandonia"
+    },
+    "badge": null,
+    "max_level": null,
+    "sprite": "champ"
+  },
+  {
+    "id": 20,
+    "names": {
+      "de": "Rivale",
+      "en": "Rival",
+      "fr": "Rival",
+      "es": "Rival",
+      "it": "Rivale"
+    },
+    "location": {
+      "de": "Silph Co., Saffronia City",
+      "en": "Silph Co., Saffron City",
+      "fr": "Sylphe SARL, Safrania",
+      "es": "Silph S.A., Ciudad Azafrán",
+      "it": "Silph SpA, Zafferanopoli"
+    },
+    "badge": null,
+    "max_level": null,
+    "sprite": "champ"
+  },
+  {
+    "id": 21,
+    "names": {
+      "de": "Giovanni",
+      "en": "Giovanni",
+      "fr": "Giovanni",
+      "es": "Giovanni",
+      "it": "Giovanni"
+    },
+    "location": {
+      "de": "Silph Co., Saffronia City",
+      "en": "Silph Co., Saffron City",
+      "fr": "Sylphe SARL, Safrania",
+      "es": "Silph S.A., Ciudad Azafrán",
+      "it": "Silph SpA, Zafferanopoli"
+    },
+    "badge": null,
+    "max_level": null,
+    "sprite": "giovanni"
+  },
+  {
+    "id": 6,
+    "names": {
+      "de": "Sabrina",
+      "en": "Sabrina",
+      "fr": "Morgane",
+      "es": "Sabrina",
+      "it": "Sabrina"
+    },
+    "location": {
+      "de": "Saffronia City",
+      "en": "Saffron City",
+      "fr": "Safrania",
+      "es": "Ciudad Azafrán",
+      "it": "Zafferanopoli"
+    },
+    "badge": {
+      "de": "Sumpforden",
+      "en": "Marsh Badge",
+      "fr": "Badge Marais",
+      "es": "Medalla Pantano",
+      "it": "Medaglia Palude"
+    },
+    "max_level": 43
+  },
+  {
+    "id": 5,
+    "names": {
+      "de": "Koga",
+      "en": "Koga",
+      "fr": "Koga",
+      "es": "Koga",
+      "it": "Koga"
+    },
+    "location": {
+      "de": "Fuchsania City",
+      "en": "Fuchsia City",
+      "fr": "Parmanie",
+      "es": "Ciudad Fucsia",
+      "it": "Fucsiapoli"
+    },
+    "badge": {
+      "de": "Seelenorden",
+      "en": "Soul Badge",
+      "fr": "Badge Âme",
+      "es": "Medalla Alma",
+      "it": "Medaglia Anima"
+    },
+    "max_level": 43
+  },
+  {
+    "id": 7,
+    "names": {
+      "de": "Pyro",
+      "en": "Blaine",
+      "fr": "Auguste",
+      "es": "Blaine",
+      "it": "Blaine"
+    },
+    "location": {
+      "de": "Zinnoberinsel",
+      "en": "Cinnabar Island",
+      "fr": "Cramois'Ile",
+      "es": "Isla Canela",
+      "it": "Cinabropoli"
+    },
+    "badge": {
+      "de": "Vulkanorden",
+      "en": "Volcano Badge",
+      "fr": "Badge Volcan",
+      "es": "Medalla Volcán",
+      "it": "Medaglia Vulcano"
+    },
+    "max_level": 47
+  },
+  {
+    "id": 8,
+    "names": {
+      "de": "Giovanni",
+      "en": "Giovanni",
+      "fr": "Giovanni",
+      "es": "Giovanni",
+      "it": "Giovanni"
+    },
+    "location": {
+      "de": "Vertania City",
+      "en": "Viridian City",
+      "fr": "Jadielle",
+      "es": "Ciudad Verde",
+      "it": "Smeraldopoli"
+    },
+    "badge": {
+      "de": "Erdorden",
+      "en": "Earth Badge",
+      "fr": "Badge Terre",
+      "es": "Medalla Tierra",
+      "it": "Medaglia Terra"
+    },
+    "max_level": 50
+  },
+  {
+    "id": 22,
+    "names": {
+      "de": "Rivale",
+      "en": "Rival",
+      "fr": "Rival",
+      "es": "Rival",
+      "it": "Rivale"
+    },
+    "location": {
+      "de": "Route 22",
+      "en": "Route 22",
+      "fr": "Route 22",
+      "es": "Ruta 22",
+      "it": "Percorso 22"
+    },
+    "badge": null,
+    "max_level": null,
+    "sprite": "champ"
+  },
+  {
+    "id": 9,
+    "names": {
+      "de": "Lorelei",
+      "en": "Lorelei",
+      "fr": "Olga",
+      "es": "Lorelei",
+      "it": "Lorelei"
+    },
+    "location": {
+      "de": "Top 4",
+      "en": "Elite Four",
+      "fr": "Conseil 4",
+      "es": "Alto Mando",
+      "it": "Superquattro"
+    },
+    "badge": null,
+    "max_level": 54
+  },
+  {
+    "id": 10,
+    "names": {
+      "de": "Bruno",
+      "en": "Bruno",
+      "fr": "Aldo",
+      "es": "Bruno",
+      "it": "Bruno"
+    },
+    "location": {
+      "de": "Top 4",
+      "en": "Elite Four",
+      "fr": "Conseil 4",
+      "es": "Alto Mando",
+      "it": "Superquattro"
+    },
+    "badge": null,
+    "max_level": 56
+  },
+  {
+    "id": 11,
+    "names": {
+      "de": "Agathe",
+      "en": "Agatha",
+      "fr": "Agatha",
+      "es": "Agatha",
+      "it": "Agatha"
+    },
+    "location": {
+      "de": "Top 4",
+      "en": "Elite Four",
+      "fr": "Conseil 4",
+      "es": "Alto Mando",
+      "it": "Superquattro"
+    },
+    "badge": null,
+    "max_level": 58
+  },
+  {
+    "id": 12,
+    "names": {
+      "de": "Siegfried",
+      "en": "Lance",
+      "fr": "Peter",
+      "es": "Lance",
+      "it": "Lance"
+    },
+    "location": {
+      "de": "Top 4",
+      "en": "Elite Four",
+      "fr": "Conseil 4",
+      "es": "Alto Mando",
+      "it": "Superquattro"
+    },
+    "badge": null,
+    "max_level": 60
+  },
+  {
+    "id": 13,
+    "names": {
+      "de": "Champ",
+      "en": "Champion",
+      "fr": "Champion",
+      "es": "Campeón",
+      "it": "Campione"
+    },
+    "location": {
+      "de": "Top 4",
+      "en": "Elite Four",
+      "fr": "Conseil 4",
+      "es": "Alto Mando",
+      "it": "Superquattro"
+    },
+    "badge": null,
+    "max_level": 63,
+    "sprite": "champ"
+  }
+]

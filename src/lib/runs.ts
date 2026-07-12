@@ -12,7 +12,13 @@ import { parseRunSettings, type RunSettings } from "@/lib/runSettings";
 // query.
 export async function resolveRunId(
   rawRun: string | undefined,
-): Promise<{ runId: number; mode: RunMode; settings: RunSettings; canonical: boolean }> {
+): Promise<{
+  runId: number;
+  mode: RunMode;
+  gameId: string;
+  settings: RunSettings;
+  canonical: boolean;
+}> {
   const parsed = rawRun ? Number(rawRun) : NaN;
   if (Number.isInteger(parsed)) {
     const exists = await prisma.run.findUnique({ where: { id: parsed } });
@@ -20,6 +26,7 @@ export async function resolveRunId(
       return {
         runId: exists.id,
         mode: exists.mode,
+        gameId: exists.gameId,
         settings: parseRunSettings(exists.settingsJson),
         canonical: true,
       };
@@ -31,6 +38,7 @@ export async function resolveRunId(
     return {
       runId: fallback.id,
       mode: fallback.mode,
+      gameId: fallback.gameId,
       settings: parseRunSettings(fallback.settingsJson),
       canonical: false,
     };
@@ -40,6 +48,7 @@ export async function resolveRunId(
   return {
     runId: created.id,
     mode: created.mode,
+    gameId: created.gameId,
     settings: parseRunSettings(created.settingsJson),
     canonical: false,
   };

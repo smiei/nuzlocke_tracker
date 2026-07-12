@@ -4,32 +4,42 @@ import { useEffect, useRef, useState } from "react";
 import { RunMode } from "@/generated/prisma/enums";
 import type { Lang } from "@/lib/i18n/dictionary";
 import { translations } from "@/lib/i18n/dictionary";
+import { localizeName } from "@/lib/i18n/localize";
+import type { GameSummary } from "@/lib/types";
 
 export function NewRunDialog({
   lang,
   open,
   pending,
+  games,
+  initialGameId,
   onClose,
   onCreate,
 }: {
   lang: Lang;
   open: boolean;
   pending: boolean;
+  games: GameSummary[];
+  // Preselected game = the active run's game (new runs usually continue on
+  // the same cartridge).
+  initialGameId: string;
   onClose: () => void;
-  onCreate: (name: string, mode: RunMode) => void;
+  onCreate: (name: string, mode: RunMode, gameId: string) => void;
 }) {
   const t = translations[lang].runSwitcher;
   const [name, setName] = useState("");
   const [mode, setMode] = useState<RunMode>(RunMode.SOULLINK);
+  const [gameId, setGameId] = useState(initialGameId);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!open) return;
     setName("");
     setMode(RunMode.SOULLINK);
+    setGameId(initialGameId);
     const id = setTimeout(() => inputRef.current?.focus(), 0);
     return () => clearTimeout(id);
-  }, [open]);
+  }, [open, initialGameId]);
 
   if (!open) return null;
 
@@ -37,7 +47,7 @@ export function NewRunDialog({
     e.preventDefault();
     const trimmed = name.trim();
     if (!trimmed) return;
-    onCreate(trimmed, mode);
+    onCreate(trimmed, mode, gameId);
   }
 
   return (
@@ -64,6 +74,22 @@ export function NewRunDialog({
           placeholder={t.namePlaceholder}
           className="mb-3 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-zinc-500 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-950 dark:focus:border-zinc-400"
         />
+
+        <label className="mb-1 block text-xs font-medium text-zinc-500 dark:text-zinc-400">
+          {t.gameLabel}
+        </label>
+        <select
+          value={gameId}
+          disabled={pending}
+          onChange={(e) => setGameId(e.target.value)}
+          className="mb-3 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-zinc-500 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-950 dark:focus:border-zinc-400"
+        >
+          {games.map((game) => (
+            <option key={game.id} value={game.id}>
+              {localizeName(game.names, lang)}
+            </option>
+          ))}
+        </select>
 
         <span className="mb-1 block text-xs font-medium text-zinc-500 dark:text-zinc-400">
           {t.modeLabel}

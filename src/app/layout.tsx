@@ -12,6 +12,7 @@ import { LiveRefresh } from "@/components/LiveRefresh";
 import { TabOrderProvider } from "@/components/TabOrderProvider";
 import { LanguageProvider } from "@/lib/i18n/LanguageProvider";
 import { prisma } from "@/lib/prisma";
+import { getGames } from "@/lib/data";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -35,6 +36,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const runs = await prisma.run.findMany({ orderBy: { createdAt: "asc" } });
+  const games = getGames().map((game) => ({ id: game.id, names: game.names }));
 
   return (
     <html
@@ -58,7 +60,7 @@ export default async function RootLayout({
                         <div className="h-9 w-32 rounded-md border border-zinc-200 dark:border-zinc-700" />
                       }
                     >
-                      <RunSwitcher runs={runs} />
+                      <RunSwitcher runs={runs} games={games} />
                     </Suspense>
                     <Suspense fallback={<div className="h-9 w-9 rounded-md border border-zinc-200 dark:border-zinc-700" />}>
                       <HeaderMenu runs={runs} />

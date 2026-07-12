@@ -73,10 +73,11 @@ async function main() {
           : null;
 
         const pokemon = pokemonList.find((p) => p.id === id);
-        const expectedName = normalizeName(pokemon.name_en);
+        const nameEn = pokemon.names?.en ?? pokemon.name_en;
+        const expectedName = normalizeName(nameEn);
         if (expectedName !== species.name) {
           console.warn(
-            `[sanity] id=${id}: name_en "${pokemon.name_en}" -> "${expectedName}", PokeAPI species name is "${species.name}"`,
+            `[sanity] id=${id}: name_en "${nameEn}" -> "${expectedName}", PokeAPI species name is "${species.name}"`,
           );
         }
         return { id, from, chainUrl: species.evolution_chain?.url ?? null };
