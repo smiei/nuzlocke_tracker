@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, type ReactNode } from "react";
 import type { Pokemon, EvolutionEntry } from "@/lib/data";
 import type { Learnset } from "@/lib/learnset";
 import { attackTypesAtLevel } from "@/lib/learnset";
@@ -69,16 +69,46 @@ export function PokemonDetailModal({
   const attacks = attackTypesAtLevel(learnset, pokemon.id, 100);
 
   const evoById = new Map(evolutions.map((e) => [e.id, e]));
-  const entry = evoById.get(pokemon.id);
-  const preEvoId =
-    entry?.evolvesFrom != null && entry.evolvesFrom <= dexLimit ? entry.evolvesFrom : null;
-  const evolvesTo = (entry?.evolvesTo ?? [])
-    .filter((id) => id <= dexLimit)
-    .map((id) => ({
-      id,
-      name: nameOf(id),
-      method: evoById.get(id)?.method ? formatEvolutionMethod(evoById.get(id)!.method!, lang) : null,
-    }));
+  // Walk up to the family's root, then render the whole tree (Eevee & co.
+  // branch, so it's a tree, not a chain). Each node shows how it evolves from
+  // its parent. dexLimit keeps stages that don't exist in this game out.
+  let rootId = pokemon.id;
+  for (let guard = 0; guard < 10; guard++) {
+    const from = evoById.get(rootId)?.evolvesFrom;
+    if (from == null || from > dexLimit) break;
+    rootId = from;
+  }
+  const familyHasEvolution =
+    rootId !== pokemon.id ||
+    (evoById.get(pokemon.id)?.evolvesTo ?? []).some((id) => id <= dexLimit);
+
+  // Plain recursive render function (not a nested component - that trips the
+  // React compiler). A node's method is how IT evolves from its pre-evo.
+  const renderEvoNode = (id: number, depth: number): ReactNode => {
+    const e = evoById.get(id);
+    const method = depth > 0 && e?.method ? formatEvolutionMethod(e.method, lang) : null;
+    const children = (e?.evolvesTo ?? []).filter((c) => c <= dexLimit);
+    const isCurrent = id === pokemon.id;
+    return (
+      <div key={id}>
+        <div className="flex items-center gap-1.5 py-0.5" style={{ paddingLeft: depth * 16 }}>
+          {depth > 0 && <span className="text-zinc-300 dark:text-zinc-600">↳</span>}
+          <PokemonSprite pokemonId={id} name={nameOf(id)} size="sm" />
+          <span
+            className={`text-sm ${
+              isCurrent ? "font-semibold text-zinc-900 dark:text-zinc-50" : ""
+            }`}
+          >
+            {nameOf(id)}
+          </span>
+          {method && (
+            <span className="text-xs text-zinc-500 dark:text-zinc-400">({method})</span>
+          )}
+        </div>
+        {children.map((c) => renderEvoNode(c, depth + 1))}
+      </div>
+    );
+  };
 
   return (
     <div
@@ -172,25 +202,10 @@ export function PokemonDetailModal({
           <h3 className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
             {td.evolution}
           </h3>
-          {preEvoId === null && evolvesTo.length === 0 ? (
+          {!familyHasEvolution ? (
             <p className="text-xs text-zinc-400 dark:text-zinc-500">{td.noEvolution}</p>
           ) : (
-            <div className="space-y-1 text-sm">
-              {preEvoId !== null && (
-                <div className="text-zinc-500 dark:text-zinc-400">
-                  {td.evolvesFrom}: <span className="font-medium text-zinc-700 dark:text-zinc-200">{nameOf(preEvoId)}</span>
-                </div>
-              )}
-              {evolvesTo.map((child) => (
-                <div key={child.id}>
-                  <span className="text-zinc-400 dark:text-zinc-500">→ </span>
-                  <span className="font-medium">{child.name}</span>
-                  {child.method && (
-                    <span className="text-xs text-zinc-500 dark:text-zinc-400"> ({child.method})</span>
-                  )}
-                </div>
-              ))}
-            </div>
+            <div>{renderEvoNode(rootId, 0)}</div>
           )}
         </div>
       </div>

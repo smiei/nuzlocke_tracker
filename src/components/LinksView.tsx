@@ -1,11 +1,13 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { SoulLinkView } from "@/lib/types";
 import { LinkStatus, RunMode } from "@/generated/prisma/enums";
 import { markDead, markAlive } from "@/lib/actions";
 import { formatActionError } from "@/lib/actionErrors";
+import { GEN3_TYPES } from "@/lib/effectiveness";
+import { TYPE_LABELS } from "@/lib/pokemonTypes";
 import { useDialog } from "@/components/DialogProvider";
 import type { Lang } from "@/lib/i18n/dictionary";
 import { translations } from "@/lib/i18n/dictionary";
@@ -13,6 +15,7 @@ import { AddToTeamButton } from "@/components/AddToTeamButton";
 import { EncounterTile } from "@/components/EncounterTile";
 import { EvolveButton, RevertButton } from "@/components/EvolveControls";
 import { TeamBar } from "@/components/TeamBar";
+import { TypeBadge } from "@/components/TypeBadge";
 
 const SORT_STORAGE_KEY = "nuzlocke:linksSortBySumme";
 
@@ -33,12 +36,38 @@ export function LinksView({
   const [, startTransition] = useTransition();
   const [sortBySumme, setSortBySumme] = useState(false);
   const [evolvableOnly, setEvolvableOnly] = useState(false);
+  const [hideTeam, setHideTeam] = useState(false);
+  const [typeFilter, setTypeFilter] = useState<string[]>([]);
+  const [typeMenuOpen, setTypeMenuOpen] = useState(false);
+  const typeMenuRef = useRef<HTMLDivElement>(null);
   const t = translations[lang];
   const isClassic = mode === RunMode.CLASSIC;
 
   useEffect(() => {
     setSortBySumme(localStorage.getItem(SORT_STORAGE_KEY) === "true");
   }, []);
+
+  useEffect(() => {
+    function onClickOutside(event: MouseEvent) {
+      if (typeMenuRef.current && !typeMenuRef.current.contains(event.target as Node)) {
+        setTypeMenuOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", onClickOutside);
+    return () => document.removeEventListener("mousedown", onClickOutside);
+  }, []);
+
+  // Only offer types that actually occur in this run's Pokémon, in canonical
+  // chart order.
+  const availableTypes = GEN3_TYPES.filter((type) =>
+    soulLinks.some((l) => l.encounters.some((e) => e.types.includes(type))),
+  );
+
+  function toggleType(type: string) {
+    setTypeFilter((prev) =>
+      prev.includes(type) ? prev.filter((x) => x !== type) : [...prev, type],
+    );
+  }
 
   function handleSortChange(value: boolean) {
     setSortBySumme(value);
@@ -61,11 +90,15 @@ export function LinksView({
       (sortBySumme ? totalSumme(b) - totalSumme(a) : 0),
   );
 
-  const visibleLinks = evolvableOnly
-    ? sortedLinks.filter((link) =>
-        link.encounters.some((e) => e.evolvesTo.some((target) => target.available)),
-      )
-    : sortedLinks;
+  const visibleLinks = sortedLinks.filter((link) => {
+    if (evolvableOnly && !link.encounters.some((e) => e.evolvesTo.some((t) => t.available)))
+      return false;
+    if (hideTeam && link.teamPosition !== null && link.status !== LinkStatus.DEAD) return false;
+    // Type filter (OR): keep the link if any of its Pokémon has a selected type.
+    if (typeFilter.length > 0 && !link.encounters.some((e) => e.types.some((ty) => typeFilter.includes(ty))))
+      return false;
+    return true;
+  });
 
   function handleMarkDead(id: number) {
     setPendingId(id);
@@ -98,7 +131,7 @@ export function LinksView({
   return (
     <div>
       <TeamBar runId={runId} mode={mode} lang={lang} links={soulLinks} />
-      <div className="mb-3 flex items-center gap-2">
+      <div className="mb-3 flex flex-wrap items-center gap-2">
         <label
           htmlFor="links-sort"
           className="text-sm font-medium text-zinc-500 dark:text-zinc-400"
@@ -126,6 +159,68 @@ export function LinksView({
         >
           {t.links.filterEvolvable}
         </button>
+        <button
+          type="button"
+          onClick={() => setHideTeam((v) => !v)}
+          title={t.links.hideTeamTitle}
+          className={`rounded-md border px-2 py-1.5 text-sm font-medium transition-colors ${
+            hideTeam
+              ? "border-emerald-400 bg-emerald-50 text-emerald-700 dark:border-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300"
+              : "border-zinc-200 text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+          }`}
+        >
+          {t.links.hideTeam}
+        </button>
+        <div ref={typeMenuRef} className="relative">
+          <button
+            type="button"
+            onClick={() => setTypeMenuOpen((v) => !v)}
+            title={t.links.filterTypesTitle}
+            className={`flex items-center gap-1 rounded-md border px-2 py-1.5 text-sm font-medium transition-colors ${
+              typeFilter.length > 0
+                ? "border-emerald-400 bg-emerald-50 text-emerald-700 dark:border-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300"
+                : "border-zinc-200 text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+            }`}
+          >
+            {t.links.filterTypes}
+            {typeFilter.length > 0 && (
+              <span className="rounded-full bg-emerald-500 px-1.5 text-xs text-white">
+                {typeFilter.length}
+              </span>
+            )}
+            <span className="text-xs text-zinc-400">▾</span>
+          </button>
+          {typeMenuOpen && (
+            <div className="absolute left-0 z-20 mt-1 w-48 rounded-md border border-zinc-200 bg-white p-1 shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
+              <div className="max-h-72 overflow-y-auto">
+                {availableTypes.map((type) => (
+                  <label
+                    key={type}
+                    className="flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={typeFilter.includes(type)}
+                      onChange={() => toggleType(type)}
+                      className="accent-emerald-500"
+                    />
+                    <TypeBadge type={type} lang={lang} />
+                    <span className="text-sm">{TYPE_LABELS[lang][type] ?? type}</span>
+                  </label>
+                ))}
+              </div>
+              {typeFilter.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => setTypeFilter([])}
+                  className="mt-1 w-full rounded px-2 py-1.5 text-left text-xs text-zinc-500 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+                >
+                  {t.links.filterTypesClear}
+                </button>
+              )}
+            </div>
+          )}
+        </div>
       </div>
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {visibleLinks.map((link) => {
