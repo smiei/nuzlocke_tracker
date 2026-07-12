@@ -1,5 +1,13 @@
 import { redirect } from "next/navigation";
-import { getRouteById, getPokemonById, getPokemonList, getEvolutionById, getLevelCaps } from "@/lib/data";
+import {
+  getGameOrDefault,
+  getRouteById,
+  getPokemonById,
+  getPokemonList,
+  getEvolutionById,
+  getLevelCaps,
+} from "@/lib/data";
+import { SpriteSetProvider } from "@/components/SpriteSetProvider";
 import { computePokemonRanks } from "@/lib/ranking";
 import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
@@ -30,7 +38,10 @@ export default async function LinksPage({
     where: { runId },
     include: { encounters: true },
   });
-  const ranks = computePokemonRanks(getPokemonList());
+  // Ranks are computed within the game's dex, so "Rang #X" means the same
+  // thing the Pokédex tab shows for that game.
+  const game = getGameOrDefault(gameId);
+  const ranks = computePokemonRanks(getPokemonList(game.dexLimit));
 
   // Current level cap = the LAST DEFEATED Journey milestone with a cap (the
   // cap you have earned). House rule: only one Pokémon may reach the cap
@@ -70,7 +81,11 @@ export default async function LinksPage({
         rang: ranks.get(e.currentPokemonId) ?? 0,
         status: e.status,
         isStatic: e.isStatic,
-        evolvesTo: (evo?.evolvesTo ?? []).map((id) => {
+        // Evolutions beyond the game's dex (e.g. Crobat in Gen 1, Magnezone
+        // in Gen 3) don't exist in that game - filter them out entirely.
+        evolvesTo: (evo?.evolvesTo ?? [])
+          .filter((id) => id <= game.dexLimit)
+          .map((id) => {
           const p = getPokemonById(id);
           const targetEvo = getEvolutionById(id, evoOptions);
           const method = targetEvo?.method ?? null;
@@ -84,7 +99,9 @@ export default async function LinksPage({
           };
         }),
         evolvesFrom: (() => {
-          if (!evo?.evolvesFrom) return null;
+          // Pre-evos introduced later (e.g. Pichu for Pikachu) don't exist
+          // in older games either.
+          if (!evo?.evolvesFrom || evo.evolvesFrom > game.dexLimit) return null;
           const p = getPokemonById(evo.evolvesFrom);
           return { id: evo.evolvesFrom, name: p ? pokemonName(p, lang) : `#${evo.evolvesFrom}` };
         })(),
@@ -102,7 +119,9 @@ export default async function LinksPage({
   return (
     <div>
       <h2 className="mb-4 text-xl font-semibold">{heading}</h2>
-      <LinksView runId={runId} mode={mode} lang={lang} soulLinks={views} />
+      <SpriteSetProvider spriteSet={game.spriteSet}>
+        <LinksView runId={runId} mode={mode} lang={lang} soulLinks={views} />
+      </SpriteSetProvider>
     </div>
   );
 }

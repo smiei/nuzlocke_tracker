@@ -9046,5 +9046,2519 @@
       "Init.": 150,
       "Summe": 600
     }
+  },
+  {
+    "id": 387,
+    "names": {
+      "de": "Chelast",
+      "en": "Turtwig",
+      "fr": "Tortipouss",
+      "es": "Turtwig",
+      "it": "Turtwig"
+    },
+    "types": [
+      "grass"
+    ],
+    "family_id": 387,
+    "stats": {
+      "KP": 55,
+      "Ang.": 68,
+      "Vert.": 64,
+      "Sp.-A.": 45,
+      "Sp.-V.": 55,
+      "Init.": 31,
+      "Summe": 318
+    }
+  },
+  {
+    "id": 388,
+    "names": {
+      "de": "Chelcarain",
+      "en": "Grotle",
+      "fr": "Boskara",
+      "es": "Grotle",
+      "it": "Grotle"
+    },
+    "types": [
+      "grass"
+    ],
+    "family_id": 387,
+    "stats": {
+      "KP": 75,
+      "Ang.": 89,
+      "Vert.": 85,
+      "Sp.-A.": 55,
+      "Sp.-V.": 65,
+      "Init.": 36,
+      "Summe": 405
+    }
+  },
+  {
+    "id": 389,
+    "names": {
+      "de": "Chelterrar",
+      "en": "Torterra",
+      "fr": "Torterra",
+      "es": "Torterra",
+      "it": "Torterra"
+    },
+    "types": [
+      "grass",
+      "ground"
+    ],
+    "family_id": 387,
+    "stats": {
+      "KP": 95,
+      "Ang.": 109,
+      "Vert.": 105,
+      "Sp.-A.": 75,
+      "Sp.-V.": 85,
+      "Init.": 56,
+      "Summe": 525
+    }
+  },
+  {
+    "id": 390,
+    "names": {
+      "de": "Panflam",
+      "en": "Chimchar",
+      "fr": "Ouisticram",
+      "es": "Chimchar",
+      "it": "Chimchar"
+    },
+    "types": [
+      "fire"
+    ],
+    "family_id": 390,
+    "stats": {
+      "KP": 44,
+      "Ang.": 58,
+      "Vert.": 44,
+      "Sp.-A.": 58,
+      "Sp.-V.": 44,
+      "Init.": 61,
+      "Summe": 309
+    }
+  },
+  {
+    "id": 391,
+    "names": {
+      "de": "Panpyro",
+      "en": "Monferno",
+      "fr": "Chimpenfeu",
+      "es": "Monferno",
+      "it": "Monferno"
+    },
+    "types": [
+      "fire",
+      "fighting"
+    ],
+    "family_id": 390,
+    "stats": {
+      "KP": 64,
+      "Ang.": 78,
+      "Vert.": 52,
+      "Sp.-A.": 78,
+      "Sp.-V.": 52,
+      "Init.": 81,
+      "Summe": 405
+    }
+  },
+  {
+    "id": 392,
+    "names": {
+      "de": "Panferno",
+      "en": "Infernape",
+      "fr": "Simiabraz",
+      "es": "Infernape",
+      "it": "Infernape"
+    },
+    "types": [
+      "fire",
+      "fighting"
+    ],
+    "family_id": 390,
+    "stats": {
+      "KP": 76,
+      "Ang.": 104,
+      "Vert.": 71,
+      "Sp.-A.": 104,
+      "Sp.-V.": 71,
+      "Init.": 108,
+      "Summe": 534
+    }
+  },
+  {
+    "id": 393,
+    "names": {
+      "de": "Plinfa",
+      "en": "Piplup",
+      "fr": "Tiplouf",
+      "es": "Piplup",
+      "it": "Piplup"
+    },
+    "types": [
+      "water"
+    ],
+    "family_id": 393,
+    "stats": {
+      "KP": 53,
+      "Ang.": 51,
+      "Vert.": 53,
+      "Sp.-A.": 61,
+      "Sp.-V.": 56,
+      "Init.": 40,
+      "Summe": 314
+    }
+  },
+  {
+    "id": 394,
+    "names": {
+      "de": "Pliprin",
+      "en": "Prinplup",
+      "fr": "Prinplouf",
+      "es": "Prinplup",
+      "it": "Prinplup"
+    },
+    "types": [
+      "water"
+    ],
+    "family_id": 393,
+    "stats": {
+      "KP": 64,
+      "Ang.": 66,
+      "Vert.": 68,
+      "Sp.-A.": 81,
+      "Sp.-V.": 76,
+      "Init.": 50,
+      "Summe": 405
+    }
+  },
+  {
+    "id": 395,
+    "names": {
+      "de": "Impoleon",
+      "en": "Empoleon",
+      "fr": "Pingoléon",
+      "es": "Empoleon",
+      "it": "Empoleon"
+    },
+    "types": [
+      "water",
+      "steel"
+    ],
+    "family_id": 393,
+    "stats": {
+      "KP": 84,
+      "Ang.": 86,
+      "Vert.": 88,
+      "Sp.-A.": 111,
+      "Sp.-V.": 101,
+      "Init.": 60,
+      "Summe": 530
+    }
+  },
+  {
+    "id": 396,
+    "names": {
+      "de": "Staralili",
+      "en": "Starly",
+      "fr": "Étourmi",
+      "es": "Starly",
+      "it": "Starly"
+    },
+    "types": [
+      "normal",
+      "flying"
+    ],
+    "family_id": 396,
+    "stats": {
+      "KP": 40,
+      "Ang.": 55,
+      "Vert.": 30,
+      "Sp.-A.": 30,
+      "Sp.-V.": 30,
+      "Init.": 60,
+      "Summe": 245
+    }
+  },
+  {
+    "id": 397,
+    "names": {
+      "de": "Staravia",
+      "en": "Staravia",
+      "fr": "Étourvol",
+      "es": "Staravia",
+      "it": "Staravia"
+    },
+    "types": [
+      "normal",
+      "flying"
+    ],
+    "family_id": 396,
+    "stats": {
+      "KP": 55,
+      "Ang.": 75,
+      "Vert.": 50,
+      "Sp.-A.": 40,
+      "Sp.-V.": 40,
+      "Init.": 80,
+      "Summe": 340
+    }
+  },
+  {
+    "id": 398,
+    "names": {
+      "de": "Staraptor",
+      "en": "Staraptor",
+      "fr": "Étouraptor",
+      "es": "Staraptor",
+      "it": "Staraptor"
+    },
+    "types": [
+      "normal",
+      "flying"
+    ],
+    "family_id": 396,
+    "stats": {
+      "KP": 85,
+      "Ang.": 120,
+      "Vert.": 70,
+      "Sp.-A.": 50,
+      "Sp.-V.": 60,
+      "Init.": 100,
+      "Summe": 485
+    }
+  },
+  {
+    "id": 399,
+    "names": {
+      "de": "Bidiza",
+      "en": "Bidoof",
+      "fr": "Keunotor",
+      "es": "Bidoof",
+      "it": "Bidoof"
+    },
+    "types": [
+      "normal"
+    ],
+    "family_id": 399,
+    "stats": {
+      "KP": 59,
+      "Ang.": 45,
+      "Vert.": 40,
+      "Sp.-A.": 35,
+      "Sp.-V.": 40,
+      "Init.": 31,
+      "Summe": 250
+    }
+  },
+  {
+    "id": 400,
+    "names": {
+      "de": "Bidifas",
+      "en": "Bibarel",
+      "fr": "Castorno",
+      "es": "Bibarel",
+      "it": "Bibarel"
+    },
+    "types": [
+      "normal",
+      "water"
+    ],
+    "family_id": 399,
+    "stats": {
+      "KP": 79,
+      "Ang.": 85,
+      "Vert.": 60,
+      "Sp.-A.": 55,
+      "Sp.-V.": 60,
+      "Init.": 71,
+      "Summe": 410
+    }
+  },
+  {
+    "id": 401,
+    "names": {
+      "de": "Zirpurze",
+      "en": "Kricketot",
+      "fr": "Crikzik",
+      "es": "Kricketot",
+      "it": "Kricketot"
+    },
+    "types": [
+      "bug"
+    ],
+    "family_id": 401,
+    "stats": {
+      "KP": 37,
+      "Ang.": 25,
+      "Vert.": 41,
+      "Sp.-A.": 25,
+      "Sp.-V.": 41,
+      "Init.": 25,
+      "Summe": 194
+    }
+  },
+  {
+    "id": 402,
+    "names": {
+      "de": "Zirpeise",
+      "en": "Kricketune",
+      "fr": "Mélokrik",
+      "es": "Kricketune",
+      "it": "Kricketune"
+    },
+    "types": [
+      "bug"
+    ],
+    "family_id": 401,
+    "stats": {
+      "KP": 77,
+      "Ang.": 85,
+      "Vert.": 51,
+      "Sp.-A.": 55,
+      "Sp.-V.": 51,
+      "Init.": 65,
+      "Summe": 384
+    }
+  },
+  {
+    "id": 403,
+    "names": {
+      "de": "Sheinux",
+      "en": "Shinx",
+      "fr": "Lixy",
+      "es": "Shinx",
+      "it": "Shinx"
+    },
+    "types": [
+      "electric"
+    ],
+    "family_id": 403,
+    "stats": {
+      "KP": 45,
+      "Ang.": 65,
+      "Vert.": 34,
+      "Sp.-A.": 40,
+      "Sp.-V.": 34,
+      "Init.": 45,
+      "Summe": 263
+    }
+  },
+  {
+    "id": 404,
+    "names": {
+      "de": "Luxio",
+      "en": "Luxio",
+      "fr": "Luxio",
+      "es": "Luxio",
+      "it": "Luxio"
+    },
+    "types": [
+      "electric"
+    ],
+    "family_id": 403,
+    "stats": {
+      "KP": 60,
+      "Ang.": 85,
+      "Vert.": 49,
+      "Sp.-A.": 60,
+      "Sp.-V.": 49,
+      "Init.": 60,
+      "Summe": 363
+    }
+  },
+  {
+    "id": 405,
+    "names": {
+      "de": "Luxtra",
+      "en": "Luxray",
+      "fr": "Luxray",
+      "es": "Luxray",
+      "it": "Luxray"
+    },
+    "types": [
+      "electric"
+    ],
+    "family_id": 403,
+    "stats": {
+      "KP": 80,
+      "Ang.": 120,
+      "Vert.": 79,
+      "Sp.-A.": 95,
+      "Sp.-V.": 79,
+      "Init.": 70,
+      "Summe": 523
+    }
+  },
+  {
+    "id": 406,
+    "names": {
+      "de": "Knospi",
+      "en": "Budew",
+      "fr": "Rozbouton",
+      "es": "Budew",
+      "it": "Budew"
+    },
+    "types": [
+      "grass",
+      "poison"
+    ],
+    "family_id": 406,
+    "stats": {
+      "KP": 40,
+      "Ang.": 30,
+      "Vert.": 35,
+      "Sp.-A.": 50,
+      "Sp.-V.": 70,
+      "Init.": 55,
+      "Summe": 280
+    }
+  },
+  {
+    "id": 407,
+    "names": {
+      "de": "Roserade",
+      "en": "Roserade",
+      "fr": "Roserade",
+      "es": "Roserade",
+      "it": "Roserade"
+    },
+    "types": [
+      "grass",
+      "poison"
+    ],
+    "family_id": 406,
+    "stats": {
+      "KP": 60,
+      "Ang.": 70,
+      "Vert.": 65,
+      "Sp.-A.": 125,
+      "Sp.-V.": 105,
+      "Init.": 90,
+      "Summe": 515
+    }
+  },
+  {
+    "id": 408,
+    "names": {
+      "de": "Koknodon",
+      "en": "Cranidos",
+      "fr": "Kranidos",
+      "es": "Cranidos",
+      "it": "Cranidos"
+    },
+    "types": [
+      "rock"
+    ],
+    "family_id": 408,
+    "stats": {
+      "KP": 67,
+      "Ang.": 125,
+      "Vert.": 40,
+      "Sp.-A.": 30,
+      "Sp.-V.": 30,
+      "Init.": 58,
+      "Summe": 350
+    }
+  },
+  {
+    "id": 409,
+    "names": {
+      "de": "Rameidon",
+      "en": "Rampardos",
+      "fr": "Charkos",
+      "es": "Rampardos",
+      "it": "Rampardos"
+    },
+    "types": [
+      "rock"
+    ],
+    "family_id": 408,
+    "stats": {
+      "KP": 97,
+      "Ang.": 165,
+      "Vert.": 60,
+      "Sp.-A.": 65,
+      "Sp.-V.": 50,
+      "Init.": 58,
+      "Summe": 495
+    }
+  },
+  {
+    "id": 410,
+    "names": {
+      "de": "Schilterus",
+      "en": "Shieldon",
+      "fr": "Dinoclier",
+      "es": "Shieldon",
+      "it": "Shieldon"
+    },
+    "types": [
+      "rock",
+      "steel"
+    ],
+    "family_id": 410,
+    "stats": {
+      "KP": 30,
+      "Ang.": 42,
+      "Vert.": 118,
+      "Sp.-A.": 42,
+      "Sp.-V.": 88,
+      "Init.": 30,
+      "Summe": 350
+    }
+  },
+  {
+    "id": 411,
+    "names": {
+      "de": "Bollterus",
+      "en": "Bastiodon",
+      "fr": "Bastiodon",
+      "es": "Bastiodon",
+      "it": "Bastiodon"
+    },
+    "types": [
+      "rock",
+      "steel"
+    ],
+    "family_id": 410,
+    "stats": {
+      "KP": 60,
+      "Ang.": 52,
+      "Vert.": 168,
+      "Sp.-A.": 47,
+      "Sp.-V.": 138,
+      "Init.": 30,
+      "Summe": 495
+    }
+  },
+  {
+    "id": 412,
+    "names": {
+      "de": "Burmy",
+      "en": "Burmy",
+      "fr": "Cheniti",
+      "es": "Burmy",
+      "it": "Burmy"
+    },
+    "types": [
+      "bug"
+    ],
+    "family_id": 412,
+    "stats": {
+      "KP": 40,
+      "Ang.": 29,
+      "Vert.": 45,
+      "Sp.-A.": 29,
+      "Sp.-V.": 45,
+      "Init.": 36,
+      "Summe": 224
+    }
+  },
+  {
+    "id": 413,
+    "names": {
+      "de": "Burmadame",
+      "en": "Wormadam",
+      "fr": "Cheniselle",
+      "es": "Wormadam",
+      "it": "Wormadam"
+    },
+    "types": [
+      "bug",
+      "grass"
+    ],
+    "family_id": 412,
+    "stats": {
+      "KP": 60,
+      "Ang.": 59,
+      "Vert.": 85,
+      "Sp.-A.": 79,
+      "Sp.-V.": 105,
+      "Init.": 36,
+      "Summe": 424
+    }
+  },
+  {
+    "id": 414,
+    "names": {
+      "de": "Moterpel",
+      "en": "Mothim",
+      "fr": "Papilord",
+      "es": "Mothim",
+      "it": "Mothim"
+    },
+    "types": [
+      "bug",
+      "flying"
+    ],
+    "family_id": 412,
+    "stats": {
+      "KP": 70,
+      "Ang.": 94,
+      "Vert.": 50,
+      "Sp.-A.": 94,
+      "Sp.-V.": 50,
+      "Init.": 66,
+      "Summe": 424
+    }
+  },
+  {
+    "id": 415,
+    "names": {
+      "de": "Wadribie",
+      "en": "Combee",
+      "fr": "Apitrini",
+      "es": "Combee",
+      "it": "Combee"
+    },
+    "types": [
+      "bug",
+      "flying"
+    ],
+    "family_id": 415,
+    "stats": {
+      "KP": 30,
+      "Ang.": 30,
+      "Vert.": 42,
+      "Sp.-A.": 30,
+      "Sp.-V.": 42,
+      "Init.": 70,
+      "Summe": 244
+    }
+  },
+  {
+    "id": 416,
+    "names": {
+      "de": "Honweisel",
+      "en": "Vespiquen",
+      "fr": "Apireine",
+      "es": "Vespiquen",
+      "it": "Vespiquen"
+    },
+    "types": [
+      "bug",
+      "flying"
+    ],
+    "family_id": 415,
+    "stats": {
+      "KP": 70,
+      "Ang.": 80,
+      "Vert.": 102,
+      "Sp.-A.": 80,
+      "Sp.-V.": 102,
+      "Init.": 40,
+      "Summe": 474
+    }
+  },
+  {
+    "id": 417,
+    "names": {
+      "de": "Pachirisu",
+      "en": "Pachirisu",
+      "fr": "Pachirisu",
+      "es": "Pachirisu",
+      "it": "Pachirisu"
+    },
+    "types": [
+      "electric"
+    ],
+    "family_id": 417,
+    "stats": {
+      "KP": 60,
+      "Ang.": 45,
+      "Vert.": 70,
+      "Sp.-A.": 45,
+      "Sp.-V.": 90,
+      "Init.": 95,
+      "Summe": 405
+    }
+  },
+  {
+    "id": 418,
+    "names": {
+      "de": "Bamelin",
+      "en": "Buizel",
+      "fr": "Mustébouée",
+      "es": "Buizel",
+      "it": "Buizel"
+    },
+    "types": [
+      "water"
+    ],
+    "family_id": 418,
+    "stats": {
+      "KP": 55,
+      "Ang.": 65,
+      "Vert.": 35,
+      "Sp.-A.": 60,
+      "Sp.-V.": 30,
+      "Init.": 85,
+      "Summe": 330
+    }
+  },
+  {
+    "id": 419,
+    "names": {
+      "de": "Bojelin",
+      "en": "Floatzel",
+      "fr": "Mustéflott",
+      "es": "Floatzel",
+      "it": "Floatzel"
+    },
+    "types": [
+      "water"
+    ],
+    "family_id": 418,
+    "stats": {
+      "KP": 85,
+      "Ang.": 105,
+      "Vert.": 55,
+      "Sp.-A.": 85,
+      "Sp.-V.": 50,
+      "Init.": 115,
+      "Summe": 495
+    }
+  },
+  {
+    "id": 420,
+    "names": {
+      "de": "Kikugi",
+      "en": "Cherubi",
+      "fr": "Ceribou",
+      "es": "Cherubi",
+      "it": "Cherubi"
+    },
+    "types": [
+      "grass"
+    ],
+    "family_id": 420,
+    "stats": {
+      "KP": 45,
+      "Ang.": 35,
+      "Vert.": 45,
+      "Sp.-A.": 62,
+      "Sp.-V.": 53,
+      "Init.": 35,
+      "Summe": 275
+    }
+  },
+  {
+    "id": 421,
+    "names": {
+      "de": "Kinoso",
+      "en": "Cherrim",
+      "fr": "Ceriflor",
+      "es": "Cherrim",
+      "it": "Cherrim"
+    },
+    "types": [
+      "grass"
+    ],
+    "family_id": 420,
+    "stats": {
+      "KP": 70,
+      "Ang.": 60,
+      "Vert.": 70,
+      "Sp.-A.": 87,
+      "Sp.-V.": 78,
+      "Init.": 85,
+      "Summe": 450
+    }
+  },
+  {
+    "id": 422,
+    "names": {
+      "de": "Schalellos",
+      "en": "Shellos",
+      "fr": "Sancoki",
+      "es": "Shellos",
+      "it": "Shellos"
+    },
+    "types": [
+      "water"
+    ],
+    "family_id": 422,
+    "stats": {
+      "KP": 76,
+      "Ang.": 48,
+      "Vert.": 48,
+      "Sp.-A.": 57,
+      "Sp.-V.": 62,
+      "Init.": 34,
+      "Summe": 325
+    }
+  },
+  {
+    "id": 423,
+    "names": {
+      "de": "Gastrodon",
+      "en": "Gastrodon",
+      "fr": "Tritosor",
+      "es": "Gastrodon",
+      "it": "Gastrodon"
+    },
+    "types": [
+      "water",
+      "ground"
+    ],
+    "family_id": 422,
+    "stats": {
+      "KP": 111,
+      "Ang.": 83,
+      "Vert.": 68,
+      "Sp.-A.": 92,
+      "Sp.-V.": 82,
+      "Init.": 39,
+      "Summe": 475
+    }
+  },
+  {
+    "id": 424,
+    "names": {
+      "de": "Ambidiffel",
+      "en": "Ambipom",
+      "fr": "Capidextre",
+      "es": "Ambipom",
+      "it": "Ambipom"
+    },
+    "types": [
+      "normal"
+    ],
+    "family_id": 190,
+    "stats": {
+      "KP": 75,
+      "Ang.": 100,
+      "Vert.": 66,
+      "Sp.-A.": 60,
+      "Sp.-V.": 66,
+      "Init.": 115,
+      "Summe": 482
+    }
+  },
+  {
+    "id": 425,
+    "names": {
+      "de": "Driftlon",
+      "en": "Drifloon",
+      "fr": "Baudrive",
+      "es": "Drifloon",
+      "it": "Drifloon"
+    },
+    "types": [
+      "ghost",
+      "flying"
+    ],
+    "family_id": 425,
+    "stats": {
+      "KP": 90,
+      "Ang.": 50,
+      "Vert.": 34,
+      "Sp.-A.": 60,
+      "Sp.-V.": 44,
+      "Init.": 70,
+      "Summe": 348
+    }
+  },
+  {
+    "id": 426,
+    "names": {
+      "de": "Drifzepeli",
+      "en": "Drifblim",
+      "fr": "Grodrive",
+      "es": "Drifblim",
+      "it": "Drifblim"
+    },
+    "types": [
+      "ghost",
+      "flying"
+    ],
+    "family_id": 425,
+    "stats": {
+      "KP": 150,
+      "Ang.": 80,
+      "Vert.": 44,
+      "Sp.-A.": 90,
+      "Sp.-V.": 54,
+      "Init.": 80,
+      "Summe": 498
+    }
+  },
+  {
+    "id": 427,
+    "names": {
+      "de": "Haspiror",
+      "en": "Buneary",
+      "fr": "Laporeille",
+      "es": "Buneary",
+      "it": "Buneary"
+    },
+    "types": [
+      "normal"
+    ],
+    "family_id": 427,
+    "stats": {
+      "KP": 55,
+      "Ang.": 66,
+      "Vert.": 44,
+      "Sp.-A.": 44,
+      "Sp.-V.": 56,
+      "Init.": 85,
+      "Summe": 350
+    }
+  },
+  {
+    "id": 428,
+    "names": {
+      "de": "Schlapor",
+      "en": "Lopunny",
+      "fr": "Lockpin",
+      "es": "Lopunny",
+      "it": "Lopunny"
+    },
+    "types": [
+      "normal"
+    ],
+    "family_id": 427,
+    "stats": {
+      "KP": 65,
+      "Ang.": 76,
+      "Vert.": 84,
+      "Sp.-A.": 54,
+      "Sp.-V.": 96,
+      "Init.": 105,
+      "Summe": 480
+    }
+  },
+  {
+    "id": 429,
+    "names": {
+      "de": "Traunmagil",
+      "en": "Mismagius",
+      "fr": "Magirêve",
+      "es": "Mismagius",
+      "it": "Mismagius"
+    },
+    "types": [
+      "ghost"
+    ],
+    "family_id": 200,
+    "stats": {
+      "KP": 60,
+      "Ang.": 60,
+      "Vert.": 60,
+      "Sp.-A.": 105,
+      "Sp.-V.": 105,
+      "Init.": 105,
+      "Summe": 495
+    }
+  },
+  {
+    "id": 430,
+    "names": {
+      "de": "Kramshef",
+      "en": "Honchkrow",
+      "fr": "Corboss",
+      "es": "Honchkrow",
+      "it": "Honchkrow"
+    },
+    "types": [
+      "dark",
+      "flying"
+    ],
+    "family_id": 198,
+    "stats": {
+      "KP": 100,
+      "Ang.": 125,
+      "Vert.": 52,
+      "Sp.-A.": 105,
+      "Sp.-V.": 52,
+      "Init.": 71,
+      "Summe": 505
+    }
+  },
+  {
+    "id": 431,
+    "names": {
+      "de": "Charmian",
+      "en": "Glameow",
+      "fr": "Chaglam",
+      "es": "Glameow",
+      "it": "Glameow"
+    },
+    "types": [
+      "normal"
+    ],
+    "family_id": 431,
+    "stats": {
+      "KP": 49,
+      "Ang.": 55,
+      "Vert.": 42,
+      "Sp.-A.": 42,
+      "Sp.-V.": 37,
+      "Init.": 85,
+      "Summe": 310
+    }
+  },
+  {
+    "id": 432,
+    "names": {
+      "de": "Shnurgarst",
+      "en": "Purugly",
+      "fr": "Chaffreux",
+      "es": "Purugly",
+      "it": "Purugly"
+    },
+    "types": [
+      "normal"
+    ],
+    "family_id": 431,
+    "stats": {
+      "KP": 71,
+      "Ang.": 82,
+      "Vert.": 64,
+      "Sp.-A.": 64,
+      "Sp.-V.": 59,
+      "Init.": 112,
+      "Summe": 452
+    }
+  },
+  {
+    "id": 433,
+    "names": {
+      "de": "Klingplim",
+      "en": "Chingling",
+      "fr": "Korillon",
+      "es": "Chingling",
+      "it": "Chingling"
+    },
+    "types": [
+      "psychic"
+    ],
+    "family_id": 433,
+    "stats": {
+      "KP": 45,
+      "Ang.": 30,
+      "Vert.": 50,
+      "Sp.-A.": 65,
+      "Sp.-V.": 50,
+      "Init.": 45,
+      "Summe": 285
+    }
+  },
+  {
+    "id": 434,
+    "names": {
+      "de": "Skunkapuh",
+      "en": "Stunky",
+      "fr": "Moufouette",
+      "es": "Stunky",
+      "it": "Stunky"
+    },
+    "types": [
+      "poison",
+      "dark"
+    ],
+    "family_id": 434,
+    "stats": {
+      "KP": 63,
+      "Ang.": 63,
+      "Vert.": 47,
+      "Sp.-A.": 41,
+      "Sp.-V.": 41,
+      "Init.": 74,
+      "Summe": 329
+    }
+  },
+  {
+    "id": 435,
+    "names": {
+      "de": "Skuntank",
+      "en": "Skuntank",
+      "fr": "Moufflair",
+      "es": "Skuntank",
+      "it": "Skuntank"
+    },
+    "types": [
+      "poison",
+      "dark"
+    ],
+    "family_id": 434,
+    "stats": {
+      "KP": 103,
+      "Ang.": 93,
+      "Vert.": 67,
+      "Sp.-A.": 71,
+      "Sp.-V.": 61,
+      "Init.": 84,
+      "Summe": 479
+    }
+  },
+  {
+    "id": 436,
+    "names": {
+      "de": "Bronzel",
+      "en": "Bronzor",
+      "fr": "Archéomire",
+      "es": "Bronzor",
+      "it": "Bronzor"
+    },
+    "types": [
+      "steel",
+      "psychic"
+    ],
+    "family_id": 436,
+    "stats": {
+      "KP": 57,
+      "Ang.": 24,
+      "Vert.": 86,
+      "Sp.-A.": 24,
+      "Sp.-V.": 86,
+      "Init.": 23,
+      "Summe": 300
+    }
+  },
+  {
+    "id": 437,
+    "names": {
+      "de": "Bronzong",
+      "en": "Bronzong",
+      "fr": "Archéodong",
+      "es": "Bronzong",
+      "it": "Bronzong"
+    },
+    "types": [
+      "steel",
+      "psychic"
+    ],
+    "family_id": 436,
+    "stats": {
+      "KP": 67,
+      "Ang.": 89,
+      "Vert.": 116,
+      "Sp.-A.": 79,
+      "Sp.-V.": 116,
+      "Init.": 33,
+      "Summe": 500
+    }
+  },
+  {
+    "id": 438,
+    "names": {
+      "de": "Mobai",
+      "en": "Bonsly",
+      "fr": "Manzaï",
+      "es": "Bonsly",
+      "it": "Bonsly"
+    },
+    "types": [
+      "rock"
+    ],
+    "family_id": 438,
+    "stats": {
+      "KP": 50,
+      "Ang.": 80,
+      "Vert.": 95,
+      "Sp.-A.": 10,
+      "Sp.-V.": 45,
+      "Init.": 10,
+      "Summe": 290
+    }
+  },
+  {
+    "id": 439,
+    "names": {
+      "de": "Pantimimi",
+      "en": "Mime Jr.",
+      "fr": "Mime Jr.",
+      "es": "Mime Jr.",
+      "it": "Mime Jr."
+    },
+    "types": [
+      "psychic",
+      "fairy"
+    ],
+    "family_id": 439,
+    "stats": {
+      "KP": 20,
+      "Ang.": 25,
+      "Vert.": 45,
+      "Sp.-A.": 70,
+      "Sp.-V.": 90,
+      "Init.": 60,
+      "Summe": 310
+    }
+  },
+  {
+    "id": 440,
+    "names": {
+      "de": "Wonneira",
+      "en": "Happiny",
+      "fr": "Ptiravi",
+      "es": "Happiny",
+      "it": "Happiny"
+    },
+    "types": [
+      "normal"
+    ],
+    "family_id": 440,
+    "stats": {
+      "KP": 100,
+      "Ang.": 5,
+      "Vert.": 5,
+      "Sp.-A.": 15,
+      "Sp.-V.": 65,
+      "Init.": 30,
+      "Summe": 220
+    }
+  },
+  {
+    "id": 441,
+    "names": {
+      "de": "Plaudagei",
+      "en": "Chatot",
+      "fr": "Pijako",
+      "es": "Chatot",
+      "it": "Chatot"
+    },
+    "types": [
+      "normal",
+      "flying"
+    ],
+    "family_id": 441,
+    "stats": {
+      "KP": 76,
+      "Ang.": 65,
+      "Vert.": 45,
+      "Sp.-A.": 92,
+      "Sp.-V.": 42,
+      "Init.": 91,
+      "Summe": 411
+    }
+  },
+  {
+    "id": 442,
+    "names": {
+      "de": "Kryppuk",
+      "en": "Spiritomb",
+      "fr": "Spiritomb",
+      "es": "Spiritomb",
+      "it": "Spiritomb"
+    },
+    "types": [
+      "ghost",
+      "dark"
+    ],
+    "family_id": 442,
+    "stats": {
+      "KP": 50,
+      "Ang.": 92,
+      "Vert.": 108,
+      "Sp.-A.": 92,
+      "Sp.-V.": 108,
+      "Init.": 35,
+      "Summe": 485
+    }
+  },
+  {
+    "id": 443,
+    "names": {
+      "de": "Kaumalat",
+      "en": "Gible",
+      "fr": "Griknot",
+      "es": "Gible",
+      "it": "Gible"
+    },
+    "types": [
+      "dragon",
+      "ground"
+    ],
+    "family_id": 443,
+    "stats": {
+      "KP": 58,
+      "Ang.": 70,
+      "Vert.": 45,
+      "Sp.-A.": 40,
+      "Sp.-V.": 45,
+      "Init.": 42,
+      "Summe": 300
+    }
+  },
+  {
+    "id": 444,
+    "names": {
+      "de": "Knarksel",
+      "en": "Gabite",
+      "fr": "Carmache",
+      "es": "Gabite",
+      "it": "Gabite"
+    },
+    "types": [
+      "dragon",
+      "ground"
+    ],
+    "family_id": 443,
+    "stats": {
+      "KP": 68,
+      "Ang.": 90,
+      "Vert.": 65,
+      "Sp.-A.": 50,
+      "Sp.-V.": 55,
+      "Init.": 82,
+      "Summe": 410
+    }
+  },
+  {
+    "id": 445,
+    "names": {
+      "de": "Knakrack",
+      "en": "Garchomp",
+      "fr": "Carchacrok",
+      "es": "Garchomp",
+      "it": "Garchomp"
+    },
+    "types": [
+      "dragon",
+      "ground"
+    ],
+    "family_id": 443,
+    "stats": {
+      "KP": 108,
+      "Ang.": 130,
+      "Vert.": 95,
+      "Sp.-A.": 80,
+      "Sp.-V.": 85,
+      "Init.": 102,
+      "Summe": 600
+    }
+  },
+  {
+    "id": 446,
+    "names": {
+      "de": "Mampfaxo",
+      "en": "Munchlax",
+      "fr": "Goinfrex",
+      "es": "Munchlax",
+      "it": "Munchlax"
+    },
+    "types": [
+      "normal"
+    ],
+    "family_id": 446,
+    "stats": {
+      "KP": 135,
+      "Ang.": 85,
+      "Vert.": 40,
+      "Sp.-A.": 40,
+      "Sp.-V.": 85,
+      "Init.": 5,
+      "Summe": 390
+    }
+  },
+  {
+    "id": 447,
+    "names": {
+      "de": "Riolu",
+      "en": "Riolu",
+      "fr": "Riolu",
+      "es": "Riolu",
+      "it": "Riolu"
+    },
+    "types": [
+      "fighting"
+    ],
+    "family_id": 447,
+    "stats": {
+      "KP": 40,
+      "Ang.": 70,
+      "Vert.": 40,
+      "Sp.-A.": 35,
+      "Sp.-V.": 40,
+      "Init.": 60,
+      "Summe": 285
+    }
+  },
+  {
+    "id": 448,
+    "names": {
+      "de": "Lucario",
+      "en": "Lucario",
+      "fr": "Lucario",
+      "es": "Lucario",
+      "it": "Lucario"
+    },
+    "types": [
+      "fighting",
+      "steel"
+    ],
+    "family_id": 447,
+    "stats": {
+      "KP": 70,
+      "Ang.": 110,
+      "Vert.": 70,
+      "Sp.-A.": 115,
+      "Sp.-V.": 70,
+      "Init.": 90,
+      "Summe": 525
+    }
+  },
+  {
+    "id": 449,
+    "names": {
+      "de": "Hippopotas",
+      "en": "Hippopotas",
+      "fr": "Hippopotas",
+      "es": "Hippopotas",
+      "it": "Hippopotas"
+    },
+    "types": [
+      "ground"
+    ],
+    "family_id": 449,
+    "stats": {
+      "KP": 68,
+      "Ang.": 72,
+      "Vert.": 78,
+      "Sp.-A.": 38,
+      "Sp.-V.": 42,
+      "Init.": 32,
+      "Summe": 330
+    }
+  },
+  {
+    "id": 450,
+    "names": {
+      "de": "Hippoterus",
+      "en": "Hippowdon",
+      "fr": "Hippodocus",
+      "es": "Hippowdon",
+      "it": "Hippowdon"
+    },
+    "types": [
+      "ground"
+    ],
+    "family_id": 449,
+    "stats": {
+      "KP": 108,
+      "Ang.": 112,
+      "Vert.": 118,
+      "Sp.-A.": 68,
+      "Sp.-V.": 72,
+      "Init.": 47,
+      "Summe": 525
+    }
+  },
+  {
+    "id": 451,
+    "names": {
+      "de": "Pionskora",
+      "en": "Skorupi",
+      "fr": "Rapion",
+      "es": "Skorupi",
+      "it": "Skorupi"
+    },
+    "types": [
+      "poison",
+      "bug"
+    ],
+    "family_id": 451,
+    "stats": {
+      "KP": 40,
+      "Ang.": 50,
+      "Vert.": 90,
+      "Sp.-A.": 30,
+      "Sp.-V.": 55,
+      "Init.": 65,
+      "Summe": 330
+    }
+  },
+  {
+    "id": 452,
+    "names": {
+      "de": "Piondragi",
+      "en": "Drapion",
+      "fr": "Drascore",
+      "es": "Drapion",
+      "it": "Drapion"
+    },
+    "types": [
+      "poison",
+      "dark"
+    ],
+    "family_id": 451,
+    "stats": {
+      "KP": 70,
+      "Ang.": 90,
+      "Vert.": 110,
+      "Sp.-A.": 60,
+      "Sp.-V.": 75,
+      "Init.": 95,
+      "Summe": 500
+    }
+  },
+  {
+    "id": 453,
+    "names": {
+      "de": "Glibunkel",
+      "en": "Croagunk",
+      "fr": "Cradopaud",
+      "es": "Croagunk",
+      "it": "Croagunk"
+    },
+    "types": [
+      "poison",
+      "fighting"
+    ],
+    "family_id": 453,
+    "stats": {
+      "KP": 48,
+      "Ang.": 61,
+      "Vert.": 40,
+      "Sp.-A.": 61,
+      "Sp.-V.": 40,
+      "Init.": 50,
+      "Summe": 300
+    }
+  },
+  {
+    "id": 454,
+    "names": {
+      "de": "Toxiquak",
+      "en": "Toxicroak",
+      "fr": "Coatox",
+      "es": "Toxicroak",
+      "it": "Toxicroak"
+    },
+    "types": [
+      "poison",
+      "fighting"
+    ],
+    "family_id": 453,
+    "stats": {
+      "KP": 83,
+      "Ang.": 106,
+      "Vert.": 65,
+      "Sp.-A.": 86,
+      "Sp.-V.": 65,
+      "Init.": 85,
+      "Summe": 490
+    }
+  },
+  {
+    "id": 455,
+    "names": {
+      "de": "Venuflibis",
+      "en": "Carnivine",
+      "fr": "Vortente",
+      "es": "Carnivine",
+      "it": "Carnivine"
+    },
+    "types": [
+      "grass"
+    ],
+    "family_id": 455,
+    "stats": {
+      "KP": 74,
+      "Ang.": 100,
+      "Vert.": 72,
+      "Sp.-A.": 90,
+      "Sp.-V.": 72,
+      "Init.": 46,
+      "Summe": 454
+    }
+  },
+  {
+    "id": 456,
+    "names": {
+      "de": "Finneon",
+      "en": "Finneon",
+      "fr": "Écayon",
+      "es": "Finneon",
+      "it": "Finneon"
+    },
+    "types": [
+      "water"
+    ],
+    "family_id": 456,
+    "stats": {
+      "KP": 49,
+      "Ang.": 49,
+      "Vert.": 56,
+      "Sp.-A.": 49,
+      "Sp.-V.": 61,
+      "Init.": 66,
+      "Summe": 330
+    }
+  },
+  {
+    "id": 457,
+    "names": {
+      "de": "Lumineon",
+      "en": "Lumineon",
+      "fr": "Luminéon",
+      "es": "Lumineon",
+      "it": "Lumineon"
+    },
+    "types": [
+      "water"
+    ],
+    "family_id": 456,
+    "stats": {
+      "KP": 69,
+      "Ang.": 69,
+      "Vert.": 76,
+      "Sp.-A.": 69,
+      "Sp.-V.": 86,
+      "Init.": 91,
+      "Summe": 460
+    }
+  },
+  {
+    "id": 458,
+    "names": {
+      "de": "Mantirps",
+      "en": "Mantyke",
+      "fr": "Babimanta",
+      "es": "Mantyke",
+      "it": "Mantyke"
+    },
+    "types": [
+      "water",
+      "flying"
+    ],
+    "family_id": 458,
+    "stats": {
+      "KP": 45,
+      "Ang.": 20,
+      "Vert.": 50,
+      "Sp.-A.": 60,
+      "Sp.-V.": 120,
+      "Init.": 50,
+      "Summe": 345
+    }
+  },
+  {
+    "id": 459,
+    "names": {
+      "de": "Shnebedeck",
+      "en": "Snover",
+      "fr": "Blizzi",
+      "es": "Snover",
+      "it": "Snover"
+    },
+    "types": [
+      "grass",
+      "ice"
+    ],
+    "family_id": 459,
+    "stats": {
+      "KP": 60,
+      "Ang.": 62,
+      "Vert.": 50,
+      "Sp.-A.": 62,
+      "Sp.-V.": 60,
+      "Init.": 40,
+      "Summe": 334
+    }
+  },
+  {
+    "id": 460,
+    "names": {
+      "de": "Rexblisar",
+      "en": "Abomasnow",
+      "fr": "Blizzaroi",
+      "es": "Abomasnow",
+      "it": "Abomasnow"
+    },
+    "types": [
+      "grass",
+      "ice"
+    ],
+    "family_id": 459,
+    "stats": {
+      "KP": 90,
+      "Ang.": 92,
+      "Vert.": 75,
+      "Sp.-A.": 92,
+      "Sp.-V.": 85,
+      "Init.": 60,
+      "Summe": 494
+    }
+  },
+  {
+    "id": 461,
+    "names": {
+      "de": "Snibunna",
+      "en": "Weavile",
+      "fr": "Dimoret",
+      "es": "Weavile",
+      "it": "Weavile"
+    },
+    "types": [
+      "dark",
+      "ice"
+    ],
+    "family_id": 215,
+    "stats": {
+      "KP": 70,
+      "Ang.": 120,
+      "Vert.": 65,
+      "Sp.-A.": 45,
+      "Sp.-V.": 85,
+      "Init.": 125,
+      "Summe": 510
+    }
+  },
+  {
+    "id": 462,
+    "names": {
+      "de": "Magnezone",
+      "en": "Magnezone",
+      "fr": "Magnézone",
+      "es": "Magnezone",
+      "it": "Magnezone"
+    },
+    "types": [
+      "electric",
+      "steel"
+    ],
+    "family_id": 81,
+    "stats": {
+      "KP": 70,
+      "Ang.": 70,
+      "Vert.": 115,
+      "Sp.-A.": 130,
+      "Sp.-V.": 90,
+      "Init.": 60,
+      "Summe": 535
+    }
+  },
+  {
+    "id": 463,
+    "names": {
+      "de": "Schlurplek",
+      "en": "Lickilicky",
+      "fr": "Coudlangue",
+      "es": "Lickilicky",
+      "it": "Lickilicky"
+    },
+    "types": [
+      "normal"
+    ],
+    "family_id": 108,
+    "stats": {
+      "KP": 110,
+      "Ang.": 85,
+      "Vert.": 95,
+      "Sp.-A.": 80,
+      "Sp.-V.": 95,
+      "Init.": 50,
+      "Summe": 515
+    }
+  },
+  {
+    "id": 464,
+    "names": {
+      "de": "Rihornior",
+      "en": "Rhyperior",
+      "fr": "Rhinastoc",
+      "es": "Rhyperior",
+      "it": "Rhyperior"
+    },
+    "types": [
+      "ground",
+      "rock"
+    ],
+    "family_id": 111,
+    "stats": {
+      "KP": 115,
+      "Ang.": 140,
+      "Vert.": 130,
+      "Sp.-A.": 55,
+      "Sp.-V.": 55,
+      "Init.": 40,
+      "Summe": 535
+    }
+  },
+  {
+    "id": 465,
+    "names": {
+      "de": "Tangoloss",
+      "en": "Tangrowth",
+      "fr": "Bouldeneu",
+      "es": "Tangrowth",
+      "it": "Tangrowth"
+    },
+    "types": [
+      "grass"
+    ],
+    "family_id": 114,
+    "stats": {
+      "KP": 100,
+      "Ang.": 100,
+      "Vert.": 125,
+      "Sp.-A.": 110,
+      "Sp.-V.": 50,
+      "Init.": 50,
+      "Summe": 535
+    }
+  },
+  {
+    "id": 466,
+    "names": {
+      "de": "Elevoltek",
+      "en": "Electivire",
+      "fr": "Élekable",
+      "es": "Electivire",
+      "it": "Electivire"
+    },
+    "types": [
+      "electric"
+    ],
+    "family_id": 239,
+    "stats": {
+      "KP": 75,
+      "Ang.": 123,
+      "Vert.": 67,
+      "Sp.-A.": 95,
+      "Sp.-V.": 85,
+      "Init.": 95,
+      "Summe": 540
+    }
+  },
+  {
+    "id": 467,
+    "names": {
+      "de": "Magbrant",
+      "en": "Magmortar",
+      "fr": "Maganon",
+      "es": "Magmortar",
+      "it": "Magmortar"
+    },
+    "types": [
+      "fire"
+    ],
+    "family_id": 240,
+    "stats": {
+      "KP": 75,
+      "Ang.": 95,
+      "Vert.": 67,
+      "Sp.-A.": 125,
+      "Sp.-V.": 95,
+      "Init.": 83,
+      "Summe": 540
+    }
+  },
+  {
+    "id": 468,
+    "names": {
+      "de": "Togekiss",
+      "en": "Togekiss",
+      "fr": "Togekiss",
+      "es": "Togekiss",
+      "it": "Togekiss"
+    },
+    "types": [
+      "fairy",
+      "flying"
+    ],
+    "family_id": 175,
+    "stats": {
+      "KP": 85,
+      "Ang.": 50,
+      "Vert.": 95,
+      "Sp.-A.": 120,
+      "Sp.-V.": 115,
+      "Init.": 80,
+      "Summe": 545
+    }
+  },
+  {
+    "id": 469,
+    "names": {
+      "de": "Yanmega",
+      "en": "Yanmega",
+      "fr": "Yanmega",
+      "es": "Yanmega",
+      "it": "Yanmega"
+    },
+    "types": [
+      "bug",
+      "flying"
+    ],
+    "family_id": 193,
+    "stats": {
+      "KP": 86,
+      "Ang.": 76,
+      "Vert.": 86,
+      "Sp.-A.": 116,
+      "Sp.-V.": 56,
+      "Init.": 95,
+      "Summe": 515
+    }
+  },
+  {
+    "id": 470,
+    "names": {
+      "de": "Folipurba",
+      "en": "Leafeon",
+      "fr": "Phyllali",
+      "es": "Leafeon",
+      "it": "Leafeon"
+    },
+    "types": [
+      "grass"
+    ],
+    "family_id": 133,
+    "stats": {
+      "KP": 65,
+      "Ang.": 110,
+      "Vert.": 130,
+      "Sp.-A.": 60,
+      "Sp.-V.": 65,
+      "Init.": 95,
+      "Summe": 525
+    }
+  },
+  {
+    "id": 471,
+    "names": {
+      "de": "Glaziola",
+      "en": "Glaceon",
+      "fr": "Givrali",
+      "es": "Glaceon",
+      "it": "Glaceon"
+    },
+    "types": [
+      "ice"
+    ],
+    "family_id": 133,
+    "stats": {
+      "KP": 65,
+      "Ang.": 60,
+      "Vert.": 110,
+      "Sp.-A.": 130,
+      "Sp.-V.": 95,
+      "Init.": 65,
+      "Summe": 525
+    }
+  },
+  {
+    "id": 472,
+    "names": {
+      "de": "Skorgro",
+      "en": "Gliscor",
+      "fr": "Scorvol",
+      "es": "Gliscor",
+      "it": "Gliscor"
+    },
+    "types": [
+      "ground",
+      "flying"
+    ],
+    "family_id": 207,
+    "stats": {
+      "KP": 75,
+      "Ang.": 95,
+      "Vert.": 125,
+      "Sp.-A.": 45,
+      "Sp.-V.": 75,
+      "Init.": 95,
+      "Summe": 510
+    }
+  },
+  {
+    "id": 473,
+    "names": {
+      "de": "Mamutel",
+      "en": "Mamoswine",
+      "fr": "Mammochon",
+      "es": "Mamoswine",
+      "it": "Mamoswine"
+    },
+    "types": [
+      "ice",
+      "ground"
+    ],
+    "family_id": 220,
+    "stats": {
+      "KP": 110,
+      "Ang.": 130,
+      "Vert.": 80,
+      "Sp.-A.": 70,
+      "Sp.-V.": 60,
+      "Init.": 80,
+      "Summe": 530
+    }
+  },
+  {
+    "id": 474,
+    "names": {
+      "de": "Porygon-Z",
+      "en": "Porygon-Z",
+      "fr": "Porygon-Z",
+      "es": "Porygon-Z",
+      "it": "Porygon-Z"
+    },
+    "types": [
+      "normal"
+    ],
+    "family_id": 137,
+    "stats": {
+      "KP": 85,
+      "Ang.": 80,
+      "Vert.": 70,
+      "Sp.-A.": 135,
+      "Sp.-V.": 75,
+      "Init.": 90,
+      "Summe": 535
+    }
+  },
+  {
+    "id": 475,
+    "names": {
+      "de": "Galagladi",
+      "en": "Gallade",
+      "fr": "Gallame",
+      "es": "Gallade",
+      "it": "Gallade"
+    },
+    "types": [
+      "psychic",
+      "fighting"
+    ],
+    "family_id": 280,
+    "stats": {
+      "KP": 68,
+      "Ang.": 125,
+      "Vert.": 65,
+      "Sp.-A.": 65,
+      "Sp.-V.": 115,
+      "Init.": 80,
+      "Summe": 518
+    }
+  },
+  {
+    "id": 476,
+    "names": {
+      "de": "Voluminas",
+      "en": "Probopass",
+      "fr": "Tarinorme",
+      "es": "Probopass",
+      "it": "Probopass"
+    },
+    "types": [
+      "rock",
+      "steel"
+    ],
+    "family_id": 299,
+    "stats": {
+      "KP": 60,
+      "Ang.": 55,
+      "Vert.": 145,
+      "Sp.-A.": 75,
+      "Sp.-V.": 150,
+      "Init.": 40,
+      "Summe": 525
+    }
+  },
+  {
+    "id": 477,
+    "names": {
+      "de": "Zwirrfinst",
+      "en": "Dusknoir",
+      "fr": "Noctunoir",
+      "es": "Dusknoir",
+      "it": "Dusknoir"
+    },
+    "types": [
+      "ghost"
+    ],
+    "family_id": 355,
+    "stats": {
+      "KP": 45,
+      "Ang.": 100,
+      "Vert.": 135,
+      "Sp.-A.": 65,
+      "Sp.-V.": 135,
+      "Init.": 45,
+      "Summe": 525
+    }
+  },
+  {
+    "id": 478,
+    "names": {
+      "de": "Frosdedje",
+      "en": "Froslass",
+      "fr": "Momartik",
+      "es": "Froslass",
+      "it": "Froslass"
+    },
+    "types": [
+      "ice",
+      "ghost"
+    ],
+    "family_id": 361,
+    "stats": {
+      "KP": 70,
+      "Ang.": 80,
+      "Vert.": 70,
+      "Sp.-A.": 80,
+      "Sp.-V.": 70,
+      "Init.": 110,
+      "Summe": 480
+    }
+  },
+  {
+    "id": 479,
+    "names": {
+      "de": "Rotom",
+      "en": "Rotom",
+      "fr": "Motisma",
+      "es": "Rotom",
+      "it": "Rotom"
+    },
+    "types": [
+      "electric",
+      "ghost"
+    ],
+    "family_id": 479,
+    "stats": {
+      "KP": 50,
+      "Ang.": 50,
+      "Vert.": 77,
+      "Sp.-A.": 95,
+      "Sp.-V.": 77,
+      "Init.": 91,
+      "Summe": 440
+    }
+  },
+  {
+    "id": 480,
+    "names": {
+      "de": "Selfe",
+      "en": "Uxie",
+      "fr": "Créhelf",
+      "es": "Uxie",
+      "it": "Uxie"
+    },
+    "types": [
+      "psychic"
+    ],
+    "family_id": 480,
+    "stats": {
+      "KP": 75,
+      "Ang.": 75,
+      "Vert.": 130,
+      "Sp.-A.": 75,
+      "Sp.-V.": 130,
+      "Init.": 95,
+      "Summe": 580
+    }
+  },
+  {
+    "id": 481,
+    "names": {
+      "de": "Vesprit",
+      "en": "Mesprit",
+      "fr": "Créfollet",
+      "es": "Mesprit",
+      "it": "Mesprit"
+    },
+    "types": [
+      "psychic"
+    ],
+    "family_id": 481,
+    "stats": {
+      "KP": 80,
+      "Ang.": 105,
+      "Vert.": 105,
+      "Sp.-A.": 105,
+      "Sp.-V.": 105,
+      "Init.": 80,
+      "Summe": 580
+    }
+  },
+  {
+    "id": 482,
+    "names": {
+      "de": "Tobutz",
+      "en": "Azelf",
+      "fr": "Créfadet",
+      "es": "Azelf",
+      "it": "Azelf"
+    },
+    "types": [
+      "psychic"
+    ],
+    "family_id": 482,
+    "stats": {
+      "KP": 75,
+      "Ang.": 125,
+      "Vert.": 70,
+      "Sp.-A.": 125,
+      "Sp.-V.": 70,
+      "Init.": 115,
+      "Summe": 580
+    }
+  },
+  {
+    "id": 483,
+    "names": {
+      "de": "Dialga",
+      "en": "Dialga",
+      "fr": "Dialga",
+      "es": "Dialga",
+      "it": "Dialga"
+    },
+    "types": [
+      "steel",
+      "dragon"
+    ],
+    "family_id": 483,
+    "stats": {
+      "KP": 100,
+      "Ang.": 120,
+      "Vert.": 120,
+      "Sp.-A.": 150,
+      "Sp.-V.": 100,
+      "Init.": 90,
+      "Summe": 680
+    }
+  },
+  {
+    "id": 484,
+    "names": {
+      "de": "Palkia",
+      "en": "Palkia",
+      "fr": "Palkia",
+      "es": "Palkia",
+      "it": "Palkia"
+    },
+    "types": [
+      "water",
+      "dragon"
+    ],
+    "family_id": 484,
+    "stats": {
+      "KP": 90,
+      "Ang.": 120,
+      "Vert.": 100,
+      "Sp.-A.": 150,
+      "Sp.-V.": 120,
+      "Init.": 100,
+      "Summe": 680
+    }
+  },
+  {
+    "id": 485,
+    "names": {
+      "de": "Heatran",
+      "en": "Heatran",
+      "fr": "Heatran",
+      "es": "Heatran",
+      "it": "Heatran"
+    },
+    "types": [
+      "fire",
+      "steel"
+    ],
+    "family_id": 485,
+    "stats": {
+      "KP": 91,
+      "Ang.": 90,
+      "Vert.": 106,
+      "Sp.-A.": 130,
+      "Sp.-V.": 106,
+      "Init.": 77,
+      "Summe": 600
+    }
+  },
+  {
+    "id": 486,
+    "names": {
+      "de": "Regigigas",
+      "en": "Regigigas",
+      "fr": "Regigigas",
+      "es": "Regigigas",
+      "it": "Regigigas"
+    },
+    "types": [
+      "normal"
+    ],
+    "family_id": 486,
+    "stats": {
+      "KP": 110,
+      "Ang.": 160,
+      "Vert.": 110,
+      "Sp.-A.": 80,
+      "Sp.-V.": 110,
+      "Init.": 100,
+      "Summe": 670
+    }
+  },
+  {
+    "id": 487,
+    "names": {
+      "de": "Giratina",
+      "en": "Giratina",
+      "fr": "Giratina",
+      "es": "Giratina",
+      "it": "Giratina"
+    },
+    "types": [
+      "ghost",
+      "dragon"
+    ],
+    "family_id": 487,
+    "stats": {
+      "KP": 150,
+      "Ang.": 100,
+      "Vert.": 120,
+      "Sp.-A.": 100,
+      "Sp.-V.": 120,
+      "Init.": 90,
+      "Summe": 680
+    }
+  },
+  {
+    "id": 488,
+    "names": {
+      "de": "Cresselia",
+      "en": "Cresselia",
+      "fr": "Cresselia",
+      "es": "Cresselia",
+      "it": "Cresselia"
+    },
+    "types": [
+      "psychic"
+    ],
+    "family_id": 488,
+    "stats": {
+      "KP": 120,
+      "Ang.": 70,
+      "Vert.": 110,
+      "Sp.-A.": 75,
+      "Sp.-V.": 120,
+      "Init.": 85,
+      "Summe": 580
+    }
+  },
+  {
+    "id": 489,
+    "names": {
+      "de": "Phione",
+      "en": "Phione",
+      "fr": "Phione",
+      "es": "Phione",
+      "it": "Phione"
+    },
+    "types": [
+      "water"
+    ],
+    "family_id": 489,
+    "stats": {
+      "KP": 80,
+      "Ang.": 80,
+      "Vert.": 80,
+      "Sp.-A.": 80,
+      "Sp.-V.": 80,
+      "Init.": 80,
+      "Summe": 480
+    }
+  },
+  {
+    "id": 490,
+    "names": {
+      "de": "Manaphy",
+      "en": "Manaphy",
+      "fr": "Manaphy",
+      "es": "Manaphy",
+      "it": "Manaphy"
+    },
+    "types": [
+      "water"
+    ],
+    "family_id": 489,
+    "stats": {
+      "KP": 100,
+      "Ang.": 100,
+      "Vert.": 100,
+      "Sp.-A.": 100,
+      "Sp.-V.": 100,
+      "Init.": 100,
+      "Summe": 600
+    }
+  },
+  {
+    "id": 491,
+    "names": {
+      "de": "Darkrai",
+      "en": "Darkrai",
+      "fr": "Darkrai",
+      "es": "Darkrai",
+      "it": "Darkrai"
+    },
+    "types": [
+      "dark"
+    ],
+    "family_id": 491,
+    "stats": {
+      "KP": 70,
+      "Ang.": 90,
+      "Vert.": 90,
+      "Sp.-A.": 135,
+      "Sp.-V.": 90,
+      "Init.": 125,
+      "Summe": 600
+    }
+  },
+  {
+    "id": 492,
+    "names": {
+      "de": "Shaymin",
+      "en": "Shaymin",
+      "fr": "Shaymin",
+      "es": "Shaymin",
+      "it": "Shaymin"
+    },
+    "types": [
+      "grass"
+    ],
+    "family_id": 492,
+    "stats": {
+      "KP": 100,
+      "Ang.": 100,
+      "Vert.": 100,
+      "Sp.-A.": 100,
+      "Sp.-V.": 100,
+      "Init.": 100,
+      "Summe": 600
+    }
+  },
+  {
+    "id": 493,
+    "names": {
+      "de": "Arceus",
+      "en": "Arceus",
+      "fr": "Arceus",
+      "es": "Arceus",
+      "it": "Arceus"
+    },
+    "types": [
+      "normal"
+    ],
+    "family_id": 493,
+    "stats": {
+      "KP": 120,
+      "Ang.": 120,
+      "Vert.": 120,
+      "Sp.-A.": 120,
+      "Sp.-V.": 120,
+      "Init.": 120,
+      "Summe": 720
+    }
   }
 ]

@@ -1,0 +1,416 @@
+[
+  {
+    "id": 1,
+    "names": {
+      "de": "Rivale",
+      "en": "Rival",
+      "fr": "Rival",
+      "es": "Rival",
+      "it": "Rivale"
+    },
+    "location": {
+      "de": "Route 201",
+      "en": "Route 201",
+      "fr": "Route 201",
+      "es": "Ruta 201",
+      "it": "Percorso 201"
+    },
+    "badge": null,
+    "max_level": null,
+    "sprite": "rivale"
+  },
+  {
+    "id": 2,
+    "names": {
+      "de": "Veit",
+      "en": "Roark",
+      "fr": "Pierrick",
+      "es": "Roco",
+      "it": "Roark"
+    },
+    "location": {
+      "de": "Erzelingen",
+      "en": "Oreburgh City",
+      "fr": "Charbourg",
+      "es": "Oreburgh City",
+      "it": "Oreburgh City"
+    },
+    "badge": {
+      "de": "Kohleorden",
+      "en": "Coal Badge",
+      "fr": "Badge Charbon",
+      "es": "Medalla Lignito",
+      "it": "Medaglia Carbone"
+    },
+    "max_level": 14
+  },
+  {
+    "id": 3,
+    "names": {
+      "de": "Silvana",
+      "en": "Gardenia",
+      "fr": "Flo",
+      "es": "Gardenia",
+      "it": "Gardenia"
+    },
+    "location": {
+      "de": "Ewigenau",
+      "en": "Eterna City",
+      "fr": "Vestigion",
+      "es": "Eterna City",
+      "it": "Eterna City"
+    },
+    "badge": {
+      "de": "Waldorden",
+      "en": "Forest Badge",
+      "fr": "Badge Forêt",
+      "es": "Medalla Bosque",
+      "it": "Medaglia Foresta"
+    },
+    "max_level": 22
+  },
+  {
+    "id": 4,
+    "names": {
+      "de": "Rivale",
+      "en": "Rival",
+      "fr": "Rival",
+      "es": "Rival",
+      "it": "Rivale"
+    },
+    "location": {
+      "de": "Herzhofen",
+      "en": "Hearthome City",
+      "fr": "Unionpolis",
+      "es": "Hearthome City",
+      "it": "Hearthome City"
+    },
+    "badge": null,
+    "max_level": null,
+    "sprite": "rivale"
+  },
+  {
+    "id": 5,
+    "names": {
+      "de": "Lamina",
+      "en": "Fantina",
+      "fr": "Kiméra",
+      "es": "Fantina",
+      "it": "Fantina"
+    },
+    "location": {
+      "de": "Herzhofen",
+      "en": "Hearthome City",
+      "fr": "Unionpolis",
+      "es": "Hearthome City",
+      "it": "Hearthome City"
+    },
+    "badge": {
+      "de": "Reliktorden",
+      "en": "Relic Badge",
+      "fr": "Badge Relique",
+      "es": "Medalla Reliquia",
+      "it": "Medaglia Reliquia"
+    },
+    "max_level": 26
+  },
+  {
+    "id": 6,
+    "names": {
+      "de": "Hilda",
+      "en": "Maylene",
+      "fr": "Mélina",
+      "es": "Brega",
+      "it": "Maylene"
+    },
+    "location": {
+      "de": "Weideburg",
+      "en": "Veilstone City",
+      "fr": "Voilaroc",
+      "es": "Veilstone City",
+      "it": "Veilstone City"
+    },
+    "badge": {
+      "de": "Bergorden",
+      "en": "Cobble Badge",
+      "fr": "Badge Galet",
+      "es": "Medalla Adoquín",
+      "it": "Medaglia Ciottolo"
+    },
+    "max_level": 32
+  },
+  {
+    "id": 7,
+    "names": {
+      "de": "Rivale",
+      "en": "Rival",
+      "fr": "Rival",
+      "es": "Rival",
+      "it": "Rivale"
+    },
+    "location": {
+      "de": "Pastoria City",
+      "en": "Pastoria City",
+      "fr": "Verchamps",
+      "es": "Pastoria City",
+      "it": "Pastoria City"
+    },
+    "badge": null,
+    "max_level": null,
+    "sprite": "rivale"
+  },
+  {
+    "id": 8,
+    "names": {
+      "de": "Marinus",
+      "en": "Crasher Wake",
+      "fr": "Lovis",
+      "es": "Mananti",
+      "it": "Crasher Wake"
+    },
+    "location": {
+      "de": "Pastoria City",
+      "en": "Pastoria City",
+      "fr": "Verchamps",
+      "es": "Pastoria City",
+      "it": "Pastoria City"
+    },
+    "badge": {
+      "de": "Fennorden",
+      "en": "Fen Badge",
+      "fr": "Badge Fange",
+      "es": "Medalla Ciénaga",
+      "it": "Medaglia Palude"
+    },
+    "max_level": 37
+  },
+  {
+    "id": 9,
+    "names": {
+      "de": "Adam",
+      "en": "Byron",
+      "fr": "Charles",
+      "es": "Acerón",
+      "it": "Byron"
+    },
+    "location": {
+      "de": "Fleetburg",
+      "en": "Canalave City",
+      "fr": "Joliberges",
+      "es": "Canalave City",
+      "it": "Canalave City"
+    },
+    "badge": {
+      "de": "Minenorden",
+      "en": "Mine Badge",
+      "fr": "Badge Mine",
+      "es": "Medalla Mina",
+      "it": "Medaglia Miniera"
+    },
+    "max_level": 41
+  },
+  {
+    "id": 10,
+    "names": {
+      "de": "Rivale",
+      "en": "Rival",
+      "fr": "Rival",
+      "es": "Rival",
+      "it": "Rivale"
+    },
+    "location": {
+      "de": "Fleetburg",
+      "en": "Canalave City",
+      "fr": "Joliberges",
+      "es": "Canalave City",
+      "it": "Canalave City"
+    },
+    "badge": null,
+    "max_level": null,
+    "sprite": "rivale"
+  },
+  {
+    "id": 11,
+    "names": {
+      "de": "Frida",
+      "en": "Candice",
+      "fr": "Gladys",
+      "es": "Inverna",
+      "it": "Candice"
+    },
+    "location": {
+      "de": "Blizzach",
+      "en": "Snowpoint City",
+      "fr": "Frimapic",
+      "es": "Snowpoint City",
+      "it": "Snowpoint City"
+    },
+    "badge": {
+      "de": "Firnorden",
+      "en": "Icicle Badge",
+      "fr": "Badge Glaçon",
+      "es": "Medalla Carámbano",
+      "it": "Medaglia Ghiacciolo"
+    },
+    "max_level": 44
+  },
+  {
+    "id": 12,
+    "names": {
+      "de": "Zyrus",
+      "en": "Cyrus",
+      "fr": "Hélio",
+      "es": "Helio",
+      "it": "Cyrus"
+    },
+    "location": {
+      "de": "Zerrwelt",
+      "en": "Distortion World",
+      "fr": "Monde Distorsion",
+      "es": "Mundo Distorsión",
+      "it": "Mondo Distorto"
+    },
+    "badge": null,
+    "max_level": null
+  },
+  {
+    "id": 13,
+    "names": {
+      "de": "Volkner",
+      "en": "Volkner",
+      "fr": "Tanguy",
+      "es": "Lectro",
+      "it": "Volkner"
+    },
+    "location": {
+      "de": "Sonnewik",
+      "en": "Sunyshore City",
+      "fr": "Rivamar",
+      "es": "Sunyshore City",
+      "it": "Sunyshore City"
+    },
+    "badge": {
+      "de": "Lichtorden",
+      "en": "Beacon Badge",
+      "fr": "Badge Phare",
+      "es": "Medalla Faro",
+      "it": "Medaglia Faro"
+    },
+    "max_level": 50
+  },
+  {
+    "id": 14,
+    "names": {
+      "de": "Rivale",
+      "en": "Rival",
+      "fr": "Rival",
+      "es": "Rival",
+      "it": "Rivale"
+    },
+    "location": {
+      "de": "Pokémon-Liga",
+      "en": "Pokémon League",
+      "fr": "Ligue Pokémon",
+      "es": "Liga Pokémon",
+      "it": "Lega Pokémon"
+    },
+    "badge": null,
+    "max_level": null,
+    "sprite": "rivale"
+  },
+  {
+    "id": 15,
+    "names": {
+      "de": "Herbaro",
+      "en": "Aaron",
+      "fr": "Aaron",
+      "es": "Alecrán",
+      "it": "Aaron"
+    },
+    "location": {
+      "de": "Top 4",
+      "en": "Elite Four",
+      "fr": "Conseil 4",
+      "es": "Alto Mando",
+      "it": "Superquattro"
+    },
+    "badge": null,
+    "max_level": 53
+  },
+  {
+    "id": 16,
+    "names": {
+      "de": "Teresa",
+      "en": "Bertha",
+      "fr": "Terry",
+      "es": "Gaia",
+      "it": "Bertha"
+    },
+    "location": {
+      "de": "Top 4",
+      "en": "Elite Four",
+      "fr": "Conseil 4",
+      "es": "Alto Mando",
+      "it": "Superquattro"
+    },
+    "badge": null,
+    "max_level": 55
+  },
+  {
+    "id": 17,
+    "names": {
+      "de": "Ignaz",
+      "en": "Flint",
+      "fr": "Adrien",
+      "es": "Fausto",
+      "it": "Flint"
+    },
+    "location": {
+      "de": "Top 4",
+      "en": "Elite Four",
+      "fr": "Conseil 4",
+      "es": "Alto Mando",
+      "it": "Superquattro"
+    },
+    "badge": null,
+    "max_level": 57
+  },
+  {
+    "id": 18,
+    "names": {
+      "de": "Lucian",
+      "en": "Lucian",
+      "fr": "Lucio",
+      "es": "Delos",
+      "it": "Lucian"
+    },
+    "location": {
+      "de": "Top 4",
+      "en": "Elite Four",
+      "fr": "Conseil 4",
+      "es": "Alto Mando",
+      "it": "Superquattro"
+    },
+    "badge": null,
+    "max_level": 59
+  },
+  {
+    "id": 19,
+    "names": {
+      "de": "Cynthia",
+      "en": "Cynthia",
+      "fr": "Cynthia",
+      "es": "Cintia",
+      "it": "Camilla"
+    },
+    "location": {
+      "de": "Top 4",
+      "en": "Elite Four",
+      "fr": "Conseil 4",
+      "es": "Alto Mando",
+      "it": "Superquattro"
+    },
+    "badge": null,
+    "max_level": 62
+  }
+]

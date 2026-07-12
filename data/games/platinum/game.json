@@ -1,0 +1,14 @@
+{
+  "id": "platinum",
+  "sort": 5,
+  "generation": 4,
+  "dexLimit": 493,
+  "spriteSet": "platinum",
+  "names": {
+    "de": "Platin",
+    "en": "Platinum",
+    "fr": "Platine",
+    "es": "Platino",
+    "it": "Platino"
+  }
+}

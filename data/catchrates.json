@@ -1542,5 +1542,433 @@
   {
     "id": 386,
     "catch_rate": 3
+  },
+  {
+    "id": 387,
+    "catch_rate": 45
+  },
+  {
+    "id": 388,
+    "catch_rate": 45
+  },
+  {
+    "id": 389,
+    "catch_rate": 45
+  },
+  {
+    "id": 390,
+    "catch_rate": 45
+  },
+  {
+    "id": 391,
+    "catch_rate": 45
+  },
+  {
+    "id": 392,
+    "catch_rate": 45
+  },
+  {
+    "id": 393,
+    "catch_rate": 45
+  },
+  {
+    "id": 394,
+    "catch_rate": 45
+  },
+  {
+    "id": 395,
+    "catch_rate": 45
+  },
+  {
+    "id": 396,
+    "catch_rate": 255
+  },
+  {
+    "id": 397,
+    "catch_rate": 120
+  },
+  {
+    "id": 398,
+    "catch_rate": 45
+  },
+  {
+    "id": 399,
+    "catch_rate": 255
+  },
+  {
+    "id": 400,
+    "catch_rate": 127
+  },
+  {
+    "id": 401,
+    "catch_rate": 255
+  },
+  {
+    "id": 402,
+    "catch_rate": 45
+  },
+  {
+    "id": 403,
+    "catch_rate": 235
+  },
+  {
+    "id": 404,
+    "catch_rate": 120
+  },
+  {
+    "id": 405,
+    "catch_rate": 45
+  },
+  {
+    "id": 406,
+    "catch_rate": 255
+  },
+  {
+    "id": 407,
+    "catch_rate": 75
+  },
+  {
+    "id": 408,
+    "catch_rate": 45
+  },
+  {
+    "id": 409,
+    "catch_rate": 45
+  },
+  {
+    "id": 410,
+    "catch_rate": 45
+  },
+  {
+    "id": 411,
+    "catch_rate": 45
+  },
+  {
+    "id": 412,
+    "catch_rate": 120
+  },
+  {
+    "id": 413,
+    "catch_rate": 45
+  },
+  {
+    "id": 414,
+    "catch_rate": 45
+  },
+  {
+    "id": 415,
+    "catch_rate": 120
+  },
+  {
+    "id": 416,
+    "catch_rate": 45
+  },
+  {
+    "id": 417,
+    "catch_rate": 200
+  },
+  {
+    "id": 418,
+    "catch_rate": 190
+  },
+  {
+    "id": 419,
+    "catch_rate": 75
+  },
+  {
+    "id": 420,
+    "catch_rate": 190
+  },
+  {
+    "id": 421,
+    "catch_rate": 75
+  },
+  {
+    "id": 422,
+    "catch_rate": 190
+  },
+  {
+    "id": 423,
+    "catch_rate": 75
+  },
+  {
+    "id": 424,
+    "catch_rate": 45
+  },
+  {
+    "id": 425,
+    "catch_rate": 125
+  },
+  {
+    "id": 426,
+    "catch_rate": 60
+  },
+  {
+    "id": 427,
+    "catch_rate": 190
+  },
+  {
+    "id": 428,
+    "catch_rate": 60
+  },
+  {
+    "id": 429,
+    "catch_rate": 45
+  },
+  {
+    "id": 430,
+    "catch_rate": 30
+  },
+  {
+    "id": 431,
+    "catch_rate": 190
+  },
+  {
+    "id": 432,
+    "catch_rate": 75
+  },
+  {
+    "id": 433,
+    "catch_rate": 120
+  },
+  {
+    "id": 434,
+    "catch_rate": 225
+  },
+  {
+    "id": 435,
+    "catch_rate": 60
+  },
+  {
+    "id": 436,
+    "catch_rate": 255
+  },
+  {
+    "id": 437,
+    "catch_rate": 90
+  },
+  {
+    "id": 438,
+    "catch_rate": 255
+  },
+  {
+    "id": 439,
+    "catch_rate": 145
+  },
+  {
+    "id": 440,
+    "catch_rate": 130
+  },
+  {
+    "id": 441,
+    "catch_rate": 30
+  },
+  {
+    "id": 442,
+    "catch_rate": 100
+  },
+  {
+    "id": 443,
+    "catch_rate": 45
+  },
+  {
+    "id": 444,
+    "catch_rate": 45
+  },
+  {
+    "id": 445,
+    "catch_rate": 45
+  },
+  {
+    "id": 446,
+    "catch_rate": 50
+  },
+  {
+    "id": 447,
+    "catch_rate": 75
+  },
+  {
+    "id": 448,
+    "catch_rate": 45
+  },
+  {
+    "id": 449,
+    "catch_rate": 140
+  },
+  {
+    "id": 450,
+    "catch_rate": 60
+  },
+  {
+    "id": 451,
+    "catch_rate": 120
+  },
+  {
+    "id": 452,
+    "catch_rate": 45
+  },
+  {
+    "id": 453,
+    "catch_rate": 140
+  },
+  {
+    "id": 454,
+    "catch_rate": 75
+  },
+  {
+    "id": 455,
+    "catch_rate": 200
+  },
+  {
+    "id": 456,
+    "catch_rate": 190
+  },
+  {
+    "id": 457,
+    "catch_rate": 75
+  },
+  {
+    "id": 458,
+    "catch_rate": 25
+  },
+  {
+    "id": 459,
+    "catch_rate": 120
+  },
+  {
+    "id": 460,
+    "catch_rate": 60
+  },
+  {
+    "id": 461,
+    "catch_rate": 45
+  },
+  {
+    "id": 462,
+    "catch_rate": 30
+  },
+  {
+    "id": 463,
+    "catch_rate": 30
+  },
+  {
+    "id": 464,
+    "catch_rate": 30
+  },
+  {
+    "id": 465,
+    "catch_rate": 30
+  },
+  {
+    "id": 466,
+    "catch_rate": 30
+  },
+  {
+    "id": 467,
+    "catch_rate": 30
+  },
+  {
+    "id": 468,
+    "catch_rate": 30
+  },
+  {
+    "id": 469,
+    "catch_rate": 30
+  },
+  {
+    "id": 470,
+    "catch_rate": 45
+  },
+  {
+    "id": 471,
+    "catch_rate": 45
+  },
+  {
+    "id": 472,
+    "catch_rate": 30
+  },
+  {
+    "id": 473,
+    "catch_rate": 50
+  },
+  {
+    "id": 474,
+    "catch_rate": 30
+  },
+  {
+    "id": 475,
+    "catch_rate": 45
+  },
+  {
+    "id": 476,
+    "catch_rate": 60
+  },
+  {
+    "id": 477,
+    "catch_rate": 45
+  },
+  {
+    "id": 478,
+    "catch_rate": 75
+  },
+  {
+    "id": 479,
+    "catch_rate": 45
+  },
+  {
+    "id": 480,
+    "catch_rate": 3
+  },
+  {
+    "id": 481,
+    "catch_rate": 3
+  },
+  {
+    "id": 482,
+    "catch_rate": 3
+  },
+  {
+    "id": 483,
+    "catch_rate": 3
+  },
+  {
+    "id": 484,
+    "catch_rate": 3
+  },
+  {
+    "id": 485,
+    "catch_rate": 3
+  },
+  {
+    "id": 486,
+    "catch_rate": 3
+  },
+  {
+    "id": 487,
+    "catch_rate": 3
+  },
+  {
+    "id": 488,
+    "catch_rate": 3
+  },
+  {
+    "id": 489,
+    "catch_rate": 30
+  },
+  {
+    "id": 490,
+    "catch_rate": 3
+  },
+  {
+    "id": 491,
+    "catch_rate": 3
+  },
+  {
+    "id": 492,
+    "catch_rate": 45
+  },
+  {
+    "id": 493,
+    "catch_rate": 3
   }
 ]

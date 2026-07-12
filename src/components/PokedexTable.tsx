@@ -5,7 +5,7 @@ import type { Pokemon } from "@/lib/data";
 import { computePokemonRanks } from "@/lib/ranking";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import { translations, type Lang } from "@/lib/i18n/dictionary";
-import { pokemonName } from "@/lib/i18n/localize";
+import { localizeName, pokemonName, type LocalizedNames } from "@/lib/i18n/localize";
 import { TypeBadge } from "@/components/TypeBadge";
 import { PokemonSprite } from "@/components/PokemonSprite";
 
@@ -42,10 +42,40 @@ function getSortValue(
   }
 }
 
-export function PokedexTable({ pokemon }: { pokemon: Pokemon[] }) {
+type PokedexGame = { id: string; names: LocalizedNames; dexLimit: number };
+
+const GAME_STORAGE_KEY = "nuzlocke:pokedexGame";
+
+export function PokedexTable({
+  pokemon: allPokemon,
+  games,
+}: {
+  pokemon: Pokemon[];
+  games: PokedexGame[];
+}) {
   const { lang } = useLanguage();
   const t = translations[lang].pokedex;
   const columns = t.columns;
+
+  // Client-side game filter (the page itself is statically prerendered and
+  // knows no run). Per-device preference, like the sort/tab-order prefs.
+  const [gameId, setGameId] = useState(games[0]?.id ?? "");
+  useEffect(() => {
+    const stored = localStorage.getItem(GAME_STORAGE_KEY);
+    if (stored && games.some((g) => g.id === stored)) setGameId(stored);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  function handleGameChange(next: string) {
+    setGameId(next);
+    localStorage.setItem(GAME_STORAGE_KEY, next);
+  }
+
+  const dexLimit = games.find((g) => g.id === gameId)?.dexLimit ?? Infinity;
+  const pokemon = useMemo(
+    () => allPokemon.filter((p) => p.id <= dexLimit),
+    [allPokemon, dexLimit],
+  );
 
   const COLUMNS: { key: ColumnKey; label: string; align?: "right"; hideClass?: string }[] = [
     { key: "id", label: columns.id, hideClass: "hidden md:table-cell" },
@@ -120,7 +150,19 @@ export function PokedexTable({ pokemon }: { pokemon: Pokemon[] }) {
 
   return (
     <div>
-      <div ref={searchRef} className="relative mb-4 max-w-sm">
+      <div className="mb-4 flex flex-wrap items-center gap-2">
+        <select
+          value={gameId}
+          onChange={(e) => handleGameChange(e.target.value)}
+          className="rounded-md border border-zinc-200 bg-white px-2 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+        >
+          {games.map((g) => (
+            <option key={g.id} value={g.id}>
+              {localizeName(g.names, lang)}
+            </option>
+          ))}
+        </select>
+      <div ref={searchRef} className="relative max-w-sm flex-1">
         <input
           type="text"
           value={search}
@@ -149,6 +191,7 @@ export function PokedexTable({ pokemon }: { pokemon: Pokemon[] }) {
             ))}
           </ul>
         )}
+      </div>
       </div>
       <div className="overflow-x-auto rounded-md border border-zinc-200 dark:border-zinc-800">
         <table className="w-full border-collapse text-sm">

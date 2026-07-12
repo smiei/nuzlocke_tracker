@@ -705,7 +705,9 @@
   {
     "id": 82,
     "evolvesFrom": 81,
-    "evolvesTo": [],
+    "evolvesTo": [
+      462
+    ],
     "method": {
       "kind": "level",
       "level": 30
@@ -914,7 +916,9 @@
   {
     "id": 108,
     "evolvesFrom": null,
-    "evolvesTo": []
+    "evolvesTo": [
+      463
+    ]
   },
   {
     "id": 109,
@@ -942,7 +946,9 @@
   {
     "id": 112,
     "evolvesFrom": 111,
-    "evolvesTo": [],
+    "evolvesTo": [
+      464
+    ],
     "method": {
       "kind": "level",
       "level": 42
@@ -950,15 +956,20 @@
   },
   {
     "id": 113,
-    "evolvesFrom": null,
+    "evolvesFrom": 440,
     "evolvesTo": [
       242
-    ]
+    ],
+    "method": {
+      "kind": "other"
+    }
   },
   {
     "id": 114,
     "evolvesFrom": null,
-    "evolvesTo": []
+    "evolvesTo": [
+      465
+    ]
   },
   {
     "id": 115,
@@ -1017,8 +1028,11 @@
   },
   {
     "id": 122,
-    "evolvesFrom": null,
-    "evolvesTo": []
+    "evolvesFrom": 439,
+    "evolvesTo": [],
+    "method": {
+      "kind": "other"
+    }
   },
   {
     "id": 123,
@@ -1039,7 +1053,9 @@
   {
     "id": 125,
     "evolvesFrom": 239,
-    "evolvesTo": [],
+    "evolvesTo": [
+      466
+    ],
     "method": {
       "kind": "level",
       "level": 30
@@ -1048,7 +1064,9 @@
   {
     "id": 126,
     "evolvesFrom": 240,
-    "evolvesTo": [],
+    "evolvesTo": [
+      467
+    ],
     "method": {
       "kind": "level",
       "level": 30
@@ -1098,7 +1116,9 @@
       135,
       136,
       196,
-      197
+      197,
+      470,
+      471
     ]
   },
   {
@@ -1174,8 +1194,12 @@
   },
   {
     "id": 143,
-    "evolvesFrom": null,
-    "evolvesTo": []
+    "evolvesFrom": 446,
+    "evolvesTo": [],
+    "method": {
+      "kind": "happiness",
+      "time": null
+    }
   },
   {
     "id": 144,
@@ -1430,7 +1454,9 @@
   {
     "id": 176,
     "evolvesFrom": 175,
-    "evolvesTo": [],
+    "evolvesTo": [
+      468
+    ],
     "method": {
       "kind": "happiness",
       "time": null
@@ -1510,8 +1536,11 @@
   },
   {
     "id": 185,
-    "evolvesFrom": null,
-    "evolvesTo": []
+    "evolvesFrom": 438,
+    "evolvesTo": [],
+    "method": {
+      "kind": "other"
+    }
   },
   {
     "id": 186,
@@ -1552,7 +1581,9 @@
   {
     "id": 190,
     "evolvesFrom": null,
-    "evolvesTo": []
+    "evolvesTo": [
+      424
+    ]
   },
   {
     "id": 191,
@@ -1573,7 +1604,9 @@
   {
     "id": 193,
     "evolvesFrom": null,
-    "evolvesTo": []
+    "evolvesTo": [
+      469
+    ]
   },
   {
     "id": 194,
@@ -1612,7 +1645,9 @@
   {
     "id": 198,
     "evolvesFrom": null,
-    "evolvesTo": []
+    "evolvesTo": [
+      430
+    ]
   },
   {
     "id": 199,
@@ -1626,7 +1661,9 @@
   {
     "id": 200,
     "evolvesFrom": null,
-    "evolvesTo": []
+    "evolvesTo": [
+      429
+    ]
   },
   {
     "id": 201,
@@ -1671,7 +1708,9 @@
   {
     "id": 207,
     "evolvesFrom": null,
-    "evolvesTo": []
+    "evolvesTo": [
+      472
+    ]
   },
   {
     "id": 208,
@@ -1725,7 +1764,9 @@
   {
     "id": 215,
     "evolvesFrom": null,
-    "evolvesTo": []
+    "evolvesTo": [
+      461
+    ]
   },
   {
     "id": 216,
@@ -1769,7 +1810,9 @@
   {
     "id": 221,
     "evolvesFrom": 220,
-    "evolvesTo": [],
+    "evolvesTo": [
+      473
+    ],
     "method": {
       "kind": "level",
       "level": 33
@@ -1803,8 +1846,11 @@
   },
   {
     "id": 226,
-    "evolvesFrom": null,
-    "evolvesTo": []
+    "evolvesFrom": 458,
+    "evolvesTo": [],
+    "method": {
+      "kind": "other"
+    }
   },
   {
     "id": 227,
@@ -1855,7 +1901,9 @@
   {
     "id": 233,
     "evolvesFrom": 137,
-    "evolvesTo": [],
+    "evolvesTo": [
+      474
+    ],
     "method": {
       "kind": "trade",
       "item": "up-grade"
@@ -2239,7 +2287,8 @@
     "id": 281,
     "evolvesFrom": 280,
     "evolvesTo": [
-      282
+      282,
+      475
     ],
     "method": {
       "kind": "level",
@@ -2392,7 +2441,9 @@
   {
     "id": 299,
     "evolvesFrom": null,
-    "evolvesTo": []
+    "evolvesTo": [
+      476
+    ]
   },
   {
     "id": 300,
@@ -2501,8 +2552,14 @@
   },
   {
     "id": 315,
-    "evolvesFrom": null,
-    "evolvesTo": []
+    "evolvesFrom": 406,
+    "evolvesTo": [
+      407
+    ],
+    "method": {
+      "kind": "happiness",
+      "time": "day"
+    }
   },
   {
     "id": 316,
@@ -2804,7 +2861,9 @@
   {
     "id": 356,
     "evolvesFrom": 355,
-    "evolvesTo": [],
+    "evolvesTo": [
+      477
+    ],
     "method": {
       "kind": "level",
       "level": 37
@@ -2817,8 +2876,12 @@
   },
   {
     "id": 358,
-    "evolvesFrom": null,
-    "evolvesTo": []
+    "evolvesFrom": 433,
+    "evolvesTo": [],
+    "method": {
+      "kind": "happiness",
+      "time": "night"
+    }
   },
   {
     "id": 359,
@@ -2836,7 +2899,8 @@
     "id": 361,
     "evolvesFrom": null,
     "evolvesTo": [
-      362
+      362,
+      478
     ]
   },
   {
@@ -3012,6 +3076,829 @@
   },
   {
     "id": 386,
+    "evolvesFrom": null,
+    "evolvesTo": []
+  },
+  {
+    "id": 387,
+    "evolvesFrom": null,
+    "evolvesTo": [
+      388
+    ]
+  },
+  {
+    "id": 388,
+    "evolvesFrom": 387,
+    "evolvesTo": [
+      389
+    ],
+    "method": {
+      "kind": "level",
+      "level": 18
+    }
+  },
+  {
+    "id": 389,
+    "evolvesFrom": 388,
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 32
+    }
+  },
+  {
+    "id": 390,
+    "evolvesFrom": null,
+    "evolvesTo": [
+      391
+    ]
+  },
+  {
+    "id": 391,
+    "evolvesFrom": 390,
+    "evolvesTo": [
+      392
+    ],
+    "method": {
+      "kind": "level",
+      "level": 14
+    }
+  },
+  {
+    "id": 392,
+    "evolvesFrom": 391,
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 36
+    }
+  },
+  {
+    "id": 393,
+    "evolvesFrom": null,
+    "evolvesTo": [
+      394
+    ]
+  },
+  {
+    "id": 394,
+    "evolvesFrom": 393,
+    "evolvesTo": [
+      395
+    ],
+    "method": {
+      "kind": "level",
+      "level": 16
+    }
+  },
+  {
+    "id": 395,
+    "evolvesFrom": 394,
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 36
+    }
+  },
+  {
+    "id": 396,
+    "evolvesFrom": null,
+    "evolvesTo": [
+      397
+    ]
+  },
+  {
+    "id": 397,
+    "evolvesFrom": 396,
+    "evolvesTo": [
+      398
+    ],
+    "method": {
+      "kind": "level",
+      "level": 14
+    }
+  },
+  {
+    "id": 398,
+    "evolvesFrom": 397,
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 34
+    }
+  },
+  {
+    "id": 399,
+    "evolvesFrom": null,
+    "evolvesTo": [
+      400
+    ]
+  },
+  {
+    "id": 400,
+    "evolvesFrom": 399,
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 15
+    }
+  },
+  {
+    "id": 401,
+    "evolvesFrom": null,
+    "evolvesTo": [
+      402
+    ]
+  },
+  {
+    "id": 402,
+    "evolvesFrom": 401,
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 10
+    }
+  },
+  {
+    "id": 403,
+    "evolvesFrom": null,
+    "evolvesTo": [
+      404
+    ]
+  },
+  {
+    "id": 404,
+    "evolvesFrom": 403,
+    "evolvesTo": [
+      405
+    ],
+    "method": {
+      "kind": "level",
+      "level": 15
+    }
+  },
+  {
+    "id": 405,
+    "evolvesFrom": 404,
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 30
+    }
+  },
+  {
+    "id": 406,
+    "evolvesFrom": null,
+    "evolvesTo": [
+      315
+    ]
+  },
+  {
+    "id": 407,
+    "evolvesFrom": 315,
+    "evolvesTo": [],
+    "method": {
+      "kind": "item",
+      "item": "shiny-stone"
+    }
+  },
+  {
+    "id": 408,
+    "evolvesFrom": null,
+    "evolvesTo": [
+      409
+    ]
+  },
+  {
+    "id": 409,
+    "evolvesFrom": 408,
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 30
+    }
+  },
+  {
+    "id": 410,
+    "evolvesFrom": null,
+    "evolvesTo": [
+      411
+    ]
+  },
+  {
+    "id": 411,
+    "evolvesFrom": 410,
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 30
+    }
+  },
+  {
+    "id": 412,
+    "evolvesFrom": null,
+    "evolvesTo": [
+      413,
+      414
+    ]
+  },
+  {
+    "id": 413,
+    "evolvesFrom": 412,
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 20
+    }
+  },
+  {
+    "id": 414,
+    "evolvesFrom": 412,
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 20
+    }
+  },
+  {
+    "id": 415,
+    "evolvesFrom": null,
+    "evolvesTo": [
+      416
+    ]
+  },
+  {
+    "id": 416,
+    "evolvesFrom": 415,
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 21
+    }
+  },
+  {
+    "id": 417,
+    "evolvesFrom": null,
+    "evolvesTo": []
+  },
+  {
+    "id": 418,
+    "evolvesFrom": null,
+    "evolvesTo": [
+      419
+    ]
+  },
+  {
+    "id": 419,
+    "evolvesFrom": 418,
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 26
+    }
+  },
+  {
+    "id": 420,
+    "evolvesFrom": null,
+    "evolvesTo": [
+      421
+    ]
+  },
+  {
+    "id": 421,
+    "evolvesFrom": 420,
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 25
+    }
+  },
+  {
+    "id": 422,
+    "evolvesFrom": null,
+    "evolvesTo": [
+      423
+    ]
+  },
+  {
+    "id": 423,
+    "evolvesFrom": 422,
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 30
+    }
+  },
+  {
+    "id": 424,
+    "evolvesFrom": 190,
+    "evolvesTo": [],
+    "method": {
+      "kind": "other"
+    }
+  },
+  {
+    "id": 425,
+    "evolvesFrom": null,
+    "evolvesTo": [
+      426
+    ]
+  },
+  {
+    "id": 426,
+    "evolvesFrom": 425,
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 28
+    }
+  },
+  {
+    "id": 427,
+    "evolvesFrom": null,
+    "evolvesTo": [
+      428
+    ]
+  },
+  {
+    "id": 428,
+    "evolvesFrom": 427,
+    "evolvesTo": [],
+    "method": {
+      "kind": "happiness",
+      "time": null
+    }
+  },
+  {
+    "id": 429,
+    "evolvesFrom": 200,
+    "evolvesTo": [],
+    "method": {
+      "kind": "item",
+      "item": "dusk-stone"
+    }
+  },
+  {
+    "id": 430,
+    "evolvesFrom": 198,
+    "evolvesTo": [],
+    "method": {
+      "kind": "item",
+      "item": "dusk-stone"
+    }
+  },
+  {
+    "id": 431,
+    "evolvesFrom": null,
+    "evolvesTo": [
+      432
+    ]
+  },
+  {
+    "id": 432,
+    "evolvesFrom": 431,
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 38
+    }
+  },
+  {
+    "id": 433,
+    "evolvesFrom": null,
+    "evolvesTo": [
+      358
+    ]
+  },
+  {
+    "id": 434,
+    "evolvesFrom": null,
+    "evolvesTo": [
+      435
+    ]
+  },
+  {
+    "id": 435,
+    "evolvesFrom": 434,
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 34
+    }
+  },
+  {
+    "id": 436,
+    "evolvesFrom": null,
+    "evolvesTo": [
+      437
+    ]
+  },
+  {
+    "id": 437,
+    "evolvesFrom": 436,
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 33
+    }
+  },
+  {
+    "id": 438,
+    "evolvesFrom": null,
+    "evolvesTo": [
+      185
+    ]
+  },
+  {
+    "id": 439,
+    "evolvesFrom": null,
+    "evolvesTo": [
+      122
+    ]
+  },
+  {
+    "id": 440,
+    "evolvesFrom": null,
+    "evolvesTo": [
+      113
+    ]
+  },
+  {
+    "id": 441,
+    "evolvesFrom": null,
+    "evolvesTo": []
+  },
+  {
+    "id": 442,
+    "evolvesFrom": null,
+    "evolvesTo": []
+  },
+  {
+    "id": 443,
+    "evolvesFrom": null,
+    "evolvesTo": [
+      444
+    ]
+  },
+  {
+    "id": 444,
+    "evolvesFrom": 443,
+    "evolvesTo": [
+      445
+    ],
+    "method": {
+      "kind": "level",
+      "level": 24
+    }
+  },
+  {
+    "id": 445,
+    "evolvesFrom": 444,
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 48
+    }
+  },
+  {
+    "id": 446,
+    "evolvesFrom": null,
+    "evolvesTo": [
+      143
+    ]
+  },
+  {
+    "id": 447,
+    "evolvesFrom": null,
+    "evolvesTo": [
+      448
+    ]
+  },
+  {
+    "id": 448,
+    "evolvesFrom": 447,
+    "evolvesTo": [],
+    "method": {
+      "kind": "happiness",
+      "time": "day"
+    }
+  },
+  {
+    "id": 449,
+    "evolvesFrom": null,
+    "evolvesTo": [
+      450
+    ]
+  },
+  {
+    "id": 450,
+    "evolvesFrom": 449,
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 34
+    }
+  },
+  {
+    "id": 451,
+    "evolvesFrom": null,
+    "evolvesTo": [
+      452
+    ]
+  },
+  {
+    "id": 452,
+    "evolvesFrom": 451,
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 40
+    }
+  },
+  {
+    "id": 453,
+    "evolvesFrom": null,
+    "evolvesTo": [
+      454
+    ]
+  },
+  {
+    "id": 454,
+    "evolvesFrom": 453,
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 37
+    }
+  },
+  {
+    "id": 455,
+    "evolvesFrom": null,
+    "evolvesTo": []
+  },
+  {
+    "id": 456,
+    "evolvesFrom": null,
+    "evolvesTo": [
+      457
+    ]
+  },
+  {
+    "id": 457,
+    "evolvesFrom": 456,
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 31
+    }
+  },
+  {
+    "id": 458,
+    "evolvesFrom": null,
+    "evolvesTo": [
+      226
+    ]
+  },
+  {
+    "id": 459,
+    "evolvesFrom": null,
+    "evolvesTo": [
+      460
+    ]
+  },
+  {
+    "id": 460,
+    "evolvesFrom": 459,
+    "evolvesTo": [],
+    "method": {
+      "kind": "level",
+      "level": 40
+    }
+  },
+  {
+    "id": 461,
+    "evolvesFrom": 215,
+    "evolvesTo": [],
+    "method": {
+      "kind": "other"
+    }
+  },
+  {
+    "id": 462,
+    "evolvesFrom": 82,
+    "evolvesTo": [],
+    "method": {
+      "kind": "other"
+    }
+  },
+  {
+    "id": 463,
+    "evolvesFrom": 108,
+    "evolvesTo": [],
+    "method": {
+      "kind": "other"
+    }
+  },
+  {
+    "id": 464,
+    "evolvesFrom": 112,
+    "evolvesTo": [],
+    "method": {
+      "kind": "trade",
+      "item": "protector"
+    }
+  },
+  {
+    "id": 465,
+    "evolvesFrom": 114,
+    "evolvesTo": [],
+    "method": {
+      "kind": "other"
+    }
+  },
+  {
+    "id": 466,
+    "evolvesFrom": 125,
+    "evolvesTo": [],
+    "method": {
+      "kind": "trade",
+      "item": "electirizer"
+    }
+  },
+  {
+    "id": 467,
+    "evolvesFrom": 126,
+    "evolvesTo": [],
+    "method": {
+      "kind": "trade",
+      "item": "magmarizer"
+    }
+  },
+  {
+    "id": 468,
+    "evolvesFrom": 176,
+    "evolvesTo": [],
+    "method": {
+      "kind": "item",
+      "item": "shiny-stone"
+    }
+  },
+  {
+    "id": 469,
+    "evolvesFrom": 193,
+    "evolvesTo": [],
+    "method": {
+      "kind": "other"
+    }
+  },
+  {
+    "id": 470,
+    "evolvesFrom": 133,
+    "evolvesTo": [],
+    "method": {
+      "kind": "other"
+    }
+  },
+  {
+    "id": 471,
+    "evolvesFrom": 133,
+    "evolvesTo": [],
+    "method": {
+      "kind": "other"
+    }
+  },
+  {
+    "id": 472,
+    "evolvesFrom": 207,
+    "evolvesTo": [],
+    "method": {
+      "kind": "other"
+    }
+  },
+  {
+    "id": 473,
+    "evolvesFrom": 221,
+    "evolvesTo": [],
+    "method": {
+      "kind": "other"
+    }
+  },
+  {
+    "id": 474,
+    "evolvesFrom": 233,
+    "evolvesTo": [],
+    "method": {
+      "kind": "trade",
+      "item": "dubious-disc"
+    }
+  },
+  {
+    "id": 475,
+    "evolvesFrom": 281,
+    "evolvesTo": [],
+    "method": {
+      "kind": "item",
+      "item": "dawn-stone"
+    }
+  },
+  {
+    "id": 476,
+    "evolvesFrom": 299,
+    "evolvesTo": [],
+    "method": {
+      "kind": "other"
+    }
+  },
+  {
+    "id": 477,
+    "evolvesFrom": 356,
+    "evolvesTo": [],
+    "method": {
+      "kind": "trade",
+      "item": "reaper-cloth"
+    }
+  },
+  {
+    "id": 478,
+    "evolvesFrom": 361,
+    "evolvesTo": [],
+    "method": {
+      "kind": "item",
+      "item": "dawn-stone"
+    }
+  },
+  {
+    "id": 479,
+    "evolvesFrom": null,
+    "evolvesTo": []
+  },
+  {
+    "id": 480,
+    "evolvesFrom": null,
+    "evolvesTo": []
+  },
+  {
+    "id": 481,
+    "evolvesFrom": null,
+    "evolvesTo": []
+  },
+  {
+    "id": 482,
+    "evolvesFrom": null,
+    "evolvesTo": []
+  },
+  {
+    "id": 483,
+    "evolvesFrom": null,
+    "evolvesTo": []
+  },
+  {
+    "id": 484,
+    "evolvesFrom": null,
+    "evolvesTo": []
+  },
+  {
+    "id": 485,
+    "evolvesFrom": null,
+    "evolvesTo": []
+  },
+  {
+    "id": 486,
+    "evolvesFrom": null,
+    "evolvesTo": []
+  },
+  {
+    "id": 487,
+    "evolvesFrom": null,
+    "evolvesTo": []
+  },
+  {
+    "id": 488,
+    "evolvesFrom": null,
+    "evolvesTo": []
+  },
+  {
+    "id": 489,
+    "evolvesFrom": null,
+    "evolvesTo": []
+  },
+  {
+    "id": 490,
+    "evolvesFrom": null,
+    "evolvesTo": []
+  },
+  {
+    "id": 491,
+    "evolvesFrom": null,
+    "evolvesTo": []
+  },
+  {
+    "id": 492,
+    "evolvesFrom": null,
+    "evolvesTo": []
+  },
+  {
+    "id": 493,
     "evolvesFrom": null,
     "evolvesTo": []
   }

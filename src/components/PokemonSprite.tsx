@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { getPokemonSpriteUrl } from "@/lib/sprites";
+import { useSpriteSet } from "@/components/SpriteSetProvider";
 
 const SIZES = {
   sm: 32,
@@ -32,6 +33,7 @@ export function PokemonSprite({
   size?: keyof typeof SIZES;
   className?: string;
 }) {
+  const spriteSet = useSpriteSet();
   const [failedId, setFailedId] = useState<number | null>(null);
   const px = SIZES[size];
 
@@ -49,7 +51,7 @@ export function PokemonSprite({
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      src={getPokemonSpriteUrl(pokemonId)}
+      src={getPokemonSpriteUrl(pokemonId, spriteSet)}
       alt={name}
       width={px}
       height={px}

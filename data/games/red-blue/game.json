@@ -1,0 +1,14 @@
+{
+  "id": "red-blue",
+  "sort": 3,
+  "generation": 1,
+  "dexLimit": 151,
+  "spriteSet": "red-blue",
+  "names": {
+    "de": "Rot / Blau / Gelb",
+    "en": "Red / Blue / Yellow",
+    "fr": "Rouge / Bleu / Jaune",
+    "es": "Rojo / Azul / Amarillo",
+    "it": "Rosso / Blu / Giallo"
+  }
+}

@@ -1,0 +1,752 @@
+[
+  {
+    "id": 1,
+    "names": {
+      "de": "Starter",
+      "en": "Starter",
+      "fr": "Starter",
+      "es": "Inicial",
+      "it": "Starter"
+    },
+    "type": "static"
+  },
+  {
+    "id": 2,
+    "names": {
+      "de": "Route 201",
+      "en": "Route 201",
+      "fr": "Route 201",
+      "es": "Ruta 201",
+      "it": "Percorso 201"
+    },
+    "type": "route"
+  },
+  {
+    "id": 3,
+    "names": {
+      "de": "Route 202",
+      "en": "Route 202",
+      "fr": "Route 202",
+      "es": "Ruta 202",
+      "it": "Percorso 202"
+    },
+    "type": "route"
+  },
+  {
+    "id": 4,
+    "names": {
+      "de": "Route 203",
+      "en": "Route 203",
+      "fr": "Route 203",
+      "es": "Ruta 203",
+      "it": "Percorso 203"
+    },
+    "type": "route"
+  },
+  {
+    "id": 5,
+    "names": {
+      "de": "Route 204",
+      "en": "Route 204",
+      "fr": "Route 204",
+      "es": "Ruta 204",
+      "it": "Percorso 204"
+    },
+    "type": "route"
+  },
+  {
+    "id": 6,
+    "names": {
+      "de": "Zerklüfteter Pfad",
+      "en": "Ravaged Path",
+      "fr": "Chemin Rocheux",
+      "es": "Ravaged Path",
+      "it": "Ravaged Path"
+    },
+    "type": "route"
+  },
+  {
+    "id": 7,
+    "names": {
+      "de": "Route 207",
+      "en": "Route 207",
+      "fr": "Route 207",
+      "es": "Ruta 207",
+      "it": "Percorso 207"
+    },
+    "type": "route"
+  },
+  {
+    "id": 8,
+    "names": {
+      "de": "Erzelingen-Tor",
+      "en": "Oreburgh Gate",
+      "fr": "Entrée Charbourg",
+      "es": "Oreburgh Gate",
+      "it": "Oreburgh Gate"
+    },
+    "type": "route"
+  },
+  {
+    "id": 9,
+    "names": {
+      "de": "Erzelingen-Mine",
+      "en": "Oreburgh Mine",
+      "fr": "Mine Charbourg",
+      "es": "Oreburgh Mine",
+      "it": "Oreburgh Mine"
+    },
+    "type": "route"
+  },
+  {
+    "id": 10,
+    "names": {
+      "de": "Fossil Erzelingen",
+      "en": "Fossil Oreburgh City",
+      "fr": "Fossile Charbourg",
+      "es": "Fossil Oreburgh City",
+      "it": "Fossil Oreburgh City"
+    },
+    "type": "static"
+  },
+  {
+    "id": 11,
+    "names": {
+      "de": "Route 205",
+      "en": "Route 205",
+      "fr": "Route 205",
+      "es": "Ruta 205",
+      "it": "Percorso 205"
+    },
+    "type": "route"
+  },
+  {
+    "id": 12,
+    "names": {
+      "de": "Windkraftanlage",
+      "en": "Valley Windworks",
+      "fr": "Les Eoliennes",
+      "es": "Valley Windworks",
+      "it": "Valley Windworks"
+    },
+    "type": "route"
+  },
+  {
+    "id": 13,
+    "names": {
+      "de": "Driftlon Windkraftanlage",
+      "en": "Drifloon Valley Windworks",
+      "fr": "Baudrive Les Eoliennes",
+      "es": "Drifloon Valley Windworks",
+      "it": "Drifloon Valley Windworks"
+    },
+    "type": "static"
+  },
+  {
+    "id": 14,
+    "names": {
+      "de": "Ewigwald",
+      "en": "Eterna Forest",
+      "fr": "Forêt Vestigion",
+      "es": "Eterna Forest",
+      "it": "Eterna Forest"
+    },
+    "type": "route"
+  },
+  {
+    "id": 15,
+    "names": {
+      "de": "Altes Schloss",
+      "en": "Old Chateau",
+      "fr": "Vieux Château",
+      "es": "Old Chateau",
+      "it": "Old Chateau"
+    },
+    "type": "route"
+  },
+  {
+    "id": 16,
+    "names": {
+      "de": "Rotom Altes Schloss",
+      "en": "Rotom Old Chateau",
+      "fr": "Motisma Vieux Château",
+      "es": "Rotom Old Chateau",
+      "it": "Rotom Old Chateau"
+    },
+    "type": "static"
+  },
+  {
+    "id": 17,
+    "names": {
+      "de": "Togepi-Ei Ewigenau",
+      "en": "Togepi Egg Eterna City",
+      "fr": "Œuf de Togepi Vestigion",
+      "es": "Togepi Egg Eterna City",
+      "it": "Togepi Egg Eterna City"
+    },
+    "type": "static"
+  },
+  {
+    "id": 18,
+    "names": {
+      "de": "Route 206",
+      "en": "Route 206",
+      "fr": "Route 206",
+      "es": "Ruta 206",
+      "it": "Percorso 206"
+    },
+    "type": "route"
+  },
+  {
+    "id": 19,
+    "names": {
+      "de": "Irrhöhle",
+      "en": "Wayward Cave",
+      "fr": "Grotte Revèche",
+      "es": "Wayward Cave",
+      "it": "Wayward Cave"
+    },
+    "type": "route"
+  },
+  {
+    "id": 20,
+    "names": {
+      "de": "Route 208",
+      "en": "Route 208",
+      "fr": "Route 208",
+      "es": "Ruta 208",
+      "it": "Percorso 208"
+    },
+    "type": "route"
+  },
+  {
+    "id": 21,
+    "names": {
+      "de": "Kraterberge",
+      "en": "Mt. Coronet",
+      "fr": "Mont Couronné",
+      "es": "Mt. Coronet",
+      "it": "Mt. Coronet"
+    },
+    "type": "route"
+  },
+  {
+    "id": 22,
+    "names": {
+      "de": "Evoli Herzhofen",
+      "en": "Eevee Hearthome City",
+      "fr": "Évoli Unionpolis",
+      "es": "Eevee Hearthome City",
+      "it": "Eevee Hearthome City"
+    },
+    "type": "static"
+  },
+  {
+    "id": 23,
+    "names": {
+      "de": "Route 209",
+      "en": "Route 209",
+      "fr": "Route 209",
+      "es": "Ruta 209",
+      "it": "Percorso 209"
+    },
+    "type": "route"
+  },
+  {
+    "id": 24,
+    "names": {
+      "de": "Kryppuk Route 209",
+      "en": "Spiritomb Route 209",
+      "fr": "Spiritomb Route 209",
+      "es": "Spiritomb Ruta 209",
+      "it": "Spiritomb Percorso 209"
+    },
+    "type": "static"
+  },
+  {
+    "id": 25,
+    "names": {
+      "de": "Verlorenturm",
+      "en": "Lost Tower",
+      "fr": "Tour Perdue",
+      "es": "Lost Tower",
+      "it": "Lost Tower"
+    },
+    "type": "route"
+  },
+  {
+    "id": 26,
+    "names": {
+      "de": "Trostu-Ruinen",
+      "en": "Solaceon Ruins",
+      "fr": "Ruines Bonville",
+      "es": "Solaceon Ruins",
+      "it": "Solaceon Ruins"
+    },
+    "type": "route"
+  },
+  {
+    "id": 27,
+    "names": {
+      "de": "Route 210",
+      "en": "Route 210",
+      "fr": "Route 210",
+      "es": "Ruta 210",
+      "it": "Percorso 210"
+    },
+    "type": "route"
+  },
+  {
+    "id": 28,
+    "names": {
+      "de": "Route 215",
+      "en": "Route 215",
+      "fr": "Route 215",
+      "es": "Ruta 215",
+      "it": "Percorso 215"
+    },
+    "type": "route"
+  },
+  {
+    "id": 29,
+    "names": {
+      "de": "Route 214",
+      "en": "Route 214",
+      "fr": "Route 214",
+      "es": "Ruta 214",
+      "it": "Percorso 214"
+    },
+    "type": "route"
+  },
+  {
+    "id": 30,
+    "names": {
+      "de": "Route 213",
+      "en": "Route 213",
+      "fr": "Route 213",
+      "es": "Ruta 213",
+      "it": "Percorso 213"
+    },
+    "type": "route"
+  },
+  {
+    "id": 31,
+    "names": {
+      "de": "Pastoria City",
+      "en": "Pastoria City",
+      "fr": "Verchamps",
+      "es": "Pastoria City",
+      "it": "Pastoria City"
+    },
+    "type": "route"
+  },
+  {
+    "id": 32,
+    "names": {
+      "de": "Großmoor",
+      "en": "Great Marsh",
+      "fr": "Grand Marais",
+      "es": "Great Marsh",
+      "it": "Great Marsh"
+    },
+    "type": "route"
+  },
+  {
+    "id": 33,
+    "names": {
+      "de": "Route 212",
+      "en": "Route 212",
+      "fr": "Route 212",
+      "es": "Ruta 212",
+      "it": "Percorso 212"
+    },
+    "type": "route"
+  },
+  {
+    "id": 34,
+    "names": {
+      "de": "Trophäengarten",
+      "en": "Trophy Garden",
+      "fr": "Jardin Trophée",
+      "es": "Trophy Garden",
+      "it": "Trophy Garden"
+    },
+    "type": "route"
+  },
+  {
+    "id": 35,
+    "names": {
+      "de": "Route 218",
+      "en": "Route 218",
+      "fr": "Route 218",
+      "es": "Ruta 218",
+      "it": "Percorso 218"
+    },
+    "type": "route"
+  },
+  {
+    "id": 36,
+    "names": {
+      "de": "Fleetburg",
+      "en": "Canalave City",
+      "fr": "Joliberges",
+      "es": "Canalave City",
+      "it": "Canalave City"
+    },
+    "type": "route"
+  },
+  {
+    "id": 37,
+    "names": {
+      "de": "Route 219",
+      "en": "Route 219",
+      "fr": "Route 219",
+      "es": "Ruta 219",
+      "it": "Percorso 219"
+    },
+    "type": "route"
+  },
+  {
+    "id": 38,
+    "names": {
+      "de": "Route 220",
+      "en": "Route 220",
+      "fr": "Route 220",
+      "es": "Ruta 220",
+      "it": "Percorso 220"
+    },
+    "type": "route"
+  },
+  {
+    "id": 39,
+    "names": {
+      "de": "Route 221",
+      "en": "Route 221",
+      "fr": "Route 221",
+      "es": "Ruta 221",
+      "it": "Percorso 221"
+    },
+    "type": "route"
+  },
+  {
+    "id": 40,
+    "names": {
+      "de": "Eiseninsel",
+      "en": "Iron Island",
+      "fr": "Ile de Fer",
+      "es": "Iron Island",
+      "it": "Iron Island"
+    },
+    "type": "route"
+  },
+  {
+    "id": 41,
+    "names": {
+      "de": "Riolu-Ei Eiseninsel",
+      "en": "Riolu Egg Iron Island",
+      "fr": "Œuf de Riolu Ile de Fer",
+      "es": "Riolu Egg Iron Island",
+      "it": "Riolu Egg Iron Island"
+    },
+    "type": "static"
+  },
+  {
+    "id": 42,
+    "names": {
+      "de": "Route 211",
+      "en": "Route 211",
+      "fr": "Route 211",
+      "es": "Ruta 211",
+      "it": "Percorso 211"
+    },
+    "type": "route"
+  },
+  {
+    "id": 43,
+    "names": {
+      "de": "Route 216",
+      "en": "Route 216",
+      "fr": "Route 216",
+      "es": "Ruta 216",
+      "it": "Percorso 216"
+    },
+    "type": "route"
+  },
+  {
+    "id": 44,
+    "names": {
+      "de": "Route 217",
+      "en": "Route 217",
+      "fr": "Route 217",
+      "es": "Ruta 217",
+      "it": "Percorso 217"
+    },
+    "type": "route"
+  },
+  {
+    "id": 45,
+    "names": {
+      "de": "Scharfsinnsee",
+      "en": "Lake Acuity",
+      "fr": "Lac Savoir",
+      "es": "Lake Acuity",
+      "it": "Lake Acuity"
+    },
+    "type": "route"
+  },
+  {
+    "id": 46,
+    "names": {
+      "de": "Wahrheitssee",
+      "en": "Lake Verity",
+      "fr": "Lac Vérité",
+      "es": "Lake Verity",
+      "it": "Lake Verity"
+    },
+    "type": "route"
+  },
+  {
+    "id": 47,
+    "names": {
+      "de": "Muthsee",
+      "en": "Lake Valor",
+      "fr": "Lac Courage",
+      "es": "Lake Valor",
+      "it": "Lake Valor"
+    },
+    "type": "route"
+  },
+  {
+    "id": 48,
+    "names": {
+      "de": "Selfe Scharfsinnsee",
+      "en": "Uxie Lake Acuity",
+      "fr": "Créhelf Lac Savoir",
+      "es": "Uxie Lake Acuity",
+      "it": "Uxie Lake Acuity"
+    },
+    "type": "static"
+  },
+  {
+    "id": 49,
+    "names": {
+      "de": "Tobutz Muthsee",
+      "en": "Azelf Lake Valor",
+      "fr": "Créfadet Lac Courage",
+      "es": "Azelf Lake Valor",
+      "it": "Azelf Lake Valor"
+    },
+    "type": "static"
+  },
+  {
+    "id": 50,
+    "names": {
+      "de": "Vesprit (Roaming)",
+      "en": "Mesprit (Roaming)",
+      "fr": "Créfollet (itinérant)",
+      "es": "Mesprit (errante)",
+      "it": "Mesprit (vagante)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 51,
+    "names": {
+      "de": "Giratina Zerrwelt",
+      "en": "Giratina Distortion World",
+      "fr": "Giratina Monde Distorsion",
+      "es": "Giratina Distortion World",
+      "it": "Giratina Distortion World"
+    },
+    "type": "static"
+  },
+  {
+    "id": 52,
+    "names": {
+      "de": "Route 222",
+      "en": "Route 222",
+      "fr": "Route 222",
+      "es": "Ruta 222",
+      "it": "Percorso 222"
+    },
+    "type": "route"
+  },
+  {
+    "id": 53,
+    "names": {
+      "de": "Route 223",
+      "en": "Route 223",
+      "fr": "Route 223",
+      "es": "Ruta 223",
+      "it": "Percorso 223"
+    },
+    "type": "route"
+  },
+  {
+    "id": 54,
+    "names": {
+      "de": "Siegesstraße",
+      "en": "Victory Road",
+      "fr": "Route Victoire",
+      "es": "Calle Victoria",
+      "it": "Via Vittoria"
+    },
+    "type": "route"
+  },
+  {
+    "id": 55,
+    "names": {
+      "de": "Dialga/Palkia Speersäule",
+      "en": "Dialga/Palkia Spear Pillar",
+      "fr": "Dialga/Palkia Spear Pillar",
+      "es": "Dialga/Palkia Spear Pillar",
+      "it": "Dialga/Palkia Spear Pillar"
+    },
+    "type": "static",
+    "postgame": true
+  },
+  {
+    "id": 56,
+    "names": {
+      "de": "Route 224",
+      "en": "Route 224",
+      "fr": "Route 224",
+      "es": "Ruta 224",
+      "it": "Percorso 224"
+    },
+    "type": "route",
+    "postgame": true
+  },
+  {
+    "id": 57,
+    "names": {
+      "de": "Route 225",
+      "en": "Route 225",
+      "fr": "Route 225",
+      "es": "Ruta 225",
+      "it": "Percorso 225"
+    },
+    "type": "route",
+    "postgame": true
+  },
+  {
+    "id": 58,
+    "names": {
+      "de": "Route 226",
+      "en": "Route 226",
+      "fr": "Route 226",
+      "es": "Ruta 226",
+      "it": "Percorso 226"
+    },
+    "type": "route",
+    "postgame": true
+  },
+  {
+    "id": 59,
+    "names": {
+      "de": "Route 227",
+      "en": "Route 227",
+      "fr": "Route 227",
+      "es": "Ruta 227",
+      "it": "Percorso 227"
+    },
+    "type": "route",
+    "postgame": true
+  },
+  {
+    "id": 60,
+    "names": {
+      "de": "Route 228",
+      "en": "Route 228",
+      "fr": "Route 228",
+      "es": "Ruta 228",
+      "it": "Percorso 228"
+    },
+    "type": "route",
+    "postgame": true
+  },
+  {
+    "id": 61,
+    "names": {
+      "de": "Route 229",
+      "en": "Route 229",
+      "fr": "Route 229",
+      "es": "Ruta 229",
+      "it": "Percorso 229"
+    },
+    "type": "route",
+    "postgame": true
+  },
+  {
+    "id": 62,
+    "names": {
+      "de": "Route 230",
+      "en": "Route 230",
+      "fr": "Route 230",
+      "es": "Ruta 230",
+      "it": "Percorso 230"
+    },
+    "type": "route",
+    "postgame": true
+  },
+  {
+    "id": 63,
+    "names": {
+      "de": "Feuriger Berg",
+      "en": "Stark Mountain",
+      "fr": "Mont Abrupt",
+      "es": "Stark Mountain",
+      "it": "Stark Mountain"
+    },
+    "type": "route",
+    "postgame": true
+  },
+  {
+    "id": 64,
+    "names": {
+      "de": "Heatran Feuriger Berg",
+      "en": "Heatran Stark Mountain",
+      "fr": "Heatran Mont Abrupt",
+      "es": "Heatran Stark Mountain",
+      "it": "Heatran Stark Mountain"
+    },
+    "type": "static",
+    "postgame": true
+  },
+  {
+    "id": 65,
+    "names": {
+      "de": "Regigigas Blizzach-Tempel",
+      "en": "Regigigas Snowpoint Temple",
+      "fr": "Regigigas Temple Frimapic",
+      "es": "Regigigas Snowpoint Temple",
+      "it": "Regigigas Snowpoint Temple"
+    },
+    "type": "static",
+    "postgame": true
+  },
+  {
+    "id": 66,
+    "names": {
+      "de": "Quelle des Abschieds",
+      "en": "Sendoff Spring",
+      "fr": "Source Adieu",
+      "es": "Sendoff Spring",
+      "it": "Sendoff Spring"
+    },
+    "type": "route",
+    "postgame": true
+  },
+  {
+    "id": 67,
+    "names": {
+      "de": "Cresselia (Roaming)",
+      "en": "Cresselia (Roaming)",
+      "fr": "Cresselia (itinérante)",
+      "es": "Cresselia (errante)",
+      "it": "Cresselia (vagante)"
+    },
+    "type": "static",
+    "postgame": true
+  }
+]

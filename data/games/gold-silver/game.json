@@ -1,0 +1,14 @@
+{
+  "id": "gold-silver",
+  "sort": 4,
+  "generation": 2,
+  "dexLimit": 251,
+  "spriteSet": "crystal",
+  "names": {
+    "de": "Gold / Silber / Kristall",
+    "en": "Gold / Silver / Crystal",
+    "fr": "Or / Argent / Cristal",
+    "es": "Oro / Plata / Cristal",
+    "it": "Oro / Argento / Cristallo"
+  }
+}

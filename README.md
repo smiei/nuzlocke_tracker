@@ -15,12 +15,12 @@ Self-hosted web app for tracking Pokémon Nuzlocke runs – as a two-player Soul
 
 - **Encounter**: catch one Pokémon per route (and player), with the catch-time status (Caught/Killed/Fled) and an optional nickname. Static locations are pre-marked from the data files. Species Clause conflicts show a warning without ever blocking a save; post-game areas are collapsed by default; an "open only" toggle hides completed routes and SoulLink rows missing one player's entry are tinted as a reminder.
 - **Pokémon**: the active 6-slot team plus all links/catches as cards, "mark as dead" (with undo; the catch-time status stays untouched), evolve/devolve incl. evolution methods, a glowing evolve button when a level evolution is reachable within the earned level cap, an "evolvable only" filter, sorting by encounter order or BST (dead links always sink to the end).
-- **Type Effectiveness**: weaknesses/resistances of any Pokémon (defender's perspective) plus the full Gen 3 type matrix.
-- **Catchrate**: catch chance calculator (Gen 3 formula) with ball, HP, level, and status condition inputs.
-- **Pokédex**: sortable table with rank (by base-stat total, standard competition ranking), search with suggestions and scroll-to-row.
+- **Type Effectiveness**: weaknesses/resistances of any Pokémon (defender's perspective) plus the full type matrix (the static page shows the Gen 2-5 chart; the run-scoped Team Weaknesses tab uses the run's generation, incl. the Gen 1 chart).
+- **Catchrate**: catch chance calculator with ball, HP, level, and status condition inputs – uses the run's generation formula (Gen 1, Gen 2, Gen 3/4) and ball selection.
+- **Pokédex**: sortable table with rank (by base-stat total, standard competition ranking), search with suggestions and scroll-to-row, and a client-side game filter (dex scope per game, stored per device).
 - **Journey**: boss battles (gym leaders, rival, Team Rocket, Elite Four) with level caps, click to mark as defeated.
 - **Rules**: per-run rule toggles (Species Clause on/off, nicknames, ROM/randomizer evolution overrides, static encounters and their clause exemption) plus a markdown section for house rules & notes, editable right in the browser; new runs inherit both from the most recent run. All toggles are informational/UI-level – the server never rejects a save because of them.
-- **Multiple runs & games**: fully separate progress per run (SoulLink or solo); each run plays one game data pack – FireRed/LeafGreen and Emerald ship built-in, more can be added as data under `data/games/<gameId>/` without code changes (same generation). Switch and create runs via the header, rename/delete plus backup and settings behind the header gear menu.
+- **Multiple runs & games**: fully separate progress per run (SoulLink or solo); each run plays one game data pack. Built-in packs: Red/Blue/Yellow (Gen 1), Gold/Silver/Crystal (Gen 2), FireRed/LeafGreen and Emerald (Gen 3), Platinum (Gen 4) – more can be added as data under `data/games/<gameId>/` without code changes. Generation-aware mechanics per game: type chart (incl. the Gen 1 oddities), catch formula and ball selection (Gen 1/2/3/4), obtainable Pokémon (dex limit filters pick lists, evolutions, and rankings), and era-appropriate battle sprites.
 - **Backup & import**: export the current run or all runs as a JSON file; import adds the contained runs (including team assignments, rules, rule settings, and nicknames) without ever overwriting existing data.
 - **Multilingual**: UI, Pokémon, route, trainer, and badge names switchable between German, English, French, Spanish, and Italian (language picker in the header gear menu). German and English are hand-curated; the other languages are generated from PokeAPI plus curated tables (`npm run generate:names`) and fall back to English where no official translation exists (a few obscure Sevii-Island areas).
 
@@ -42,7 +42,7 @@ Then open [http://localhost:3000](http://localhost:3000).
 | --- | --- |
 | `npm run dev` | Dev server with hot reload |
 | `npm run build` / `npm run start` | Production build / start |
-| `npm run download:sprites` | Downloads all Pokémon sprites (Gen 3 Emerald style) once from PokeAPI into `public/pokemon-sprites/`. **Must be run once after `npm install`** – the sprites are deliberately not part of this repo (copyrighted artwork, see `.gitignore`). Without this step, Pokémon images are missing across the UI. Re-run if `data/pokemon.json` changes. |
+| `npm run download:sprites` | Downloads the Pokémon battle sprites for every sprite set referenced by a game pack (red-blue, crystal, emerald, platinum, ...) from PokeAPI into `public/pokemon-sprites/<set>/`, skipping files that already exist. **Must be run once after `npm install`** – the sprites are deliberately not part of this repo (copyrighted artwork, see `.gitignore`). Re-run after adding a game pack with a new sprite set. |
 | `npm run generate:evolutions` | Regenerates `data/evolutions.json` (evolution lines incl. evolution methods: level/item/trade/friendship) from PokeAPI. Already included in the repo – only needed when `data/pokemon.json` changes. ROM-specific evolution changes (e.g. from a randomizer's "change impossible evolutions") live in `data/evolution-overrides.json` and are merged at runtime, so they survive regeneration. |
 | `npm run download:catchrates` | Regenerates `data/catchrates.json` (base catch rates for the Catchrate tab) from PokeAPI. Already included in the repo – only needed when `data/pokemon.json` changes. |
 | `npm run generate:names` | Regenerates the localized display names (`names` objects keyed by language) in `data/pokemon.json` and every game pack's `routes.json`/`levelcaps.json` from PokeAPI plus hand-curated tables (trainers, badges, es/it locations). German/English values are never overwritten. |
@@ -58,8 +58,8 @@ The Journey page can show trainer avatars from `public/trainers/<slug>.png` (cir
 
 All reference data is read straight from disk at runtime (not copied into the database). Edits take effect immediately, even inside a running Docker container, without a rebuild. (Exception: the statically pre-rendered Pokédex/Type Effectiveness pages bake their data in at build time.)
 
-- **Game-independent** (`data/`): `pokemon.json`, `evolutions.json`, `effectiveness.json`, `catchrates.json`.
-- **Per game pack** (`data/games/<gameId>/`): `game.json` (id, display names, generation, picker order), `routes.json`, `levelcaps.json`, and optionally `evolution-overrides.json` (ROM/randomizer changes). Each run is bound to one pack (chosen at creation); a run whose pack goes missing falls back to the default pack instead of crashing. Adding another same-generation game = adding a new folder, no code changes.
+- **Game-independent** (`data/`): `pokemon.json` (national dex 1-493), `evolutions.json`, `effectiveness.json` (Gen 2-5 chart), `effectiveness-gen1.json`, `catchrates.json`.
+- **Per game pack** (`data/games/<gameId>/`): `game.json` (id, display names, generation, dexLimit, spriteSet, picker order), `routes.json`, `levelcaps.json`, and optionally `evolution-overrides.json` (ROM/randomizer changes). Each run is bound to one pack (chosen at creation); a run whose pack goes missing falls back to the default pack instead of crashing. Adding another game of a supported generation (1-4) = adding a new folder, no code changes.
 
 Route entries carry a `type` (`"route"` = regular wild encounter, `"static"` = fixed encounter such as gifts, fossils, Snorlax, legendaries – exempt from the Species Clause) and an optional `"postgame": true` flag (collapsed by default on the Encounter tab). Route IDs are referenced by the database and must never be renumbered within a pack.
 
@@ -79,7 +79,7 @@ docker compose up --build
 | Container path | Purpose |
 | --- | --- |
 | `/app/db` | SQLite database (required) |
-| `/app/public/pokemon-sprites` | Pokémon sprites – auto-filled on first start, persists across image updates (recommended) |
+| `/app/public/pokemon-sprites` | Pokémon sprites (one subfolder per sprite set) – auto-filled on start with whatever the installed game packs need, persists across image updates (recommended). Old flat layouts are migrated into `emerald/` automatically. |
 | `/app/public/ball-sprites` | Poké Ball item sprites – auto-filled on first start (optional; simply re-downloaded when missing) |
 | `/app/public/trainers` | Trainer avatars – place your own `<slug>.png` files here (optional) |
 | `/app/data` | Static reference data override (optional; omit to use the data baked into the image) |

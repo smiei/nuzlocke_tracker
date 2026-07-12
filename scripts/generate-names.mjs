@@ -60,6 +60,35 @@ const TRAINER_NAMES = {
   Maxie: { fr: "Max", es: "Magno" },
   Archie: { fr: "Arthur", es: "Aquiles" },
   Wally: { fr: "Timmy", es: "Blasco" },
+  // Johto (Gold/Silver) - Italian omitted where unsure (-> English).
+  Falkner: { fr: "Albert", es: "Pegaso" },
+  Bugsy: { fr: "Hector", es: "Antón" },
+  Whitney: { fr: "Blanche", es: "Blanca" },
+  Morty: { fr: "Mortimer", es: "Morti" },
+  Chuck: { fr: "Chuck", es: "Aníbal" },
+  Jasmine: { fr: "Jasmine", es: "Yasmina" },
+  Pryce: { fr: "Frédo", es: "Fredo" },
+  Clair: { fr: "Sandra", es: "Débora" },
+  Will: { fr: "Clément", es: "Mento" },
+  Karen: { fr: "Marion", es: "Karen" },
+  Janine: { fr: "Jeannine" },
+  Blue: { fr: "Blue", es: "Azul", it: "Blu" },
+  Red: { fr: "Red", es: "Rojo", it: "Rosso" },
+  // Sinnoh (Platinum)
+  Roark: { fr: "Pierrick", es: "Roco" },
+  Gardenia: { fr: "Flo", es: "Gardenia" },
+  Fantina: { fr: "Kiméra", es: "Fantina" },
+  Maylene: { fr: "Mélina", es: "Brega" },
+  "Crasher Wake": { fr: "Lovis", es: "Mananti" },
+  Byron: { fr: "Charles", es: "Acerón" },
+  Candice: { fr: "Gladys", es: "Inverna" },
+  Volkner: { fr: "Tanguy", es: "Lectro" },
+  Cyrus: { fr: "Hélio", es: "Helio" },
+  Aaron: { fr: "Aaron", es: "Alecrán" },
+  Bertha: { fr: "Terry", es: "Gaia" },
+  Flint: { fr: "Adrien", es: "Fausto" },
+  Lucian: { fr: "Lucio", es: "Delos" },
+  Cynthia: { fr: "Cynthia", es: "Cintia", it: "Camilla" },
 };
 
 // Badges, keyed by the English name.
@@ -82,6 +111,24 @@ const BADGE_NAMES = {
   "Feather Badge": { fr: "Badge Plume", es: "Medalla Pluma", it: "Medaglia Piuma" },
   "Mind Badge": { fr: "Badge Esprit", es: "Medalla Mente", it: "Medaglia Mente" },
   "Rain Badge": { fr: "Badge Pluie", es: "Medalla Lluvia", it: "Medaglia Pioggia" },
+  // Johto
+  "Zephyr Badge": { fr: "Badge Zéphyr", es: "Medalla Céfiro", it: "Medaglia Zefiro" },
+  "Hive Badge": { fr: "Badge Essaim", es: "Medalla Colmena", it: "Medaglia Alveare" },
+  "Plain Badge": { fr: "Badge Plaine", es: "Medalla Planicie", it: "Medaglia Pianura" },
+  "Fog Badge": { fr: "Badge Brume", es: "Medalla Niebla", it: "Medaglia Nebbia" },
+  "Storm Badge": { fr: "Badge Tempête", es: "Medalla Tormenta", it: "Medaglia Tempesta" },
+  "Mineral Badge": { fr: "Badge Minéral", es: "Medalla Mineral", it: "Medaglia Minerale" },
+  "Glacier Badge": { fr: "Badge Glacier", es: "Medalla Glaciar", it: "Medaglia Ghiacciaio" },
+  "Rising Badge": { fr: "Badge Lever", es: "Medalla Alzada", it: "Medaglia Ascesa" },
+  // Sinnoh
+  "Coal Badge": { fr: "Badge Charbon", es: "Medalla Lignito", it: "Medaglia Carbone" },
+  "Forest Badge": { fr: "Badge Forêt", es: "Medalla Bosque", it: "Medaglia Foresta" },
+  "Relic Badge": { fr: "Badge Relique", es: "Medalla Reliquia", it: "Medaglia Reliquia" },
+  "Cobble Badge": { fr: "Badge Galet", es: "Medalla Adoquín", it: "Medaglia Ciottolo" },
+  "Fen Badge": { fr: "Badge Fange", es: "Medalla Ciénaga", it: "Medaglia Palude" },
+  "Mine Badge": { fr: "Badge Mine", es: "Medalla Mina", it: "Medaglia Miniera" },
+  "Icicle Badge": { fr: "Badge Glaçon", es: "Medalla Carámbano", it: "Medaglia Ghiacciolo" },
+  "Beacon Badge": { fr: "Badge Phare", es: "Medalla Faro", it: "Medaglia Faro" },
 };
 
 // Journey locations that aren't plain PokeAPI locations, keyed by English.
@@ -107,6 +154,8 @@ const LEVELCAP_LOCATIONS = {
     es: "Silph S.A., Ciudad Azafrán",
     it: "Silph SpA, Zafferanopoli",
   },
+  "Pokémon League": { fr: "Ligue Pokémon", es: "Liga Pokémon", it: "Lega Pokémon" },
+  "Distortion World": { fr: "Monde Distorsion", es: "Mundo Distorsión", it: "Mondo Distorto" },
 };
 
 // Composite static-encounter routes, keyed "<gameId>:<routeId>":
@@ -163,6 +212,74 @@ const ROUTE_COMPOSITES = {
   "emerald:70": { speciesId: 382, baseEn: "Marine Cave" },
   "emerald:71": { speciesId: 383, baseEn: "Terra Cave" },
   "emerald:75": { speciesId: 185, baseEn: "Battle Frontier" },
+  "red-blue:1": { full: { fr: "Starter", es: "Inicial", it: "Starter" } },
+  "red-blue:10": { subject: { fr: "Vendeur", es: "Vendedor", it: "Venditore" }, baseEn: "Route 4" },
+  "red-blue:12": { subject: { fr: "Fossile", es: "Fósil", it: "Fossile" }, baseEn: "Mt. Moon" },
+  "red-blue:26": { speciesId: 143, baseEn: "Route 12" },
+  "red-blue:30": { speciesId: 133, baseEn: "Celadon City" },
+  "red-blue:32": { speciesId: 143, baseEn: "Route 16" },
+  "red-blue:41": {
+    subject: { fr: "Dojo Karaté", es: "Dojo Karate", it: "Dojo di Lotta" },
+    baseEn: "Saffron City",
+  },
+  "red-blue:42": { full: { fr: "Sylphe SARL", es: "Silph S.A.", it: "Silph SpA" } },
+  "red-blue:44": { speciesId: 145, baseEn: "Power Plant" },
+  "red-blue:48": { speciesId: 144, baseEn: "Seafoam Islands" },
+  "red-blue:50": {
+    subject: { fr: "Vieil Ambre", es: "Ámbar Viejo", it: "Vecchia Ambra" },
+    baseEn: "Pewter City",
+  },
+  "red-blue:55": { speciesId: 146, baseEn: "Victory Road" },
+  "red-blue:57": { speciesId: 150, baseEn: "Cerulean Cave" },
+  "gold-silver:1": { full: { fr: "Starter", es: "Inicial", it: "Starter" } },
+  "gold-silver:9": {
+    subject: { fr: "Œuf de Togepi", es: "Huevo de Togepi", it: "Uovo di Togepi" },
+    baseEn: "Violet City",
+  },
+  "gold-silver:17": { speciesId: 133, baseEn: "Goldenrod City" },
+  "gold-silver:21": { speciesId: 185, baseEn: "Route 36" },
+  "gold-silver:32": { speciesId: 213, baseEn: "Cianwood City" },
+  "gold-silver:35": { speciesId: 236, baseEn: "Mt. Mortar" },
+  "gold-silver:38": { speciesId: 130, baseEn: "Lake of Rage" },
+  "gold-silver:43": { speciesId: 147, baseEn: "Dragon's Den" },
+  "gold-silver:49": { speciesId: 249, baseEn: "Whirl Islands" },
+  "gold-silver:50": { speciesId: 250, baseEn: "Bell Tower" },
+  "gold-silver:51": {
+    full: {
+      fr: "Raikou/Entei/Suicune (itinérant)",
+      es: "Raikou/Entei/Suicune (errante)",
+      it: "Raikou/Entei/Suicune (vagante)",
+    },
+  },
+  "gold-silver:66": { speciesId: 143, baseEn: "Vermilion City" },
+  "platinum:1": { full: { fr: "Starter", es: "Inicial", it: "Starter" } },
+  "platinum:10": {
+    subject: { fr: "Fossile", es: "Fósil", it: "Fossile" },
+    baseEn: "Oreburgh City",
+  },
+  "platinum:13": { speciesId: 425, baseEn: "Valley Windworks" },
+  "platinum:16": { speciesId: 479, baseEn: "Old Chateau" },
+  "platinum:17": {
+    subject: { fr: "Œuf de Togepi", es: "Huevo de Togepi", it: "Uovo di Togepi" },
+    baseEn: "Eterna City",
+  },
+  "platinum:22": { speciesId: 133, baseEn: "Hearthome City" },
+  "platinum:24": { speciesId: 442, baseEn: "Route 209" },
+  "platinum:41": {
+    subject: { fr: "Œuf de Riolu", es: "Huevo de Riolu", it: "Uovo di Riolu" },
+    baseEn: "Iron Island",
+  },
+  "platinum:48": { speciesId: 480, baseEn: "Lake Acuity" },
+  "platinum:49": { speciesId: 482, baseEn: "Lake Valor" },
+  "platinum:50": {
+    full: { fr: "Créfollet (itinérant)", es: "Mesprit (errante)", it: "Mesprit (vagante)" },
+  },
+  "platinum:51": { speciesId: 487, baseEn: "Distortion World" },
+  "platinum:64": { speciesId: 485, baseEn: "Stark Mountain" },
+  "platinum:65": { speciesId: 486, baseEn: "Snowpoint Temple" },
+  "platinum:67": {
+    full: { fr: "Cresselia (itinérante)", es: "Cresselia (errante)", it: "Cresselia (vagante)" },
+  },
 };
 
 // English location name -> PokeAPI location slug, where the generic
@@ -271,13 +388,14 @@ async function locationNames(nameEn) {
   if (locationCache.has(nameEn)) return locationCache.get(nameEn);
   const base = slugify(nameEn);
   // Numbered routes are region-prefixed in PokeAPI; Kanto sea routes (19-21)
-  // are "kanto-sea-route-N". Kanto (1-25) and Hoenn (101-134) numbers don't
-  // overlap, so trying all prefixes is unambiguous.
+  // are "kanto-sea-route-N". The regions' route numbers don't overlap
+  // (Kanto 1-28, Johto 29-48, Hoenn 101-134, Sinnoh 201-230), so trying all
+  // prefixes is unambiguous.
   const candidates = LOCATION_SLUG_OVERRIDES[nameEn]
     ? [LOCATION_SLUG_OVERRIDES[nameEn]]
     : /^route \d+$/i.test(nameEn)
-      ? [`kanto-${base}`, `kanto-sea-${base}`, `hoenn-${base}`]
-      : [base, `kanto-${base}`, `hoenn-${base}`];
+      ? [`kanto-${base}`, `kanto-sea-${base}`, `johto-${base}`, `hoenn-${base}`, `sinnoh-${base}`]
+      : [base, `kanto-${base}`, `johto-${base}`, `hoenn-${base}`, `sinnoh-${base}`];
   let result = {};
   for (const slug of candidates) {
     const data = await fetchJson(`https://pokeapi.co/api/v2/location/${slug}`);

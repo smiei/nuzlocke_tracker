@@ -1,18 +1,29 @@
-// One-off script (not run at build/dev time): downloads every Pokémon sprite
-// used by this app plus the Poké Ball item sprites from the PokeAPI sprite
-// mirror and saves them locally (public/pokemon-sprites, public/ball-sprites),
-// so the running app never depends on an external CDN (avoids GitHub
-// raw-content throttling under bursts of requests, e.g. the full Pokédex
-// table loading ~386 sprites at once).
+// One-off script (not run at build/dev time): downloads the Pokémon battle
+// sprites for every sprite set referenced by a game pack (game.json
+// `spriteSet`) plus the Poké Ball item sprites from the PokeAPI sprite
+// mirror, and saves them locally (public/pokemon-sprites/<set>/,
+// public/ball-sprites/) so the running app never depends on an external CDN.
+// Already-downloaded files are skipped, so re-runs only fetch what's missing.
 // Run manually: node scripts/download-sprites.mjs
-import { mkdir, writeFile, readFile } from "node:fs/promises";
+import { mkdir, writeFile, readFile, readdir, rename } from "node:fs/promises";
+import { existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const pokemonListPath = path.join(__dirname, "..", "data", "pokemon.json");
-const outDir = path.join(__dirname, "..", "public", "pokemon-sprites");
+const dataDir = path.join(__dirname, "..", "data");
+const outRoot = path.join(__dirname, "..", "public", "pokemon-sprites");
 const ballOutDir = path.join(__dirname, "..", "public", "ball-sprites");
+
+// Sprite set name (game.json `spriteSet`) -> PokeAPI path + highest id the
+// set contains.
+const SPRITE_SETS = {
+  "red-blue": { path: "versions/generation-i/red-blue", maxId: 151 },
+  crystal: { path: "versions/generation-ii/crystal", maxId: 251 },
+  emerald: { path: "versions/generation-iii/emerald", maxId: 386 },
+  "firered-leafgreen": { path: "versions/generation-iii/firered-leafgreen", maxId: 386 },
+  platinum: { path: "versions/generation-iv/platinum", maxId: 493 },
+};
 
 // Local ball id (see src/lib/catchrate.ts) -> PokeAPI item sprite name.
 const BALLS = [
@@ -28,15 +39,16 @@ const BALLS = [
   "timer",
   "luxury",
   "premier",
+  "level",
+  "lure",
+  "moon",
+  "friend",
+  "love",
+  "fast",
+  "park",
+  "quick",
+  "dusk",
 ];
-
-function spriteUrl(id) {
-  return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-iii/emerald/${id}.png`;
-}
-
-function ballSpriteUrl(ballId) {
-  return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/${ballId}-ball.png`;
-}
 
 async function download(url, target) {
   const res = await fetch(url);
@@ -45,28 +57,88 @@ async function download(url, target) {
   await writeFile(target, buffer);
 }
 
-async function main() {
-  const pokemonList = JSON.parse(await readFile(pokemonListPath, "utf-8"));
-  const ids = pokemonList.map((p) => p.id).sort((a, b) => a - b);
-
-  await mkdir(outDir, { recursive: true });
-  await mkdir(ballOutDir, { recursive: true });
-
-  const batchSize = 10;
-  for (let i = 0; i < ids.length; i += batchSize) {
-    const batch = ids.slice(i, i + batchSize);
-    await Promise.all(
-      batch.map((id) => download(spriteUrl(id), path.join(outDir, `${id}.png`))),
-    );
-    console.log(`downloaded ${Math.min(i + batchSize, ids.length)}/${ids.length}`);
-    if (i + batchSize < ids.length) await new Promise((r) => setTimeout(r, 150));
+// Pre-sprite-set layouts kept the emerald sprites flat in
+// public/pokemon-sprites/*.png - move them into the emerald/ subfolder once
+// instead of re-downloading ~386 files.
+async function migrateFlatLayout() {
+  if (!existsSync(outRoot)) return;
+  const entries = await readdir(outRoot, { withFileTypes: true });
+  const flat = entries.filter((e) => e.isFile() && /^\d+\.png$/.test(e.name));
+  if (flat.length === 0) return;
+  const emeraldDir = path.join(outRoot, "emerald");
+  await mkdir(emeraldDir, { recursive: true });
+  for (const file of flat) {
+    const target = path.join(emeraldDir, file.name);
+    if (!existsSync(target)) await rename(path.join(outRoot, file.name), target);
   }
-  console.log(`Saved ${ids.length} sprites to public/pokemon-sprites/`);
+  console.log(`migrated ${flat.length} flat sprites into emerald/`);
+}
 
+async function main() {
+  await migrateFlatLayout();
+
+  // Which sets do the installed game packs need?
+  const gameDirs = await readdir(path.join(dataDir, "games"), { withFileTypes: true });
+  const sets = new Set();
+  for (const dir of gameDirs) {
+    if (!dir.isDirectory()) continue;
+    try {
+      const game = JSON.parse(
+        await readFile(path.join(dataDir, "games", dir.name, "game.json"), "utf-8"),
+      );
+      sets.add(game.spriteSet ?? "emerald");
+    } catch {
+      // No game.json - skip.
+    }
+  }
+
+  const maxKnownId = JSON.parse(await readFile(path.join(dataDir, "pokemon.json"), "utf-8"))
+    .map((p) => p.id)
+    .reduce((a, b) => Math.max(a, b), 0);
+
+  for (const set of sets) {
+    const config = SPRITE_SETS[set];
+    if (!config) {
+      console.warn(`[warn] unknown sprite set "${set}" - skipping`);
+      continue;
+    }
+    const outDir = path.join(outRoot, set);
+    await mkdir(outDir, { recursive: true });
+    const ids = [];
+    for (let id = 1; id <= Math.min(config.maxId, maxKnownId); id++) {
+      if (!existsSync(path.join(outDir, `${id}.png`))) ids.push(id);
+    }
+    if (ids.length === 0) {
+      console.log(`${set}: complete`);
+      continue;
+    }
+    const batchSize = 10;
+    for (let i = 0; i < ids.length; i += batchSize) {
+      const batch = ids.slice(i, i + batchSize);
+      await Promise.all(
+        batch.map((id) =>
+          download(
+            `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${config.path}/${id}.png`,
+            path.join(outDir, `${id}.png`),
+          ),
+        ),
+      );
+      console.log(`${set}: ${Math.min(i + batchSize, ids.length)}/${ids.length}`);
+      if (i + batchSize < ids.length) await new Promise((r) => setTimeout(r, 150));
+    }
+  }
+
+  await mkdir(ballOutDir, { recursive: true });
+  const missingBalls = BALLS.filter((b) => !existsSync(path.join(ballOutDir, `${b}.png`)));
   await Promise.all(
-    BALLS.map((ball) => download(ballSpriteUrl(ball), path.join(ballOutDir, `${ball}.png`))),
+    missingBalls.map((ball) =>
+      download(
+        `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/${ball}-ball.png`,
+        path.join(ballOutDir, `${ball}.png`),
+      ),
+    ),
   );
-  console.log(`Saved ${BALLS.length} ball sprites to public/ball-sprites/`);
+  console.log(`ball sprites: ${missingBalls.length} downloaded, ${BALLS.length} total`);
 }
 
 main().catch((err) => {

@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
-import { getEffectiveness, getPokemonById } from "@/lib/data";
+import { getEffectiveness, getGameOrDefault, getPokemonById } from "@/lib/data";
+import { getTypesForGeneration } from "@/lib/effectiveness";
 import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
 import { getLang } from "@/lib/i18n/getLang";
@@ -7,6 +8,7 @@ import { pokemonName } from "@/lib/i18n/localize";
 import { LinkStatus, Player, RunMode } from "@/generated/prisma/client";
 import type { TeamMember } from "@/components/TeamWeaknessesView";
 import { TeamWeaknessesView } from "@/components/TeamWeaknessesView";
+import { SpriteSetProvider } from "@/components/SpriteSetProvider";
 
 export const dynamic = "force-dynamic";
 
@@ -16,8 +18,9 @@ export default async function WeaknessesPage({
   searchParams: Promise<{ run?: string }>;
 }) {
   const { run } = await searchParams;
-  const { runId, mode, canonical } = await resolveRunId(run);
+  const { runId, mode, gameId, canonical } = await resolveRunId(run);
   if (!canonical) redirect(`/weaknesses?run=${runId}`);
+  const game = getGameOrDefault(gameId);
 
   const lang = await getLang();
 
@@ -55,11 +58,14 @@ export default async function WeaknessesPage({
         ];
 
   return (
-    <TeamWeaknessesView
-      lang={lang}
-      mode={mode}
-      teams={teams}
-      table={getEffectiveness()}
-    />
+    <SpriteSetProvider spriteSet={game.spriteSet}>
+      <TeamWeaknessesView
+        lang={lang}
+        mode={mode}
+        teams={teams}
+        table={getEffectiveness(game.generation)}
+        attackTypes={getTypesForGeneration(game.generation)}
+      />
+    </SpriteSetProvider>
   );
 }

@@ -2,6 +2,8 @@
   "id": "emerald",
   "sort": 2,
   "generation": 3,
+  "dexLimit": 386,
+  "spriteSet": "emerald",
   "names": {
     "de": "Smaragd",
     "en": "Emerald",

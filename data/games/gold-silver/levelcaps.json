@@ -1,0 +1,596 @@
+[
+  {
+    "id": 1,
+    "names": {
+      "de": "Falk",
+      "en": "Falkner",
+      "fr": "Albert",
+      "es": "Pegaso",
+      "it": "Falkner"
+    },
+    "location": {
+      "de": "Viola City",
+      "en": "Violet City",
+      "fr": "Mauville",
+      "es": "Violet City",
+      "it": "Violet City"
+    },
+    "badge": {
+      "de": "Zephyrorden",
+      "en": "Zephyr Badge",
+      "fr": "Badge Zéphyr",
+      "es": "Medalla Céfiro",
+      "it": "Medaglia Zefiro"
+    },
+    "max_level": 9
+  },
+  {
+    "id": 2,
+    "names": {
+      "de": "Rivale",
+      "en": "Rival",
+      "fr": "Rival",
+      "es": "Rival",
+      "it": "Rivale"
+    },
+    "location": {
+      "de": "Azalea City",
+      "en": "Azalea Town",
+      "fr": "Ecorcia",
+      "es": "Azalea Town",
+      "it": "Azalea Town"
+    },
+    "badge": null,
+    "max_level": null,
+    "sprite": "rivale"
+  },
+  {
+    "id": 3,
+    "names": {
+      "de": "Kai",
+      "en": "Bugsy",
+      "fr": "Hector",
+      "es": "Antón",
+      "it": "Bugsy"
+    },
+    "location": {
+      "de": "Azalea City",
+      "en": "Azalea Town",
+      "fr": "Ecorcia",
+      "es": "Azalea Town",
+      "it": "Azalea Town"
+    },
+    "badge": {
+      "de": "Insektenorden",
+      "en": "Hive Badge",
+      "fr": "Badge Essaim",
+      "es": "Medalla Colmena",
+      "it": "Medaglia Alveare"
+    },
+    "max_level": 16
+  },
+  {
+    "id": 4,
+    "names": {
+      "de": "Bianka",
+      "en": "Whitney",
+      "fr": "Blanche",
+      "es": "Blanca",
+      "it": "Whitney"
+    },
+    "location": {
+      "de": "Dukatia City",
+      "en": "Goldenrod City",
+      "fr": "Doublonville",
+      "es": "Goldenrod City",
+      "it": "Goldenrod City"
+    },
+    "badge": {
+      "de": "Basisorden",
+      "en": "Plain Badge",
+      "fr": "Badge Plaine",
+      "es": "Medalla Planicie",
+      "it": "Medaglia Pianura"
+    },
+    "max_level": 20
+  },
+  {
+    "id": 5,
+    "names": {
+      "de": "Rivale",
+      "en": "Rival",
+      "fr": "Rival",
+      "es": "Rival",
+      "it": "Rivale"
+    },
+    "location": {
+      "de": "Verbrannter Turm, Teak City",
+      "en": "Burned Tower, Ecruteak City",
+      "fr": "Burned Tower, Ecruteak City",
+      "es": "Burned Tower, Ecruteak City",
+      "it": "Burned Tower, Ecruteak City"
+    },
+    "badge": null,
+    "max_level": null,
+    "sprite": "rivale"
+  },
+  {
+    "id": 6,
+    "names": {
+      "de": "Jens",
+      "en": "Morty",
+      "fr": "Mortimer",
+      "es": "Morti",
+      "it": "Morty"
+    },
+    "location": {
+      "de": "Teak City",
+      "en": "Ecruteak City",
+      "fr": "Rosalia",
+      "es": "Ecruteak City",
+      "it": "Ecruteak City"
+    },
+    "badge": {
+      "de": "Nebelorden",
+      "en": "Fog Badge",
+      "fr": "Badge Brume",
+      "es": "Medalla Niebla",
+      "it": "Medaglia Nebbia"
+    },
+    "max_level": 25
+  },
+  {
+    "id": 7,
+    "names": {
+      "de": "Hartwig",
+      "en": "Chuck",
+      "fr": "Chuck",
+      "es": "Aníbal",
+      "it": "Chuck"
+    },
+    "location": {
+      "de": "Anemonia City",
+      "en": "Cianwood City",
+      "fr": "Irisia",
+      "es": "Cianwood City",
+      "it": "Cianwood City"
+    },
+    "badge": {
+      "de": "Sturmorden",
+      "en": "Storm Badge",
+      "fr": "Badge Tempête",
+      "es": "Medalla Tormenta",
+      "it": "Medaglia Tempesta"
+    },
+    "max_level": 30
+  },
+  {
+    "id": 8,
+    "names": {
+      "de": "Jasmin",
+      "en": "Jasmine",
+      "fr": "Jasmine",
+      "es": "Yasmina",
+      "it": "Jasmine"
+    },
+    "location": {
+      "de": "Oliviana City",
+      "en": "Olivine City",
+      "fr": "Oliville",
+      "es": "Olivine City",
+      "it": "Olivine City"
+    },
+    "badge": {
+      "de": "Mineralorden",
+      "en": "Mineral Badge",
+      "fr": "Badge Minéral",
+      "es": "Medalla Mineral",
+      "it": "Medaglia Minerale"
+    },
+    "max_level": 35
+  },
+  {
+    "id": 9,
+    "names": {
+      "de": "Norbert",
+      "en": "Pryce",
+      "fr": "Frédo",
+      "es": "Fredo",
+      "it": "Pryce"
+    },
+    "location": {
+      "de": "Mahagonia City",
+      "en": "Mahogany Town",
+      "fr": "Acajou",
+      "es": "Mahogany Town",
+      "it": "Mahogany Town"
+    },
+    "badge": {
+      "de": "Gletscherorden",
+      "en": "Glacier Badge",
+      "fr": "Badge Glacier",
+      "es": "Medalla Glaciar",
+      "it": "Medaglia Ghiacciaio"
+    },
+    "max_level": 31
+  },
+  {
+    "id": 10,
+    "names": {
+      "de": "Rivale",
+      "en": "Rival",
+      "fr": "Rival",
+      "es": "Rival",
+      "it": "Rivale"
+    },
+    "location": {
+      "de": "Dukatia City",
+      "en": "Goldenrod City",
+      "fr": "Doublonville",
+      "es": "Goldenrod City",
+      "it": "Goldenrod City"
+    },
+    "badge": null,
+    "max_level": null,
+    "sprite": "rivale"
+  },
+  {
+    "id": 11,
+    "names": {
+      "de": "Sandra",
+      "en": "Clair",
+      "fr": "Sandra",
+      "es": "Débora",
+      "it": "Clair"
+    },
+    "location": {
+      "de": "Ebenholz City",
+      "en": "Blackthorn City",
+      "fr": "Ebènelle",
+      "es": "Blackthorn City",
+      "it": "Blackthorn City"
+    },
+    "badge": {
+      "de": "Aufstiegsorden",
+      "en": "Rising Badge",
+      "fr": "Badge Lever",
+      "es": "Medalla Alzada",
+      "it": "Medaglia Ascesa"
+    },
+    "max_level": 40
+  },
+  {
+    "id": 12,
+    "names": {
+      "de": "Rivale",
+      "en": "Rival",
+      "fr": "Rival",
+      "es": "Rival",
+      "it": "Rivale"
+    },
+    "location": {
+      "de": "Siegesstraße",
+      "en": "Victory Road",
+      "fr": "Route Victoire",
+      "es": "Calle Victoria",
+      "it": "Via Vittoria"
+    },
+    "badge": null,
+    "max_level": null,
+    "sprite": "rivale"
+  },
+  {
+    "id": 13,
+    "names": {
+      "de": "Willi",
+      "en": "Will",
+      "fr": "Clément",
+      "es": "Mento",
+      "it": "Will"
+    },
+    "location": {
+      "de": "Top 4",
+      "en": "Elite Four",
+      "fr": "Conseil 4",
+      "es": "Alto Mando",
+      "it": "Superquattro"
+    },
+    "badge": null,
+    "max_level": 42
+  },
+  {
+    "id": 14,
+    "names": {
+      "de": "Koga",
+      "en": "Koga",
+      "fr": "Koga",
+      "es": "Koga",
+      "it": "Koga"
+    },
+    "location": {
+      "de": "Top 4",
+      "en": "Elite Four",
+      "fr": "Conseil 4",
+      "es": "Alto Mando",
+      "it": "Superquattro"
+    },
+    "badge": null,
+    "max_level": 44
+  },
+  {
+    "id": 15,
+    "names": {
+      "de": "Bruno",
+      "en": "Bruno",
+      "fr": "Aldo",
+      "es": "Bruno",
+      "it": "Bruno"
+    },
+    "location": {
+      "de": "Top 4",
+      "en": "Elite Four",
+      "fr": "Conseil 4",
+      "es": "Alto Mando",
+      "it": "Superquattro"
+    },
+    "badge": null,
+    "max_level": 46
+  },
+  {
+    "id": 16,
+    "names": {
+      "de": "Melanie",
+      "en": "Karen",
+      "fr": "Marion",
+      "es": "Karen",
+      "it": "Karen"
+    },
+    "location": {
+      "de": "Top 4",
+      "en": "Elite Four",
+      "fr": "Conseil 4",
+      "es": "Alto Mando",
+      "it": "Superquattro"
+    },
+    "badge": null,
+    "max_level": 47
+  },
+  {
+    "id": 17,
+    "names": {
+      "de": "Siegfried",
+      "en": "Lance",
+      "fr": "Peter",
+      "es": "Lance",
+      "it": "Lance"
+    },
+    "location": {
+      "de": "Top 4",
+      "en": "Elite Four",
+      "fr": "Conseil 4",
+      "es": "Alto Mando",
+      "it": "Superquattro"
+    },
+    "badge": null,
+    "max_level": 50
+  },
+  {
+    "id": 18,
+    "names": {
+      "de": "Major Bob",
+      "en": "Lt. Surge",
+      "fr": "Major Bob",
+      "es": "Teniente Surge",
+      "it": "Lt. Surge"
+    },
+    "location": {
+      "de": "Orania City",
+      "en": "Vermilion City",
+      "fr": "Carmin sur Mer",
+      "es": "Ciudad Carmín",
+      "it": "Aranciopoli"
+    },
+    "badge": {
+      "de": "Donnerorden",
+      "en": "Thunder Badge",
+      "fr": "Badge Foudre",
+      "es": "Medalla Trueno",
+      "it": "Medaglia Tuono"
+    },
+    "max_level": 46
+  },
+  {
+    "id": 19,
+    "names": {
+      "de": "Sabrina",
+      "en": "Sabrina",
+      "fr": "Morgane",
+      "es": "Sabrina",
+      "it": "Sabrina"
+    },
+    "location": {
+      "de": "Saffronia City",
+      "en": "Saffron City",
+      "fr": "Safrania",
+      "es": "Ciudad Azafrán",
+      "it": "Zafferanopoli"
+    },
+    "badge": {
+      "de": "Sumpforden",
+      "en": "Marsh Badge",
+      "fr": "Badge Marais",
+      "es": "Medalla Pantano",
+      "it": "Medaglia Palude"
+    },
+    "max_level": 48
+  },
+  {
+    "id": 20,
+    "names": {
+      "de": "Misty",
+      "en": "Misty",
+      "fr": "Ondine",
+      "es": "Misty",
+      "it": "Misty"
+    },
+    "location": {
+      "de": "Azuria City",
+      "en": "Cerulean City",
+      "fr": "Azuria",
+      "es": "Ciudad Celeste",
+      "it": "Celestopoli"
+    },
+    "badge": {
+      "de": "Quellorden",
+      "en": "Cascade Badge",
+      "fr": "Badge Cascade",
+      "es": "Medalla Cascada",
+      "it": "Medaglia Cascata"
+    },
+    "max_level": 47
+  },
+  {
+    "id": 21,
+    "names": {
+      "de": "Erika",
+      "en": "Erika",
+      "fr": "Erika",
+      "es": "Erika",
+      "it": "Erika"
+    },
+    "location": {
+      "de": "Prismania City",
+      "en": "Celadon City",
+      "fr": "Céladopole",
+      "es": "Ciudad Azulona",
+      "it": "Azzurropoli"
+    },
+    "badge": {
+      "de": "Farborden",
+      "en": "Rainbow Badge",
+      "fr": "Badge Prisme",
+      "es": "Medalla Arcoíris",
+      "it": "Medaglia Arcobaleno"
+    },
+    "max_level": 46
+  },
+  {
+    "id": 22,
+    "names": {
+      "de": "Janina",
+      "en": "Janine",
+      "fr": "Jeannine",
+      "es": "Janine",
+      "it": "Janine"
+    },
+    "location": {
+      "de": "Fuchsania City",
+      "en": "Fuchsia City",
+      "fr": "Parmanie",
+      "es": "Ciudad Fucsia",
+      "it": "Fucsiapoli"
+    },
+    "badge": {
+      "de": "Seelenorden",
+      "en": "Soul Badge",
+      "fr": "Badge Âme",
+      "es": "Medalla Alma",
+      "it": "Medaglia Anima"
+    },
+    "max_level": 36
+  },
+  {
+    "id": 23,
+    "names": {
+      "de": "Rocko",
+      "en": "Brock",
+      "fr": "Pierre",
+      "es": "Brock",
+      "it": "Brock"
+    },
+    "location": {
+      "de": "Marmoria City",
+      "en": "Pewter City",
+      "fr": "Argenta",
+      "es": "Ciudad Plateada",
+      "it": "Plumbeopoli"
+    },
+    "badge": {
+      "de": "Felsorden",
+      "en": "Boulder Badge",
+      "fr": "Badge Roche",
+      "es": "Medalla Roca",
+      "it": "Medaglia Sasso"
+    },
+    "max_level": 42
+  },
+  {
+    "id": 24,
+    "names": {
+      "de": "Pyro",
+      "en": "Blaine",
+      "fr": "Auguste",
+      "es": "Blaine",
+      "it": "Blaine"
+    },
+    "location": {
+      "de": "Seeschauminseln",
+      "en": "Seafoam Islands",
+      "fr": "Iles Ecume",
+      "es": "Islas Espuma",
+      "it": "Isole Schiuma"
+    },
+    "badge": {
+      "de": "Vulkanorden",
+      "en": "Volcano Badge",
+      "fr": "Badge Volcan",
+      "es": "Medalla Volcán",
+      "it": "Medaglia Vulcano"
+    },
+    "max_level": 45
+  },
+  {
+    "id": 25,
+    "names": {
+      "de": "Blau",
+      "en": "Blue",
+      "fr": "Blue",
+      "es": "Azul",
+      "it": "Blu"
+    },
+    "location": {
+      "de": "Vertania City",
+      "en": "Viridian City",
+      "fr": "Jadielle",
+      "es": "Ciudad Verde",
+      "it": "Smeraldopoli"
+    },
+    "badge": {
+      "de": "Erdorden",
+      "en": "Earth Badge",
+      "fr": "Badge Terre",
+      "es": "Medalla Tierra",
+      "it": "Medaglia Terra"
+    },
+    "max_level": 58
+  },
+  {
+    "id": 26,
+    "names": {
+      "de": "Rot",
+      "en": "Red",
+      "fr": "Red",
+      "es": "Rojo",
+      "it": "Rosso"
+    },
+    "location": {
+      "de": "Silberberg",
+      "en": "Mt. Silver",
+      "fr": "Mont Argenté",
+      "es": "Mt. Silver",
+      "it": "Mt. Silver"
+    },
+    "badge": null,
+    "max_level": 81
+  }
+]

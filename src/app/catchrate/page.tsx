@@ -1,8 +1,9 @@
 import { redirect } from "next/navigation";
-import { getCatchRates, getPokemonList } from "@/lib/data";
+import { getCatchRates, getGameOrDefault, getPokemonList } from "@/lib/data";
 import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
 import { CatchRateView } from "@/components/CatchRateView";
+import { SpriteSetProvider } from "@/components/SpriteSetProvider";
 
 export const dynamic = "force-dynamic";
 
@@ -12,7 +13,7 @@ export default async function CatchratePage({
   searchParams: Promise<{ run?: string }>;
 }) {
   const { run } = await searchParams;
-  const { runId, settings, canonical } = await resolveRunId(run);
+  const { runId, gameId, settings, canonical } = await resolveRunId(run);
   if (!canonical) redirect(`/catchrate?run=${runId}`);
 
   const catchRates = Object.fromEntries(
@@ -29,12 +30,16 @@ export default async function CatchratePage({
       })
     : [];
   const lockedFamilyIds = [...new Set(used.map((e) => e.familyId))];
+  const game = getGameOrDefault(gameId);
 
   return (
-    <CatchRateView
-      pokemonList={getPokemonList()}
-      catchRates={catchRates}
-      lockedFamilyIds={lockedFamilyIds}
-    />
+    <SpriteSetProvider spriteSet={game.spriteSet}>
+      <CatchRateView
+        pokemonList={getPokemonList(game.dexLimit)}
+        catchRates={catchRates}
+        lockedFamilyIds={lockedFamilyIds}
+        generation={game.generation}
+      />
+    </SpriteSetProvider>
   );
 }

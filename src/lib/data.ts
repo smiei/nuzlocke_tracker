@@ -22,6 +22,11 @@ export type GameInfo = {
   // Display order in the game picker.
   sort: number;
   generation: number;
+  // Highest national-dex id obtainable in this game - filters the pick
+  // lists, evolution targets, and per-run rankings.
+  dexLimit: number;
+  // Sprite folder under public/pokemon-sprites/ (see scripts/download-sprites.mjs).
+  spriteSet: string;
   names: LocalizedNames;
 };
 
@@ -108,6 +113,14 @@ export function getGameById(gameId: string): GameInfo | undefined {
   return getGames().find((game) => game.id === gameId);
 }
 
+// Never returns undefined - a run whose pack disappeared behaves like the
+// default game instead of crashing every page.
+export function getGameOrDefault(gameId: string): GameInfo {
+  const game = getGameById(gameId) ?? getGameById(DEFAULT_GAME_ID);
+  if (!game) throw new Error(`Missing default game pack "${DEFAULT_GAME_ID}"`);
+  return game;
+}
+
 export function getRoutes(gameId: string): Route[] {
   return readGameJson<Route[]>(gameId, "routes.json");
 }
@@ -116,8 +129,11 @@ export function getRouteById(gameId: string, routeId: number): Route | undefined
   return getRoutes(gameId).find((route) => route.id === routeId);
 }
 
-export function getPokemonList(): Pokemon[] {
-  return readJson<Pokemon[]>("pokemon.json");
+// dexLimit (a game's highest obtainable national-dex id) filters the list;
+// omitted = everything in the file.
+export function getPokemonList(dexLimit?: number): Pokemon[] {
+  const list = readJson<Pokemon[]>("pokemon.json");
+  return dexLimit ? list.filter((pokemon) => pokemon.id <= dexLimit) : list;
 }
 
 export function getPokemonById(pokemonId: number): Pokemon | undefined {
@@ -194,8 +210,13 @@ export function getEvolutionById(
   return getEvolutions(options).find((entry) => entry.id === pokemonId);
 }
 
-export function getEffectiveness(): EffectivenessTable {
-  return readJson<EffectivenessTable>("effectiveness.json");
+// Gen 1 has its own chart (no Dark/Steel, Ghost-vs-Psychic bug, Bug/Poison
+// hitting each other super-effectively, Ice neutral vs Fire); gens 2-5 share
+// the standard pre-Fairy chart in effectiveness.json.
+export function getEffectiveness(generation = 3): EffectivenessTable {
+  return readJson<EffectivenessTable>(
+    generation === 1 ? "effectiveness-gen1.json" : "effectiveness.json",
+  );
 }
 
 export type CatchRateEntry = {

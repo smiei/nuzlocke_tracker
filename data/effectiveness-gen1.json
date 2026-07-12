@@ -1,0 +1,114 @@
+{
+  "Normal": {
+    "Kampf": 2,
+    "Geist": 0
+  },
+  "Feuer": {
+    "Wasser": 2,
+    "Boden": 2,
+    "Gestein": 2,
+    "Feuer": 0.5,
+    "Pflanze": 0.5,
+    "Käfer": 0.5
+  },
+  "Wasser": {
+    "Elektro": 2,
+    "Pflanze": 2,
+    "Feuer": 0.5,
+    "Wasser": 0.5,
+    "Eis": 0.5
+  },
+  "Pflanze": {
+    "Feuer": 2,
+    "Eis": 2,
+    "Gift": 2,
+    "Flug": 2,
+    "Käfer": 2,
+    "Wasser": 0.5,
+    "Elektro": 0.5,
+    "Pflanze": 0.5,
+    "Boden": 0.5
+  },
+  "Elektro": {
+    "Boden": 2,
+    "Elektro": 0.5,
+    "Flug": 0.5
+  },
+  "Eis": {
+    "Feuer": 2,
+    "Kampf": 2,
+    "Gestein": 2,
+    "Eis": 0.5
+  },
+  "Kampf": {
+    "Flug": 2,
+    "Psycho": 2,
+    "Käfer": 0.5,
+    "Gestein": 0.5
+  },
+  "Gift": {
+    "Boden": 2,
+    "Psycho": 2,
+    "Pflanze": 0.5,
+    "Kampf": 0.5,
+    "Gift": 0.5,
+    "Käfer": 2
+  },
+  "Boden": {
+    "Wasser": 2,
+    "Pflanze": 2,
+    "Eis": 2,
+    "Gift": 0.5,
+    "Gestein": 0.5,
+    "Elektro": 0
+  },
+  "Flug": {
+    "Elektro": 2,
+    "Eis": 2,
+    "Gestein": 2,
+    "Pflanze": 0.5,
+    "Kampf": 0.5,
+    "Käfer": 0.5,
+    "Boden": 0
+  },
+  "Psycho": {
+    "Käfer": 2,
+    "Geist": 0,
+    "Kampf": 0.5,
+    "Psycho": 0.5
+  },
+  "Käfer": {
+    "Feuer": 2,
+    "Flug": 2,
+    "Gestein": 2,
+    "Pflanze": 0.5,
+    "Kampf": 0.5,
+    "Boden": 0.5,
+    "Gift": 2
+  },
+  "Gestein": {
+    "Wasser": 2,
+    "Pflanze": 2,
+    "Kampf": 2,
+    "Boden": 2,
+    "Normal": 0.5,
+    "Feuer": 0.5,
+    "Gift": 0.5,
+    "Flug": 0.5
+  },
+  "Geist": {
+    "Geist": 2,
+    "Gift": 0.5,
+    "Käfer": 0.5,
+    "Normal": 0,
+    "Kampf": 0
+  },
+  "Drache": {
+    "Eis": 2,
+    "Drache": 2,
+    "Feuer": 0.5,
+    "Wasser": 0.5,
+    "Pflanze": 0.5,
+    "Elektro": 0.5
+  }
+}

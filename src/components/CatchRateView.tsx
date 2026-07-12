@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Pokemon } from "@/lib/data";
 import type { BallId, StatusId } from "@/lib/catchrate";
-import { BALL_IDS, STATUS_IDS, computeCatchChance } from "@/lib/catchrate";
+import { getBallIdsForGeneration, STATUS_IDS, computeCatchChance } from "@/lib/catchrate";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import { translations } from "@/lib/i18n/dictionary";
 import { pokemonName } from "@/lib/i18n/localize";
@@ -53,10 +53,12 @@ function BallSprite({ ball, size = 24 }: { ball: BallId; size?: number }) {
 // ball sprite - same pattern as the evolve/team pickers.
 function BallPicker({
   ball,
+  ballIds,
   labels,
   onPick,
 }: {
   ball: BallId;
+  ballIds: BallId[];
   labels: Record<BallId, string>;
   onPick: (ball: BallId) => void;
 }) {
@@ -89,7 +91,7 @@ function BallPicker({
       </button>
       {open && (
         <ul className="absolute z-10 mt-1 max-h-72 w-full overflow-y-auto rounded-md border border-zinc-200 bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
-          {BALL_IDS.map((id) => (
+          {ballIds.map((id) => (
             <li key={id}>
               <button
                 type="button"
@@ -116,14 +118,17 @@ export function CatchRateView({
   pokemonList,
   catchRates,
   lockedFamilyIds,
+  generation,
 }: {
   pokemonList: Pokemon[];
   catchRates: Record<number, number>;
   lockedFamilyIds: number[];
+  generation: number;
 }) {
   const { lang } = useLanguage();
   const t = translations[lang].catchrate;
   const lockedFamilies = useMemo(() => new Set(lockedFamilyIds), [lockedFamilyIds]);
+  const ballIds = getBallIdsForGeneration(generation);
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [ball, setBall] = useState<BallId>("poke");
   const [hpPercent, setHpPercent] = useState(100);
@@ -137,7 +142,7 @@ export function CatchRateView({
 
   const result =
     selected && baseRate !== undefined
-      ? computeCatchChance({
+      ? computeCatchChance(generation, {
           baseRate,
           hpPercent,
           level,
@@ -173,7 +178,7 @@ export function CatchRateView({
             <label className={labelClass} htmlFor="cr-ball">
               {t.ballLabel}
             </label>
-            <BallPicker ball={ball} labels={t.balls} onPick={setBall} />
+            <BallPicker ball={ball} ballIds={ballIds} labels={t.balls} onPick={setBall} />
           </div>
 
           <div className="col-span-2 sm:col-span-1">
@@ -234,7 +239,7 @@ export function CatchRateView({
             </div>
           )}
 
-          {ball === "timer" && (
+          {(ball === "timer" || ball === "quick") && (
             <div className="col-span-2 sm:col-span-1">
               <label className={labelClass} htmlFor="cr-turn">
                 {t.turnLabel}
@@ -284,11 +289,7 @@ export function CatchRateView({
                     : `${t.resultLabel} · ${t.avgThrows((1 / result.chance).toFixed(1))}`}
                 </div>
                 <div className="mt-1 text-xs text-zinc-400 dark:text-zinc-500">
-                  {t.details(
-                    baseRate ?? 0,
-                    String(result.ballBonus),
-                    String(result.statusBonus),
-                  )}
+                  {t.details(baseRate ?? 0, result.ballText, result.statusText)}
                 </div>
               </div>
             </div>

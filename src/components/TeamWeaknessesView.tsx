@@ -45,17 +45,21 @@ function BigTypeBadge({ type, lang }: { type: string; lang: Lang }) {
 function TeamTable({
   members,
   table,
+  attackTypes,
   lang,
 }: {
   members: TeamMember[];
   table: EffectivenessTable;
+  attackTypes: string[];
   lang: Lang;
 }) {
   const t = translations[lang].weaknesses;
 
-  const memberMults = members.map((m) => computeDefenseMultipliers(table, m.types));
+  const memberMults = members.map((m) =>
+    computeDefenseMultipliers(table, m.types, attackTypes),
+  );
 
-  const rows = GEN3_TYPES.map((attack, order) => {
+  const rows = attackTypes.map((attack, order) => {
     const mults = memberMults.map((mm) => mm[attack]);
     const weak = mults.filter((m) => m > 1).length;
     const resist = mults.filter((m) => m < 1).length;
@@ -159,11 +163,14 @@ export function TeamWeaknessesView({
   mode,
   teams,
   table,
+  attackTypes = GEN3_TYPES,
 }: {
   lang: Lang;
   mode: RunMode;
   teams: { player: Player; members: TeamMember[] }[];
   table: EffectivenessTable;
+  // Gen 1 games have no Dark/Steel rows.
+  attackTypes?: string[];
 }) {
   const t = translations[lang];
   const hasAnyMembers = teams.some((team) => team.members.length > 0);
@@ -185,7 +192,12 @@ export function TeamWeaknessesView({
                         {t.player[team.player]}
                       </h3>
                     )}
-                    <TeamTable members={team.members} table={table} lang={lang} />
+                    <TeamTable
+                      members={team.members}
+                      table={table}
+                      attackTypes={attackTypes}
+                      lang={lang}
+                    />
                   </section>
                 ),
             )}
