@@ -13,7 +13,7 @@ export default async function RulesPage({
   searchParams: Promise<{ run?: string }>;
 }) {
   const { run } = await searchParams;
-  const { runId, canonical } = await resolveRunId(run);
+  const { runId, settings, canonical } = await resolveRunId(run);
   if (!canonical) redirect(`/rules?run=${runId}`);
 
   const lang = await getLang();
@@ -23,5 +23,5 @@ export default async function RulesPage({
   // built-in ruleset for them instead of an empty page.
   const markdown = runRow?.rulesMarkdown.trim() ? runRow.rulesMarkdown : DEFAULT_RULES;
 
-  return <RulesView runId={runId} lang={lang} markdown={markdown} />;
+  return <RulesView runId={runId} lang={lang} markdown={markdown} settings={settings} />;
 }

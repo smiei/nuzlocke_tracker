@@ -92,6 +92,8 @@ const de = {
     openOnly: "Nur offene",
     openOnlyTitle: "Nur Routen ohne vollständigen Eintrag anzeigen",
     missingPlayer: "Encounter fehlt noch für einen Spieler",
+    nicknamePlaceholder: "Spitzname",
+    nicknameLabel: "Spitzname",
     postgameShow: (n: number) => `Post-Game Content anzeigen (${n} Gebiete)`,
     postgameHide: "Post-Game Content ausblenden",
   },
@@ -153,6 +155,37 @@ const de = {
     edit: "Bearbeiten",
     save: "Speichern",
     cancel: "Abbrechen",
+    settingsHeading: "Regel-Einstellungen",
+    notesHeading: "Hausregeln & Notizen",
+    showNotes: "Einblenden",
+    hideNotes: "Ausblenden",
+    toggles: {
+      speciesClause: {
+        label: "Species Clause",
+        description:
+          "Warnt, wenn eine Evolutionsfamilie im Run bereits verwendet wurde. Blockiert nie das Speichern.",
+      },
+      staticsExemptFromClause: {
+        label: "Statics von der Species Clause ausgenommen",
+        description:
+          "Auf Static-Routen (Geschenke, Fossilien, Legendäre) wird keine Clause-Warnung angezeigt.",
+      },
+      nicknames: {
+        label: "Spitznamen",
+        description:
+          "Eingabefeld im Encounter-Tab; Karten im Pokémon-Tab zeigen den Spitznamen an.",
+      },
+      evolutionOverrides: {
+        label: "Angepasste Entwicklungsmethoden (ROM/Randomizer)",
+        description:
+          "Wendet evolution-overrides.json an, z. B. geänderte Tausch-Entwicklungen. Aus = Original-Methoden.",
+      },
+      statics: {
+        label: "Static-Encounter",
+        description:
+          "Zeigt Static-Standorte im Encounter-Tab. Aus = nur reguläre Routen werden getrackt.",
+      },
+    },
   },
   catchrate: {
     heading: "Catchrate",
@@ -324,6 +357,8 @@ const en: Dictionary = {
     openOnly: "Open only",
     openOnlyTitle: "Show only routes without a complete entry",
     missingPlayer: "Encounter still missing for one player",
+    nicknamePlaceholder: "Nickname",
+    nicknameLabel: "Nickname",
     postgameShow: (n: number) => `Show post-game content (${n} areas)`,
     postgameHide: "Hide post-game content",
   },
@@ -385,6 +420,37 @@ const en: Dictionary = {
     edit: "Edit",
     save: "Save",
     cancel: "Cancel",
+    settingsHeading: "Rule settings",
+    notesHeading: "House rules & notes",
+    showNotes: "Show",
+    hideNotes: "Hide",
+    toggles: {
+      speciesClause: {
+        label: "Species Clause",
+        description:
+          "Warns when an evolution family has already been used in this run. Never blocks saving.",
+      },
+      staticsExemptFromClause: {
+        label: "Statics exempt from the Species Clause",
+        description:
+          "No clause warning is shown on static locations (gifts, fossils, legendaries).",
+      },
+      nicknames: {
+        label: "Nicknames",
+        description:
+          "Input field on the Encounter tab; cards on the Pokémon tab show the nickname.",
+      },
+      evolutionOverrides: {
+        label: "Modified evolution methods (ROM/randomizer)",
+        description:
+          "Applies evolution-overrides.json, e.g. changed trade evolutions. Off = vanilla methods.",
+      },
+      statics: {
+        label: "Static encounters",
+        description:
+          "Shows static locations on the Encounter tab. Off = only regular routes are tracked.",
+      },
+    },
   },
   catchrate: {
     heading: "Catchrate",

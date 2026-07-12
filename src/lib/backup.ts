@@ -23,6 +23,7 @@ export type BackupEncounter = {
   pokemonId: number;
   currentPokemonId: number;
   familyId: number;
+  nickname: string | null;
   status: EncounterStatus;
   isStatic: boolean;
   // routeId of the SoulLink this encounter belongs to, or null if unlinked.
@@ -41,6 +42,10 @@ export type BackupRun = {
   name: string;
   mode: RunMode;
   rulesMarkdown: string;
+  // Raw Run.settingsJson - kept as the stored string; parsing/defaulting
+  // happens at read time via parseRunSettings, so old backups without it
+  // simply restore as '{}' (= all defaults).
+  settingsJson: string;
   createdAt: string;
   soulLinks: BackupSoulLink[];
   encounters: BackupEncounter[];
@@ -71,6 +76,7 @@ export async function buildBackup(runIds?: number[]): Promise<BackupFile> {
         name: run.name,
         mode: run.mode,
         rulesMarkdown: run.rulesMarkdown,
+        settingsJson: run.settingsJson,
         createdAt: run.createdAt.toISOString(),
         soulLinks: run.soulLinks.map((sl) => ({
           routeId: sl.routeId,
@@ -85,6 +91,7 @@ export async function buildBackup(runIds?: number[]): Promise<BackupFile> {
           pokemonId: e.pokemonId,
           currentPokemonId: e.currentPokemonId,
           familyId: e.familyId,
+          nickname: e.nickname,
           status: e.status,
           isStatic: e.isStatic,
           soulLinkRouteId:
@@ -142,6 +149,7 @@ export function parseBackup(json: string): BackupFile | null {
       name: typeof rawRun.name === "string" ? rawRun.name : "Imported Run",
       mode: isEnumValue(RunMode, rawRun.mode) ? rawRun.mode : RunMode.SOULLINK,
       rulesMarkdown: typeof rawRun.rulesMarkdown === "string" ? rawRun.rulesMarkdown : "",
+      settingsJson: typeof rawRun.settingsJson === "string" ? rawRun.settingsJson : "{}",
       createdAt: isoString(rawRun.createdAt),
       soulLinks: Array.isArray(rawRun.soulLinks)
         ? rawRun.soulLinks.filter(isRecord).map((sl) => ({
@@ -162,6 +170,7 @@ export function parseBackup(json: string): BackupFile | null {
             pokemonId: num(e.pokemonId),
             currentPokemonId: num(e.currentPokemonId, num(e.pokemonId)),
             familyId: num(e.familyId),
+            nickname: typeof e.nickname === "string" && e.nickname.trim() ? e.nickname : null,
             status: isEnumValue(EncounterStatus, e.status) ? e.status : EncounterStatus.CAUGHT,
             isStatic: e.isStatic === true,
             soulLinkRouteId:
@@ -199,6 +208,7 @@ export async function applyBackup(backup: BackupFile): Promise<number> {
             name: run.name,
             mode: run.mode,
             rulesMarkdown: run.rulesMarkdown,
+            settingsJson: run.settingsJson,
             createdAt: new Date(run.createdAt),
           },
         });
@@ -226,6 +236,7 @@ export async function applyBackup(backup: BackupFile): Promise<number> {
               pokemonId: e.pokemonId,
               currentPokemonId: e.currentPokemonId,
               familyId: e.familyId,
+              nickname: e.nickname,
               status: e.status,
               isStatic: e.isStatic,
               soulLinkId:

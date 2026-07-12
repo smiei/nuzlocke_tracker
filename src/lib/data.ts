@@ -108,8 +108,13 @@ type EvolutionOverride = {
 // Overrides are merged at read time (not baked into evolutions.json), so
 // re-running the generator script never loses the ROM-specific changes and
 // the override file stays editable in /data like everything else.
-export function getEvolutions(): EvolutionEntry[] {
+// `applyOverrides: false` (the per-run "evolutionOverrides" rule toggle)
+// returns the vanilla methods instead. Overrides only ever swap `method`,
+// never the evolvesTo/evolvesFrom structure - so evolve/devolve validation
+// is unaffected by the toggle.
+export function getEvolutions(options?: { applyOverrides?: boolean }): EvolutionEntry[] {
   const entries = readJson<EvolutionEntry[]>("evolutions.json");
+  if (options?.applyOverrides === false) return entries;
   let overrides: EvolutionOverride[] = [];
   try {
     overrides = readJson<EvolutionOverride[]>("evolution-overrides.json");
@@ -126,8 +131,11 @@ export function getEvolutions(): EvolutionEntry[] {
   });
 }
 
-export function getEvolutionById(pokemonId: number): EvolutionEntry | undefined {
-  return getEvolutions().find((entry) => entry.id === pokemonId);
+export function getEvolutionById(
+  pokemonId: number,
+  options?: { applyOverrides?: boolean },
+): EvolutionEntry | undefined {
+  return getEvolutions(options).find((entry) => entry.id === pokemonId);
 }
 
 export function getEffectiveness(): EffectivenessTable {

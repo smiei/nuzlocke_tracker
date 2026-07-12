@@ -44,6 +44,11 @@ model Run {
   // Raw markdown shown on the Rules tab. Copied from the most recent run on
   // creation (falling back to the built-in default ruleset in code).
   rulesMarkdown    String             @default("")
+  // Per-run rule toggles as a JSON object (SQLite has no Json scalar in
+  // Prisma). Parsed/defaulted by src/lib/runSettings.ts - missing keys fall
+  // back to defaults, so '{}' is always valid. Copied from the most recent
+  // run on creation, like rulesMarkdown.
+  settingsJson     String             @default("{}")
   createdAt        DateTime           @default(now())
   soulLinks        SoulLink[]
   encounters       Encounter[]
@@ -86,6 +91,9 @@ model Encounter {
   pokemonId        Int
   currentPokemonId Int
   familyId         Int
+  // Optional user-given nickname (rendered when the run's `nicknames` rule is
+  // on; the data is kept either way so toggling the rule is lossless).
+  nickname         String?
   status           EncounterStatus @default(CAUGHT)
   isStatic         Boolean         @default(false)
   soulLinkId       Int?

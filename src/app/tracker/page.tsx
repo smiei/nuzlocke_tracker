@@ -16,7 +16,7 @@ export default async function TrackerPage({
   searchParams: Promise<{ run?: string }>;
 }) {
   const { run } = await searchParams;
-  const { runId, mode, canonical } = await resolveRunId(run);
+  const { runId, mode, settings, canonical } = await resolveRunId(run);
   if (!canonical) redirect(`/tracker?run=${runId}`);
 
   const lang = await getLang();
@@ -31,6 +31,7 @@ export default async function TrackerPage({
         runId={runId}
         mode={mode}
         lang={lang}
+        settings={settings}
         routes={routes}
         pokemonList={pokemonList}
         encounters={encounters}

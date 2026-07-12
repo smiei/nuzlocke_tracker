@@ -41,7 +41,12 @@ export function EncounterTile({
         <span
           className={`font-medium ${isDead ? "text-zinc-400 line-through dark:text-zinc-600" : ""}`}
         >
-          {encounter.pokemonName}
+          {encounter.nickname ?? encounter.pokemonName}
+          {encounter.nickname && (
+            <span className="ml-1.5 text-xs font-normal text-zinc-400 dark:text-zinc-500">
+              ({encounter.pokemonName})
+            </span>
+          )}
         </span>
         <div className="flex flex-wrap gap-1">
           {encounter.types.map((type) => (

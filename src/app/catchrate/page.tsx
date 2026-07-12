@@ -12,7 +12,7 @@ export default async function CatchratePage({
   searchParams: Promise<{ run?: string }>;
 }) {
   const { run } = await searchParams;
-  const { runId, canonical } = await resolveRunId(run);
+  const { runId, settings, canonical } = await resolveRunId(run);
   if (!canonical) redirect(`/catchrate?run=${runId}`);
 
   const catchRates = Object.fromEntries(
@@ -21,10 +21,13 @@ export default async function CatchratePage({
 
   // Families already used by ANY encounter in this run (static or not) are
   // locked by the Species Clause - the calculator only warns, never blocks.
-  const used = await prisma.encounter.findMany({
-    where: { runId },
-    select: { familyId: true },
-  });
+  // With the clause rule off, nothing is marked at all.
+  const used = settings.speciesClause
+    ? await prisma.encounter.findMany({
+        where: { runId },
+        select: { familyId: true },
+      })
+    : [];
   const lockedFamilyIds = [...new Set(used.map((e) => e.familyId))];
 
   return (

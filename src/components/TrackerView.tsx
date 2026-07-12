@@ -8,11 +8,13 @@ import type { Lang } from "@/lib/i18n/dictionary";
 import { translations } from "@/lib/i18n/dictionary";
 import { routeName } from "@/lib/i18n/localize";
 import { EncounterEditor } from "@/components/EncounterEditor";
+import type { RunSettings } from "@/lib/runSettings";
 
 export function TrackerView({
   runId,
   mode,
   lang,
+  settings,
   routes,
   pokemonList,
   encounters,
@@ -20,6 +22,7 @@ export function TrackerView({
   runId: number;
   mode: RunMode;
   lang: Lang;
+  settings: RunSettings;
   routes: Route[];
   pokemonList: Pokemon[];
   encounters: Encounter[];
@@ -41,7 +44,11 @@ export function TrackerView({
     return p1 && p2;
   }
 
-  const visible = openOnly ? routes.filter((r) => !isRouteDone(r)) : routes;
+  // "statics" rule off = static locations aren't tracked at all. The full
+  // `routes` array still goes to the editors below - it's their lookup table
+  // for route names in clause warnings, which may point at a static route.
+  const trackable = settings.statics ? routes : routes.filter((r) => r.type === "route");
+  const visible = openOnly ? trackable.filter((r) => !isRouteDone(r)) : trackable;
   const mainRoutes = visible.filter((r) => !r.postgame);
   const postgameRoutes = visible.filter((r) => r.postgame);
 
@@ -84,6 +91,7 @@ export function TrackerView({
             <EncounterEditor
               runId={runId}
               lang={lang}
+              settings={settings}
               routeId={route.id}
               player={Player.PLAYER1}
               routes={routes}
@@ -99,6 +107,7 @@ export function TrackerView({
                 <EncounterEditor
                   runId={runId}
                   lang={lang}
+                  settings={settings}
                   routeId={route.id}
                   player={Player.PLAYER1}
                   routes={routes}
@@ -113,6 +122,7 @@ export function TrackerView({
                 <EncounterEditor
                   runId={runId}
                   lang={lang}
+                  settings={settings}
                   routeId={route.id}
                   player={Player.PLAYER2}
                   routes={routes}

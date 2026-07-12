@@ -17,6 +17,9 @@ export type SoulLinkView = {
     player: Player;
     pokemonId: number;
     pokemonName: string;
+    // Already gated by the run's `nicknames` rule server-side: null when the
+    // rule is off, so display components never need to know about settings.
+    nickname: string | null;
     types: string[];
     summe: number;
     rang: number;

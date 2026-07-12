@@ -31,10 +31,12 @@ export function RunSwitcher({ runs }: { runs: RunSummary[] }) {
 
   function handleCreate(name: string, mode: RunMode) {
     startTransition(async () => {
-      const result = await createRun(name, mode);
+      // Inherit ruleset + rule toggles from the run that's on screen right
+      // now, then land on the Rules tab so they can be reviewed first.
+      const result = await createRun(name, mode, activeId ?? null);
       if (result.success) {
         setDialogOpen(false);
-        router.push(`${pathname}?run=${result.runId}`);
+        router.push(`/rules?run=${result.runId}`);
       } else {
         await alert({ message: formatActionError(result.error, lang) });
       }

@@ -9,6 +9,7 @@ import type { ActionError } from "@/lib/actionErrors";
 import type { BackupFile } from "@/lib/backup";
 import { applyBackup, backupFilename, buildBackup, parseBackup } from "@/lib/backup";
 import { DEFAULT_RULES } from "@/lib/defaultRules";
+import { parseRunSettings, RUN_SETTING_KEYS, type RunSettings } from "@/lib/runSettings";
 
 export type SaveEncounterInput = {
   runId: number;
@@ -16,6 +17,9 @@ export type SaveEncounterInput = {
   player: Player;
   pokemonId: number;
   status: EncounterStatus;
+  // undefined = leave the stored nickname untouched (e.g. a status-only
+  // update); a string sets it (trimmed, empty -> null); null clears it.
+  nickname?: string | null;
 };
 
 export type SaveEncounterResult = { success: true } | { success: false; error: ActionError };
@@ -24,6 +28,11 @@ export async function saveEncounter(
   input: SaveEncounterInput,
 ): Promise<SaveEncounterResult> {
   const { runId, routeId, player, pokemonId, status } = input;
+  // Normalize once; games cap nicknames at ~10 chars, 20 leaves headroom.
+  const nickname =
+    input.nickname === undefined
+      ? undefined
+      : (input.nickname ?? "").trim().slice(0, 20) || null;
 
   const pokemon = getPokemonById(pokemonId);
   if (!pokemon) {
@@ -76,6 +85,7 @@ export async function saveEncounter(
         pokemonId,
         currentPokemonId: pokemonId,
         familyId: pokemon.family_id,
+        nickname: nickname ?? null,
         status,
         isStatic,
         soulLinkId,
@@ -84,6 +94,7 @@ export async function saveEncounter(
         pokemonId,
         currentPokemonId: pokemonId,
         familyId: pokemon.family_id,
+        ...(nickname !== undefined && { nickname }),
         status,
         isStatic,
         soulLinkId,
@@ -289,21 +300,31 @@ export type CreateRunResult =
   | { success: true; runId: number }
   | { success: false; error: ActionError };
 
-export async function createRun(name: string, mode: RunMode): Promise<CreateRunResult> {
+export async function createRun(
+  name: string,
+  mode: RunMode,
+  sourceRunId?: number | null,
+): Promise<CreateRunResult> {
   const trimmed = name.trim();
   if (!trimmed) {
     return { success: false, error: { key: "nameRequired" } };
   }
 
-  // New runs never start with an empty ruleset: inherit from the most recent
-  // run, or fall back to the built-in default for the very first one.
-  // Ordered by id, not createdAt: rows backfilled by hand-written migrations
-  // store createdAt as TEXT while Prisma writes numbers, and SQLite sorts
-  // TEXT above all numbers - id is monotonic and immune to that.
-  const lastRun = await prisma.run.findFirst({ orderBy: { id: "desc" } });
-  const rulesMarkdown = lastRun?.rulesMarkdown.trim() ? lastRun.rulesMarkdown : DEFAULT_RULES;
+  // New runs never start with an empty ruleset: inherit ruleset + rule
+  // toggles from the run that was ACTIVE when the user hit "+" (what's
+  // currently on screen), falling back to the most recent run, then to the
+  // built-in default for the very first one. Fallback ordered by id, not
+  // createdAt: rows backfilled by hand-written migrations store createdAt as
+  // TEXT while Prisma writes numbers, and SQLite sorts TEXT above all
+  // numbers - id is monotonic and immune to that.
+  const source =
+    (sourceRunId != null
+      ? await prisma.run.findUnique({ where: { id: sourceRunId } })
+      : null) ?? (await prisma.run.findFirst({ orderBy: { id: "desc" } }));
+  const rulesMarkdown = source?.rulesMarkdown.trim() ? source.rulesMarkdown : DEFAULT_RULES;
+  const settingsJson = source?.settingsJson ?? "{}";
 
-  const run = await prisma.run.create({ data: { name: trimmed, mode, rulesMarkdown } });
+  const run = await prisma.run.create({ data: { name: trimmed, mode, rulesMarkdown, settingsJson } });
   revalidatePath("/", "layout");
   publishChange(run.id);
   return { success: true, runId: run.id };
@@ -323,6 +344,41 @@ export async function renameRun(runId: number, name: string): Promise<RenameRunR
 
   await prisma.run.update({ where: { id: runId }, data: { name: trimmed } });
   revalidatePath("/", "layout");
+  publishChange(runId);
+  return { success: true };
+}
+
+export type UpdateRunSettingsResult = { success: true } | { success: false; error: ActionError };
+
+// Merges the given toggle changes into the run's stored settings. Only known
+// keys with boolean values are applied - anything else is ignored, matching
+// the tolerant parseRunSettings on the read side.
+export async function updateRunSettings(
+  runId: number,
+  changes: Partial<RunSettings>,
+): Promise<UpdateRunSettingsResult> {
+  const run = await prisma.run.findUnique({ where: { id: runId } });
+  if (!run) {
+    return { success: false, error: { key: "runNotFound", id: runId } };
+  }
+
+  const settings = parseRunSettings(run.settingsJson);
+  for (const key of RUN_SETTING_KEYS) {
+    const value = changes[key];
+    if (typeof value === "boolean") settings[key] = value;
+  }
+
+  await prisma.run.update({
+    where: { id: runId },
+    data: { settingsJson: JSON.stringify(settings) },
+  });
+
+  // Toggles affect rendering on several tabs (clause warnings, nicknames,
+  // statics filter, evolution methods) - refresh everything run-scoped.
+  revalidatePath("/rules");
+  revalidatePath("/tracker");
+  revalidatePath("/links");
+  revalidatePath("/catchrate");
   publishChange(runId);
   return { success: true };
 }

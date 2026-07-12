@@ -18,8 +18,11 @@ export default async function LinksPage({
   searchParams: Promise<{ run?: string }>;
 }) {
   const { run } = await searchParams;
-  const { runId, mode, canonical } = await resolveRunId(run);
+  const { runId, mode, settings, canonical } = await resolveRunId(run);
   if (!canonical) redirect(`/links?run=${runId}`);
+  // The "evolutionOverrides" rule decides whether the ROM/randomizer methods
+  // from evolution-overrides.json or the vanilla ones are shown.
+  const evoOptions = { applyOverrides: settings.evolutionOverrides };
 
   const lang = await getLang();
 
@@ -54,12 +57,14 @@ export default async function LinksPage({
       // Links shows the current (possibly evolved) form - pokemonId (what was
       // actually caught) is what the Tracker tab shows and never changes here.
       const pokemon = getPokemonById(e.currentPokemonId);
-      const evo = getEvolutionById(e.currentPokemonId);
+      const evo = getEvolutionById(e.currentPokemonId, evoOptions);
       return {
         id: e.id,
         player: e.player,
         pokemonId: e.currentPokemonId,
         pokemonName: pokemon ? pokemonName(pokemon, lang) : `#${e.currentPokemonId}`,
+        // Gated here so display components stay settings-agnostic.
+        nickname: settings.nicknames ? e.nickname : null,
         types: pokemon?.types ?? [],
         summe: pokemon?.stats.Summe ?? 0,
         rang: ranks.get(e.currentPokemonId) ?? 0,
@@ -67,7 +72,7 @@ export default async function LinksPage({
         isStatic: e.isStatic,
         evolvesTo: (evo?.evolvesTo ?? []).map((id) => {
           const p = getPokemonById(id);
-          const targetEvo = getEvolutionById(id);
+          const targetEvo = getEvolutionById(id, evoOptions);
           const method = targetEvo?.method ?? null;
           return {
             id,
