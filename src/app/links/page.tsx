@@ -15,6 +15,7 @@ import { getLang } from "@/lib/i18n/getLang";
 import { translations } from "@/lib/i18n/dictionary";
 import { routeName, pokemonName } from "@/lib/i18n/localize";
 import { formatEvolutionMethod } from "@/lib/evolutionMethods";
+import { typesForGeneration } from "@/lib/pokemonTypes";
 import { LinksView } from "@/components/LinksView";
 import type { SoulLinkView } from "@/lib/types";
 
@@ -28,9 +29,13 @@ export default async function LinksPage({
   const { run } = await searchParams;
   const { runId, mode, gameId, settings, canonical } = await resolveRunId(run);
   if (!canonical) redirect(`/links?run=${runId}`);
-  // The "evolutionOverrides" rule decides whether the game pack's ROM/
-  // randomizer methods from evolution-overrides.json or vanilla are shown.
-  const evoOptions = { gameId, applyOverrides: settings.evolutionOverrides };
+  // The two randomizer rules decide which override categories from the game
+  // pack's evolution-overrides.json apply (vs. vanilla methods).
+  const evoOptions = {
+    gameId,
+    impossible: settings.evolutionOverridesImpossible,
+    easier: settings.evolutionOverridesEasier,
+  };
 
   const lang = await getLang();
 
@@ -76,7 +81,7 @@ export default async function LinksPage({
         pokemonName: pokemon ? pokemonName(pokemon, lang) : `#${e.currentPokemonId}`,
         // Gated here so display components stay settings-agnostic.
         nickname: settings.nicknames ? e.nickname : null,
-        types: pokemon?.types ?? [],
+        types: typesForGeneration(e.currentPokemonId, pokemon?.types ?? [], game.generation),
         summe: pokemon?.stats.Summe ?? 0,
         rang: ranks.get(e.currentPokemonId) ?? 0,
         status: e.status,

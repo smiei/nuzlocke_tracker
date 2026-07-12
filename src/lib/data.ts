@@ -166,22 +166,28 @@ type EvolutionOverride = {
   from: number;
   to: number;
   method: EvolutionMethod;
+  // Mirrors PokeRandoZX: "impossible" = Change Impossible Evolutions (trade
+  // & co. replaced), "easier" = Make Evolutions Easier (lowered levels).
+  // Missing = treated as "impossible" (the conservative default).
+  category?: "impossible" | "easier";
 };
 
 // Overrides are merged at read time (not baked into evolutions.json), so
 // re-running the generator script never loses the ROM-specific changes and
 // the override file stays editable in /data like everything else. Each game
-// pack carries its own evolution-overrides.json (or none).
-// `applyOverrides: false` (the per-run "evolutionOverrides" rule toggle)
-// returns the vanilla methods instead. Overrides only ever swap `method`,
-// never the evolvesTo/evolvesFrom structure - so evolve/devolve validation
-// is unaffected by the toggle (and by the gameId).
+// pack carries its own evolution-overrides.json (or none). The two per-run
+// rule toggles select which override categories apply (both default on).
+// Overrides only ever swap `method`, never the evolvesTo/evolvesFrom
+// structure - so evolve/devolve validation is unaffected by the toggles.
 export function getEvolutions(options?: {
   gameId?: string;
-  applyOverrides?: boolean;
+  impossible?: boolean;
+  easier?: boolean;
 }): EvolutionEntry[] {
   const entries = readJson<EvolutionEntry[]>("evolutions.json");
-  if (options?.applyOverrides === false) return entries;
+  const applyImpossible = options?.impossible ?? true;
+  const applyEasier = options?.easier ?? true;
+  if (!applyImpossible && !applyEasier) return entries;
   let overrides: EvolutionOverride[] = [];
   try {
     overrides = JSON.parse(
@@ -193,6 +199,9 @@ export function getEvolutions(options?: {
   } catch {
     // No override file for this pack - vanilla methods apply.
   }
+  overrides = overrides.filter((o) =>
+    (o.category ?? "impossible") === "impossible" ? applyImpossible : applyEasier,
+  );
   if (overrides.length === 0) return entries;
 
   const byKey = new Map(overrides.map((o) => [`${o.from}->${o.to}`, o.method]));
@@ -205,7 +214,7 @@ export function getEvolutions(options?: {
 
 export function getEvolutionById(
   pokemonId: number,
-  options?: { gameId?: string; applyOverrides?: boolean },
+  options?: { gameId?: string; impossible?: boolean; easier?: boolean },
 ): EvolutionEntry | undefined {
   return getEvolutions(options).find((entry) => entry.id === pokemonId);
 }

@@ -1,15 +1,33 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import type { Pokemon } from "@/lib/data";
 import type { EffectivenessTable } from "@/lib/effectiveness";
-import { GEN3_TYPES, computeDefenseMultipliers, singleTypeMultiplier } from "@/lib/effectiveness";
-import { TYPE_COLORS, TYPE_LABELS } from "@/lib/pokemonTypes";
+import {
+  computeDefenseMultipliers,
+  getTypesForGeneration,
+  singleTypeMultiplier,
+} from "@/lib/effectiveness";
+import { TYPE_COLORS, TYPE_LABELS, typesForGeneration } from "@/lib/pokemonTypes";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import type { Lang } from "@/lib/i18n/dictionary";
 import { translations } from "@/lib/i18n/dictionary";
+import { localizeName, type LocalizedNames } from "@/lib/i18n/localize";
 import { PokemonCombobox } from "@/components/PokemonCombobox";
+import { SpriteSetProvider } from "@/components/SpriteSetProvider";
 import { TypeBadge } from "@/components/TypeBadge";
+
+export type TypeChartGame = {
+  id: string;
+  names: LocalizedNames;
+  dexLimit: number;
+  generation: number;
+  spriteSet: string;
+};
+
+// Same per-device preference as the Pokédex table - picking a game on one
+// static page carries over to the other.
+const GAME_STORAGE_KEY = "nuzlocke:pokedexGame";
 
 const EMPTY_LOCKS = new Set<number>();
 
@@ -38,22 +56,49 @@ function matrixCellStyle(multiplier: number): { text: string; className: string 
 }
 
 export function TypeEffectivenessView({
-  pokemonList,
-  table,
+  pokemonList: allPokemon,
+  games,
+  tables,
 }: {
   pokemonList: Pokemon[];
-  table: EffectivenessTable;
+  games: TypeChartGame[];
+  // Gen 1 has its own chart; gens 2-5 share the standard one.
+  tables: { gen1: EffectivenessTable; standard: EffectivenessTable };
 }) {
   const { lang } = useLanguage();
   const t = translations[lang].typen;
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
-  const selected = pokemonList.find((p) => p.id === selectedId) ?? null;
+  const [gameId, setGameId] = useState(games[0]?.id ?? "");
+  useEffect(() => {
+    const stored = localStorage.getItem(GAME_STORAGE_KEY);
+    if (stored && games.some((g) => g.id === stored)) setGameId(stored);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const multipliers = useMemo(
-    () => (selected ? computeDefenseMultipliers(table, selected.types) : null),
-    [table, selected],
-  );
+  function handleGameChange(next: string) {
+    setGameId(next);
+    localStorage.setItem(GAME_STORAGE_KEY, next);
+  }
+
+  const game = games.find((g) => g.id === gameId) ?? games[0];
+  const generation = game?.generation ?? 3;
+  const table = generation === 1 ? tables.gen1 : tables.standard;
+  const typeList = getTypesForGeneration(generation);
+  // Plain filter per render - the React Compiler memoizes this on its own
+  // (a manual useMemo here defeats its analysis and gets flagged).
+  const dexLimit = game?.dexLimit ?? Infinity;
+  const pokemonList = allPokemon.filter((p) => p.id <= dexLimit);
+
+  const selectedRaw = pokemonList.find((p) => p.id === selectedId) ?? null;
+  const selected = selectedRaw
+    ? { ...selectedRaw, types: typesForGeneration(selectedRaw.id, selectedRaw.types, generation) }
+    : null;
+
+  // Cheap enough (17x2 lookups) to compute per render.
+  const multipliers = selected
+    ? computeDefenseMultipliers(table, selected.types, typeList)
+    : null;
 
   const groupLabels: Record<(typeof MULTIPLIER_GROUPS)[number], string> = {
     4: t.weak4,
@@ -68,17 +113,31 @@ export function TypeEffectivenessView({
     defenderTypes !== null && !defenderTypes.includes(defenseType);
 
   return (
+    <SpriteSetProvider spriteSet={game?.spriteSet ?? "emerald"}>
     <div>
       <h2 className="mb-4 text-xl font-semibold">{t.heading}</h2>
 
-      <div className="mb-4 max-w-sm">
-        <PokemonCombobox
-          lang={lang}
-          pokemonList={pokemonList}
-          selectedId={selectedId}
-          onSelect={setSelectedId}
-          lockedFamilyIds={EMPTY_LOCKS}
-        />
+      <div className="mb-4 flex flex-wrap items-center gap-2">
+        <select
+          value={gameId}
+          onChange={(e) => handleGameChange(e.target.value)}
+          className="rounded-md border border-zinc-200 bg-white px-2 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+        >
+          {games.map((g) => (
+            <option key={g.id} value={g.id}>
+              {localizeName(g.names, lang)}
+            </option>
+          ))}
+        </select>
+        <div className="max-w-sm flex-1">
+          <PokemonCombobox
+            lang={lang}
+            pokemonList={pokemonList}
+            selectedId={selected ? selectedId : null}
+            onSelect={setSelectedId}
+            lockedFamilyIds={EMPTY_LOCKS}
+          />
+        </div>
       </div>
 
       {multipliers === null ? (
@@ -87,7 +146,7 @@ export function TypeEffectivenessView({
         <div className="mb-6 max-w-xl rounded-lg border border-zinc-200 p-4 dark:border-zinc-800">
           <div className="flex flex-col gap-2.5">
             {MULTIPLIER_GROUPS.map((group) => {
-              const types = GEN3_TYPES.filter((attack) => multipliers[attack] === group);
+              const types = typeList.filter((attack) => multipliers[attack] === group);
               if (types.length === 0) return null;
               return (
                 <div key={group} className="flex flex-wrap items-center gap-x-3 gap-y-1">
@@ -116,7 +175,7 @@ export function TypeEffectivenessView({
                   <div>{t.attack} ↓</div>
                 </div>
               </th>
-              {GEN3_TYPES.map((defense) => (
+              {typeList.map((defense) => (
                 <th key={defense} className="p-0">
                   <TypeAbbrev type={defense} lang={lang} dimmed={isDimmed(defense)} />
                 </th>
@@ -124,12 +183,12 @@ export function TypeEffectivenessView({
             </tr>
           </thead>
           <tbody>
-            {GEN3_TYPES.map((attack) => (
+            {typeList.map((attack) => (
               <tr key={attack}>
                 <th className="p-0 pr-1 text-right">
                   <TypeAbbrev type={attack} lang={lang} dimmed={false} />
                 </th>
-                {GEN3_TYPES.map((defense) => {
+                {typeList.map((defense) => {
                   const { text, className } = matrixCellStyle(
                     singleTypeMultiplier(table, attack, defense),
                   );
@@ -150,5 +209,6 @@ export function TypeEffectivenessView({
         </table>
       </div>
     </div>
+    </SpriteSetProvider>
   );
 }

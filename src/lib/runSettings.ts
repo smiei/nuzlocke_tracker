@@ -8,9 +8,12 @@ export type RunSettings = {
   // Show nickname inputs and render nicknames on cards. Data is kept when
   // toggled off, so flipping the rule is lossless.
   nicknames: boolean;
-  // Apply data/evolution-overrides.json (ROM/randomizer evolution changes,
-  // e.g. "change impossible evolutions"). Off = vanilla methods.
-  evolutionOverrides: boolean;
+  // The game pack's evolution-overrides.json mirrors PokeRandoZX's two
+  // separate randomizer options, so they toggle separately: entries tagged
+  // category "impossible" ("Change Impossible Evolutions" - trade & co.
+  // replaced) vs. "easier" ("Make Evolutions Easier" - lowered levels).
+  evolutionOverridesImpossible: boolean;
+  evolutionOverridesEasier: boolean;
   // Show static locations (gifts, fossils, legendaries) on the Encounter tab.
   statics: boolean;
   // Statics don't count towards / trigger the Species Clause (today's fixed
@@ -23,7 +26,8 @@ export type RunSettings = {
 export const DEFAULT_RUN_SETTINGS: RunSettings = {
   speciesClause: true,
   nicknames: true,
-  evolutionOverrides: true,
+  evolutionOverridesImpossible: true,
+  evolutionOverridesEasier: true,
   statics: true,
   staticsExemptFromClause: true,
 };
@@ -42,6 +46,14 @@ export function parseRunSettings(json: string): RunSettings {
   if (typeof raw !== "object" || raw === null) return { ...DEFAULT_RUN_SETTINGS };
 
   const settings = { ...DEFAULT_RUN_SETTINGS };
+  // Legacy: a single `evolutionOverrides` toggle existed before the split -
+  // carry a stored value over to both new toggles (explicit new keys below
+  // still win).
+  const legacy = (raw as Record<string, unknown>).evolutionOverrides;
+  if (typeof legacy === "boolean") {
+    settings.evolutionOverridesImpossible = legacy;
+    settings.evolutionOverridesEasier = legacy;
+  }
   for (const key of RUN_SETTING_KEYS) {
     const value = (raw as Record<string, unknown>)[key];
     if (typeof value === "boolean") settings[key] = value;

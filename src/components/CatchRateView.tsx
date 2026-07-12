@@ -7,6 +7,7 @@ import { getBallIdsForGeneration, STATUS_IDS, computeCatchChance } from "@/lib/c
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import { translations } from "@/lib/i18n/dictionary";
 import { pokemonName } from "@/lib/i18n/localize";
+import { typesForGeneration } from "@/lib/pokemonTypes";
 import { PokemonCombobox } from "@/components/PokemonCombobox";
 import { PokemonSprite } from "@/components/PokemonSprite";
 import { TypeBadge } from "@/components/TypeBadge";
@@ -139,6 +140,9 @@ export function CatchRateView({
   const selected = pokemonList.find((p) => p.id === selectedId) ?? null;
   const baseRate = selected ? catchRates[selected.id] : undefined;
   const isLocked = selected ? lockedFamilies.has(selected.family_id) : false;
+  const selectedTypes = selected
+    ? typesForGeneration(selected.id, selected.types, generation)
+    : [];
 
   const result =
     selected && baseRate !== undefined
@@ -148,7 +152,7 @@ export function CatchRateView({
           level,
           ball,
           status,
-          types: selected.types,
+          types: selectedTypes,
           turn,
         })
       : null;
@@ -276,7 +280,7 @@ export function CatchRateView({
               <div>
                 <div className="mb-1 flex items-center gap-2">
                   <span className="font-medium">{pokemonName(selected, lang)}</span>
-                  {selected.types.map((type) => (
+                  {selectedTypes.map((type) => (
                     <TypeBadge key={type} type={type} lang={lang} />
                   ))}
                 </div>

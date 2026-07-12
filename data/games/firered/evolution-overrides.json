@@ -6,7 +6,8 @@
     "method": {
       "kind": "level",
       "level": 37
-    }
+    },
+    "category": "impossible"
   },
   {
     "from": 64,
@@ -15,7 +16,8 @@
     "method": {
       "kind": "level",
       "level": 37
-    }
+    },
+    "category": "impossible"
   },
   {
     "from": 67,
@@ -24,7 +26,8 @@
     "method": {
       "kind": "level",
       "level": 37
-    }
+    },
+    "category": "impossible"
   },
   {
     "from": 75,
@@ -33,7 +36,8 @@
     "method": {
       "kind": "level",
       "level": 37
-    }
+    },
+    "category": "impossible"
   },
   {
     "from": 79,
@@ -42,7 +46,8 @@
     "method": {
       "kind": "item",
       "item": "water-stone"
-    }
+    },
+    "category": "impossible"
   },
   {
     "from": 93,
@@ -51,7 +56,8 @@
     "method": {
       "kind": "level",
       "level": 37
-    }
+    },
+    "category": "impossible"
   },
   {
     "from": 95,
@@ -60,7 +66,8 @@
     "method": {
       "kind": "level",
       "level": 30
-    }
+    },
+    "category": "impossible"
   },
   {
     "from": 117,
@@ -69,7 +76,8 @@
     "method": {
       "kind": "level",
       "level": 40
-    }
+    },
+    "category": "impossible"
   },
   {
     "from": 123,
@@ -78,7 +86,8 @@
     "method": {
       "kind": "level",
       "level": 30
-    }
+    },
+    "category": "impossible"
   },
   {
     "from": 133,
@@ -87,7 +96,8 @@
     "method": {
       "kind": "item",
       "item": "sun-stone"
-    }
+    },
+    "category": "impossible"
   },
   {
     "from": 133,
@@ -96,7 +106,8 @@
     "method": {
       "kind": "item",
       "item": "moon-stone"
-    }
+    },
+    "category": "impossible"
   },
   {
     "from": 137,
@@ -105,7 +116,8 @@
     "method": {
       "kind": "level",
       "level": 30
-    }
+    },
+    "category": "impossible"
   },
   {
     "from": 349,
@@ -114,7 +126,8 @@
     "method": {
       "kind": "level",
       "level": 35
-    }
+    },
+    "category": "impossible"
   },
   {
     "from": 366,
@@ -123,7 +136,8 @@
     "method": {
       "kind": "level",
       "level": 30
-    }
+    },
+    "category": "impossible"
   },
   {
     "from": 366,
@@ -132,7 +146,8 @@
     "method": {
       "kind": "item",
       "item": "water-stone"
-    }
+    },
+    "category": "impossible"
   },
   {
     "from": 111,
@@ -141,7 +156,8 @@
     "method": {
       "kind": "level",
       "level": 40
-    }
+    },
+    "category": "easier"
   },
   {
     "from": 116,
@@ -150,7 +166,8 @@
     "method": {
       "kind": "level",
       "level": 30
-    }
+    },
+    "category": "easier"
   },
   {
     "from": 148,
@@ -159,7 +176,8 @@
     "method": {
       "kind": "level",
       "level": 40
-    }
+    },
+    "category": "easier"
   },
   {
     "from": 247,
@@ -168,7 +186,8 @@
     "method": {
       "kind": "level",
       "level": 40
-    }
+    },
+    "category": "easier"
   },
   {
     "from": 304,
@@ -177,7 +196,8 @@
     "method": {
       "kind": "level",
       "level": 30
-    }
+    },
+    "category": "easier"
   },
   {
     "from": 305,
@@ -186,7 +206,8 @@
     "method": {
       "kind": "level",
       "level": 40
-    }
+    },
+    "category": "easier"
   },
   {
     "from": 328,
@@ -195,7 +216,8 @@
     "method": {
       "kind": "level",
       "level": 30
-    }
+    },
+    "category": "easier"
   },
   {
     "from": 329,
@@ -204,7 +226,8 @@
     "method": {
       "kind": "level",
       "level": 40
-    }
+    },
+    "category": "easier"
   },
   {
     "from": 361,
@@ -213,7 +236,8 @@
     "method": {
       "kind": "level",
       "level": 40
-    }
+    },
+    "category": "easier"
   },
   {
     "from": 363,
@@ -222,7 +246,8 @@
     "method": {
       "kind": "level",
       "level": 30
-    }
+    },
+    "category": "easier"
   },
   {
     "from": 364,
@@ -231,7 +256,8 @@
     "method": {
       "kind": "level",
       "level": 40
-    }
+    },
+    "category": "easier"
   },
   {
     "from": 372,
@@ -240,7 +266,8 @@
     "method": {
       "kind": "level",
       "level": 40
-    }
+    },
+    "category": "easier"
   },
   {
     "from": 375,
@@ -249,6 +276,7 @@
     "method": {
       "kind": "level",
       "level": 40
-    }
+    },
+    "category": "easier"
   }
 ]

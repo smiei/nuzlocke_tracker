@@ -181,10 +181,15 @@ const de = {
         description:
           "Eingabefeld im Encounter-Tab; Karten im Pokémon-Tab zeigen den Spitznamen an.",
       },
-      evolutionOverrides: {
-        label: "Angepasste Entwicklungsmethoden (ROM/Randomizer)",
+      evolutionOverridesImpossible: {
+        label: "Randomizer: Unmögliche Entwicklungen geändert",
         description:
-          "Wendet evolution-overrides.json an, z. B. geänderte Tausch-Entwicklungen. Aus = Original-Methoden.",
+          "Ersetzte Tausch- & Co.-Entwicklungen aus evolution-overrides.json (z. B. Kadabra → ab Level 37). Aus = Original-Methoden.",
+      },
+      evolutionOverridesEasier: {
+        label: "Randomizer: Entwicklungen erleichtert",
+        description:
+          "Gesenkte Entwicklungslevel aus evolution-overrides.json (z. B. Dragonir → ab Level 40). Aus = Original-Level.",
       },
       statics: {
         label: "Static-Encounter",
@@ -465,10 +470,15 @@ const en: Dictionary = {
         description:
           "Input field on the Encounter tab; cards on the Pokémon tab show the nickname.",
       },
-      evolutionOverrides: {
-        label: "Modified evolution methods (ROM/randomizer)",
+      evolutionOverridesImpossible: {
+        label: "Randomizer: impossible evolutions changed",
         description:
-          "Applies evolution-overrides.json, e.g. changed trade evolutions. Off = vanilla methods.",
+          "Replaced trade & co. evolutions from evolution-overrides.json (e.g. Kadabra → at level 37). Off = vanilla methods.",
+      },
+      evolutionOverridesEasier: {
+        label: "Randomizer: evolutions made easier",
+        description:
+          "Lowered evolution levels from evolution-overrides.json (e.g. Dragonair → at level 40). Off = vanilla levels.",
       },
       statics: {
         label: "Static encounters",
@@ -749,10 +759,15 @@ const fr: Dictionary = {
         description:
           "Champ de saisie dans l'onglet Rencontres ; les cartes de l'onglet Pokémon affichent le surnom.",
       },
-      evolutionOverrides: {
-        label: "Méthodes d'évolution modifiées (ROM/randomizer)",
+      evolutionOverridesImpossible: {
+        label: "Randomizer : évolutions impossibles modifiées",
         description:
-          "Applique evolution-overrides.json, p. ex. des évolutions par échange modifiées. Désactivé = méthodes d'origine.",
+          "Évolutions par échange etc. remplacées selon evolution-overrides.json (p. ex. Kadabra → au niveau 37). Désactivé = méthodes d'origine.",
+      },
+      evolutionOverridesEasier: {
+        label: "Randomizer : évolutions facilitées",
+        description:
+          "Niveaux d'évolution abaissés selon evolution-overrides.json (p. ex. Draco → au niveau 40). Désactivé = niveaux d'origine.",
       },
       statics: {
         label: "Rencontres statiques",
@@ -1034,10 +1049,15 @@ const es: Dictionary = {
         description:
           "Campo de texto en la pestaña Encuentros; las tarjetas de la pestaña Pokémon muestran el mote.",
       },
-      evolutionOverrides: {
-        label: "Métodos de evolución modificados (ROM/randomizer)",
+      evolutionOverridesImpossible: {
+        label: "Randomizer: evoluciones imposibles cambiadas",
         description:
-          "Aplica evolution-overrides.json, p. ej. evoluciones por intercambio cambiadas. Desactivado = métodos originales.",
+          "Evoluciones por intercambio, etc., reemplazadas según evolution-overrides.json (p. ej. Kadabra → al nivel 37). Desactivado = métodos originales.",
+      },
+      evolutionOverridesEasier: {
+        label: "Randomizer: evoluciones facilitadas",
+        description:
+          "Niveles de evolución reducidos según evolution-overrides.json (p. ej. Dragonair → al nivel 40). Desactivado = niveles originales.",
       },
       statics: {
         label: "Encuentros estáticos",
@@ -1319,10 +1339,15 @@ const it: Dictionary = {
         description:
           "Campo di testo nella scheda Incontri; le carte della scheda Pokémon mostrano il soprannome.",
       },
-      evolutionOverrides: {
-        label: "Metodi di evoluzione modificati (ROM/randomizer)",
+      evolutionOverridesImpossible: {
+        label: "Randomizer: evoluzioni impossibili modificate",
         description:
-          "Applica evolution-overrides.json, ad es. evoluzioni per scambio modificate. Disattivato = metodi originali.",
+          "Evoluzioni per scambio ecc. sostituite secondo evolution-overrides.json (es. Kadabra → al livello 37). Disattivato = metodi originali.",
+      },
+      evolutionOverridesEasier: {
+        label: "Randomizer: evoluzioni facilitate",
+        description:
+          "Livelli di evoluzione ridotti secondo evolution-overrides.json (es. Dragonair → al livello 40). Disattivato = livelli originali.",
       },
       statics: {
         label: "Incontri statici",

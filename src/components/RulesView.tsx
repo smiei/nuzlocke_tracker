@@ -57,7 +57,8 @@ const TOGGLE_ORDER: (keyof RunSettings)[] = [
   "speciesClause",
   "staticsExemptFromClause",
   "nicknames",
-  "evolutionOverrides",
+  "evolutionOverridesImpossible",
+  "evolutionOverridesEasier",
   "statics",
 ];
 

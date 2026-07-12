@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { getEffectiveness, getGameOrDefault, getPokemonById } from "@/lib/data";
 import { getTypesForGeneration } from "@/lib/effectiveness";
+import { typesForGeneration } from "@/lib/pokemonTypes";
 import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
 import { getLang } from "@/lib/i18n/getLang";
@@ -44,7 +45,7 @@ export default async function WeaknessesPage({
         encounterId: e.id,
         pokemonId: e.currentPokemonId,
         name: pokemonName(pokemon, lang),
-        types: pokemon.types,
+        types: typesForGeneration(e.currentPokemonId, pokemon.types, game.generation),
       });
     }
   }
