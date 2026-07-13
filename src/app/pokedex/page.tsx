@@ -4,6 +4,7 @@ import { resolveRunId } from "@/lib/runs";
 import { getLang } from "@/lib/i18n/getLang";
 import { translations } from "@/lib/i18n/dictionary";
 import { PokedexTable } from "@/components/PokedexTable";
+import { PokemonDetailProvider } from "@/components/PokemonDetailProvider";
 import { SpriteSetProvider } from "@/components/SpriteSetProvider";
 
 // Run-scoped: the Pokédex reflects the current run's game (dex scope, sprites,
@@ -31,16 +32,19 @@ export default async function PokedexPage({
 
   return (
     <SpriteSetProvider spriteSet={game.spriteSet}>
-      <div>
-        <h2 className="mb-4 text-xl font-semibold">{translations[lang].pokedex.heading}</h2>
-        <PokedexTable
-          pokemon={pokemon}
-          evolutions={evolutions}
-          learnset={learnset}
-          generation={game.generation}
-          dexLimit={game.dexLimit}
-        />
-      </div>
+      <PokemonDetailProvider
+        pokemonList={pokemon}
+        evolutions={evolutions}
+        learnset={learnset}
+        generation={game.generation}
+        dexLimit={game.dexLimit}
+        lang={lang}
+      >
+        <div>
+          <h2 className="mb-4 text-xl font-semibold">{translations[lang].pokedex.heading}</h2>
+          <PokedexTable pokemon={pokemon} />
+        </div>
+      </PokemonDetailProvider>
     </SpriteSetProvider>
   );
 }

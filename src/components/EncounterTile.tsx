@@ -5,6 +5,7 @@ import type { Lang } from "@/lib/i18n/dictionary";
 import { translations } from "@/lib/i18n/dictionary";
 import { TypeBadge } from "@/components/TypeBadge";
 import { PokemonSprite } from "@/components/PokemonSprite";
+import { usePokemonDetail } from "@/components/PokemonDetailProvider";
 
 // One Pokémon's display inside a link/team card: sprite on the left, the
 // description (name, types, player/static line, rank·BST) and any extra
@@ -25,18 +26,31 @@ export function EncounterTile({
   children?: React.ReactNode;
 }) {
   const t = translations[lang];
+  const detail = usePokemonDetail();
   const infoParts = [
     ...(!isClassic ? [t.player[encounter.player]] : []),
     ...(encounter.isStatic ? [t.links.staticTag] : []),
   ];
   return (
     <div className="flex w-full items-center gap-3">
-      <PokemonSprite
-        pokemonId={encounter.pokemonId}
-        name={encounter.pokemonName}
-        size="xl"
-        className="shrink-0"
-      />
+      {detail ? (
+        <button
+          type="button"
+          onClick={() => detail.open(encounter.pokemonId)}
+          title={encounter.pokemonName}
+          aria-label={encounter.pokemonName}
+          className="shrink-0 cursor-pointer rounded transition-opacity hover:opacity-80"
+        >
+          <PokemonSprite pokemonId={encounter.pokemonId} name={encounter.pokemonName} size="xl" />
+        </button>
+      ) : (
+        <PokemonSprite
+          pokemonId={encounter.pokemonId}
+          name={encounter.pokemonName}
+          size="xl"
+          className="shrink-0"
+        />
+      )}
       <div className="flex min-w-0 flex-col items-start gap-1 text-left">
         <span
           className={`font-medium ${isDead ? "text-zinc-400 line-through dark:text-zinc-600" : ""}`}

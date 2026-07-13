@@ -5,9 +5,12 @@ import {
   getPokemonById,
   getPokemonList,
   getEvolutionById,
+  getEvolutions,
+  getLearnset,
   getLevelCaps,
 } from "@/lib/data";
 import { SpriteSetProvider } from "@/components/SpriteSetProvider";
+import { PokemonDetailProvider } from "@/components/PokemonDetailProvider";
 import { computePokemonRanks } from "@/lib/ranking";
 import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
@@ -125,7 +128,16 @@ export default async function LinksPage({
     <div>
       <h2 className="mb-4 text-xl font-semibold">{heading}</h2>
       <SpriteSetProvider spriteSet={game.spriteSet}>
-        <LinksView runId={runId} mode={mode} lang={lang} soulLinks={views} />
+        <PokemonDetailProvider
+          pokemonList={getPokemonList(game.dexLimit)}
+          evolutions={getEvolutions(evoOptions)}
+          learnset={getLearnset(game.versionGroup)}
+          generation={game.generation}
+          dexLimit={game.dexLimit}
+          lang={lang}
+        >
+          <LinksView runId={runId} mode={mode} lang={lang} soulLinks={views} />
+        </PokemonDetailProvider>
       </SpriteSetProvider>
     </div>
   );

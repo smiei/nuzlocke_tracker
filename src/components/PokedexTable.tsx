@@ -1,15 +1,14 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { Pokemon, EvolutionEntry } from "@/lib/data";
-import type { Learnset } from "@/lib/learnset";
+import type { Pokemon } from "@/lib/data";
 import { computePokemonRanks } from "@/lib/ranking";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import { translations, type Lang } from "@/lib/i18n/dictionary";
 import { pokemonName } from "@/lib/i18n/localize";
 import { TypeBadge } from "@/components/TypeBadge";
 import { PokemonSprite } from "@/components/PokemonSprite";
-import { PokemonDetailModal } from "@/components/PokemonDetailModal";
+import { usePokemonDetail } from "@/components/PokemonDetailProvider";
 
 type ColumnKey =
   | "id"
@@ -44,21 +43,9 @@ function getSortValue(
   }
 }
 
-export function PokedexTable({
-  pokemon,
-  evolutions,
-  learnset,
-  generation,
-  dexLimit,
-}: {
-  // Already dex-filtered server-side (the page is run-scoped now).
-  pokemon: Pokemon[];
-  evolutions: EvolutionEntry[];
-  learnset: Learnset;
-  generation: number;
-  dexLimit: number;
-}) {
+export function PokedexTable({ pokemon }: { pokemon: Pokemon[] }) {
   const { lang } = useLanguage();
+  const detail = usePokemonDetail();
   const t = translations[lang].pokedex;
   const columns = t.columns;
 
@@ -81,7 +68,6 @@ export function PokedexTable({
   const [search, setSearch] = useState("");
   const [suggestionsOpen, setSuggestionsOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<number | null>(null);
-  const [detailId, setDetailId] = useState<number | null>(null);
   const searchRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -201,7 +187,7 @@ export function PokedexTable({
                 <tr
                   key={p.id}
                   id={`pokemon-row-${p.id}`}
-                  onClick={() => setDetailId(p.id)}
+                  onClick={() => detail?.open(p.id)}
                   className={`cursor-pointer border-b border-zinc-100 last:border-0 hover:bg-zinc-50 dark:border-zinc-900 dark:hover:bg-zinc-800/50 ${
                     isSelected
                       ? "bg-blue-50 ring-1 ring-inset ring-blue-400 dark:bg-blue-950/40"
@@ -254,23 +240,6 @@ export function PokedexTable({
           </tbody>
         </table>
       </div>
-
-      {detailId !== null &&
-        (() => {
-          const p = pokemon.find((x) => x.id === detailId);
-          return p ? (
-            <PokemonDetailModal
-              pokemon={p}
-              allPokemon={pokemon}
-              evolutions={evolutions}
-              learnset={learnset}
-              generation={generation}
-              dexLimit={dexLimit}
-              lang={lang}
-              onClose={() => setDetailId(null)}
-            />
-          ) : null;
-        })()}
     </div>
   );
 }

@@ -1,5 +1,12 @@
 import { redirect } from "next/navigation";
-import { getCatchRates, getGameOrDefault, getPokemonList, getRoutes } from "@/lib/data";
+import {
+  getCatchRates,
+  getEvolutions,
+  getGameOrDefault,
+  getLearnset,
+  getPokemonList,
+  getRoutes,
+} from "@/lib/data";
 import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
 import { getLang } from "@/lib/i18n/getLang";
@@ -7,6 +14,7 @@ import { routeName } from "@/lib/i18n/localize";
 import { Player, RunMode } from "@/generated/prisma/client";
 import { CatchRateView, type OpenSlot } from "@/components/CatchRateView";
 import { SpriteSetProvider } from "@/components/SpriteSetProvider";
+import { PokemonDetailProvider } from "@/components/PokemonDetailProvider";
 
 export const dynamic = "force-dynamic";
 
@@ -47,17 +55,32 @@ export default async function CatchratePage({
     }
   }
 
+  const pokemonList = getPokemonList(game.dexLimit);
+
   return (
     <SpriteSetProvider spriteSet={game.spriteSet}>
-      <CatchRateView
-        runId={runId}
-        mode={mode}
-        pokemonList={getPokemonList(game.dexLimit)}
-        catchRates={catchRates}
-        lockedFamilyIds={lockedFamilyIds}
+      <PokemonDetailProvider
+        pokemonList={pokemonList}
+        evolutions={getEvolutions({
+          gameId,
+          impossible: settings.evolutionOverridesImpossible,
+          easier: settings.evolutionOverridesEasier,
+        })}
+        learnset={getLearnset(game.versionGroup)}
         generation={game.generation}
-        openSlots={openSlots}
-      />
+        dexLimit={game.dexLimit}
+        lang={lang}
+      >
+        <CatchRateView
+          runId={runId}
+          mode={mode}
+          pokemonList={pokemonList}
+          catchRates={catchRates}
+          lockedFamilyIds={lockedFamilyIds}
+          generation={game.generation}
+          openSlots={openSlots}
+        />
+      </PokemonDetailProvider>
     </SpriteSetProvider>
   );
 }

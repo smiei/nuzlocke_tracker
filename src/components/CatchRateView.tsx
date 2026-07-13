@@ -13,6 +13,7 @@ import { translations } from "@/lib/i18n/dictionary";
 import { pokemonName } from "@/lib/i18n/localize";
 import { typesForGeneration } from "@/lib/pokemonTypes";
 import { PokemonCombobox } from "@/components/PokemonCombobox";
+import { PokemonInfoButton } from "@/components/PokemonDetailProvider";
 import { PokemonSprite } from "@/components/PokemonSprite";
 import { TypeBadge } from "@/components/TypeBadge";
 
@@ -222,13 +223,21 @@ export function CatchRateView({
 
       <div className="max-w-xl rounded-lg border border-zinc-200 p-4 dark:border-zinc-800">
         <div className="mb-4">
-          <PokemonCombobox
-            lang={lang}
-            pokemonList={pokemonList}
-            selectedId={selectedId}
-            onSelect={setSelectedId}
-            lockedFamilyIds={lockedFamilies}
-          />
+          <div className="flex items-center gap-2">
+            <div className="min-w-0 flex-1">
+              <PokemonCombobox
+                lang={lang}
+                pokemonList={pokemonList}
+                selectedId={selectedId}
+                onSelect={setSelectedId}
+                lockedFamilyIds={lockedFamilies}
+              />
+            </div>
+            <PokemonInfoButton
+              pokemonId={selectedId}
+              label={selected ? pokemonName(selected, lang) : ""}
+            />
+          </div>
           {isLocked && (
             <p className="mt-2 text-xs text-amber-600 dark:text-amber-400">⚠ {t.lockWarning}</p>
           )}

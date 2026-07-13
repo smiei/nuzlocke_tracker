@@ -67,6 +67,7 @@ export function PokemonDetailModal({
 
   const types = typesForGeneration(pokemon.id, pokemon.types, generation);
   const attacks = attackTypesAtLevel(learnset, pokemon.id, 100);
+  const maxBST = generation >= 4 ? 720 : 680;
 
   const evoById = new Map(evolutions.map((e) => [e.id, e]));
   // Walk up to the family's root, then render the whole tree (Eevee & co.
@@ -174,6 +175,13 @@ export function PokemonDetailModal({
             </span>
             <span className="w-8 shrink-0 text-right text-xs font-bold tabular-nums">
               {pokemon.stats.Summe}
+            </span>
+            {/* BST scaled to the generation's cap (720 from Gen 4, else 680). */}
+            <span className="h-2 flex-1 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
+              <span
+                className="block h-full rounded-full bg-zinc-500 dark:bg-zinc-400"
+                style={{ width: `${Math.min(100, (pokemon.stats.Summe / maxBST) * 100)}%` }}
+              />
             </span>
           </div>
         </div>

@@ -11,6 +11,7 @@ import type { Lang } from "@/lib/i18n/dictionary";
 import { translations } from "@/lib/i18n/dictionary";
 import { pokemonName, routeName } from "@/lib/i18n/localize";
 import { PokemonCombobox } from "@/components/PokemonCombobox";
+import { PokemonInfoButton } from "@/components/PokemonDetailProvider";
 import type { RunSettings } from "@/lib/runSettings";
 
 // Colour the status control so a route's outcome is readable at a glance:
@@ -80,6 +81,11 @@ export function EncounterEditor({
   const [nickname, setNickname] = useState(current?.nickname ?? "");
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+
+  const selectedName = (() => {
+    const p = selectedId != null ? pokemonList.find((x) => x.id === selectedId) : null;
+    return p ? pokemonName(p, lang) : "";
+  })();
 
   useEffect(() => {
     setSelectedId(current?.pokemonId ?? null);
@@ -176,6 +182,7 @@ export function EncounterEditor({
       )}
       {selectedId !== null && (
         <div className="flex flex-wrap items-center gap-2 text-xs">
+          <PokemonInfoButton pokemonId={selectedId} label={selectedName} />
           <select
             value={status}
             disabled={pending}
