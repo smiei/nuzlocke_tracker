@@ -7,6 +7,9 @@
 //      -> the Pokédex info card's move list + the self-destruct/explosion warn.
 //  data/moves.json           { slug: { names:{de,en,..}, type, damaging } }
 //      -> localized move names / type / damage-class, shared across games.
+//  data/tm-compat/<vg>.json  { slug: { machine?:{kind,ids}, tutor?:ids } }
+//      -> the TM/HM/tutor tab: which Pokémon can OFFICIALLY learn a move via
+//         machine (kind = "tm"|"hm") or a move tutor, per version group.
 //
 // Approximation: PokeAPI's move `damage_class` is the Gen-4+ view. For the
 // only distinction we need (damaging vs. status) that's stable across gens.
@@ -21,6 +24,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const dataDir = path.join(__dirname, "..", "data");
 const learnsetsDir = path.join(dataDir, "learnsets");
 const movesetsDir = path.join(dataDir, "movesets");
+const tmCompatDir = path.join(dataDir, "tm-compat");
 
 const LANGS = ["de", "en", "fr", "es", "it"];
 
@@ -53,6 +57,11 @@ async function main() {
   const moveCache = new Map();
   const typeLearnsets = new Map([...versionGroups.keys()].map((vg) => [vg, {}]));
   const movesets = new Map([...versionGroups.keys()].map((vg) => [vg, {}]));
+  const tmCompat = new Map([...versionGroups.keys()].map((vg) => [vg, {}]));
+  // TM/HM classification: machine detail url -> "tm"|"hm" (cached globally),
+  // and slug -> { <vg>: "tm"|"hm" } for our version groups (from move.machines).
+  const machineKindCache = new Map();
+  const machineKindBySlug = new Map();
 
   const batchSize = 4;
   for (let id = 1; id <= maxId; id += batchSize) {
@@ -63,18 +72,28 @@ async function main() {
         const mon = await fetchJson(`https://pokeapi.co/api/v2/pokemon/${pid}`);
         for (const m of mon.moves) {
           const slug = m.move.name;
-          // Which of our version groups teach this move by level-up, at what level?
-          const perVg = new Map();
+          // Per our version groups: level-up (min level), machine (TM/HM), tutor.
+          const levelPerVg = new Map();
+          const machineVgs = new Set();
+          const tutorVgs = new Set();
           for (const v of m.version_group_details) {
-            if (v.move_learn_method.name !== "level-up") continue;
             const vg = v.version_group.name;
             if (!movesets.has(vg)) continue;
             if (pid > (versionGroups.get(vg) ?? 0)) continue;
-            const lvl = v.level_learned_at || 1;
-            perVg.set(vg, Math.min(perVg.get(vg) ?? Infinity, lvl));
+            const method = v.move_learn_method.name;
+            if (method === "level-up") {
+              const lvl = v.level_learned_at || 1;
+              levelPerVg.set(vg, Math.min(levelPerVg.get(vg) ?? Infinity, lvl));
+            } else if (method === "machine") {
+              machineVgs.add(vg);
+            } else if (method === "tutor") {
+              tutorVgs.add(vg);
+            }
           }
-          if (perVg.size === 0) continue;
+          if (levelPerVg.size === 0 && machineVgs.size === 0 && tutorVgs.size === 0) continue;
 
+          // Fetch the move once: localized names + type + (for machine moves)
+          // TM-vs-HM per version group from move.machines -> machine.item name.
           if (!moveCache.has(slug)) {
             const move = await fetchJson(m.move.url);
             const names = {};
@@ -87,11 +106,22 @@ async function main() {
               damaging: move.damage_class?.name !== "status",
               names,
             });
+            const kinds = {};
+            for (const mac of move.machines ?? []) {
+              const vg = mac.version_group?.name;
+              if (!movesets.has(vg) || !mac.machine?.url) continue;
+              if (!machineKindCache.has(mac.machine.url)) {
+                const md = await fetchJson(mac.machine.url);
+                machineKindCache.set(mac.machine.url, md.item?.name?.startsWith("hm") ? "hm" : "tm");
+              }
+              kinds[vg] = machineKindCache.get(mac.machine.url);
+            }
+            machineKindBySlug.set(slug, kinds);
           }
           const info = moveCache.get(slug);
 
-          for (const [vg, lvl] of perVg) {
-            // Full moveset (all moves).
+          for (const [vg, lvl] of levelPerVg) {
+            // Full moveset (all level-up moves).
             (movesets.get(vg)[pid] ??= []).push([lvl, slug]);
             // Damaging-type coverage learnset.
             if (info.damaging) {
@@ -99,6 +129,15 @@ async function main() {
               const entry = (table[pid] ??= {});
               entry[info.type] = Math.min(entry[info.type] ?? Infinity, lvl);
             }
+          }
+          for (const vg of machineVgs) {
+            const entry = (tmCompat.get(vg)[slug] ??= {});
+            const kind = machineKindBySlug.get(slug)?.[vg] ?? "tm";
+            (entry.machine ??= { kind, ids: [] }).ids.push(pid);
+          }
+          for (const vg of tutorVgs) {
+            const entry = (tmCompat.get(vg)[slug] ??= {});
+            (entry.tutor ??= []).push(pid);
           }
         }
       }),
@@ -109,6 +148,7 @@ async function main() {
 
   await mkdir(learnsetsDir, { recursive: true });
   await mkdir(movesetsDir, { recursive: true });
+  await mkdir(tmCompatDir, { recursive: true });
 
   for (const [vg, table] of typeLearnsets) {
     const sorted = {};
@@ -131,6 +171,24 @@ async function main() {
     }
     await writeFile(path.join(movesetsDir, `${vg}.json`), JSON.stringify(sorted) + "\n", "utf-8");
     console.log(`movesets/${vg}.json: ${Object.keys(sorted).length} Pokémon`);
+  }
+
+  for (const [vg, table] of tmCompat) {
+    const sorted = {};
+    for (const slug of Object.keys(table).sort()) {
+      const e = table[slug];
+      const out = {};
+      if (e.machine) {
+        // Resolve TM-vs-HM from the now fully-populated per-move map; the kind
+        // captured during the concurrent batch can be stale (see race above).
+        const kind = machineKindBySlug.get(slug)?.[vg] ?? e.machine.kind;
+        out.machine = { kind, ids: e.machine.ids.sort((a, b) => a - b) };
+      }
+      if (e.tutor) out.tutor = e.tutor.sort((a, b) => a - b);
+      sorted[slug] = out;
+    }
+    await writeFile(path.join(tmCompatDir, `${vg}.json`), JSON.stringify(sorted) + "\n", "utf-8");
+    console.log(`tm-compat/${vg}.json: ${Object.keys(sorted).length} moves`);
   }
 
   const moves = {};

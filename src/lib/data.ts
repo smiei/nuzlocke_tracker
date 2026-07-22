@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import type { EffectivenessTable } from "@/lib/effectiveness";
 import type { LocalizedNames } from "@/lib/i18n/localize";
-import type { Learnset, Moveset, MovesTable } from "@/lib/learnset";
+import type { Learnset, Moveset, MovesTable, TmCompatTable } from "@/lib/learnset";
 
 // Static reference data lives in /data as JSON, not in the DB (see project spec).
 // Read fresh from disk on every call (no in-memory caching) so the bind-mounted
@@ -267,6 +267,16 @@ export function getMoveset(versionGroup: string): Moveset {
 export function getMoves(): MovesTable {
   try {
     return readJson<MovesTable>("moves.json");
+  } catch {
+    return {};
+  }
+}
+
+// Official TM/HM/tutor compatibility per version group (move -> learners),
+// for the TM-compatibility tab. Missing file -> {} (tab just shows nothing).
+export function getTmCompat(versionGroup: string): TmCompatTable {
+  try {
+    return readJson<TmCompatTable>(path.join("tm-compat", `${versionGroup}.json`));
   } catch {
     return {};
   }
