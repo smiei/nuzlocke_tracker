@@ -41,11 +41,32 @@ export default async function OverviewPage({
   const game = getGameOrDefault(gameId);
   const lang = await getLang();
 
-  const soulLinks = await prisma.soulLink.findMany({
-    where: { runId },
-    include: { encounters: true },
-    orderBy: { routeId: "asc" },
-  });
+  // A pair only forms if BOTH players catch. If a route has a Fled/Killed
+  // encounter, the pair never formed - the surviving catch is boxed and any
+  // "dead" mark on it must NOT count as a death or show in the Memorial
+  // (mirrors what the Pokémon tab hides). Classic runs never hide anything.
+  const failedRouteIds =
+    mode === RunMode.SOULLINK
+      ? new Set(
+          (
+            await prisma.encounter.findMany({
+              where: {
+                runId,
+                status: { in: [EncounterStatus.FLED, EncounterStatus.KILLED] },
+              },
+              select: { routeId: true },
+            })
+          ).map((e) => e.routeId),
+        )
+      : new Set<number>();
+
+  const soulLinks = (
+    await prisma.soulLink.findMany({
+      where: { runId },
+      include: { encounters: true },
+      orderBy: { routeId: "asc" },
+    })
+  ).filter((link) => !failedRouteIds.has(link.routeId));
   const progress = await prisma.levelCapProgress.findMany({ where: { runId } });
   const evoOptions = {
     gameId,
