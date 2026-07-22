@@ -301,6 +301,16 @@ export function LinksView({
                         {playerLabel(p)}
                       </button>
                     ))}
+                    {/* Mark dead without blaming anyone (deathPlayer stays null;
+                        the Journey scoreboard counts it as unattributed). */}
+                    <button
+                      type="button"
+                      disabled={pendingId === link.id}
+                      onClick={() => handleMarkDead(link.id)}
+                      className="rounded border border-zinc-300 px-2 py-1 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100 disabled:opacity-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                    >
+                      {t.links.noAttribution}
+                    </button>
                   </div>
                 </div>
               )}

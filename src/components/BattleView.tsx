@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import type { Pokemon } from "@/lib/data";
 import type { EffectivenessTable } from "@/lib/effectiveness";
 import { computeDefenseMultipliers, singleTypeMultiplier } from "@/lib/effectiveness";
@@ -121,16 +121,7 @@ function TeamMatchup({
   );
 }
 
-export function BattleView({
-  pokemonList,
-  table,
-  attackTypes,
-  generation,
-  learnset,
-  teams,
-  mode,
-  explosiveMap,
-}: {
+type SharedProps = {
   pokemonList: Pokemon[];
   table: EffectivenessTable;
   // Gen-appropriate attack type list for the matrix (Gen 1 lacks Dark/Steel).
@@ -142,7 +133,13 @@ export function BattleView({
   // Pokémon (by id) that learn self-destruct/explosion, with the localized
   // move name + lowest level (derived server-side from the moveset).
   explosiveMap: Record<number, { name: string; level: number }>;
-}) {
+};
+
+// One independent battle instance: an opponent + level with its stats,
+// defensive weaknesses, the team matchup, and the full type matrix. Several
+// can be open at once (e.g. scouting two trainers), each with its own pick.
+function BattleCard({ shared, onRemove }: { shared: SharedProps; onRemove?: () => void }) {
+  const { pokemonList, table, attackTypes, generation, learnset, teams, mode, explosiveMap } = shared;
   const { lang } = useLanguage();
   const t = translations[lang].typen;
   const playerLabel = usePlayerLabel();
@@ -170,10 +167,19 @@ export function BattleView({
   const hasTeam = teams.some((team) => team.members.length > 0);
 
   return (
-    <div>
-      <h2 className="mb-4 text-xl font-semibold">{t.battleHeading}</h2>
+    <div className="relative rounded-xl border border-zinc-300 p-4 dark:border-zinc-700 sm:p-5">
+      {onRemove && (
+        <button
+          type="button"
+          onClick={onRemove}
+          aria-label="×"
+          className="absolute right-2 top-2 rounded p-1 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
+        >
+          ✕
+        </button>
+      )}
 
-      <div className="mb-4 flex flex-wrap items-end gap-3">
+      <div className={`mb-4 flex flex-wrap items-end gap-3 ${onRemove ? "pr-8" : ""}`}>
         <div className="flex max-w-sm flex-1 items-center gap-2">
           <div className="min-w-0 flex-1">
             <PokemonCombobox
@@ -208,151 +214,204 @@ export function BattleView({
       </div>
 
       {selectedRaw === null ? (
-        <p className="mb-6 text-sm text-zinc-500 dark:text-zinc-400">{t.battleHint}</p>
+        <p className="mb-8 text-sm text-zinc-500 dark:text-zinc-400">{t.battleHint}</p>
       ) : (
-        <div className="mb-6 max-w-2xl space-y-4 rounded-lg border border-zinc-200 p-4 dark:border-zinc-800">
-          {/* Opponent's own types */}
-          <div className="flex flex-wrap items-center gap-2">
-            {opponentTypes.map((type) => (
-              <TypeBadge key={type} type={type} lang={lang} />
-            ))}
-          </div>
-
-          {/* Self-destruct / explosion warning */}
-          {explosive && (
-            <p
-              className={`rounded-md px-2.5 py-1.5 text-sm font-medium ${
-                explosive.level <= level
-                  ? "bg-red-100 text-red-700 dark:bg-red-950/50 dark:text-red-300"
-                  : "bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300"
-              }`}
-            >
-              {t.explosionWarn(explosive.name, explosive.level)}
-            </p>
-          )}
-
-          {/* Opponent's damaging attack types at the chosen level */}
-          <div>
-            <div className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
-              {t.moveTypes} <span className="font-normal normal-case">· {t.damagingOnly}</span>
-            </div>
-            {opponentAttacks.length === 0 ? (
-              <p className="text-xs text-zinc-400 dark:text-zinc-500">—</p>
-            ) : (
-              <div className="flex flex-wrap gap-1.5">
-                {opponentAttacks.map(({ type, level: lvl }) => (
-                  <span key={type} className="inline-flex items-center gap-1">
-                    <TypeBadge type={type} lang={lang} />
-                    <span className="text-[10px] text-zinc-400 dark:text-zinc-500">
-                      {translations[lang].pokedex.detail.level(lvl)}
-                    </span>
-                  </span>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Opponent's defensive profile (what to attack it with) */}
-          {multipliers && (
-            <div className="flex flex-col gap-2 border-t border-zinc-100 pt-3 dark:border-zinc-800">
-              {MULTIPLIER_GROUPS.map((group) => {
-                const types = attackTypes.filter((a) => multipliers[a] === group);
-                if (types.length === 0) return null;
-                return (
-                  <div key={group} className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                    <span className="w-52 shrink-0 text-sm font-medium text-zinc-600 dark:text-zinc-300">
-                      {groupLabels[group]}:
-                    </span>
-                    <div className="flex flex-wrap gap-1">
-                      {types.map((type) => (
-                        <TypeBadge key={type} type={type} lang={lang} />
-                      ))}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Full type matrix (gen-aware), dimmed to the opponent's types */}
-      <div className="overflow-x-auto">
-        <table className="border-separate border-spacing-0.5">
-          <thead>
-            <tr>
-              <th className="pr-2 text-right align-bottom">
-                <div className="text-[10px] font-medium leading-tight text-zinc-400 dark:text-zinc-500">
-                  <div>{t.defense} →</div>
-                  <div>{t.attack} ↓</div>
-                </div>
-              </th>
-              {attackTypes.map((defense) => (
-                <th key={defense} className="p-0">
-                  <TypeAbbrev type={defense} lang={lang} dimmed={isDimmed(defense)} />
-                </th>
+        <div className="mb-8 space-y-4">
+          {/* Stats: the opponent's own types + its damaging attack types. */}
+          <section className="max-w-2xl rounded-lg border border-zinc-200 p-4 dark:border-zinc-800">
+            <h3 className="mb-3 text-sm font-semibold text-zinc-600 dark:text-zinc-300">
+              {t.statsHeading}
+            </h3>
+            <div className="flex flex-wrap items-center gap-2">
+              {opponentTypes.map((type) => (
+                <TypeBadge key={type} type={type} lang={lang} />
               ))}
-            </tr>
-          </thead>
-          <tbody>
-            {attackTypes.map((attack) => (
-              <tr key={attack}>
-                <th className="p-0 pr-1 text-right">
-                  <TypeAbbrev type={attack} lang={lang} dimmed={false} />
-                </th>
-                {attackTypes.map((defense) => {
-                  const { text, className } = matrixCellStyle(singleTypeMultiplier(table, attack, defense));
-                  return (
-                    <td
-                      key={defense}
-                      className={`h-7 w-8 rounded text-center text-xs font-semibold transition-opacity ${className} ${
-                        isDimmed(defense) ? "opacity-25" : ""
-                      }`}
-                    >
-                      {text}
-                    </td>
-                  );
-                })}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </div>
 
-      {/* Team matchup against the opponent's attacks */}
-      {selectedRaw !== null && opponentAttackTypes.length > 0 && (
-        <div className="mt-8">
-          <h3 className="mb-3 text-sm font-semibold text-zinc-600 dark:text-zinc-300">
-            {t.teamMatchup}
-          </h3>
-          {!hasTeam ? (
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">
-              {translations[lang].weaknesses.empty}
-            </p>
-          ) : (
-            <div className="flex flex-col gap-6 xl:flex-row xl:gap-10">
-              {teams.map(
-                (team) =>
-                  team.members.length > 0 && (
-                    <section key={team.player}>
-                      {mode !== "CLASSIC" && (
-                        <h4 className="mb-2 text-xs font-semibold text-zinc-500 dark:text-zinc-400">
-                          {playerLabel(team.player)}
-                        </h4>
-                      )}
-                      <TeamMatchup
-                        members={team.members}
-                        attackTypes={opponentAttackTypes}
-                        table={table}
-                        lang={lang}
-                      />
-                    </section>
-                  ),
+            {/* Self-destruct / explosion warning */}
+            {explosive && (
+              <p
+                className={`mt-3 rounded-md px-2.5 py-1.5 text-sm font-medium ${
+                  explosive.level <= level
+                    ? "bg-red-100 text-red-700 dark:bg-red-950/50 dark:text-red-300"
+                    : "bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300"
+                }`}
+              >
+                {t.explosionWarn(explosive.name, explosive.level)}
+              </p>
+            )}
+
+            {/* Opponent's damaging attack types at the chosen level */}
+            <div className="mt-3 border-t border-zinc-100 pt-3 dark:border-zinc-800">
+              <div className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                {t.moveTypes} <span className="font-normal normal-case">· {t.damagingOnly}</span>
+              </div>
+              {opponentAttacks.length === 0 ? (
+                <p className="text-xs text-zinc-400 dark:text-zinc-500">—</p>
+              ) : (
+                <div className="flex flex-wrap gap-1.5">
+                  {opponentAttacks.map(({ type, level: lvl }) => (
+                    <span key={type} className="inline-flex items-center gap-1">
+                      <TypeBadge type={type} lang={lang} />
+                      <span className="text-[10px] text-zinc-400 dark:text-zinc-500">
+                        {translations[lang].pokedex.detail.level(lvl)}
+                      </span>
+                    </span>
+                  ))}
+                </div>
               )}
             </div>
+          </section>
+
+          {/* Weaknesses as a defender: which attack types to hit it with. */}
+          {multipliers && (
+            <section className="max-w-2xl rounded-lg border border-zinc-200 p-4 dark:border-zinc-800">
+              <h3 className="mb-3 text-sm font-semibold text-zinc-600 dark:text-zinc-300">
+                {t.defenderWeakHeading}
+              </h3>
+              <div className="flex flex-col gap-2">
+                {MULTIPLIER_GROUPS.map((group) => {
+                  const types = attackTypes.filter((a) => multipliers[a] === group);
+                  if (types.length === 0) return null;
+                  return (
+                    <div key={group} className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                      <span className="w-52 shrink-0 text-sm font-medium text-zinc-600 dark:text-zinc-300">
+                        {groupLabels[group]}:
+                      </span>
+                      <div className="flex flex-wrap gap-1">
+                        {types.map((type) => (
+                          <TypeBadge key={type} type={type} lang={lang} />
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
           )}
+
+          {/* Strengths against my team: opponent's attacks vs each member.
+              One card in Classic, one per player in SoulLink. */}
+          {opponentAttackTypes.length > 0 &&
+            (!hasTeam ? (
+              <section className="max-w-2xl rounded-lg border border-zinc-200 p-4 dark:border-zinc-800">
+                <h3 className="mb-3 text-sm font-semibold text-zinc-600 dark:text-zinc-300">
+                  {t.teamStrengthHeading}
+                </h3>
+                <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                  {translations[lang].weaknesses.empty}
+                </p>
+              </section>
+            ) : (
+              <div className="flex flex-col gap-4 xl:flex-row xl:items-start">
+                {teams.map(
+                  (team) =>
+                    team.members.length > 0 && (
+                      <section
+                        key={team.player}
+                        className="rounded-lg border border-zinc-200 p-4 dark:border-zinc-800"
+                      >
+                        <h3 className="mb-3 text-sm font-semibold text-zinc-600 dark:text-zinc-300">
+                          {t.teamStrengthHeading}
+                          {mode !== "CLASSIC" && (
+                            <span className="ml-2 font-normal text-zinc-400 dark:text-zinc-500">
+                              · {playerLabel(team.player)}
+                            </span>
+                          )}
+                        </h3>
+                        <TeamMatchup
+                          members={team.members}
+                          attackTypes={opponentAttackTypes}
+                          table={table}
+                          lang={lang}
+                        />
+                      </section>
+                    ),
+                )}
+              </div>
+            ))}
         </div>
       )}
+
+      {/* Full type matrix (gen-aware) at the very bottom, dimmed to the opponent. */}
+      <section>
+        <h3 className="mb-3 text-sm font-semibold text-zinc-600 dark:text-zinc-300">
+          {t.matrixHeading}
+        </h3>
+        <div className="overflow-x-auto">
+          <table className="border-separate border-spacing-0.5">
+            <thead>
+              <tr>
+                <th className="pr-2 text-right align-bottom">
+                  <div className="text-[10px] font-medium leading-tight text-zinc-400 dark:text-zinc-500">
+                    <div>{t.defense} →</div>
+                    <div>{t.attack} ↓</div>
+                  </div>
+                </th>
+                {attackTypes.map((defense) => (
+                  <th key={defense} className="p-0">
+                    <TypeAbbrev type={defense} lang={lang} dimmed={isDimmed(defense)} />
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {attackTypes.map((attack) => (
+                <tr key={attack}>
+                  <th className="p-0 pr-1 text-right">
+                    <TypeAbbrev type={attack} lang={lang} dimmed={false} />
+                  </th>
+                  {attackTypes.map((defense) => {
+                    const { text, className } = matrixCellStyle(singleTypeMultiplier(table, attack, defense));
+                    return (
+                      <td
+                        key={defense}
+                        className={`h-7 w-8 rounded text-center text-xs font-semibold transition-opacity ${className} ${
+                          isDimmed(defense) ? "opacity-25" : ""
+                        }`}
+                      >
+                        {text}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+export function BattleView(props: SharedProps) {
+  const { lang } = useLanguage();
+  const t = translations[lang].typen;
+
+  // Independent, ephemeral battle cards - add one per opponent you want to
+  // compare (e.g. two trainers, or both players scouting different mons).
+  const [cards, setCards] = useState<number[]>([0]);
+  const nextId = useRef(1);
+
+  return (
+    <div>
+      <h2 className="mb-4 text-xl font-semibold">{t.battleHeading}</h2>
+      <div className="flex flex-col gap-5">
+        {cards.map((id) => (
+          <BattleCard
+            key={id}
+            shared={props}
+            onRemove={cards.length > 1 ? () => setCards((c) => c.filter((x) => x !== id)) : undefined}
+          />
+        ))}
+      </div>
+      <button
+        type="button"
+        onClick={() => setCards((c) => [...c, nextId.current++])}
+        className="mt-4 flex w-full items-center justify-center gap-1.5 rounded-xl border border-dashed border-zinc-300 px-3 py-3 text-sm font-medium text-zinc-500 transition-colors hover:border-zinc-400 hover:bg-zinc-50 hover:text-zinc-700 dark:border-zinc-700 dark:text-zinc-400 dark:hover:border-zinc-600 dark:hover:bg-zinc-900 dark:hover:text-zinc-200"
+      >
+        <span className="text-lg leading-none">+</span> {t.addCard}
+      </button>
     </div>
   );
 }

@@ -15,6 +15,10 @@ import { PokemonCombobox } from "@/components/PokemonCombobox";
 import { PokemonInfoButton } from "@/components/PokemonDetailProvider";
 import type { RunSettings } from "@/lib/runSettings";
 
+// In-game nicknames are capped at 10 characters; the input enforces this and
+// shows a live counter (the server slices to the same length as a safety net).
+const NICKNAME_MAX = 10;
+
 // Colour the status control so a route's outcome is readable at a glance:
 // green = caught, red = killed, amber = fled.
 const STATUS_STYLES: Record<EncounterStatus, string> = {
@@ -81,6 +85,7 @@ export function EncounterEditor({
   const [selectedId, setSelectedId] = useState<number | null>(current?.pokemonId ?? null);
   const [status, setStatus] = useState<EncounterStatus>(current?.status ?? EncounterStatus.CAUGHT);
   const [nickname, setNickname] = useState(current?.nickname ?? "");
+  const [nickFocused, setNickFocused] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
@@ -217,20 +222,39 @@ export function EncounterEditor({
             ))}
           </select>
           {settings.nicknames && (
-            <input
-              type="text"
-              value={nickname}
-              disabled={pending}
-              maxLength={20}
-              placeholder={t.tracker.nicknamePlaceholder}
-              aria-label={t.tracker.nicknameLabel}
-              onChange={(e) => setNickname(e.target.value)}
-              onBlur={commitNickname}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") e.currentTarget.blur();
-              }}
-              className="w-28 rounded border border-zinc-300 bg-white px-1.5 py-1 outline-none placeholder:text-zinc-400 focus:border-zinc-500 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-950 dark:placeholder:text-zinc-600 dark:focus:border-zinc-400"
-            />
+            <span className="inline-flex items-center gap-1">
+              <input
+                type="text"
+                value={nickname}
+                disabled={pending}
+                maxLength={NICKNAME_MAX}
+                placeholder={t.tracker.nicknamePlaceholder}
+                aria-label={t.tracker.nicknameLabel}
+                onChange={(e) => setNickname(e.target.value)}
+                onFocus={() => setNickFocused(true)}
+                onBlur={() => {
+                  setNickFocused(false);
+                  commitNickname();
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") e.currentTarget.blur();
+                }}
+                className="w-28 rounded border border-zinc-300 bg-white px-1.5 py-1 outline-none placeholder:text-zinc-400 focus:border-zinc-500 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-950 dark:placeholder:text-zinc-600 dark:focus:border-zinc-400"
+              />
+              {/* Live character counter - shown while editing or when filled,
+                  amber once the 10-char in-game limit is reached. */}
+              {(nickFocused || nickname.length > 0) && (
+                <span
+                  className={`tabular-nums text-[10px] ${
+                    nickname.length >= NICKNAME_MAX
+                      ? "text-amber-600 dark:text-amber-400"
+                      : "text-zinc-400 dark:text-zinc-500"
+                  }`}
+                >
+                  {nickname.length}/{NICKNAME_MAX}
+                </span>
+              )}
+            </span>
           )}
           {current && (
             <button

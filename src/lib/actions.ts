@@ -35,11 +35,12 @@ export async function saveEncounter(
   input: SaveEncounterInput,
 ): Promise<SaveEncounterResult> {
   const { runId, routeId, player, pokemonId, status } = input;
-  // Normalize once; games cap nicknames at ~10 chars, 20 leaves headroom.
+  // Normalize once; the in-game nickname limit is 10 characters (enforced in
+  // the input too), so cap here as the server-side safety net.
   const nickname =
     input.nickname === undefined
       ? undefined
-      : (input.nickname ?? "").trim().slice(0, 20) || null;
+      : (input.nickname ?? "").trim().slice(0, 10) || null;
 
   const pokemon = getPokemonById(pokemonId);
   if (!pokemon) {

@@ -28,18 +28,23 @@ export default async function LevelCapsPage({
 
   // Death scoreboard (SoulLink only): who lost how many Pokémon. Each dead
   // link records the player whose Pokémon fainted (deathPlayer); links marked
-  // dead without a choice count as unattributed.
+  // dead without a choice count as unattributed. Only pairs that ACTUALLY
+  // FORMED count - i.e. both players caught, so the link holds 2 encounters.
+  // A missed encounter leaves a lone surviving catch on the link (the fled/
+  // killed partner never attaches); marking that leftover dead must never
+  // pollute the scoreboard, since it never existed as a real link.
   let deathTally: { PLAYER1: number; PLAYER2: number; unattributed: number } | null = null;
   if (mode === RunMode.SOULLINK) {
     const deadLinks = await prisma.soulLink.findMany({
       where: { runId, status: LinkStatus.DEAD },
-      select: { deathPlayer: true },
+      select: { deathPlayer: true, _count: { select: { encounters: true } } },
     });
-    if (deadLinks.length > 0) {
+    const formed = deadLinks.filter((l) => l._count.encounters >= 2);
+    if (formed.length > 0) {
       deathTally = {
-        PLAYER1: deadLinks.filter((l) => l.deathPlayer === Player.PLAYER1).length,
-        PLAYER2: deadLinks.filter((l) => l.deathPlayer === Player.PLAYER2).length,
-        unattributed: deadLinks.filter((l) => l.deathPlayer === null).length,
+        PLAYER1: formed.filter((l) => l.deathPlayer === Player.PLAYER1).length,
+        PLAYER2: formed.filter((l) => l.deathPlayer === Player.PLAYER2).length,
+        unattributed: formed.filter((l) => l.deathPlayer === null).length,
       };
     }
   }
