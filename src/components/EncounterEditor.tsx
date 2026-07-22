@@ -5,8 +5,9 @@ import { useRouter } from "next/navigation";
 import type { Pokemon, Route } from "@/lib/data";
 import type { Encounter } from "@/generated/prisma/client";
 import { EncounterStatus, type Player } from "@/generated/prisma/enums";
-import { saveEncounter } from "@/lib/actions";
+import { saveEncounter, clearEncounter } from "@/lib/actions";
 import { formatActionError } from "@/lib/actionErrors";
+import { useDialog } from "@/components/DialogProvider";
 import type { Lang } from "@/lib/i18n/dictionary";
 import { translations } from "@/lib/i18n/dictionary";
 import { pokemonName, routeName } from "@/lib/i18n/localize";
@@ -44,6 +45,7 @@ export function EncounterEditor({
   encounters: Encounter[];
 }) {
   const router = useRouter();
+  const { confirm } = useDialog();
   const t = translations[lang];
 
   const current = useMemo(
@@ -167,6 +169,25 @@ export function EncounterEditor({
     persist({ pokemonId: selectedId, status, nickname: trimmed || null });
   }
 
+  // Undo a mistaken entry: remove the encounter entirely. The confirm() must
+  // run OUTSIDE startTransition - awaiting a dialog inside a transition keeps
+  // it pending on its own show/resolve update and deadlocks the page.
+  async function handleClear() {
+    setError(null);
+    if (!(await confirm({ message: t.tracker.clearConfirm, danger: true }))) return;
+    startTransition(async () => {
+      const result = await clearEncounter(runId, routeId, player);
+      if (result.success) {
+        setSelectedId(null);
+        setStatus(EncounterStatus.CAUGHT);
+        setNickname("");
+        router.refresh();
+      } else {
+        setError(formatActionError(result.error, lang));
+      }
+    });
+  }
+
   return (
     <div className="flex min-w-[200px] flex-col gap-1.5">
       <PokemonCombobox
@@ -210,6 +231,17 @@ export function EncounterEditor({
               }}
               className="w-28 rounded border border-zinc-300 bg-white px-1.5 py-1 outline-none placeholder:text-zinc-400 focus:border-zinc-500 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-950 dark:placeholder:text-zinc-600 dark:focus:border-zinc-400"
             />
+          )}
+          {current && (
+            <button
+              type="button"
+              disabled={pending}
+              onClick={handleClear}
+              title={t.tracker.clear}
+              className="rounded border border-zinc-200 px-1.5 py-1 text-zinc-500 transition-colors hover:bg-red-50 hover:text-red-600 disabled:opacity-50 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-red-950/40 dark:hover:text-red-400"
+            >
+              🗑
+            </button>
           )}
         </div>
       )}

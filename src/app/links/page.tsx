@@ -1,16 +1,20 @@
 import { redirect } from "next/navigation";
 import {
+  getEffectiveness,
   getGameOrDefault,
   getRouteById,
   getPokemonById,
   getPokemonList,
   getEvolutionById,
   getEvolutions,
-  getLearnset,
+  getMoves,
+  getMoveset,
   getLevelCaps,
 } from "@/lib/data";
+import { EncounterStatus, Player, RunMode } from "@/generated/prisma/client";
 import { SpriteSetProvider } from "@/components/SpriteSetProvider";
 import { PokemonDetailProvider } from "@/components/PokemonDetailProvider";
+import { PlayerNamesProvider } from "@/components/PlayerNamesProvider";
 import { computePokemonRanks } from "@/lib/ranking";
 import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
@@ -42,10 +46,32 @@ export default async function LinksPage({
 
   const lang = await getLang();
 
-  const soulLinks = await prisma.soulLink.findMany({
-    where: { runId },
-    include: { encounters: true },
-  });
+  // A SoulLink pair only forms if BOTH players catch. If one player's
+  // encounter on the route is Fled/Killed, the pair never formed - the
+  // surviving catch is boxed and must NOT show here as a usable link (it
+  // stays visible on the Tracker tab, which records every raw encounter).
+  // Classic runs have no partner, so nothing is ever hidden there.
+  const failedRouteIds =
+    mode === RunMode.SOULLINK
+      ? new Set(
+          (
+            await prisma.encounter.findMany({
+              where: {
+                runId,
+                status: { in: [EncounterStatus.FLED, EncounterStatus.KILLED] },
+              },
+              select: { routeId: true },
+            })
+          ).map((e) => e.routeId),
+        )
+      : new Set<number>();
+
+  const soulLinks = (
+    await prisma.soulLink.findMany({
+      where: { runId },
+      include: { encounters: true },
+    })
+  ).filter((link) => !failedRouteIds.has(link.routeId));
   // Ranks are computed within the game's dex, so "Rang #X" means the same
   // thing the Pokédex tab shows for that game.
   const game = getGameOrDefault(gameId);
@@ -72,7 +98,11 @@ export default async function LinksPage({
     })(),
     status: link.status,
     teamPosition: link.teamPosition,
-    encounters: link.encounters.map((e) => {
+    deathPlayer: link.deathPlayer,
+    // Within a tile always show Player 1 above Player 2, never by strength.
+    encounters: [...link.encounters]
+      .sort((a, b) => (a.player === Player.PLAYER1 ? -1 : 1) - (b.player === Player.PLAYER1 ? -1 : 1))
+      .map((e) => {
       // Links shows the current (possibly evolved) form - pokemonId (what was
       // actually caught) is what the Tracker tab shows and never changes here.
       const pokemon = getPokemonById(e.currentPokemonId);
@@ -128,16 +158,19 @@ export default async function LinksPage({
     <div>
       <h2 className="mb-4 text-xl font-semibold">{heading}</h2>
       <SpriteSetProvider spriteSet={game.spriteSet}>
-        <PokemonDetailProvider
-          pokemonList={getPokemonList(game.dexLimit)}
-          evolutions={getEvolutions(evoOptions)}
-          learnset={getLearnset(game.versionGroup)}
-          generation={game.generation}
-          dexLimit={game.dexLimit}
-          lang={lang}
-        >
-          <LinksView runId={runId} mode={mode} lang={lang} soulLinks={views} />
-        </PokemonDetailProvider>
+        <PlayerNamesProvider names={settings.playerNames} lang={lang}>
+          <PokemonDetailProvider
+            pokemonList={getPokemonList(game.dexLimit)}
+            evolutions={getEvolutions(evoOptions)}
+            moveData={{ movesets: getMoveset(game.versionGroup), moves: getMoves() }}
+            effectiveness={getEffectiveness(game.generation)}
+            generation={game.generation}
+            dexLimit={game.dexLimit}
+            lang={lang}
+          >
+            <LinksView runId={runId} mode={mode} lang={lang} soulLinks={views} />
+          </PokemonDetailProvider>
+        </PlayerNamesProvider>
       </SpriteSetProvider>
     </div>
   );

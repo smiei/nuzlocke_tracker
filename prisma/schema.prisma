@@ -69,6 +69,9 @@ model SoulLink {
   // 0-5 when this link occupies a slot of the run's 6-slot team, else null.
   // Unique per run so a slot holds at most one link (and a link one slot).
   teamPosition Int?
+  // In SoulLink, which player's Pokémon fainted and killed the link (both die
+  // together, but this records who lost theirs). Null = unknown / Classic.
+  deathPlayer  Player?
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
   run        Run         @relation(fields: [runId], references: [id], onDelete: Cascade)

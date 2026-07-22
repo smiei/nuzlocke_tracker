@@ -2,8 +2,11 @@
 
 import { useEffect, type ReactNode } from "react";
 import type { Pokemon, EvolutionEntry } from "@/lib/data";
-import type { Learnset } from "@/lib/learnset";
-import { attackTypesAtLevel } from "@/lib/learnset";
+import type { Moveset, MovesTable } from "@/lib/learnset";
+import { moveListAtLevel } from "@/lib/learnset";
+import type { EffectivenessTable } from "@/lib/effectiveness";
+import { computeDefenseMultipliers, getTypesForGeneration } from "@/lib/effectiveness";
+import { computePokemonRanks } from "@/lib/ranking";
 import type { Lang } from "@/lib/i18n/dictionary";
 import { translations } from "@/lib/i18n/dictionary";
 import { pokemonName } from "@/lib/i18n/localize";
@@ -11,6 +14,8 @@ import { typesForGeneration } from "@/lib/pokemonTypes";
 import { formatEvolutionMethod } from "@/lib/evolutionMethods";
 import { TypeBadge } from "@/components/TypeBadge";
 import { PokemonSprite } from "@/components/PokemonSprite";
+
+const WEAKNESS_GROUPS = [4, 2, 0.5, 0.25, 0] as const;
 
 // Order + label keys for the six base stats (matching pokedex.columns).
 const STAT_ROWS: { key: keyof Pokemon["stats"]; labelKey: "kp" | "ang" | "vert" | "spA" | "spV" | "init" }[] = [
@@ -34,7 +39,9 @@ export function PokemonDetailModal({
   pokemon,
   allPokemon,
   evolutions,
-  learnset,
+  movesets,
+  moves,
+  effectiveness,
   generation,
   dexLimit,
   lang,
@@ -43,7 +50,9 @@ export function PokemonDetailModal({
   pokemon: Pokemon;
   allPokemon: Pokemon[];
   evolutions: EvolutionEntry[];
-  learnset: Learnset;
+  movesets: Moveset;
+  moves: MovesTable;
+  effectiveness: EffectivenessTable;
   generation: number;
   dexLimit: number;
   lang: Lang;
@@ -66,8 +75,17 @@ export function PokemonDetailModal({
   };
 
   const types = typesForGeneration(pokemon.id, pokemon.types, generation);
-  const attacks = attackTypesAtLevel(learnset, pokemon.id, 100);
+  const moveList = moveListAtLevel(movesets, moves, pokemon.id, 100, lang);
   const maxBST = generation >= 4 ? 720 : 680;
+  const rank = computePokemonRanks(allPokemon).get(pokemon.id) ?? 0;
+
+  // Defensive type matchups (gen-corrected types + gen-appropriate chart).
+  const defMult = computeDefenseMultipliers(effectiveness, types, getTypesForGeneration(generation));
+  const weaknessGroups = WEAKNESS_GROUPS.map((g) => ({
+    mult: g,
+    label: { 4: t.typen.weak4, 2: t.typen.weak2, 0.5: t.typen.resist2, 0.25: t.typen.resist4, 0: t.typen.immune }[g],
+    types: getTypesForGeneration(generation).filter((ty) => defMult[ty] === g),
+  })).filter((row) => row.types.length > 0);
 
   const evoById = new Map(evolutions.map((e) => [e.id, e]));
   // Walk up to the family's root, then render the whole tree (Eevee & co.
@@ -145,6 +163,37 @@ export function PokemonDetailModal({
           </div>
         </div>
 
+        {/* Rank + type weaknesses */}
+        <div className="mb-4 space-y-2">
+          <div className="text-sm">
+            <span className="text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+              {td.rank}:{" "}
+            </span>
+            <span className="font-semibold">#{rank}</span>
+          </div>
+          {weaknessGroups.length > 0 && (
+            <div>
+              <h3 className="mb-1 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+                {td.weaknesses}
+              </h3>
+              <div className="flex flex-col gap-1">
+                {weaknessGroups.map((row) => (
+                  <div key={row.mult} className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                    <span className="w-28 shrink-0 text-xs text-zinc-500 dark:text-zinc-400">
+                      {row.label}:
+                    </span>
+                    <div className="flex flex-wrap gap-1">
+                      {row.types.map((type) => (
+                        <TypeBadge key={type} type={type} lang={lang} />
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
         {/* Base stats */}
         <h3 className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
           {td.stats}
@@ -186,27 +235,8 @@ export function PokemonDetailModal({
           </div>
         </div>
 
-        {/* Attack types by level */}
-        {attacks.length > 0 && (
-          <div className="mb-4">
-            <h3 className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
-              {td.moves}
-            </h3>
-            <div className="flex flex-wrap gap-1.5">
-              {attacks.map(({ type, level }) => (
-                <span key={type} className="inline-flex items-center gap-1">
-                  <TypeBadge type={type} lang={lang} />
-                  <span className="text-[10px] text-zinc-400 dark:text-zinc-500">
-                    {td.level(level)}
-                  </span>
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
-
         {/* Evolution */}
-        <div>
+        <div className="mb-4">
           <h3 className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
             {td.evolution}
           </h3>
@@ -216,6 +246,28 @@ export function PokemonDetailModal({
             <div>{renderEvoNode(rootId, 0)}</div>
           )}
         </div>
+
+        {/* Full level-up move list (bottom) */}
+        {moveList.length > 0 && (
+          <div>
+            <h3 className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+              {td.moves}
+            </h3>
+            <div className="divide-y divide-zinc-100 dark:divide-zinc-800">
+              {moveList.map((mv, i) => (
+                <div key={`${mv.name}-${i}`} className="flex items-center gap-2 py-1 text-sm">
+                  <span className="w-10 shrink-0 text-xs tabular-nums text-zinc-400 dark:text-zinc-500">
+                    {td.level(mv.level)}
+                  </span>
+                  <TypeBadge type={mv.type} lang={lang} />
+                  <span className={mv.damaging ? "" : "text-zinc-500 dark:text-zinc-400"}>
+                    {mv.name}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

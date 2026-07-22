@@ -8,6 +8,7 @@ import type { Lang } from "@/lib/i18n/dictionary";
 import { translations } from "@/lib/i18n/dictionary";
 import { routeName } from "@/lib/i18n/localize";
 import { EncounterEditor } from "@/components/EncounterEditor";
+import { usePlayerLabel } from "@/components/PlayerNamesProvider";
 import type { RunSettings } from "@/lib/runSettings";
 
 export function TrackerView({
@@ -27,7 +28,7 @@ export function TrackerView({
   pokemonList: Pokemon[];
   encounters: Encounter[];
 }) {
-  const t = translations[lang].player;
+  const playerLabel = usePlayerLabel();
   const tTracker = translations[lang].tracker;
   const isClassic = mode === "CLASSIC";
   // Post-game areas (Sevii 4-7, Cerulean Cave) are collapsed by default so
@@ -102,7 +103,7 @@ export function TrackerView({
             <>
               <div>
                 <span className="mb-1 block text-xs font-medium text-zinc-400 dark:text-zinc-500">
-                  {t.PLAYER1}
+                  {playerLabel(Player.PLAYER1)}
                 </span>
                 <EncounterEditor
                   runId={runId}
@@ -117,7 +118,7 @@ export function TrackerView({
               </div>
               <div>
                 <span className="mb-1 block text-xs font-medium text-zinc-400 dark:text-zinc-500">
-                  {t.PLAYER2}
+                  {playerLabel(Player.PLAYER2)}
                 </span>
                 <EncounterEditor
                   runId={runId}

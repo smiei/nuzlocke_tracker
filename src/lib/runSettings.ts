@@ -19,6 +19,10 @@ export type RunSettings = {
   // Statics don't count towards / trigger the Species Clause (today's fixed
   // behavior). Off = statics are treated like regular routes by the clause.
   staticsExemptFromClause: boolean;
+  // Custom SoulLink player names (empty = fall back to the localized
+  // "Player 1"/"Player 2"). Not a toggle - handled separately from the
+  // boolean keys below.
+  playerNames: { PLAYER1: string; PLAYER2: string };
 };
 
 // Defaults mirror the app's behavior before settings existed, so old runs
@@ -30,9 +34,13 @@ export const DEFAULT_RUN_SETTINGS: RunSettings = {
   evolutionOverridesEasier: true,
   statics: true,
   staticsExemptFromClause: true,
+  playerNames: { PLAYER1: "", PLAYER2: "" },
 };
 
-export const RUN_SETTING_KEYS = Object.keys(DEFAULT_RUN_SETTINGS) as (keyof RunSettings)[];
+// Only the boolean toggles - playerNames is handled separately.
+export const RUN_SETTING_KEYS = (
+  Object.keys(DEFAULT_RUN_SETTINGS) as (keyof RunSettings)[]
+).filter((k) => typeof DEFAULT_RUN_SETTINGS[k] === "boolean") as (keyof RunSettings)[];
 
 // Tolerant parser: unknown keys are dropped, missing/mistyped keys fall back
 // to their default, malformed JSON falls back entirely.
@@ -56,7 +64,16 @@ export function parseRunSettings(json: string): RunSettings {
   }
   for (const key of RUN_SETTING_KEYS) {
     const value = (raw as Record<string, unknown>)[key];
-    if (typeof value === "boolean") settings[key] = value;
+    if (typeof value === "boolean") (settings[key] as boolean) = value;
+  }
+  const names = (raw as Record<string, unknown>).playerNames;
+  if (typeof names === "object" && names !== null) {
+    const p1 = (names as Record<string, unknown>).PLAYER1;
+    const p2 = (names as Record<string, unknown>).PLAYER2;
+    settings.playerNames = {
+      PLAYER1: typeof p1 === "string" ? p1.slice(0, 20) : "",
+      PLAYER2: typeof p2 === "string" ? p2.slice(0, 20) : "",
+    };
   }
   return settings;
 }

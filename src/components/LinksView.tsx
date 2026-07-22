@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { SoulLinkView } from "@/lib/types";
-import { LinkStatus, RunMode } from "@/generated/prisma/enums";
+import { LinkStatus, Player, RunMode } from "@/generated/prisma/enums";
 import { markDead, markAlive } from "@/lib/actions";
 import { formatActionError } from "@/lib/actionErrors";
 import { GEN3_TYPES } from "@/lib/effectiveness";
@@ -16,6 +16,7 @@ import { EncounterTile } from "@/components/EncounterTile";
 import { EvolveButton, RevertButton } from "@/components/EvolveControls";
 import { TeamBar } from "@/components/TeamBar";
 import { TypeBadge } from "@/components/TypeBadge";
+import { usePlayerLabel } from "@/components/PlayerNamesProvider";
 
 const SORT_STORAGE_KEY = "nuzlocke:linksSortBySumme";
 
@@ -32,6 +33,7 @@ export function LinksView({
 }) {
   const router = useRouter();
   const { alert } = useDialog();
+  const playerLabel = usePlayerLabel();
   const [pendingId, setPendingId] = useState<number | null>(null);
   const [, startTransition] = useTransition();
   const [sortBySumme, setSortBySumme] = useState(false);
@@ -39,6 +41,7 @@ export function LinksView({
   const [hideTeam, setHideTeam] = useState(false);
   const [typeFilter, setTypeFilter] = useState<string[]>([]);
   const [typeMenuOpen, setTypeMenuOpen] = useState(false);
+  const [deadMenuId, setDeadMenuId] = useState<number | null>(null);
   const typeMenuRef = useRef<HTMLDivElement>(null);
   const t = translations[lang];
   const isClassic = mode === RunMode.CLASSIC;
@@ -100,10 +103,11 @@ export function LinksView({
     return true;
   });
 
-  function handleMarkDead(id: number) {
+  function handleMarkDead(id: number, deathPlayer?: Player) {
     setPendingId(id);
+    setDeadMenuId(null);
     startTransition(async () => {
-      const result = await markDead(runId, id);
+      const result = await markDead(runId, id, deathPlayer ?? null);
       if (!result.success) await alert({ message: formatActionError(result.error, lang) });
       router.refresh();
       setPendingId(null);
@@ -266,7 +270,11 @@ export function LinksView({
                     <button
                       type="button"
                       disabled={pendingId === link.id}
-                      onClick={() => handleMarkDead(link.id)}
+                      onClick={() =>
+                        isClassic
+                          ? handleMarkDead(link.id)
+                          : setDeadMenuId(deadMenuId === link.id ? null : link.id)
+                      }
                       className="rounded border border-red-300 px-2 py-1 text-xs font-medium text-red-600 transition-colors hover:bg-red-50 disabled:opacity-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950/40"
                     >
                       {t.links.markDead}
@@ -274,6 +282,34 @@ export function LinksView({
                   </div>
                 )}
               </div>
+
+              {/* SoulLink: pick which player lost their Pokémon. */}
+              {!isDead && !isClassic && deadMenuId === link.id && (
+                <div className="mb-3 rounded-md border border-red-200 bg-red-50/60 p-2 dark:border-red-900/50 dark:bg-red-950/20">
+                  <p className="mb-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-300">
+                    {t.links.whoLost}
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {[Player.PLAYER1, Player.PLAYER2].map((p) => (
+                      <button
+                        key={p}
+                        type="button"
+                        disabled={pendingId === link.id}
+                        onClick={() => handleMarkDead(link.id, p)}
+                        className="rounded border border-red-300 px-2 py-1 text-xs font-medium text-red-600 transition-colors hover:bg-red-100 disabled:opacity-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950/40"
+                      >
+                        {playerLabel(p)}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {isDead && link.deathPlayer && (
+                <p className="mb-2 text-xs font-medium text-red-500 dark:text-red-400">
+                  {t.links.deadBy(playerLabel(link.deathPlayer))}
+                </p>
+              )}
               <div className="flex flex-col gap-3">
                 {link.encounters.map((e) => (
                   <EncounterTile

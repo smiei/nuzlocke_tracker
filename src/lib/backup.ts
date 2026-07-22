@@ -13,6 +13,7 @@ export type BackupSoulLink = {
   routeId: number;
   status: LinkStatus;
   teamPosition: number | null;
+  deathPlayer: Player | null;
   createdAt: string;
   updatedAt: string;
 };
@@ -86,6 +87,7 @@ export async function buildBackup(runIds?: number[]): Promise<BackupFile> {
           routeId: sl.routeId,
           status: sl.status,
           teamPosition: sl.teamPosition,
+          deathPlayer: sl.deathPlayer,
           createdAt: sl.createdAt.toISOString(),
           updatedAt: sl.updatedAt.toISOString(),
         })),
@@ -164,6 +166,7 @@ export function parseBackup(json: string): BackupFile | null {
               typeof sl.teamPosition === "number" && sl.teamPosition >= 0 && sl.teamPosition <= 5
                 ? sl.teamPosition
                 : null,
+            deathPlayer: isEnumValue(Player, sl.deathPlayer) ? sl.deathPlayer : null,
             createdAt: isoString(sl.createdAt),
             updatedAt: isoString(sl.updatedAt),
           }))
@@ -227,6 +230,7 @@ export async function applyBackup(backup: BackupFile): Promise<number> {
               routeId: sl.routeId,
               status: sl.status,
               teamPosition: sl.teamPosition,
+              deathPlayer: sl.deathPlayer,
               createdAt: new Date(sl.createdAt),
             },
           });

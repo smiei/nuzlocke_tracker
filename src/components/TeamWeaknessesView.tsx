@@ -7,6 +7,7 @@ import { TYPE_COLORS, TYPE_LABELS } from "@/lib/pokemonTypes";
 import type { Lang } from "@/lib/i18n/dictionary";
 import { translations } from "@/lib/i18n/dictionary";
 import { PokemonSprite } from "@/components/PokemonSprite";
+import { usePlayerLabel } from "@/components/PlayerNamesProvider";
 
 export type TeamMember = {
   encounterId: number;
@@ -173,6 +174,7 @@ export function TeamWeaknessesView({
   attackTypes?: string[];
 }) {
   const t = translations[lang];
+  const playerLabel = usePlayerLabel();
   const hasAnyMembers = teams.some((team) => team.members.length > 0);
 
   return (
@@ -189,7 +191,7 @@ export function TeamWeaknessesView({
                   <section key={team.player}>
                     {mode !== "CLASSIC" && (
                       <h3 className="mb-2 text-sm font-semibold text-zinc-500 dark:text-zinc-400">
-                        {t.player[team.player]}
+                        {playerLabel(team.player)}
                       </h3>
                     )}
                     <TeamTable

@@ -9,6 +9,10 @@ import { useDialog } from "@/components/DialogProvider";
 import type { Lang } from "@/lib/i18n/dictionary";
 import { translations } from "@/lib/i18n/dictionary";
 import type { RunSettings } from "@/lib/runSettings";
+import { RunMode } from "@/generated/prisma/enums";
+
+// The boolean rule toggles (playerNames is handled separately).
+type BooleanSettingKey = Exclude<keyof RunSettings, "playerNames">;
 
 // react-markdown emits bare elements and Tailwind's preflight strips all
 // default styles, so every rendered element gets its look via this mapping.
@@ -53,7 +57,7 @@ const markdownComponents = {
 
 // Display order; staticsExemptFromClause is rendered as an indented child of
 // speciesClause and greyed out while the clause itself is off.
-const TOGGLE_ORDER: (keyof RunSettings)[] = [
+const TOGGLE_ORDER: BooleanSettingKey[] = [
   "speciesClause",
   "staticsExemptFromClause",
   "nicknames",
@@ -97,11 +101,13 @@ function ToggleSwitch({
 export function RulesView({
   runId,
   lang,
+  mode,
   markdown,
   settings,
 }: {
   runId: number;
   lang: Lang;
+  mode: RunMode;
   markdown: string;
   settings: RunSettings;
 }) {
@@ -115,14 +121,16 @@ export function RulesView({
   // device via live sync) wins whenever a refresh delivers new props -
   // synced during render (not in an effect) per the React docs pattern.
   const [local, setLocal] = useState(settings);
+  const [names, setNames] = useState(settings.playerNames);
   const [prevSettings, setPrevSettings] = useState(settings);
   if (prevSettings !== settings) {
     setPrevSettings(settings);
     setLocal(settings);
+    setNames(settings.playerNames);
   }
   const t = translations[lang].rules;
 
-  function handleToggle(key: keyof RunSettings) {
+  function handleToggle(key: BooleanSettingKey) {
     const next = !local[key];
     setLocal((prev) => ({ ...prev, [key]: next }));
     startTransition(async () => {
@@ -133,6 +141,18 @@ export function RulesView({
         setLocal((prev) => ({ ...prev, [key]: !next }));
         await alert({ message: formatActionError(result.error, lang) });
       }
+    });
+  }
+
+  function commitName(player: "PLAYER1" | "PLAYER2", value: string) {
+    const trimmed = value.trim().slice(0, 20);
+    if (trimmed === settings.playerNames[player]) return;
+    const nextNames = { ...names, [player]: trimmed };
+    setNames(nextNames);
+    startTransition(async () => {
+      const result = await updateRunSettings(runId, { playerNames: nextNames });
+      if (result.success) router.refresh();
+      else await alert({ message: formatActionError(result.error, lang) });
     });
   }
 
@@ -190,6 +210,34 @@ export function RulesView({
           })}
         </div>
       </section>
+
+      {mode === RunMode.SOULLINK && (
+        <section className="mb-6 max-w-3xl">
+          <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+            {t.playerNamesHeading}
+          </h3>
+          <div className="rounded-lg border border-zinc-200 p-4 dark:border-zinc-800">
+            <div className="grid gap-3 sm:grid-cols-2">
+              {(["PLAYER1", "PLAYER2"] as const).map((player) => (
+                <input
+                  key={player}
+                  type="text"
+                  defaultValue={names[player]}
+                  disabled={pending}
+                  maxLength={20}
+                  placeholder={translations[lang].player[player]}
+                  onBlur={(e) => commitName(player, e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") e.currentTarget.blur();
+                  }}
+                  className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-zinc-500 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-950 dark:focus:border-zinc-400"
+                />
+              ))}
+            </div>
+            <p className="mt-2 text-xs text-zinc-500 dark:text-zinc-400">{t.playerNamesHint}</p>
+          </div>
+        </section>
+      )}
 
       <section className="max-w-3xl">
         <div className="mb-2 flex items-center justify-between gap-2">

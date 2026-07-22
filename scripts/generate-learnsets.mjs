@@ -1,11 +1,12 @@
-// Generates data/learnsets/<versionGroup>.json for every version group a game
-// pack references (game.json `versionGroup`). Each file maps a national-dex id
-// to the DAMAGING attack types the Pokémon can learn by level-up, with the
-// LOWEST level at which each type first becomes available:
-//   { "1": { "grass": 10, "normal": 1, "poison": 15 }, ... }
-// Status moves (growl, etc.) are excluded - only physical/special count. The
-// "Kampf" tab and the Pokédex detail card read this to show a Pokémon's
-// offensive coverage at a given level.
+// Generates level-up move data for every version group a game pack references
+// (game.json `versionGroup`), in three shapes:
+//
+//  data/learnsets/<vg>.json  { id: { type: minLevel } }   DAMAGING types only
+//      -> the "Kampf" tab's offensive coverage + team matchup.
+//  data/movesets/<vg>.json   { id: [[level, slug], ...] }  ALL level-up moves
+//      -> the Pokédex info card's move list + the self-destruct/explosion warn.
+//  data/moves.json           { slug: { names:{de,en,..}, type, damaging } }
+//      -> localized move names / type / damage-class, shared across games.
 //
 // Approximation: PokeAPI's move `damage_class` is the Gen-4+ view. For the
 // only distinction we need (damaging vs. status) that's stable across gens.
@@ -18,7 +19,10 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const dataDir = path.join(__dirname, "..", "data");
-const outDir = path.join(dataDir, "learnsets");
+const learnsetsDir = path.join(dataDir, "learnsets");
+const movesetsDir = path.join(dataDir, "movesets");
+
+const LANGS = ["de", "en", "fr", "es", "it"];
 
 async function fetchJson(url) {
   const res = await fetch(url);
@@ -45,10 +49,10 @@ async function main() {
   }
 
   const maxId = Math.max(0, ...versionGroups.values());
-  // move name -> { type, damaging } (fetched once, reused across all games).
+  // slug -> { type, damaging, names } (fetched once, reused across all games).
   const moveCache = new Map();
-  // vg -> { [pokemonId]: { [type]: minLevel } }
-  const result = new Map([...versionGroups.keys()].map((vg) => [vg, {}]));
+  const typeLearnsets = new Map([...versionGroups.keys()].map((vg) => [vg, {}]));
+  const movesets = new Map([...versionGroups.keys()].map((vg) => [vg, {}]));
 
   const batchSize = 4;
   for (let id = 1; id <= maxId; id += batchSize) {
@@ -58,33 +62,43 @@ async function main() {
       ids.map(async (pid) => {
         const mon = await fetchJson(`https://pokeapi.co/api/v2/pokemon/${pid}`);
         for (const m of mon.moves) {
-          const moveName = m.move.name;
+          const slug = m.move.name;
           // Which of our version groups teach this move by level-up, at what level?
           const perVg = new Map();
           for (const v of m.version_group_details) {
             if (v.move_learn_method.name !== "level-up") continue;
             const vg = v.version_group.name;
-            if (!result.has(vg)) continue;
+            if (!movesets.has(vg)) continue;
             if (pid > (versionGroups.get(vg) ?? 0)) continue;
             const lvl = v.level_learned_at || 1;
             perVg.set(vg, Math.min(perVg.get(vg) ?? Infinity, lvl));
           }
           if (perVg.size === 0) continue;
 
-          if (!moveCache.has(moveName)) {
+          if (!moveCache.has(slug)) {
             const move = await fetchJson(m.move.url);
-            moveCache.set(moveName, {
+            const names = {};
+            for (const lang of LANGS) {
+              const hit = move.names.find((n) => n.language?.name === lang);
+              names[lang] = hit?.name ?? move.names.find((n) => n.language?.name === "en")?.name ?? slug;
+            }
+            moveCache.set(slug, {
               type: move.type.name,
               damaging: move.damage_class?.name !== "status",
+              names,
             });
           }
-          const info = moveCache.get(moveName);
-          if (!info.damaging) continue;
+          const info = moveCache.get(slug);
 
           for (const [vg, lvl] of perVg) {
-            const table = result.get(vg);
-            const entry = (table[pid] ??= {});
-            entry[info.type] = Math.min(entry[info.type] ?? Infinity, lvl);
+            // Full moveset (all moves).
+            (movesets.get(vg)[pid] ??= []).push([lvl, slug]);
+            // Damaging-type coverage learnset.
+            if (info.damaging) {
+              const table = typeLearnsets.get(vg);
+              const entry = (table[pid] ??= {});
+              entry[info.type] = Math.min(entry[info.type] ?? Infinity, lvl);
+            }
           }
         }
       }),
@@ -93,18 +107,36 @@ async function main() {
     await new Promise((r) => setTimeout(r, 120));
   }
 
-  await mkdir(outDir, { recursive: true });
-  for (const [vg, table] of result) {
-    // Sort ids numerically and types by level for stable, readable files.
+  await mkdir(learnsetsDir, { recursive: true });
+  await mkdir(movesetsDir, { recursive: true });
+
+  for (const [vg, table] of typeLearnsets) {
     const sorted = {};
     for (const pid of Object.keys(table).map(Number).sort((a, b) => a - b)) {
-      const types = Object.entries(table[pid]).sort((a, b) => a[1] - b[1]);
-      sorted[pid] = Object.fromEntries(types);
+      sorted[pid] = Object.fromEntries(Object.entries(table[pid]).sort((a, b) => a[1] - b[1]));
     }
-    await writeFile(path.join(outDir, `${vg}.json`), JSON.stringify(sorted) + "\n", "utf-8");
+    await writeFile(path.join(learnsetsDir, `${vg}.json`), JSON.stringify(sorted) + "\n", "utf-8");
     console.log(`learnsets/${vg}.json: ${Object.keys(sorted).length} Pokémon`);
   }
-  console.log(`cached ${moveCache.size} unique moves`);
+
+  for (const [vg, table] of movesets) {
+    const sorted = {};
+    for (const pid of Object.keys(table).map(Number).sort((a, b) => a - b)) {
+      // Sort by level, then by slug; drop duplicate slugs (keep lowest level).
+      const seen = new Set();
+      const list = table[pid]
+        .sort((a, b) => a[0] - b[0] || String(a[1]).localeCompare(String(b[1])))
+        .filter(([, slug]) => (seen.has(slug) ? false : (seen.add(slug), true)));
+      sorted[pid] = list;
+    }
+    await writeFile(path.join(movesetsDir, `${vg}.json`), JSON.stringify(sorted) + "\n", "utf-8");
+    console.log(`movesets/${vg}.json: ${Object.keys(sorted).length} Pokémon`);
+  }
+
+  const moves = {};
+  for (const slug of [...moveCache.keys()].sort()) moves[slug] = moveCache.get(slug);
+  await writeFile(path.join(dataDir, "moves.json"), JSON.stringify(moves) + "\n", "utf-8");
+  console.log(`moves.json: ${Object.keys(moves).length} moves`);
 }
 
 main().catch((err) => {

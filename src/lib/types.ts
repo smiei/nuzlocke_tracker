@@ -21,6 +21,7 @@ export type SoulLinkView = {
   routeName: string;
   status: LinkStatus;
   teamPosition: number | null;
+  deathPlayer: Player | null;
   encounters: {
     id: number;
     player: Player;

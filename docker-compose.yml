@@ -1,6 +1,12 @@
 services:
   nuzlocke-tracker:
     build: .
+    # Tag the built image with the Docker Hub name so `docker compose build`
+    # (or `up --build`) produces exactly the image you push. Without this,
+    # compose names it "<project>-<service>" and `docker push
+    # gloryy/nuzlocke-tracker:latest` would push a stale, separately-tagged
+    # image ("Layer already exists" for everything).
+    image: gloryy/nuzlocke-tracker:latest
     ports:
       - "3000:3000"
     volumes:

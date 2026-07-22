@@ -180,7 +180,13 @@ export async function quickCatch(
 
 export type MarkDeadResult = { success: true } | { success: false; error: ActionError };
 
-export async function markDead(runId: number, soulLinkId: number): Promise<MarkDeadResult> {
+// deathPlayer (SoulLink only) records whose Pokémon fainted; both die
+// together, this is just who lost theirs.
+export async function markDead(
+  runId: number,
+  soulLinkId: number,
+  deathPlayer?: Player | null,
+): Promise<MarkDeadResult> {
   const soulLink = await prisma.soulLink.findUnique({ where: { id: soulLinkId } });
   if (!soulLink || soulLink.runId !== runId) {
     return { success: false, error: { key: "soulLinkNotFound", id: soulLinkId } };
@@ -192,7 +198,35 @@ export async function markDead(runId: number, soulLinkId: number): Promise<MarkD
   // the team automatically (teamPosition -> null).
   await prisma.soulLink.update({
     where: { id: soulLinkId },
-    data: { status: LinkStatus.DEAD, teamPosition: null },
+    data: { status: LinkStatus.DEAD, teamPosition: null, deathPlayer: deathPlayer ?? null },
+  });
+
+  revalidatePath("/tracker");
+  revalidatePath("/links");
+  publishChange(runId);
+  return { success: true };
+}
+
+export type ClearEncounterResult = { success: true } | { success: false; error: ActionError };
+
+// Undo a mistaken encounter: delete the row and clean up an orphaned SoulLink
+// (same invariant as saveEncounter - a link always has >=1 encounter).
+export async function clearEncounter(
+  runId: number,
+  routeId: number,
+  player: Player,
+): Promise<ClearEncounterResult> {
+  await prisma.$transaction(async (tx) => {
+    const existing = await tx.encounter.findUnique({
+      where: { runId_routeId_player: { runId, routeId, player } },
+    });
+    if (!existing || existing.runId !== runId) return;
+    const soulLinkId = existing.soulLinkId;
+    await tx.encounter.delete({ where: { id: existing.id } });
+    if (soulLinkId !== null) {
+      const remaining = await tx.encounter.count({ where: { soulLinkId } });
+      if (remaining === 0) await tx.soulLink.delete({ where: { id: soulLinkId } });
+    }
   });
 
   revalidatePath("/tracker");
@@ -211,7 +245,7 @@ export async function markAlive(runId: number, soulLinkId: number): Promise<Mark
 
   await prisma.soulLink.update({
     where: { id: soulLinkId },
-    data: { status: LinkStatus.ALIVE },
+    data: { status: LinkStatus.ALIVE, deathPlayer: null },
   });
 
   revalidatePath("/tracker");
@@ -433,7 +467,13 @@ export async function updateRunSettings(
   const settings = parseRunSettings(run.settingsJson);
   for (const key of RUN_SETTING_KEYS) {
     const value = changes[key];
-    if (typeof value === "boolean") settings[key] = value;
+    if (typeof value === "boolean") (settings[key] as boolean) = value;
+  }
+  if (changes.playerNames) {
+    settings.playerNames = {
+      PLAYER1: (changes.playerNames.PLAYER1 ?? settings.playerNames.PLAYER1).slice(0, 20),
+      PLAYER2: (changes.playerNames.PLAYER2 ?? settings.playerNames.PLAYER2).slice(0, 20),
+    };
   }
 
   await prisma.run.update({
@@ -442,11 +482,13 @@ export async function updateRunSettings(
   });
 
   // Toggles affect rendering on several tabs (clause warnings, nicknames,
-  // statics filter, evolution methods) - refresh everything run-scoped.
+  // statics filter, evolution methods, player names) - refresh run-scoped.
   revalidatePath("/rules");
   revalidatePath("/tracker");
   revalidatePath("/links");
   revalidatePath("/catchrate");
+  revalidatePath("/typen");
+  revalidatePath("/weaknesses");
   publishChange(runId);
   return { success: true };
 }

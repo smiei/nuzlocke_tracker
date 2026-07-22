@@ -6,6 +6,7 @@ import { translations } from "@/lib/i18n/dictionary";
 import { TypeBadge } from "@/components/TypeBadge";
 import { PokemonSprite } from "@/components/PokemonSprite";
 import { usePokemonDetail } from "@/components/PokemonDetailProvider";
+import { usePlayerLabel } from "@/components/PlayerNamesProvider";
 
 // One Pokémon's display inside a link/team card: sprite on the left, the
 // description (name, types, player/static line, rank·BST) and any extra
@@ -27,8 +28,9 @@ export function EncounterTile({
 }) {
   const t = translations[lang];
   const detail = usePokemonDetail();
+  const playerLabel = usePlayerLabel();
   const infoParts = [
-    ...(!isClassic ? [t.player[encounter.player]] : []),
+    ...(!isClassic ? [playerLabel(encounter.player)] : []),
     ...(encounter.isStatic ? [t.links.staticTag] : []),
   ];
   return (

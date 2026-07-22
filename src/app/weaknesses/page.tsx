@@ -10,6 +10,7 @@ import { LinkStatus, Player, RunMode } from "@/generated/prisma/client";
 import type { TeamMember } from "@/components/TeamWeaknessesView";
 import { TeamWeaknessesView } from "@/components/TeamWeaknessesView";
 import { SpriteSetProvider } from "@/components/SpriteSetProvider";
+import { PlayerNamesProvider } from "@/components/PlayerNamesProvider";
 
 export const dynamic = "force-dynamic";
 
@@ -19,7 +20,7 @@ export default async function WeaknessesPage({
   searchParams: Promise<{ run?: string }>;
 }) {
   const { run } = await searchParams;
-  const { runId, mode, gameId, canonical } = await resolveRunId(run);
+  const { runId, mode, gameId, settings, canonical } = await resolveRunId(run);
   if (!canonical) redirect(`/weaknesses?run=${runId}`);
   const game = getGameOrDefault(gameId);
 
@@ -60,13 +61,15 @@ export default async function WeaknessesPage({
 
   return (
     <SpriteSetProvider spriteSet={game.spriteSet}>
-      <TeamWeaknessesView
-        lang={lang}
-        mode={mode}
-        teams={teams}
-        table={getEffectiveness(game.generation)}
-        attackTypes={getTypesForGeneration(game.generation)}
-      />
+      <PlayerNamesProvider names={settings.playerNames} lang={lang}>
+        <TeamWeaknessesView
+          lang={lang}
+          mode={mode}
+          teams={teams}
+          table={getEffectiveness(game.generation)}
+          attackTypes={getTypesForGeneration(game.generation)}
+        />
+      </PlayerNamesProvider>
     </SpriteSetProvider>
   );
 }

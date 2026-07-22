@@ -88,6 +88,27 @@ export function getBallIdsForGeneration(generation: number): BallId[] {
   return BALLS_GEN3;
 }
 
+// Balls whose bonus depends on an assumed situation the calculator can't
+// verify (registered species, fishing, night, etc.). The UI offers a
+// "condition met?" checkbox for these; when off, they count as x1. Balls
+// driven by a numeric input (nest=level, timer/quick=turn) or by type (net)
+// are NOT here - their condition is entered directly.
+const CONDITIONAL_BALLS = new Set<BallId>([
+  "repeat",
+  "dive",
+  "dusk",
+  "level",
+  "lure",
+  "moon",
+  "love",
+  "fast",
+  "park",
+]);
+
+export function ballHasCondition(ball: BallId): boolean {
+  return CONDITIONAL_BALLS.has(ball);
+}
+
 const STATUS_MULTIPLIERS: Record<StatusId, number> = {
   none: 1,
   sleep: 2,
@@ -157,6 +178,8 @@ export type CatchInput = {
   hpPercent: number; // 1-100
   level: number; // 1-100
   ball: BallId;
+  // For conditional balls: whether the assumed condition holds (default true).
+  conditionMet?: boolean;
   status: StatusId;
   types: string[];
   turn: number; // battle turn (Timer/Quick Ball)
@@ -201,7 +224,8 @@ function computeGen2(input: CatchInput): CatchResult {
     return { guaranteed: true, chance: 1, ballText: "×1", statusText: "+0" };
   }
   const hpFrac = Math.min(100, Math.max(1, input.hpPercent)) / 100;
-  const mult = ballMultiplierGen2(input.ball);
+  const conditionOff = ballHasCondition(input.ball) && input.conditionMet === false;
+  const mult = conditionOff ? 1 : ballMultiplierGen2(input.ball);
   const bonus = input.status === "sleep" || input.status === "freeze" ? 10 : 0;
   const value = Math.min(
     255,
@@ -217,11 +241,14 @@ function computeGen2(input: CatchInput): CatchResult {
 
 function computeGen34(input: CatchInput): CatchResult {
   const hpFrac = Math.min(100, Math.max(1, input.hpPercent)) / 100;
-  const ballBonus = ballMultiplierGen34(input.ball, {
-    types: input.types,
-    level: input.level,
-    turn: input.turn,
-  });
+  const conditionOff = ballHasCondition(input.ball) && input.conditionMet === false;
+  const ballBonus = conditionOff
+    ? 1
+    : ballMultiplierGen34(input.ball, {
+        types: input.types,
+        level: input.level,
+        turn: input.turn,
+      });
   const statusBonus = STATUS_MULTIPLIERS[input.status];
   const ballText = `×${ballBonus}`;
   const statusText = `×${statusBonus}`;

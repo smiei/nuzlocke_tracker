@@ -4,7 +4,9 @@ import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { Pokemon } from "@/lib/data";
 import type { BallId, StatusId } from "@/lib/catchrate";
-import { getBallIdsForGeneration, STATUS_IDS, computeCatchChance } from "@/lib/catchrate";
+import { ballHasCondition, getBallIdsForGeneration, STATUS_IDS, computeCatchChance } from "@/lib/catchrate";
+import type { EffectivenessTable } from "@/lib/effectiveness";
+import { computeDefenseMultipliers } from "@/lib/effectiveness";
 import { quickCatch } from "@/lib/actions";
 import { formatActionError } from "@/lib/actionErrors";
 import { Player, RunMode } from "@/generated/prisma/enums";
@@ -14,10 +16,13 @@ import { pokemonName } from "@/lib/i18n/localize";
 import { typesForGeneration } from "@/lib/pokemonTypes";
 import { PokemonCombobox } from "@/components/PokemonCombobox";
 import { PokemonInfoButton } from "@/components/PokemonDetailProvider";
+import { usePlayerLabel } from "@/components/PlayerNamesProvider";
 import { PokemonSprite } from "@/components/PokemonSprite";
 import { TypeBadge } from "@/components/TypeBadge";
 
 export type OpenSlot = { routeId: number; player: Player; routeName: string };
+
+const WEAKNESS_GROUPS = [4, 2, 0.5, 0.25, 0] as const;
 
 function clampInt(raw: string, min: number, max: number, fallback: number): number {
   const n = Number(raw);
@@ -29,8 +34,6 @@ const inputClass =
   "w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:focus:border-zinc-400";
 const labelClass = "mb-1 block text-xs font-medium text-zinc-500 dark:text-zinc-400";
 
-// In-game HP bar colors: green above 50%, yellow/orange between 20% and 50%,
-// red at 20% and below.
 function hpBarColor(hpPercent: number): string {
   if (hpPercent > 50) return "bg-green-500";
   if (hpPercent > 20) return "bg-amber-400";
@@ -57,8 +60,6 @@ function BallSprite({ ball, size = 24 }: { ball: BallId; size?: number }) {
   );
 }
 
-// Custom dropdown instead of a native <select> so every option can show its
-// ball sprite - same pattern as the evolve/team pickers.
 function BallPicker({
   ball,
   ballIds,
@@ -87,7 +88,6 @@ function BallPicker({
     <div ref={containerRef} className="relative">
       <button
         type="button"
-        id="cr-ball"
         onClick={() => setOpen((o) => !o)}
         className="flex w-full items-center justify-between gap-2 rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-left text-sm dark:border-zinc-700 dark:bg-zinc-900"
       >
@@ -122,43 +122,49 @@ function BallPicker({
   );
 }
 
-export function CatchRateView({
-  runId,
-  mode,
-  pokemonList,
-  catchRates,
-  lockedFamilyIds,
-  generation,
-  openSlots,
-}: {
+type SharedProps = {
   runId: number;
   mode: RunMode;
   pokemonList: Pokemon[];
   catchRates: Record<number, number>;
-  lockedFamilyIds: number[];
+  lockedFamilies: Set<number>;
   generation: number;
   openSlots: OpenSlot[];
+  effectiveness: EffectivenessTable;
+  attackTypes: string[];
+};
+
+// One independent catch calculator (Pokémon + ball + HP + status + condition),
+// with weaknesses and the quick-catch dropdowns. Several can be shown at once.
+function CatchCard({
+  shared,
+  onRemove,
+}: {
+  shared: SharedProps;
+  onRemove?: () => void;
 }) {
+  const { runId, mode, pokemonList, catchRates, lockedFamilies, generation, openSlots, effectiveness, attackTypes } = shared;
   const router = useRouter();
   const { lang } = useLanguage();
   const t = translations[lang].catchrate;
-  const lockedFamilies = useMemo(() => new Set(lockedFamilyIds), [lockedFamilyIds]);
+  const tTypen = translations[lang].typen;
+  const playerLabel = usePlayerLabel();
   const ballIds = getBallIdsForGeneration(generation);
+
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [ball, setBall] = useState<BallId>("poke");
   const [hpPercent, setHpPercent] = useState(100);
   const [level, setLevel] = useState(50);
   const [status, setStatus] = useState<StatusId>("none");
   const [turn, setTurn] = useState(1);
+  const [conditionMet, setConditionMet] = useState(true);
   const [caughtMsg, setCaughtMsg] = useState<string | null>(null);
   const [catching, startCatch] = useTransition();
 
   const selected = pokemonList.find((p) => p.id === selectedId) ?? null;
   const baseRate = selected ? catchRates[selected.id] : undefined;
   const isLocked = selected ? lockedFamilies.has(selected.family_id) : false;
-  const selectedTypes = selected
-    ? typesForGeneration(selected.id, selected.types, generation)
-    : [];
+  const selectedTypes = selected ? typesForGeneration(selected.id, selected.types, generation) : [];
 
   const result =
     selected && baseRate !== undefined
@@ -167,6 +173,7 @@ export function CatchRateView({
           hpPercent,
           level,
           ball,
+          conditionMet,
           status,
           types: selectedTypes,
           turn,
@@ -174,6 +181,19 @@ export function CatchRateView({
       : null;
 
   const ballNote = (t.ballNotes as Partial<Record<BallId, string>>)[ball];
+  const hasCondition = ballHasCondition(ball);
+
+  // Defensive matchups for the selected Pokémon (#4).
+  const weaknessGroups = useMemo(() => {
+    if (!selected) return [];
+    const mult = computeDefenseMultipliers(effectiveness, selectedTypes, attackTypes);
+    return WEAKNESS_GROUPS.map((g) => ({
+      mult: g,
+      label: { 4: tTypen.weak4, 2: tTypen.weak2, 0.5: tTypen.resist2, 0.25: tTypen.resist4, 0: tTypen.immune }[g] as string,
+      types: attackTypes.filter((ty) => mult[ty] === g),
+    })).filter((row) => row.types.length > 0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selected, effectiveness, attackTypes, generation, lang]);
 
   function handleQuickCatch(routeId: number, player: Player) {
     if (selected === null) return;
@@ -192,8 +212,6 @@ export function CatchRateView({
     });
   }
 
-  // Solo lists routes in one dropdown; SoulLink splits them per player.
-  // Plain render function (not a nested component) to satisfy the compiler.
   const renderQuickCatchSelect = (player: Player) => {
     const slots = openSlots.filter((s) => s.player === player);
     return (
@@ -218,131 +236,135 @@ export function CatchRateView({
   const isSoulLink = mode === RunMode.SOULLINK;
 
   return (
-    <div>
-      <h2 className="mb-4 text-xl font-semibold">{t.heading}</h2>
+    <div className="relative max-w-xl rounded-lg border border-zinc-200 p-4 dark:border-zinc-800">
+      {onRemove && (
+        <button
+          type="button"
+          onClick={onRemove}
+          aria-label="×"
+          className="absolute right-2 top-2 rounded p-1 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
+        >
+          ✕
+        </button>
+      )}
 
-      <div className="max-w-xl rounded-lg border border-zinc-200 p-4 dark:border-zinc-800">
-        <div className="mb-4">
-          <div className="flex items-center gap-2">
-            <div className="min-w-0 flex-1">
-              <PokemonCombobox
-                lang={lang}
-                pokemonList={pokemonList}
-                selectedId={selectedId}
-                onSelect={setSelectedId}
-                lockedFamilyIds={lockedFamilies}
-              />
-            </div>
-            <PokemonInfoButton
-              pokemonId={selectedId}
-              label={selected ? pokemonName(selected, lang) : ""}
+      <div className="mb-4">
+        <div className="flex items-center gap-2 pr-6">
+          <div className="min-w-0 flex-1">
+            <PokemonCombobox
+              lang={lang}
+              pokemonList={pokemonList}
+              selectedId={selectedId}
+              onSelect={setSelectedId}
+              lockedFamilyIds={lockedFamilies}
             />
           </div>
-          {isLocked && (
-            <p className="mt-2 text-xs text-amber-600 dark:text-amber-400">⚠ {t.lockWarning}</p>
-          )}
+          <PokemonInfoButton pokemonId={selectedId} label={selected ? pokemonName(selected, lang) : ""} />
         </div>
-
-        <div className="grid grid-cols-2 gap-3">
-          <div className="col-span-2 sm:col-span-1">
-            <label className={labelClass} htmlFor="cr-ball">
-              {t.ballLabel}
-            </label>
-            <BallPicker ball={ball} ballIds={ballIds} labels={t.balls} onPick={setBall} />
-          </div>
-
-          <div className="col-span-2 sm:col-span-1">
-            <label className={labelClass} htmlFor="cr-status">
-              {t.statusLabel}
-            </label>
-            <select
-              id="cr-status"
-              value={status}
-              onChange={(e) => setStatus(e.target.value as StatusId)}
-              className={inputClass}
-            >
-              {STATUS_IDS.map((id) => (
-                <option key={id} value={id}>
-                  {t.statusOptions[id]}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="col-span-2">
-            <label className={labelClass} htmlFor="cr-hp">
-              {t.hpLabel}: <span className="font-semibold text-zinc-700 dark:text-zinc-200">{hpPercent}%</span>
-            </label>
-            <input
-              id="cr-hp"
-              type="range"
-              min={1}
-              max={100}
-              value={hpPercent}
-              onChange={(e) => setHpPercent(Number(e.target.value))}
-              className="w-full accent-zinc-700 dark:accent-zinc-300"
-            />
-            <div className="mt-1 h-2.5 w-full overflow-hidden rounded-full border border-zinc-300 bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800">
-              <div
-                className={`h-full rounded-full transition-all ${hpBarColor(hpPercent)}`}
-                style={{ width: `${hpPercent}%` }}
-              />
-            </div>
-          </div>
-
-          {/* Level only matters for the Nest Ball bonus - the Gen 3 catch
-              formula itself is level-independent (HP enters as a ratio). */}
-          {ball === "nest" && (
-            <div className="col-span-2 sm:col-span-1">
-              <label className={labelClass} htmlFor="cr-level">
-                {t.levelLabel}
-              </label>
-              <input
-                id="cr-level"
-                type="number"
-                min={1}
-                max={100}
-                value={level}
-                onChange={(e) => setLevel(clampInt(e.target.value, 1, 100, 50))}
-                className={inputClass}
-              />
-            </div>
-          )}
-
-          {(ball === "timer" || ball === "quick") && (
-            <div className="col-span-2 sm:col-span-1">
-              <label className={labelClass} htmlFor="cr-turn">
-                {t.turnLabel}
-              </label>
-              <input
-                id="cr-turn"
-                type="number"
-                min={1}
-                max={99}
-                value={turn}
-                onChange={(e) => setTurn(clampInt(e.target.value, 1, 99, 1))}
-                className={inputClass}
-              />
-            </div>
-          )}
-        </div>
-
-        {ballNote && (
-          <p className="mt-3 text-xs text-zinc-400 dark:text-zinc-500">{ballNote}</p>
+        {isLocked && (
+          <p className="mt-2 text-xs text-amber-600 dark:text-amber-400">⚠ {t.lockWarning}</p>
         )}
       </div>
 
-      <div className="mt-4 max-w-xl">
+      <div className="grid grid-cols-2 gap-3">
+        <div className="col-span-2 sm:col-span-1">
+          <label className={labelClass}>{t.ballLabel}</label>
+          <BallPicker ball={ball} ballIds={ballIds} labels={t.balls} onPick={setBall} />
+        </div>
+        <div className="col-span-2 sm:col-span-1">
+          <label className={labelClass} htmlFor="cr-status">
+            {t.statusLabel}
+          </label>
+          <select
+            value={status}
+            onChange={(e) => setStatus(e.target.value as StatusId)}
+            className={inputClass}
+          >
+            {STATUS_IDS.map((id) => (
+              <option key={id} value={id}>
+                {t.statusOptions[id]}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="col-span-2">
+          <label className={labelClass}>
+            {t.hpLabel}:{" "}
+            <span className="font-semibold text-zinc-700 dark:text-zinc-200">{hpPercent}%</span>
+          </label>
+          <input
+            type="range"
+            min={1}
+            max={100}
+            value={hpPercent}
+            onChange={(e) => setHpPercent(Number(e.target.value))}
+            className="w-full accent-zinc-700 dark:accent-zinc-300"
+          />
+          <div className="mt-1 h-2.5 w-full overflow-hidden rounded-full border border-zinc-300 bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800">
+            <div
+              className={`h-full rounded-full transition-all ${hpBarColor(hpPercent)}`}
+              style={{ width: `${hpPercent}%` }}
+            />
+          </div>
+        </div>
+
+        {ball === "nest" && (
+          <div className="col-span-2 sm:col-span-1">
+            <label className={labelClass}>{t.levelLabel}</label>
+            <input
+              type="number"
+              min={1}
+              max={100}
+              value={level}
+              onChange={(e) => setLevel(clampInt(e.target.value, 1, 100, 50))}
+              className={inputClass}
+            />
+          </div>
+        )}
+
+        {(ball === "timer" || ball === "quick") && (
+          <div className="col-span-2 sm:col-span-1">
+            <label className={labelClass}>{t.turnLabel}</label>
+            <input
+              type="number"
+              min={1}
+              max={99}
+              value={turn}
+              onChange={(e) => setTurn(clampInt(e.target.value, 1, 99, 1))}
+              className={inputClass}
+            />
+          </div>
+        )}
+      </div>
+
+      {/* Conditional-ball checkbox (#1): the bonus only counts when checked. */}
+      {hasCondition && (
+        <label className="mt-3 flex cursor-pointer items-start gap-2">
+          <input
+            type="checkbox"
+            checked={conditionMet}
+            onChange={(e) => setConditionMet(e.target.checked)}
+            className="mt-0.5 accent-emerald-500"
+          />
+          <span className="text-xs text-zinc-600 dark:text-zinc-300">
+            <span className="font-medium">{t.conditionMet}</span>
+            {ballNote && <span className="block text-zinc-400 dark:text-zinc-500">{ballNote}</span>}
+          </span>
+        </label>
+      )}
+      {!hasCondition && ballNote && (
+        <p className="mt-3 text-xs text-zinc-400 dark:text-zinc-500">{ballNote}</p>
+      )}
+
+      {/* Result */}
+      <div className="mt-4">
         {result === null || selected === null ? (
           <p className="text-sm text-zinc-500 dark:text-zinc-400">{t.hint}</p>
         ) : (
-          <div className="rounded-lg border border-zinc-200 p-4 dark:border-zinc-800">
+          <div className="rounded-lg border border-zinc-200 p-3 dark:border-zinc-800">
             <div className="flex items-center gap-4">
-              <PokemonSprite
-                pokemonId={selected.id}
-                name={pokemonName(selected, lang)}
-                size="lg"
-              />
+              <PokemonSprite pokemonId={selected.id} name={pokemonName(selected, lang)} size="lg" />
               <div>
                 <div className="mb-1 flex items-center gap-2">
                   <span className="font-medium">{pokemonName(selected, lang)}</span>
@@ -367,9 +389,28 @@ export function CatchRateView({
         )}
       </div>
 
-      {/* Quick-catch: record the selected Pokémon as caught on an open route
-          (and drop it into a free team slot). */}
-      <div className="mt-4 max-w-xl rounded-lg border border-zinc-200 p-4 dark:border-zinc-800">
+      {/* Type weaknesses of the selected Pokémon (#4) */}
+      {selected && weaknessGroups.length > 0 && (
+        <div className="mt-3">
+          <div className="flex flex-col gap-1">
+            {weaknessGroups.map((row) => (
+              <div key={row.mult} className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                <span className="w-40 shrink-0 text-xs text-zinc-500 dark:text-zinc-400">
+                  {row.label}:
+                </span>
+                <div className="flex flex-wrap gap-1">
+                  {row.types.map((type) => (
+                    <TypeBadge key={type} type={type} lang={lang} />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Quick-catch */}
+      <div className="mt-4 border-t border-zinc-100 pt-3 dark:border-zinc-800">
         <h3 className="mb-2 text-sm font-semibold">{t.caughtHeading}</h3>
         {selectedId === null ? (
           <p className="text-xs text-zinc-400 dark:text-zinc-500">{t.caughtNeedSelection}</p>
@@ -378,11 +419,11 @@ export function CatchRateView({
         ) : isSoulLink ? (
           <div className="grid gap-3 sm:grid-cols-2">
             <div>
-              <label className={labelClass}>{translations[lang].player.PLAYER1}</label>
+              <label className={labelClass}>{playerLabel(Player.PLAYER1)}</label>
               {renderQuickCatchSelect(Player.PLAYER1)}
             </div>
             <div>
-              <label className={labelClass}>{translations[lang].player.PLAYER2}</label>
+              <label className={labelClass}>{playerLabel(Player.PLAYER2)}</label>
               {renderQuickCatchSelect(Player.PLAYER2)}
             </div>
           </div>
@@ -393,6 +434,70 @@ export function CatchRateView({
           <p className="mt-2 text-xs text-emerald-600 dark:text-emerald-400">{caughtMsg}</p>
         )}
       </div>
+    </div>
+  );
+}
+
+export function CatchRateView({
+  runId,
+  mode,
+  pokemonList,
+  catchRates,
+  lockedFamilyIds,
+  generation,
+  openSlots,
+  effectiveness,
+  attackTypes,
+}: {
+  runId: number;
+  mode: RunMode;
+  pokemonList: Pokemon[];
+  catchRates: Record<number, number>;
+  lockedFamilyIds: number[];
+  generation: number;
+  openSlots: OpenSlot[];
+  effectiveness: EffectivenessTable;
+  attackTypes: string[];
+}) {
+  const { lang } = useLanguage();
+  const t = translations[lang].catchrate;
+  const lockedFamilies = useMemo(() => new Set(lockedFamilyIds), [lockedFamilyIds]);
+
+  // Independent, ephemeral calculator cards (e.g. one per player mid-encounter).
+  const [cards, setCards] = useState<number[]>([0]);
+  const nextId = useRef(1);
+
+  const shared: SharedProps = {
+    runId,
+    mode,
+    pokemonList,
+    catchRates,
+    lockedFamilies,
+    generation,
+    openSlots,
+    effectiveness,
+    attackTypes,
+  };
+
+  return (
+    <div>
+      <h2 className="mb-4 text-xl font-semibold">{t.heading}</h2>
+      <div className="flex flex-col gap-4">
+        {cards.map((id) => (
+          <CatchCard
+            key={id}
+            shared={shared}
+            onRemove={cards.length > 1 ? () => setCards((c) => c.filter((x) => x !== id)) : undefined}
+          />
+        ))}
+      </div>
+      <button
+        type="button"
+        onClick={() => setCards((c) => [...c, nextId.current++])}
+        className="mt-3 flex max-w-xl items-center justify-center gap-1.5 rounded-lg border border-dashed border-zinc-300 px-3 py-2.5 text-sm font-medium text-zinc-500 transition-colors hover:border-zinc-400 hover:bg-zinc-50 hover:text-zinc-700 dark:border-zinc-700 dark:text-zinc-400 dark:hover:border-zinc-600 dark:hover:bg-zinc-900 dark:hover:text-zinc-200"
+      >
+        <span className="text-lg leading-none">+</span> {t.addCard}
+      </button>
     </div>
   );
 }

@@ -1,5 +1,12 @@
 import { redirect } from "next/navigation";
-import { getEvolutions, getGameOrDefault, getLearnset, getPokemonList } from "@/lib/data";
+import {
+  getEffectiveness,
+  getEvolutions,
+  getGameOrDefault,
+  getMoves,
+  getMoveset,
+  getPokemonList,
+} from "@/lib/data";
 import { resolveRunId } from "@/lib/runs";
 import { getLang } from "@/lib/i18n/getLang";
 import { translations } from "@/lib/i18n/dictionary";
@@ -28,14 +35,14 @@ export default async function PokedexPage({
     impossible: settings.evolutionOverridesImpossible,
     easier: settings.evolutionOverridesEasier,
   });
-  const learnset = getLearnset(game.versionGroup);
 
   return (
     <SpriteSetProvider spriteSet={game.spriteSet}>
       <PokemonDetailProvider
         pokemonList={pokemon}
         evolutions={evolutions}
-        learnset={learnset}
+        moveData={{ movesets: getMoveset(game.versionGroup), moves: getMoves() }}
+        effectiveness={getEffectiveness(game.generation)}
         generation={game.generation}
         dexLimit={game.dexLimit}
         lang={lang}

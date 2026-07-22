@@ -1,12 +1,15 @@
 import { redirect } from "next/navigation";
 import {
   getCatchRates,
+  getEffectiveness,
   getEvolutions,
   getGameOrDefault,
-  getLearnset,
+  getMoves,
+  getMoveset,
   getPokemonList,
   getRoutes,
 } from "@/lib/data";
+import { getTypesForGeneration } from "@/lib/effectiveness";
 import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
 import { getLang } from "@/lib/i18n/getLang";
@@ -15,6 +18,7 @@ import { Player, RunMode } from "@/generated/prisma/client";
 import { CatchRateView, type OpenSlot } from "@/components/CatchRateView";
 import { SpriteSetProvider } from "@/components/SpriteSetProvider";
 import { PokemonDetailProvider } from "@/components/PokemonDetailProvider";
+import { PlayerNamesProvider } from "@/components/PlayerNamesProvider";
 
 export const dynamic = "force-dynamic";
 
@@ -59,28 +63,33 @@ export default async function CatchratePage({
 
   return (
     <SpriteSetProvider spriteSet={game.spriteSet}>
-      <PokemonDetailProvider
-        pokemonList={pokemonList}
-        evolutions={getEvolutions({
-          gameId,
-          impossible: settings.evolutionOverridesImpossible,
-          easier: settings.evolutionOverridesEasier,
-        })}
-        learnset={getLearnset(game.versionGroup)}
-        generation={game.generation}
-        dexLimit={game.dexLimit}
-        lang={lang}
-      >
-        <CatchRateView
-          runId={runId}
-          mode={mode}
+      <PlayerNamesProvider names={settings.playerNames} lang={lang}>
+        <PokemonDetailProvider
           pokemonList={pokemonList}
-          catchRates={catchRates}
-          lockedFamilyIds={lockedFamilyIds}
+          evolutions={getEvolutions({
+            gameId,
+            impossible: settings.evolutionOverridesImpossible,
+            easier: settings.evolutionOverridesEasier,
+          })}
+          moveData={{ movesets: getMoveset(game.versionGroup), moves: getMoves() }}
+          effectiveness={getEffectiveness(game.generation)}
           generation={game.generation}
-          openSlots={openSlots}
-        />
-      </PokemonDetailProvider>
+          dexLimit={game.dexLimit}
+          lang={lang}
+        >
+          <CatchRateView
+            runId={runId}
+            mode={mode}
+            pokemonList={pokemonList}
+            catchRates={catchRates}
+            lockedFamilyIds={lockedFamilyIds}
+            generation={game.generation}
+            openSlots={openSlots}
+            effectiveness={getEffectiveness(game.generation)}
+            attackTypes={getTypesForGeneration(game.generation)}
+          />
+        </PokemonDetailProvider>
+      </PlayerNamesProvider>
     </SpriteSetProvider>
   );
 }

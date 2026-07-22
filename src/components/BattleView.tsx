@@ -11,9 +11,12 @@ import type { Player, RunMode } from "@/generated/prisma/client";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import type { Lang } from "@/lib/i18n/dictionary";
 import { translations } from "@/lib/i18n/dictionary";
+import { pokemonName } from "@/lib/i18n/localize";
 import { PokemonCombobox } from "@/components/PokemonCombobox";
 import { PokemonSprite } from "@/components/PokemonSprite";
 import { TypeBadge } from "@/components/TypeBadge";
+import { usePlayerLabel } from "@/components/PlayerNamesProvider";
+import { usePokemonDetail, PokemonInfoButton } from "@/components/PokemonDetailProvider";
 import type { TeamMember } from "@/components/TeamWeaknessesView";
 
 const EMPTY_LOCKS = new Set<number>();
@@ -66,6 +69,7 @@ function TeamMatchup({
   table: EffectivenessTable;
   lang: Lang;
 }) {
+  const detail = usePokemonDetail();
   const memberMults = members.map((m) => computeDefenseMultipliers(table, m.types, attackTypes));
   return (
     <div className="overflow-x-auto">
@@ -75,7 +79,14 @@ function TeamMatchup({
             <th aria-hidden />
             {members.map((m) => (
               <th key={m.encounterId} className="p-0 pb-1 text-center" title={m.name}>
-                <PokemonSprite pokemonId={m.pokemonId} name={m.name} size="md" className="mx-auto h-8 w-8 sm:h-11 sm:w-11" />
+                <button
+                  type="button"
+                  onClick={() => detail?.open(m.pokemonId)}
+                  className="cursor-pointer rounded transition-opacity hover:opacity-80"
+                  title={m.name}
+                >
+                  <PokemonSprite pokemonId={m.pokemonId} name={m.name} size="md" className="mx-auto h-8 w-8 sm:h-11 sm:w-11" />
+                </button>
               </th>
             ))}
           </tr>
@@ -118,6 +129,7 @@ export function BattleView({
   learnset,
   teams,
   mode,
+  explosiveMap,
 }: {
   pokemonList: Pokemon[];
   table: EffectivenessTable;
@@ -127,13 +139,18 @@ export function BattleView({
   learnset: Learnset;
   teams: { player: Player; members: TeamMember[] }[];
   mode: RunMode;
+  // Pokémon (by id) that learn self-destruct/explosion, with the localized
+  // move name + lowest level (derived server-side from the moveset).
+  explosiveMap: Record<number, { name: string; level: number }>;
 }) {
   const { lang } = useLanguage();
   const t = translations[lang].typen;
+  const playerLabel = usePlayerLabel();
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [level, setLevel] = useState(100);
 
   const selectedRaw = pokemonList.find((p) => p.id === selectedId) ?? null;
+  const explosive = selectedRaw ? explosiveMap[selectedRaw.id] ?? null : null;
   const opponentTypes = selectedRaw
     ? typesForGeneration(selectedRaw.id, selectedRaw.types, generation)
     : [];
@@ -157,13 +174,19 @@ export function BattleView({
       <h2 className="mb-4 text-xl font-semibold">{t.battleHeading}</h2>
 
       <div className="mb-4 flex flex-wrap items-end gap-3">
-        <div className="max-w-sm flex-1">
-          <PokemonCombobox
-            lang={lang}
-            pokemonList={pokemonList}
-            selectedId={selectedId}
-            onSelect={setSelectedId}
-            lockedFamilyIds={EMPTY_LOCKS}
+        <div className="flex max-w-sm flex-1 items-center gap-2">
+          <div className="min-w-0 flex-1">
+            <PokemonCombobox
+              lang={lang}
+              pokemonList={pokemonList}
+              selectedId={selectedId}
+              onSelect={setSelectedId}
+              lockedFamilyIds={EMPTY_LOCKS}
+            />
+          </div>
+          <PokemonInfoButton
+            pokemonId={selectedId}
+            label={selectedRaw ? pokemonName(selectedRaw, lang) : ""}
           />
         </div>
         <div>
@@ -194,6 +217,19 @@ export function BattleView({
               <TypeBadge key={type} type={type} lang={lang} />
             ))}
           </div>
+
+          {/* Self-destruct / explosion warning */}
+          {explosive && (
+            <p
+              className={`rounded-md px-2.5 py-1.5 text-sm font-medium ${
+                explosive.level <= level
+                  ? "bg-red-100 text-red-700 dark:bg-red-950/50 dark:text-red-300"
+                  : "bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300"
+              }`}
+            >
+              {t.explosionWarn(explosive.name, explosive.level)}
+            </p>
+          )}
 
           {/* Opponent's damaging attack types at the chosen level */}
           <div>
@@ -301,7 +337,7 @@ export function BattleView({
                     <section key={team.player}>
                       {mode !== "CLASSIC" && (
                         <h4 className="mb-2 text-xs font-semibold text-zinc-500 dark:text-zinc-400">
-                          {translations[lang].player[team.player]}
+                          {playerLabel(team.player)}
                         </h4>
                       )}
                       <TeamMatchup

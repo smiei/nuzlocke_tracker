@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import type { EffectivenessTable } from "@/lib/effectiveness";
 import type { LocalizedNames } from "@/lib/i18n/localize";
-import type { Learnset } from "@/lib/learnset";
+import type { Learnset, Moveset, MovesTable } from "@/lib/learnset";
 
 // Static reference data lives in /data as JSON, not in the DB (see project spec).
 // Read fresh from disk on every call (no in-memory caching) so the bind-mounted
@@ -249,6 +249,24 @@ export function getCatchRates(): CatchRateEntry[] {
 export function getLearnset(versionGroup: string): Learnset {
   try {
     return readJson<Learnset>(path.join("learnsets", `${versionGroup}.json`));
+  } catch {
+    return {};
+  }
+}
+
+// Full level-up movesets (all moves, for the Pokédex card's move list + the
+// Battle tab's explosion warning) and the shared localized move-name table.
+export function getMoveset(versionGroup: string): Moveset {
+  try {
+    return readJson<Moveset>(path.join("movesets", `${versionGroup}.json`));
+  } catch {
+    return {};
+  }
+}
+
+export function getMoves(): MovesTable {
+  try {
+    return readJson<MovesTable>("moves.json");
   } catch {
     return {};
   }
