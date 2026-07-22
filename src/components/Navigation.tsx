@@ -12,12 +12,13 @@ export function Navigation() {
   const searchParams = useSearchParams();
   const run = searchParams.get("run");
   const { lang } = useLanguage();
-  const { order } = useTabOrder();
+  const { order, hidden } = useTabOrder();
   const t = translations[lang].nav;
 
   const items = order
     .map((href) => NAV_ITEMS.find((item) => item.href === href))
-    .filter((item): item is (typeof NAV_ITEMS)[number] => item !== undefined);
+    .filter((item): item is (typeof NAV_ITEMS)[number] => item !== undefined)
+    .filter((item) => !hidden.includes(item.href));
 
   return (
     <nav className="flex gap-1 overflow-x-auto px-4 sm:px-6">

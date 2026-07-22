@@ -44,7 +44,7 @@ export function RunSwitcher({ runs, games }: { runs: RunSummary[]; games: GameSu
     startTransition(async () => {
       // Inherit ruleset + rule toggles from the run that's on screen right
       // now, then land on the Rules tab so they can be reviewed first.
-      const result = await createRun(name, mode, activeId ?? null, gameId);
+      const result = await createRun(name, mode, activeId ?? null, gameId, lang);
       if (result.success) {
         setDialogOpen(false);
         router.push(`/rules?run=${result.runId}`);

@@ -17,6 +17,7 @@ import type { BackupFile } from "@/lib/backup";
 import { applyBackup, backupFilename, buildBackup, parseBackup } from "@/lib/backup";
 import { DEFAULT_RULES } from "@/lib/defaultRules";
 import { parseRunSettings, RUN_SETTING_KEYS, type RunSettings } from "@/lib/runSettings";
+import type { Lang } from "@/lib/i18n/dictionary";
 
 export type SaveEncounterInput = {
   runId: number;
@@ -403,6 +404,7 @@ export async function createRun(
   mode: RunMode,
   sourceRunId?: number | null,
   gameId?: string,
+  lang?: Lang,
 ): Promise<CreateRunResult> {
   const trimmed = name.trim();
   if (!trimmed) {
@@ -422,7 +424,9 @@ export async function createRun(
     (sourceRunId != null
       ? await prisma.run.findUnique({ where: { id: sourceRunId } })
       : null) ?? (await prisma.run.findFirst({ orderBy: { id: "desc" } }));
-  const rulesMarkdown = source?.rulesMarkdown.trim() ? source.rulesMarkdown : DEFAULT_RULES;
+  const rulesMarkdown = source?.rulesMarkdown.trim()
+    ? source.rulesMarkdown
+    : DEFAULT_RULES[lang ?? "de"];
   const settingsJson = source?.settingsJson ?? "{}";
 
   const run = await prisma.run.create({

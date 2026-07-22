@@ -19,11 +19,19 @@ export default async function RulesPage({
   const lang = await getLang();
 
   const runRow = await prisma.run.findUnique({ where: { id: runId } });
+  const defaultMarkdown = DEFAULT_RULES[lang];
   // Pre-existing runs (created before the rules feature) have '' - show the
   // built-in ruleset for them instead of an empty page.
-  const markdown = runRow?.rulesMarkdown.trim() ? runRow.rulesMarkdown : DEFAULT_RULES;
+  const markdown = runRow?.rulesMarkdown.trim() ? runRow.rulesMarkdown : defaultMarkdown;
 
   return (
-    <RulesView runId={runId} lang={lang} mode={mode} markdown={markdown} settings={settings} />
+    <RulesView
+      runId={runId}
+      lang={lang}
+      mode={mode}
+      markdown={markdown}
+      defaultMarkdown={defaultMarkdown}
+      settings={settings}
+    />
   );
 }

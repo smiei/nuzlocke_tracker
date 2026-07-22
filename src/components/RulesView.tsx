@@ -103,16 +103,18 @@ export function RulesView({
   lang,
   mode,
   markdown,
+  defaultMarkdown,
   settings,
 }: {
   runId: number;
   lang: Lang;
   mode: RunMode;
   markdown: string;
+  defaultMarkdown: string;
   settings: RunSettings;
 }) {
   const router = useRouter();
-  const { alert } = useDialog();
+  const { alert, confirm } = useDialog();
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(markdown);
   const [notesOpen, setNotesOpen] = useState(true);
@@ -160,6 +162,13 @@ export function RulesView({
     setDraft(markdown);
     setEditing(true);
     setNotesOpen(true);
+  }
+
+  // Drop the current language's built-in ruleset into the editor (confirm
+  // first if there's content to overwrite). Saved only when the user hits Save.
+  async function handleLoadDefault() {
+    if (draft.trim() && !(await confirm({ message: t.loadDefaultConfirm }))) return;
+    setDraft(defaultMarkdown);
   }
 
   function handleSave() {
@@ -247,6 +256,14 @@ export function RulesView({
           <div className="flex gap-2">
             {editing ? (
               <>
+                <button
+                  type="button"
+                  disabled={pending}
+                  onClick={handleLoadDefault}
+                  className="rounded-md border border-zinc-300 px-3 py-1.5 text-sm font-medium text-zinc-600 transition-colors hover:bg-zinc-50 disabled:opacity-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                >
+                  {t.loadDefault}
+                </button>
                 <button
                   type="button"
                   disabled={pending}
