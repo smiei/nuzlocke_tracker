@@ -44,6 +44,27 @@ export function singleTypeMultiplier(
   return table[toGerman[defenseType]]?.[toGerman[attackType]] ?? 1;
 }
 
+// The team's OFFENSIVE reach: given the union of the team's damaging attack
+// types, the best multiplier it can deal to each single defending type, plus
+// the "gaps" - defending types no team member hits super-effectively (>= 2x).
+export function teamOffensiveCoverage(
+  table: EffectivenessTable,
+  teamAttackTypes: string[],
+  defenderTypes: string[] = GEN3_TYPES,
+): { best: Record<string, number>; gaps: string[] } {
+  const best: Record<string, number> = {};
+  for (const def of defenderTypes) {
+    let m = 0;
+    for (const atk of teamAttackTypes) {
+      const mult = singleTypeMultiplier(table, atk, def);
+      if (mult > m) m = mult;
+    }
+    best[def] = m;
+  }
+  const gaps = defenderTypes.filter((def) => best[def] < 2);
+  return { best, gaps };
+}
+
 // Multiplier per attack type against a (single- or dual-typed) defender.
 // Dual types multiply, so immunities (0) win over everything.
 export function computeDefenseMultipliers(

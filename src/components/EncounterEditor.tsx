@@ -68,10 +68,12 @@ export function EncounterEditor({
     if (!settings.speciesClause) return set;
     for (const e of encounters) {
       if (e.routeId === routeId && e.player === player) continue;
+      // Shiny Clause: a shiny catch is exempt and doesn't lock its family.
+      if (settings.shinyClause && e.shiny) continue;
       set.add(e.familyId);
     }
     return set;
-  }, [settings.speciesClause, encounters, routeId, player]);
+  }, [settings.speciesClause, settings.shinyClause, encounters, routeId, player]);
 
   // Tracker always shows what was actually caught (pokemonId); if it has
   // since been evolved in the Links tab (currentPokemonId), name that form
@@ -86,6 +88,7 @@ export function EncounterEditor({
   const [status, setStatus] = useState<EncounterStatus>(current?.status ?? EncounterStatus.CAUGHT);
   const [nickname, setNickname] = useState(current?.nickname ?? "");
   const [nickFocused, setNickFocused] = useState(false);
+  const [shiny, setShiny] = useState(current?.shiny ?? false);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
@@ -98,7 +101,8 @@ export function EncounterEditor({
     setSelectedId(current?.pokemonId ?? null);
     setStatus(current?.status ?? EncounterStatus.CAUGHT);
     setNickname(current?.nickname ?? "");
-  }, [current?.pokemonId, current?.status, current?.nickname]);
+    setShiny(current?.shiny ?? false);
+  }, [current?.pokemonId, current?.status, current?.nickname, current?.shiny]);
 
   // Static/gift is a fixed property of the location (routes.json `type`),
   // no longer a user-set checkbox.
@@ -114,6 +118,8 @@ export function EncounterEditor({
   // could flip when entries are edited later).
   const lockWarning = useMemo(() => {
     if (!settings.speciesClause || selectedId === null) return null;
+    // Shiny Clause: a shiny catch is always allowed - no clause warning.
+    if (settings.shinyClause && shiny) return null;
     if (routeIsStatic && settings.staticsExemptFromClause) return null;
     const picked = pokemonList.find((p) => p.id === selectedId);
     if (!picked) return null;
@@ -127,12 +133,13 @@ export function EncounterEditor({
       t.player[conflict.player],
       conflictRoute ? routeName(conflictRoute, lang) : `Route #${conflict.routeId}`,
     );
-  }, [settings, selectedId, routeIsStatic, encounters, routeId, player, pokemonList, routes, lang, t]);
+  }, [settings, shiny, selectedId, routeIsStatic, encounters, routeId, player, pokemonList, routes, lang, t]);
 
   function persist(next: {
     pokemonId: number;
     status: EncounterStatus;
     nickname?: string | null;
+    shiny?: boolean;
   }) {
     setError(null);
     startTransition(async () => {
@@ -145,6 +152,7 @@ export function EncounterEditor({
         setSelectedId(current?.pokemonId ?? null);
         setStatus(current?.status ?? EncounterStatus.CAUGHT);
         setNickname(current?.nickname ?? "");
+        setShiny(current?.shiny ?? false);
       }
     });
   }
@@ -152,13 +160,21 @@ export function EncounterEditor({
   function handleSelectPokemon(pokemonId: number) {
     setSelectedId(pokemonId);
     if (pokemonId !== current?.pokemonId) {
-      // A different species = a different individual - its nickname doesn't
-      // carry over. Re-picking the same species keeps it.
+      // A different species = a different individual - its nickname and shiny
+      // flag don't carry over. Re-picking the same species keeps them.
       setNickname("");
-      persist({ pokemonId, status, nickname: null });
+      setShiny(false);
+      persist({ pokemonId, status, nickname: null, shiny: false });
     } else {
       persist({ pokemonId, status });
     }
+  }
+
+  function handleShinyToggle() {
+    if (selectedId === null) return;
+    const next = !shiny;
+    setShiny(next);
+    persist({ pokemonId: selectedId, status, shiny: next });
   }
 
   function handleStatusChange(next: EncounterStatus) {
@@ -209,6 +225,22 @@ export function EncounterEditor({
       {selectedId !== null && (
         <div className="flex flex-wrap items-center gap-2 text-xs">
           <PokemonInfoButton pokemonId={selectedId} label={selectedName} />
+          {settings.shinyClause && (
+            <button
+              type="button"
+              disabled={pending}
+              onClick={handleShinyToggle}
+              aria-pressed={shiny}
+              title={t.tracker.shinyToggle}
+              className={`rounded border px-1.5 py-1 transition-colors disabled:opacity-50 ${
+                shiny
+                  ? "border-amber-400 bg-amber-50 text-amber-600 dark:border-amber-600 dark:bg-amber-950/40 dark:text-amber-300"
+                  : "border-zinc-200 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:border-zinc-700 dark:text-zinc-500 dark:hover:bg-zinc-800"
+              }`}
+            >
+              ✨
+            </button>
+          )}
           <select
             value={status}
             disabled={pending}

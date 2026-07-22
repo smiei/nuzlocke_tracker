@@ -22,6 +22,7 @@ export type SoulLinkView = {
   status: LinkStatus;
   teamPosition: number | null;
   deathPlayer: Player | null;
+  deathCause: string | null;
   encounters: {
     id: number;
     player: Player;
@@ -32,9 +33,12 @@ export type SoulLinkView = {
     nickname: string | null;
     types: string[];
     summe: number;
+    // Highest BST reachable by fully evolving (within the game's dex).
+    summeMax: number;
     rang: number;
     status: EncounterStatus;
     isStatic: boolean;
+    shiny: boolean;
     evolvesTo: { id: number; name: string; method: string | null; available: boolean }[];
     evolvesFrom: { id: number; name: string } | null;
   }[];

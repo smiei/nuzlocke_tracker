@@ -8,6 +8,7 @@ import { ballHasCondition, getBallIdsForGeneration, STATUS_IDS, computeCatchChan
 import type { EffectivenessTable } from "@/lib/effectiveness";
 import { computeDefenseMultipliers } from "@/lib/effectiveness";
 import { quickCatch } from "@/lib/actions";
+import { usePersistentState } from "@/lib/usePersistentState";
 import { formatActionError } from "@/lib/actionErrors";
 import { Player, RunMode } from "@/generated/prisma/enums";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
@@ -134,13 +135,33 @@ type SharedProps = {
   attackTypes: string[];
 };
 
+type CatchCardState = {
+  id: number;
+  selectedId: number | null;
+  ball: BallId;
+  hpPercent: number;
+  level: number;
+  status: StatusId;
+  turn: number;
+  conditionMet: boolean;
+};
+
+function newCatchCard(id: number): CatchCardState {
+  return { id, selectedId: null, ball: "poke", hpPercent: 100, level: 50, status: "none", turn: 1, conditionMet: true };
+}
+
 // One independent catch calculator (Pokémon + ball + HP + status + condition),
 // with weaknesses and the quick-catch dropdowns. Several can be shown at once.
+// Controlled by the parent so the whole set persists per client.
 function CatchCard({
   shared,
+  state,
+  onChange,
   onRemove,
 }: {
   shared: SharedProps;
+  state: CatchCardState;
+  onChange: (patch: Partial<CatchCardState>) => void;
   onRemove?: () => void;
 }) {
   const { runId, mode, pokemonList, catchRates, lockedFamilies, generation, openSlots, effectiveness, attackTypes } = shared;
@@ -151,13 +172,7 @@ function CatchCard({
   const playerLabel = usePlayerLabel();
   const ballIds = getBallIdsForGeneration(generation);
 
-  const [selectedId, setSelectedId] = useState<number | null>(null);
-  const [ball, setBall] = useState<BallId>("poke");
-  const [hpPercent, setHpPercent] = useState(100);
-  const [level, setLevel] = useState(50);
-  const [status, setStatus] = useState<StatusId>("none");
-  const [turn, setTurn] = useState(1);
-  const [conditionMet, setConditionMet] = useState(true);
+  const { selectedId, ball, hpPercent, level, status, turn, conditionMet } = state;
   const [caughtMsg, setCaughtMsg] = useState<string | null>(null);
   const [catching, startCatch] = useTransition();
 
@@ -255,7 +270,8 @@ function CatchCard({
               lang={lang}
               pokemonList={pokemonList}
               selectedId={selectedId}
-              onSelect={setSelectedId}
+              onSelect={(id) => onChange({ selectedId: id })}
+              onClear={() => onChange({ selectedId: null })}
               lockedFamilyIds={lockedFamilies}
             />
           </div>
@@ -269,7 +285,7 @@ function CatchCard({
       <div className="grid grid-cols-2 gap-3">
         <div className="col-span-2 sm:col-span-1">
           <label className={labelClass}>{t.ballLabel}</label>
-          <BallPicker ball={ball} ballIds={ballIds} labels={t.balls} onPick={setBall} />
+          <BallPicker ball={ball} ballIds={ballIds} labels={t.balls} onPick={(b) => onChange({ ball: b })} />
         </div>
         <div className="col-span-2 sm:col-span-1">
           <label className={labelClass} htmlFor="cr-status">
@@ -277,7 +293,7 @@ function CatchCard({
           </label>
           <select
             value={status}
-            onChange={(e) => setStatus(e.target.value as StatusId)}
+            onChange={(e) => onChange({ status: e.target.value as StatusId })}
             className={inputClass}
           >
             {STATUS_IDS.map((id) => (
@@ -298,7 +314,7 @@ function CatchCard({
             min={1}
             max={100}
             value={hpPercent}
-            onChange={(e) => setHpPercent(Number(e.target.value))}
+            onChange={(e) => onChange({ hpPercent: Number(e.target.value) })}
             className="w-full accent-zinc-700 dark:accent-zinc-300"
           />
           <div className="mt-1 h-2.5 w-full overflow-hidden rounded-full border border-zinc-300 bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800">
@@ -312,14 +328,23 @@ function CatchCard({
         {ball === "nest" && (
           <div className="col-span-2 sm:col-span-1">
             <label className={labelClass}>{t.levelLabel}</label>
-            <input
-              type="number"
-              min={1}
-              max={100}
-              value={level}
-              onChange={(e) => setLevel(clampInt(e.target.value, 1, 100, 50))}
-              className={inputClass}
-            />
+            <div className="flex items-center gap-1">
+              <input
+                type="number"
+                min={1}
+                max={100}
+                value={level}
+                onChange={(e) => onChange({ level: clampInt(e.target.value, 1, 100, 50) })}
+                className={inputClass}
+              />
+              <button
+                type="button"
+                onClick={() => onChange({ level: 100 })}
+                className="shrink-0 rounded-md border border-zinc-300 px-2 py-2 text-xs font-medium text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-700 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
+              >
+                100
+              </button>
+            </div>
           </div>
         )}
 
@@ -331,7 +356,7 @@ function CatchCard({
               min={1}
               max={99}
               value={turn}
-              onChange={(e) => setTurn(clampInt(e.target.value, 1, 99, 1))}
+              onChange={(e) => onChange({ turn: clampInt(e.target.value, 1, 99, 1) })}
               className={inputClass}
             />
           </div>
@@ -344,7 +369,7 @@ function CatchCard({
           <input
             type="checkbox"
             checked={conditionMet}
-            onChange={(e) => setConditionMet(e.target.checked)}
+            onChange={(e) => onChange({ conditionMet: e.target.checked })}
             className="mt-0.5 accent-emerald-500"
           />
           <span className="text-xs text-zinc-600 dark:text-zinc-300">
@@ -463,9 +488,11 @@ export function CatchRateView({
   const t = translations[lang].catchrate;
   const lockedFamilies = useMemo(() => new Set(lockedFamilyIds), [lockedFamilyIds]);
 
-  // Independent, ephemeral calculator cards (e.g. one per player mid-encounter).
-  const [cards, setCards] = useState<number[]>([0]);
-  const nextId = useRef(1);
+  // Persisted per client, so a tab switch / reload keeps each card's inputs
+  // and the number of cards. Never synced across devices.
+  const [cards, setCards] = usePersistentState<CatchCardState[]>("nuzlocke:catchrate:cards", [
+    newCatchCard(0),
+  ]);
 
   const shared: SharedProps = {
     runId,
@@ -483,17 +510,27 @@ export function CatchRateView({
     <div>
       <h2 className="mb-4 text-xl font-semibold">{t.heading}</h2>
       <div className="flex flex-col gap-4">
-        {cards.map((id) => (
+        {cards.map((card) => (
           <CatchCard
-            key={id}
+            key={card.id}
             shared={shared}
-            onRemove={cards.length > 1 ? () => setCards((c) => c.filter((x) => x !== id)) : undefined}
+            state={card}
+            onChange={(patch) =>
+              setCards((cs) => cs.map((c) => (c.id === card.id ? { ...c, ...patch } : c)))
+            }
+            onRemove={
+              cards.length > 1
+                ? () => setCards((cs) => cs.filter((c) => c.id !== card.id))
+                : undefined
+            }
           />
         ))}
       </div>
       <button
         type="button"
-        onClick={() => setCards((c) => [...c, nextId.current++])}
+        onClick={() =>
+          setCards((cs) => [...cs, newCatchCard(Math.max(-1, ...cs.map((c) => c.id)) + 1)])
+        }
         className="mt-3 flex max-w-xl items-center justify-center gap-1.5 rounded-lg border border-dashed border-zinc-300 px-3 py-2.5 text-sm font-medium text-zinc-500 transition-colors hover:border-zinc-400 hover:bg-zinc-50 hover:text-zinc-700 dark:border-zinc-700 dark:text-zinc-400 dark:hover:border-zinc-600 dark:hover:bg-zinc-900 dark:hover:text-zinc-200"
       >
         <span className="text-lg leading-none">+</span> {t.addCard}

@@ -72,6 +72,9 @@ model SoulLink {
   // In SoulLink, which player's Pokémon fainted and killed the link (both die
   // together, but this records who lost theirs). Null = unknown / Classic.
   deathPlayer  Player?
+  // Optional free-text cause of death (e.g. the opponent or move that did it),
+  // shown in the Memorial. Null = not recorded.
+  deathCause   String?
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
   run        Run         @relation(fields: [runId], references: [id], onDelete: Cascade)
@@ -102,6 +105,9 @@ model Encounter {
   nickname         String?
   status           EncounterStatus @default(CAUGHT)
   isStatic         Boolean         @default(false)
+  // Shiny Clause: a shiny catch is exempt from the Species Clause - its own
+  // warning is suppressed and it never locks the family for other encounters.
+  shiny            Boolean         @default(false)
   soulLinkId       Int?
   run              Run             @relation(fields: [runId], references: [id], onDelete: Cascade)
   soulLink         SoulLink?       @relation(fields: [soulLinkId], references: [id], onDelete: SetNull)

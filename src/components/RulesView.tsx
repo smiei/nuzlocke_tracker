@@ -60,6 +60,7 @@ const markdownComponents = {
 const TOGGLE_ORDER: BooleanSettingKey[] = [
   "speciesClause",
   "staticsExemptFromClause",
+  "shinyClause",
   "nicknames",
   "evolutionOverridesImpossible",
   "evolutionOverridesEasier",

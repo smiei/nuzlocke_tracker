@@ -51,6 +51,7 @@ export function PokemonDetailProvider({
           generation={generation}
           dexLimit={dexLimit}
           lang={lang}
+          onSelect={setOpenId}
           onClose={() => setOpenId(null)}
         />
       )}

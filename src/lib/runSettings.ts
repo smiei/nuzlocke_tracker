@@ -5,6 +5,10 @@
 export type RunSettings = {
   // Show Species Clause warnings/lock markers (never blocks saving).
   speciesClause: boolean;
+  // Shiny Clause: an encounter marked shiny is exempt from the Species Clause
+  // (its own warning is suppressed and it doesn't lock the family for others).
+  // Off = the shiny flag has no effect on the clause.
+  shinyClause: boolean;
   // Show nickname inputs and render nicknames on cards. Data is kept when
   // toggled off, so flipping the rule is lossless.
   nicknames: boolean;
@@ -29,6 +33,7 @@ export type RunSettings = {
 // (settingsJson '{}') keep working exactly as they did.
 export const DEFAULT_RUN_SETTINGS: RunSettings = {
   speciesClause: true,
+  shinyClause: true,
   nicknames: true,
   evolutionOverridesImpossible: true,
   evolutionOverridesEasier: true,

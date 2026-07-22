@@ -129,6 +129,7 @@ export function TeamBar({
   const playerLabel = usePlayerLabel();
   const [pending, startTransition] = useTransition();
   const [deadMenuId, setDeadMenuId] = useState<number | null>(null);
+  const [deadCause, setDeadCause] = useState("");
   const t = translations[lang];
   const isClassic = mode === RunMode.CLASSIC;
 
@@ -150,8 +151,10 @@ export function TeamBar({
 
   function handleMarkDead(soulLinkId: number, deathPlayer?: Player) {
     setDeadMenuId(null);
+    const cause = deadCause;
+    setDeadCause("");
     startTransition(async () => {
-      const result = await markDead(runId, soulLinkId, deathPlayer ?? null);
+      const result = await markDead(runId, soulLinkId, deathPlayer ?? null, cause);
       if (!result.success) await alert({ message: formatActionError(result.error, lang) });
       router.refresh();
     });
@@ -175,49 +178,81 @@ export function TeamBar({
             >
               {link ? (
                 <>
-                  <div className="mb-3 flex items-center justify-between gap-2">
-                    <h3 className="font-medium">{link.routeName}</h3>
+                  <div className="mb-3 flex items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <h3 className="font-medium">{link.routeName}</h3>
+                      <p
+                        className="text-xs tabular-nums text-zinc-400 dark:text-zinc-500"
+                        title={t.pokedex.columns.summe}
+                      >
+                        {(() => {
+                          const cur = link.encounters.reduce((s, e) => s + e.summe, 0);
+                          const max = link.encounters.reduce((s, e) => s + e.summeMax, 0);
+                          return max > cur ? `Σ ${cur} → ${max}` : `Σ ${cur}`;
+                        })()}
+                      </p>
+                    </div>
                     <button
                       type="button"
                       disabled={pending}
-                      onClick={() =>
-                        isClassic
-                          ? handleMarkDead(link.id)
-                          : setDeadMenuId(deadMenuId === link.id ? null : link.id)
-                      }
+                      onClick={() => {
+                        setDeadCause("");
+                        setDeadMenuId(deadMenuId === link.id ? null : link.id);
+                      }}
                       className="rounded border border-red-300 px-2 py-1 text-xs font-medium text-red-600 transition-colors hover:bg-red-50 disabled:opacity-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950/40"
                     >
                       {t.links.markDead}
                     </button>
                   </div>
 
-                  {/* SoulLink: pick who lost their Pokémon (or no attribution). */}
-                  {!isClassic && deadMenuId === link.id && (
+                  {/* Mark-dead menu: optional cause + (SoulLink) who lost theirs. */}
+                  {deadMenuId === link.id && (
                     <div className="mb-3 rounded-md border border-red-200 bg-red-50/60 p-2 dark:border-red-900/50 dark:bg-red-950/20">
-                      <p className="mb-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-300">
-                        {t.links.whoLost}
-                      </p>
-                      <div className="flex flex-wrap gap-1.5">
-                        {[Player.PLAYER1, Player.PLAYER2].map((p) => (
-                          <button
-                            key={p}
-                            type="button"
-                            disabled={pending}
-                            onClick={() => handleMarkDead(link.id, p)}
-                            className="rounded border border-red-300 px-2 py-1 text-xs font-medium text-red-600 transition-colors hover:bg-red-100 disabled:opacity-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950/40"
-                          >
-                            {playerLabel(p)}
-                          </button>
-                        ))}
+                      <input
+                        type="text"
+                        value={deadCause}
+                        onChange={(e) => setDeadCause(e.target.value)}
+                        maxLength={80}
+                        placeholder={t.links.deathCausePlaceholder}
+                        className="mb-2 w-full rounded border border-zinc-300 bg-white px-2 py-1 text-xs outline-none focus:border-zinc-500 dark:border-zinc-700 dark:bg-zinc-950 dark:focus:border-zinc-400"
+                      />
+                      {isClassic ? (
                         <button
                           type="button"
                           disabled={pending}
                           onClick={() => handleMarkDead(link.id)}
-                          className="rounded border border-zinc-300 px-2 py-1 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100 disabled:opacity-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                          className="rounded border border-red-300 px-2 py-1 text-xs font-medium text-red-600 transition-colors hover:bg-red-100 disabled:opacity-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950/40"
                         >
-                          {t.links.noAttribution}
+                          {t.links.markDead}
                         </button>
-                      </div>
+                      ) : (
+                        <>
+                          <p className="mb-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-300">
+                            {t.links.whoLost}
+                          </p>
+                          <div className="flex flex-wrap gap-1.5">
+                            {[Player.PLAYER1, Player.PLAYER2].map((p) => (
+                              <button
+                                key={p}
+                                type="button"
+                                disabled={pending}
+                                onClick={() => handleMarkDead(link.id, p)}
+                                className="rounded border border-red-300 px-2 py-1 text-xs font-medium text-red-600 transition-colors hover:bg-red-100 disabled:opacity-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950/40"
+                              >
+                                {playerLabel(p)}
+                              </button>
+                            ))}
+                            <button
+                              type="button"
+                              disabled={pending}
+                              onClick={() => handleMarkDead(link.id)}
+                              className="rounded border border-zinc-300 px-2 py-1 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100 disabled:opacity-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                            >
+                              {t.links.noAttribution}
+                            </button>
+                          </div>
+                        </>
+                      )}
                     </div>
                   )}
                   <div className="flex flex-col gap-3">

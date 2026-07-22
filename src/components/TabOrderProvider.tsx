@@ -1,7 +1,8 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useMemo } from "react";
 import { NAV_ITEMS } from "@/lib/nav";
+import { usePersistentState } from "@/lib/usePersistentState";
 
 const ORDER_KEY = "nuzlocke:tabOrder";
 const HIDDEN_KEY = "nuzlocke:tabHidden";
@@ -38,49 +39,29 @@ export function useTabOrder(): TabOrderApi {
 }
 
 // Personal UI preference, so it lives in localStorage (per browser) - same
-// treatment as the sort preference on the Pokémon tab. First client render
-// uses the defaults to match SSR, the stored values apply post-mount.
+// treatment as the sort preference on the Pokémon tab. usePersistentState is
+// SSR-safe: the default order/visibility renders on the server, the stored
+// values apply during hydration.
 export function TabOrderProvider({ children }: { children: React.ReactNode }) {
-  const [order, setOrderState] = useState<string[]>(DEFAULT_ORDER);
-  const [hidden, setHiddenState] = useState<string[]>([]);
+  const [rawOrder, setRawOrder] = usePersistentState<string[]>(ORDER_KEY, DEFAULT_ORDER);
+  const [rawHidden, setRawHidden] = usePersistentState<string[]>(HIDDEN_KEY, []);
+  const order = useMemo(() => normalize(rawOrder), [rawOrder]);
+  const hidden = useMemo(() => normalizeHidden(rawHidden), [rawHidden]);
 
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem(ORDER_KEY);
-      if (raw) setOrderState(normalize(JSON.parse(raw)));
-    } catch {
-      // Corrupt storage - keep the default order.
-    }
-    try {
-      const raw = localStorage.getItem(HIDDEN_KEY);
-      if (raw) setHiddenState(normalizeHidden(JSON.parse(raw)));
-    } catch {
-      // Corrupt storage - keep nothing hidden.
-    }
-  }, []);
+  const setOrder = useCallback((next: string[]) => setRawOrder(normalize(next)), [setRawOrder]);
 
-  const setOrder = useCallback((next: string[]) => {
-    const normalized = normalize(next);
-    setOrderState(normalized);
-    localStorage.setItem(ORDER_KEY, JSON.stringify(normalized));
-  }, []);
-
-  const toggleHidden = useCallback((href: string) => {
-    setHiddenState((prev) => {
-      const next = normalizeHidden(
-        prev.includes(href) ? prev.filter((h) => h !== href) : [...prev, href],
-      );
-      localStorage.setItem(HIDDEN_KEY, JSON.stringify(next));
-      return next;
-    });
-  }, []);
+  const toggleHidden = useCallback(
+    (href: string) =>
+      setRawHidden((prev) =>
+        normalizeHidden(prev.includes(href) ? prev.filter((h) => h !== href) : [...prev, href]),
+      ),
+    [setRawHidden],
+  );
 
   const reset = useCallback(() => {
-    setOrderState(DEFAULT_ORDER);
-    localStorage.removeItem(ORDER_KEY);
-    setHiddenState([]);
-    localStorage.removeItem(HIDDEN_KEY);
-  }, []);
+    setRawOrder(DEFAULT_ORDER);
+    setRawHidden([]);
+  }, [setRawOrder, setRawHidden]);
 
   const api = useMemo(
     () => ({

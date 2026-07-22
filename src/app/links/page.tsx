@@ -16,6 +16,7 @@ import { SpriteSetProvider } from "@/components/SpriteSetProvider";
 import { PokemonDetailProvider } from "@/components/PokemonDetailProvider";
 import { PlayerNamesProvider } from "@/components/PlayerNamesProvider";
 import { computePokemonRanks } from "@/lib/ranking";
+import { maxEvolvedSumme } from "@/lib/evolutions";
 import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
 import { getLang } from "@/lib/i18n/getLang";
@@ -99,6 +100,7 @@ export default async function LinksPage({
     status: link.status,
     teamPosition: link.teamPosition,
     deathPlayer: link.deathPlayer,
+    deathCause: link.deathCause,
     // Within a tile always show Player 1 above Player 2, never by strength.
     encounters: [...link.encounters]
       .sort((a, b) => (a.player === Player.PLAYER1 ? -1 : 1) - (b.player === Player.PLAYER1 ? -1 : 1))
@@ -116,9 +118,17 @@ export default async function LinksPage({
         nickname: settings.nicknames ? e.nickname : null,
         types: typesForGeneration(e.currentPokemonId, pokemon?.types ?? [], game.generation),
         summe: pokemon?.stats.Summe ?? 0,
+        // Best BST the caught form could still reach by evolving in this game.
+        summeMax: maxEvolvedSumme(
+          e.currentPokemonId,
+          (id) => getEvolutionById(id, evoOptions)?.evolvesTo ?? [],
+          (id) => getPokemonById(id)?.stats.Summe ?? 0,
+          game.dexLimit,
+        ),
         rang: ranks.get(e.currentPokemonId) ?? 0,
         status: e.status,
         isStatic: e.isStatic,
+        shiny: e.shiny,
         // Evolutions beyond the game's dex (e.g. Crobat in Gen 1, Magnezone
         // in Gen 3) don't exist in that game - filter them out entirely.
         evolvesTo: (evo?.evolvesTo ?? [])

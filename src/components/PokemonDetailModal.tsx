@@ -45,6 +45,7 @@ export function PokemonDetailModal({
   generation,
   dexLimit,
   lang,
+  onSelect,
   onClose,
 }: {
   pokemon: Pokemon;
@@ -56,6 +57,9 @@ export function PokemonDetailModal({
   generation: number;
   dexLimit: number;
   lang: Lang;
+  // Opens the card for another Pokémon (evolution links) - replaces this same
+  // single modal instance, so no duplicate cards ever stack up.
+  onSelect: (pokemonId: number) => void;
   onClose: () => void;
 }) {
   const t = translations[lang];
@@ -112,14 +116,26 @@ export function PokemonDetailModal({
       <div key={id}>
         <div className="flex items-center gap-1.5 py-0.5" style={{ paddingLeft: depth * 16 }}>
           {depth > 0 && <span className="text-zinc-300 dark:text-zinc-600">↳</span>}
-          <PokemonSprite pokemonId={id} name={nameOf(id)} size="sm" />
-          <span
-            className={`text-sm ${
-              isCurrent ? "font-semibold text-zinc-900 dark:text-zinc-50" : ""
-            }`}
-          >
-            {nameOf(id)}
-          </span>
+          {isCurrent ? (
+            <span className="flex items-center gap-1.5">
+              <PokemonSprite pokemonId={id} name={nameOf(id)} size="sm" />
+              <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
+                {nameOf(id)}
+              </span>
+            </span>
+          ) : (
+            // Clicking another family member reopens the (single) card for it.
+            <button
+              type="button"
+              onClick={() => onSelect(id)}
+              className="flex items-center gap-1.5 rounded px-1 -mx-1 text-left transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-800"
+            >
+              <PokemonSprite pokemonId={id} name={nameOf(id)} size="sm" />
+              <span className="text-sm text-zinc-600 underline-offset-2 hover:underline dark:text-zinc-300">
+                {nameOf(id)}
+              </span>
+            </button>
+          )}
           {method && (
             <span className="text-xs text-zinc-500 dark:text-zinc-400">({method})</span>
           )}

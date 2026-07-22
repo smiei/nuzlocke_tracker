@@ -14,6 +14,7 @@ export type BackupSoulLink = {
   status: LinkStatus;
   teamPosition: number | null;
   deathPlayer: Player | null;
+  deathCause: string | null;
   createdAt: string;
   updatedAt: string;
 };
@@ -27,6 +28,7 @@ export type BackupEncounter = {
   nickname: string | null;
   status: EncounterStatus;
   isStatic: boolean;
+  shiny: boolean;
   // routeId of the SoulLink this encounter belongs to, or null if unlinked.
   soulLinkRouteId: number | null;
   createdAt: string;
@@ -88,6 +90,7 @@ export async function buildBackup(runIds?: number[]): Promise<BackupFile> {
           status: sl.status,
           teamPosition: sl.teamPosition,
           deathPlayer: sl.deathPlayer,
+          deathCause: sl.deathCause,
           createdAt: sl.createdAt.toISOString(),
           updatedAt: sl.updatedAt.toISOString(),
         })),
@@ -100,6 +103,7 @@ export async function buildBackup(runIds?: number[]): Promise<BackupFile> {
           nickname: e.nickname,
           status: e.status,
           isStatic: e.isStatic,
+          shiny: e.shiny,
           soulLinkRouteId:
             e.soulLinkId !== null ? routeBySoulLinkId.get(e.soulLinkId) ?? null : null,
           createdAt: e.createdAt.toISOString(),
@@ -167,6 +171,7 @@ export function parseBackup(json: string): BackupFile | null {
                 ? sl.teamPosition
                 : null,
             deathPlayer: isEnumValue(Player, sl.deathPlayer) ? sl.deathPlayer : null,
+            deathCause: typeof sl.deathCause === "string" ? sl.deathCause : null,
             createdAt: isoString(sl.createdAt),
             updatedAt: isoString(sl.updatedAt),
           }))
@@ -181,6 +186,7 @@ export function parseBackup(json: string): BackupFile | null {
             nickname: typeof e.nickname === "string" && e.nickname.trim() ? e.nickname : null,
             status: isEnumValue(EncounterStatus, e.status) ? e.status : EncounterStatus.CAUGHT,
             isStatic: e.isStatic === true,
+            shiny: e.shiny === true,
             soulLinkRouteId:
               typeof e.soulLinkRouteId === "number" ? e.soulLinkRouteId : null,
             createdAt: isoString(e.createdAt),
@@ -231,6 +237,7 @@ export async function applyBackup(backup: BackupFile): Promise<number> {
               status: sl.status,
               teamPosition: sl.teamPosition,
               deathPlayer: sl.deathPlayer,
+              deathCause: sl.deathCause,
               createdAt: new Date(sl.createdAt),
             },
           });
@@ -249,6 +256,7 @@ export async function applyBackup(backup: BackupFile): Promise<number> {
               nickname: e.nickname,
               status: e.status,
               isStatic: e.isStatic,
+              shiny: e.shiny,
               soulLinkId:
                 e.soulLinkRouteId !== null
                   ? soulLinkIdByRoute.get(e.soulLinkRouteId) ?? null

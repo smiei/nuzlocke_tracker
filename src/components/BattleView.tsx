@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { usePersistentState } from "@/lib/usePersistentState";
 import type { Pokemon } from "@/lib/data";
 import type { EffectivenessTable } from "@/lib/effectiveness";
 import { computeDefenseMultipliers, singleTypeMultiplier } from "@/lib/effectiveness";
@@ -135,16 +135,28 @@ type SharedProps = {
   explosiveMap: Record<number, { name: string; level: number }>;
 };
 
+type BattleCardState = { id: number; selectedId: number | null; level: number };
+
 // One independent battle instance: an opponent + level with its stats,
 // defensive weaknesses, the team matchup, and the full type matrix. Several
 // can be open at once (e.g. scouting two trainers), each with its own pick.
-function BattleCard({ shared, onRemove }: { shared: SharedProps; onRemove?: () => void }) {
+// Controlled by the parent so the whole set persists per client.
+function BattleCard({
+  shared,
+  state,
+  onChange,
+  onRemove,
+}: {
+  shared: SharedProps;
+  state: BattleCardState;
+  onChange: (patch: Partial<BattleCardState>) => void;
+  onRemove?: () => void;
+}) {
   const { pokemonList, table, attackTypes, generation, learnset, teams, mode, explosiveMap } = shared;
   const { lang } = useLanguage();
   const t = translations[lang].typen;
   const playerLabel = usePlayerLabel();
-  const [selectedId, setSelectedId] = useState<number | null>(null);
-  const [level, setLevel] = useState(100);
+  const { selectedId, level } = state;
 
   const selectedRaw = pokemonList.find((p) => p.id === selectedId) ?? null;
   const explosive = selectedRaw ? explosiveMap[selectedRaw.id] ?? null : null;
@@ -190,7 +202,8 @@ function BattleCard({ shared, onRemove }: { shared: SharedProps; onRemove?: () =
               lang={lang}
               pokemonList={pokemonList}
               selectedId={selectedId}
-              onSelect={setSelectedId}
+              onSelect={(id) => onChange({ selectedId: id })}
+              onClear={() => onChange({ selectedId: null })}
               lockedFamilyIds={EMPTY_LOCKS}
             />
           </div>
@@ -203,17 +216,28 @@ function BattleCard({ shared, onRemove }: { shared: SharedProps; onRemove?: () =
           <label className="mb-1 block text-xs font-medium text-zinc-500 dark:text-zinc-400">
             {t.levelLabel}
           </label>
-          <input
-            type="number"
-            min={1}
-            max={100}
-            value={level}
-            onChange={(e) => {
-              const n = Number(e.target.value);
-              setLevel(Number.isFinite(n) ? Math.min(100, Math.max(1, Math.round(n))) : 100);
-            }}
-            className="w-20 rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:focus:border-zinc-400"
-          />
+          <div className="flex items-center gap-1">
+            <input
+              type="number"
+              min={1}
+              max={100}
+              value={level}
+              onChange={(e) => {
+                const n = Number(e.target.value);
+                onChange({
+                  level: Number.isFinite(n) ? Math.min(100, Math.max(1, Math.round(n))) : 100,
+                });
+              }}
+              className="w-20 rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:focus:border-zinc-400"
+            />
+            <button
+              type="button"
+              onClick={() => onChange({ level: 100 })}
+              className="rounded-md border border-zinc-300 px-2 py-2 text-xs font-medium text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-700 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
+            >
+              100
+            </button>
+          </div>
         </div>
       </div>
 
@@ -396,26 +420,40 @@ export function BattleView(props: SharedProps) {
   const { lang } = useLanguage();
   const t = translations[lang].typen;
 
-  // Independent, ephemeral battle cards - add one per opponent you want to
-  // compare (e.g. two trainers, or both players scouting different mons).
-  const [cards, setCards] = useState<number[]>([0]);
-  const nextId = useRef(1);
+  // Persisted per client, so a tab switch / reload keeps each opponent + level
+  // and the number of cards. Never synced across devices.
+  const [cards, setCards] = usePersistentState<BattleCardState[]>("nuzlocke:battle:cards", [
+    { id: 0, selectedId: null, level: 100 },
+  ]);
 
   return (
     <div>
       <h2 className="mb-4 text-xl font-semibold">{t.battleHeading}</h2>
       <div className="flex flex-col gap-5">
-        {cards.map((id) => (
+        {cards.map((card) => (
           <BattleCard
-            key={id}
+            key={card.id}
             shared={props}
-            onRemove={cards.length > 1 ? () => setCards((c) => c.filter((x) => x !== id)) : undefined}
+            state={card}
+            onChange={(patch) =>
+              setCards((cs) => cs.map((c) => (c.id === card.id ? { ...c, ...patch } : c)))
+            }
+            onRemove={
+              cards.length > 1
+                ? () => setCards((cs) => cs.filter((c) => c.id !== card.id))
+                : undefined
+            }
           />
         ))}
       </div>
       <button
         type="button"
-        onClick={() => setCards((c) => [...c, nextId.current++])}
+        onClick={() =>
+          setCards((cs) => [
+            ...cs,
+            { id: Math.max(-1, ...cs.map((c) => c.id)) + 1, selectedId: null, level: 100 },
+          ])
+        }
         className="mt-4 flex w-full items-center justify-center gap-1.5 rounded-xl border border-dashed border-zinc-300 px-3 py-3 text-sm font-medium text-zinc-500 transition-colors hover:border-zinc-400 hover:bg-zinc-50 hover:text-zinc-700 dark:border-zinc-700 dark:text-zinc-400 dark:hover:border-zinc-600 dark:hover:bg-zinc-900 dark:hover:text-zinc-200"
       >
         <span className="text-lg leading-none">+</span> {t.addCard}

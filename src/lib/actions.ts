@@ -28,6 +28,8 @@ export type SaveEncounterInput = {
   // undefined = leave the stored nickname untouched (e.g. a status-only
   // update); a string sets it (trimmed, empty -> null); null clears it.
   nickname?: string | null;
+  // undefined = leave the stored shiny flag untouched; a boolean sets it.
+  shiny?: boolean;
 };
 
 export type SaveEncounterResult = { success: true } | { success: false; error: ActionError };
@@ -99,6 +101,7 @@ export async function saveEncounter(
         nickname: nickname ?? null,
         status,
         isStatic,
+        shiny: input.shiny ?? false,
         soulLinkId,
       },
       update: {
@@ -108,6 +111,7 @@ export async function saveEncounter(
         ...(nickname !== undefined && { nickname }),
         status,
         isStatic,
+        ...(input.shiny !== undefined && { shiny: input.shiny }),
         soulLinkId,
       },
     });
@@ -188,6 +192,7 @@ export async function markDead(
   runId: number,
   soulLinkId: number,
   deathPlayer?: Player | null,
+  deathCause?: string | null,
 ): Promise<MarkDeadResult> {
   const soulLink = await prisma.soulLink.findUnique({ where: { id: soulLinkId } });
   if (!soulLink || soulLink.runId !== runId) {
@@ -198,9 +203,15 @@ export async function markDead(
   // tracks what happened at catch time (stays CAUGHT), while the link's
   // DEAD/ALIVE state lives on the SoulLink alone. A dead link also leaves
   // the team automatically (teamPosition -> null).
+  const cause = (deathCause ?? "").trim().slice(0, 80) || null;
   await prisma.soulLink.update({
     where: { id: soulLinkId },
-    data: { status: LinkStatus.DEAD, teamPosition: null, deathPlayer: deathPlayer ?? null },
+    data: {
+      status: LinkStatus.DEAD,
+      teamPosition: null,
+      deathPlayer: deathPlayer ?? null,
+      deathCause: cause,
+    },
   });
 
   revalidatePath("/tracker");
@@ -247,7 +258,7 @@ export async function markAlive(runId: number, soulLinkId: number): Promise<Mark
 
   await prisma.soulLink.update({
     where: { id: soulLinkId },
-    data: { status: LinkStatus.ALIVE, deathPlayer: null },
+    data: { status: LinkStatus.ALIVE, deathPlayer: null, deathCause: null },
   });
 
   revalidatePath("/tracker");

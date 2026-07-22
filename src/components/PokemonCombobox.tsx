@@ -12,6 +12,7 @@ export function PokemonCombobox({
   pokemonList,
   selectedId,
   onSelect,
+  onClear,
   lockedFamilyIds,
   disabled,
 }: {
@@ -19,6 +20,9 @@ export function PokemonCombobox({
   pokemonList: Pokemon[];
   selectedId: number | null;
   onSelect: (pokemonId: number) => void;
+  // When provided, an ✕ button clears the current selection (used on the
+  // analysis tabs where the pick is transient and persisted per client).
+  onClear?: () => void;
   lockedFamilyIds: Set<number>;
   disabled?: boolean;
 }) {
@@ -44,7 +48,6 @@ export function PokemonCombobox({
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected, lang]);
 
   const results = useMemo(() => {
@@ -87,6 +90,21 @@ export function PokemonCombobox({
           placeholder={t.searchPlaceholder}
           className="w-full bg-transparent py-1.5 text-sm outline-none"
         />
+        {onClear && selected && (
+          <button
+            type="button"
+            disabled={disabled}
+            onClick={() => {
+              setQuery("");
+              onClear();
+            }}
+            aria-label={t.clearSelection}
+            title={t.clearSelection}
+            className="shrink-0 rounded p-0.5 text-zinc-400 transition-colors hover:text-zinc-700 disabled:opacity-50 dark:hover:text-zinc-200"
+          >
+            ✕
+          </button>
+        )}
       </div>
       {open && !disabled && (
         <ul className="absolute z-10 mt-1 max-h-64 w-full min-w-[220px] overflow-y-auto rounded-md border border-zinc-200 bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
