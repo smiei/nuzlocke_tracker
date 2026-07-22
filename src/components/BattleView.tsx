@@ -151,6 +151,10 @@ function BattleCard({ shared, onRemove }: { shared: SharedProps; onRemove?: () =
   const opponentTypes = selectedRaw
     ? typesForGeneration(selectedRaw.id, selectedRaw.types, generation)
     : [];
+  // Stats card lists ALL damaging attack types (every level), independent of
+  // the entered level. The team matchup below only counts types reachable by
+  // the entered level.
+  const allAttacks = selectedRaw ? attackTypesAtLevel(learnset, selectedRaw.id, 100) : [];
   const opponentAttacks = selectedRaw ? attackTypesAtLevel(learnset, selectedRaw.id, level) : [];
   const opponentAttackTypes = opponentAttacks.map((a) => a.type);
 
@@ -246,12 +250,16 @@ function BattleCard({ shared, onRemove }: { shared: SharedProps; onRemove?: () =
               <div className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
                 {t.moveTypes} <span className="font-normal normal-case">· {t.damagingOnly}</span>
               </div>
-              {opponentAttacks.length === 0 ? (
+              {allAttacks.length === 0 ? (
                 <p className="text-xs text-zinc-400 dark:text-zinc-500">—</p>
               ) : (
                 <div className="flex flex-wrap gap-1.5">
-                  {opponentAttacks.map(({ type, level: lvl }) => (
-                    <span key={type} className="inline-flex items-center gap-1">
+                  {allAttacks.map(({ type, level: lvl }) => (
+                    // Types not yet learnable at the entered level are dimmed.
+                    <span
+                      key={type}
+                      className={`inline-flex items-center gap-1 ${lvl > level ? "opacity-20" : ""}`}
+                    >
                       <TypeBadge type={type} lang={lang} />
                       <span className="text-[10px] text-zinc-400 dark:text-zinc-500">
                         {translations[lang].pokedex.detail.level(lvl)}
