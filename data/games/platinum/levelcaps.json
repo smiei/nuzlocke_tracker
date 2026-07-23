@@ -45,6 +45,25 @@
     "max_level": 14
   },
   {
+    "id": 20,
+    "names": {
+      "de": "Mars",
+      "en": "Mars",
+      "fr": "Mars",
+      "es": "Venus",
+      "it": "Martes"
+    },
+    "location": {
+      "de": "Windkraftanlage",
+      "en": "Valley Windworks",
+      "fr": "Les Eoliennes",
+      "es": "Valley Windworks",
+      "it": "Valley Windworks"
+    },
+    "badge": null,
+    "max_level": null
+  },
+  {
     "id": 3,
     "names": {
       "de": "Silvana",
@@ -90,6 +109,25 @@
     "sprite": "rivale"
   },
   {
+    "id": 21,
+    "names": {
+      "de": "Jupiter",
+      "en": "Jupiter",
+      "fr": "Jupiter",
+      "es": "Ceres",
+      "it": "Giovia"
+    },
+    "location": {
+      "de": "Galaktik-Gebäude",
+      "en": "Eterna Building",
+      "fr": "Eterna Building",
+      "es": "Eterna Building",
+      "it": "Eterna Building"
+    },
+    "badge": null,
+    "max_level": null
+  },
+  {
     "id": 5,
     "names": {
       "de": "Lamina",
@@ -124,7 +162,7 @@
       "it": "Maylene"
     },
     "location": {
-      "de": "Weideburg",
+      "de": "Schleiede",
       "en": "Veilstone City",
       "fr": "Voilaroc",
       "es": "Veilstone City",
@@ -169,7 +207,7 @@
       "it": "Crasher Wake"
     },
     "location": {
-      "de": "Pastoria City",
+      "de": "Weideburg",
       "en": "Pastoria City",
       "fr": "Verchamps",
       "es": "Pastoria City",
@@ -183,6 +221,25 @@
       "it": "Medaglia Palude"
     },
     "max_level": 37
+  },
+  {
+    "id": 22,
+    "names": {
+      "de": "Zyrus",
+      "en": "Cyrus",
+      "fr": "Hélio",
+      "es": "Helio",
+      "it": "Cyrus"
+    },
+    "location": {
+      "de": "Elyses",
+      "en": "Celestic Town",
+      "fr": "Celestia",
+      "es": "Pueblo Caelestis",
+      "it": "Memoride"
+    },
+    "badge": null,
+    "max_level": null
   },
   {
     "id": 9,
@@ -230,6 +287,44 @@
     "sprite": "rivale"
   },
   {
+    "id": 23,
+    "names": {
+      "de": "Saturn",
+      "en": "Saturn",
+      "fr": "Saturne",
+      "es": "Saturno",
+      "it": "Saturno"
+    },
+    "location": {
+      "de": "Muthsee",
+      "en": "Lake Valor",
+      "fr": "Lac Courage",
+      "es": "Lake Valor",
+      "it": "Lake Valor"
+    },
+    "badge": null,
+    "max_level": null
+  },
+  {
+    "id": 24,
+    "names": {
+      "de": "Mars",
+      "en": "Mars",
+      "fr": "Mars",
+      "es": "Venus",
+      "it": "Martes"
+    },
+    "location": {
+      "de": "Wahrheitssee",
+      "en": "Lake Verity",
+      "fr": "Lac Vérité",
+      "es": "Lake Verity",
+      "it": "Lake Verity"
+    },
+    "badge": null,
+    "max_level": null
+  },
+  {
     "id": 11,
     "names": {
       "de": "Frida",
@@ -253,6 +348,63 @@
       "it": "Medaglia Ghiacciolo"
     },
     "max_level": 44
+  },
+  {
+    "id": 25,
+    "names": {
+      "de": "Zyrus",
+      "en": "Cyrus",
+      "fr": "Hélio",
+      "es": "Helio",
+      "it": "Cyrus"
+    },
+    "location": {
+      "de": "Galaktik-Hauptquartier",
+      "en": "Galactic HQ",
+      "fr": "Bâtiment Galaxie de Voilaroc",
+      "es": "Edificio Galaxia de Ciudad Rocavelo",
+      "it": "Edificio Galassia di Rupepoli"
+    },
+    "badge": null,
+    "max_level": null
+  },
+  {
+    "id": 26,
+    "names": {
+      "de": "Saturn",
+      "en": "Saturn",
+      "fr": "Saturne",
+      "es": "Saturno",
+      "it": "Saturno"
+    },
+    "location": {
+      "de": "Galaktik-Hauptquartier",
+      "en": "Galactic HQ",
+      "fr": "Bâtiment Galaxie de Voilaroc",
+      "es": "Edificio Galaxia de Ciudad Rocavelo",
+      "it": "Edificio Galassia di Rupepoli"
+    },
+    "badge": null,
+    "max_level": null
+  },
+  {
+    "id": 27,
+    "names": {
+      "de": "Mars & Jupiter",
+      "en": "Mars & Jupiter",
+      "fr": "Mars & Jupiter",
+      "es": "Venus & Ceres",
+      "it": "Martes & Giovia"
+    },
+    "location": {
+      "de": "Speersäule",
+      "en": "Spear Pillar",
+      "fr": "Colonnes Lances",
+      "es": "Columna Lanza",
+      "it": "Vetta Lancia"
+    },
+    "badge": null,
+    "max_level": null
   },
   {
     "id": 12,
