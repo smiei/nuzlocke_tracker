@@ -5,8 +5,8 @@
     "comment": "Quaputzi -> Quaxo",
     "category": "impossible",
     "method": {
-      "kind": "level",
-      "level": 37
+      "kind": "item",
+      "item": "kings-rock"
     }
   },
   {
@@ -50,6 +50,16 @@
     }
   },
   {
+    "from": 82,
+    "to": 462,
+    "comment": "Magneton -> Magnezone",
+    "category": "impossible",
+    "method": {
+      "kind": "level",
+      "level": 40
+    }
+  },
+  {
     "from": 93,
     "to": 94,
     "comment": "Alpollo -> Gengar",
@@ -65,8 +75,18 @@
     "comment": "Onix -> Stahlos",
     "category": "impossible",
     "method": {
-      "kind": "level",
-      "level": 30
+      "kind": "item",
+      "item": "metal-coat"
+    }
+  },
+  {
+    "from": 112,
+    "to": 464,
+    "comment": "Rizeros -> Rihornior",
+    "category": "impossible",
+    "method": {
+      "kind": "item",
+      "item": "protector"
     }
   },
   {
@@ -75,8 +95,8 @@
     "comment": "Seemon -> Seedraking",
     "category": "impossible",
     "method": {
-      "kind": "level",
-      "level": 40
+      "kind": "item",
+      "item": "dragon-scale"
     }
   },
   {
@@ -85,8 +105,48 @@
     "comment": "Sichlor -> Scherox",
     "category": "impossible",
     "method": {
-      "kind": "level",
-      "level": 30
+      "kind": "item",
+      "item": "metal-coat"
+    }
+  },
+  {
+    "from": 125,
+    "to": 466,
+    "comment": "Elektek -> Elevoltek",
+    "category": "impossible",
+    "method": {
+      "kind": "item",
+      "item": "electirizer"
+    }
+  },
+  {
+    "from": 126,
+    "to": 467,
+    "comment": "Magmar -> Magbrant",
+    "category": "impossible",
+    "method": {
+      "kind": "item",
+      "item": "magmarizer"
+    }
+  },
+  {
+    "from": 133,
+    "to": 470,
+    "comment": "Evoli -> Folipurba",
+    "category": "impossible",
+    "method": {
+      "kind": "item",
+      "item": "leaf-stone"
+    }
+  },
+  {
+    "from": 133,
+    "to": 471,
+    "comment": "Evoli -> Glaziola",
+    "category": "impossible",
+    "method": {
+      "kind": "item",
+      "item": "shiny-stone"
     }
   },
   {
@@ -95,8 +155,48 @@
     "comment": "Porygon -> Porygon2",
     "category": "impossible",
     "method": {
+      "kind": "item",
+      "item": "up-grade"
+    }
+  },
+  {
+    "from": 233,
+    "to": 474,
+    "comment": "Porygon2 -> Porygon-Z",
+    "category": "impossible",
+    "method": {
+      "kind": "item",
+      "item": "dubious-disc"
+    }
+  },
+  {
+    "from": 299,
+    "to": 476,
+    "comment": "Nasgnet -> Voluminas",
+    "category": "impossible",
+    "method": {
       "kind": "level",
-      "level": 30
+      "level": 40
+    }
+  },
+  {
+    "from": 349,
+    "to": 350,
+    "comment": "Barschwa -> Milotic",
+    "category": "impossible",
+    "method": {
+      "kind": "level",
+      "level": 35
+    }
+  },
+  {
+    "from": 356,
+    "to": 477,
+    "comment": "Zwirrklop -> Zwirrfinst",
+    "category": "impossible",
+    "method": {
+      "kind": "item",
+      "item": "reaper-cloth"
     }
   },
   {
@@ -105,8 +205,8 @@
     "comment": "Perlu -> Aalabyss",
     "category": "impossible",
     "method": {
-      "kind": "level",
-      "level": 30
+      "kind": "item",
+      "item": "deep-sea-tooth"
     }
   },
   {
@@ -116,7 +216,7 @@
     "category": "impossible",
     "method": {
       "kind": "item",
-      "item": "water-stone"
+      "item": "deep-sea-scale"
     }
   },
   {
@@ -126,7 +226,7 @@
     "category": "easier",
     "method": {
       "kind": "level",
-      "level": 40
+      "level": 30
     }
   },
   {
@@ -147,6 +247,16 @@
     "method": {
       "kind": "level",
       "level": 40
+    }
+  },
+  {
+    "from": 220,
+    "to": 221,
+    "comment": "Quiekel -> Keifel",
+    "category": "easier",
+    "method": {
+      "kind": "level",
+      "level": 30
     }
   },
   {
@@ -200,6 +310,16 @@
     }
   },
   {
+    "from": 355,
+    "to": 356,
+    "comment": "Zwirrlicht -> Zwirrklop",
+    "category": "easier",
+    "method": {
+      "kind": "level",
+      "level": 30
+    }
+  },
+  {
     "from": 361,
     "to": 362,
     "comment": "Schneppke -> Firnontor",
@@ -243,6 +363,16 @@
     "from": 375,
     "to": 376,
     "comment": "Metang -> Metagross",
+    "category": "easier",
+    "method": {
+      "kind": "level",
+      "level": 40
+    }
+  },
+  {
+    "from": 444,
+    "to": 445,
+    "comment": "Knarksel -> Knakrack",
     "category": "easier",
     "method": {
       "kind": "level",

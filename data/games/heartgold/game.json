@@ -1,0 +1,15 @@
+{
+  "id": "heartgold",
+  "sort": 6,
+  "generation": 4,
+  "dexLimit": 493,
+  "spriteSet": "heartgold-soulsilver",
+  "versionGroup": "heartgold-soulsilver",
+  "names": {
+    "de": "Goldene Edition HeartGold",
+    "en": "HeartGold",
+    "fr": "Version Or HeartGold",
+    "es": "Edición Oro HeartGold",
+    "it": "Versione Oro HeartGold"
+  }
+}

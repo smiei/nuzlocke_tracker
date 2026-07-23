@@ -1,0 +1,15 @@
+{
+  "id": "soulsilver",
+  "sort": 7,
+  "generation": 4,
+  "dexLimit": 493,
+  "spriteSet": "heartgold-soulsilver",
+  "versionGroup": "heartgold-soulsilver",
+  "names": {
+    "de": "Silberne Edition SoulSilver",
+    "en": "SoulSilver",
+    "fr": "Version Argent SoulSilver",
+    "es": "Edición Plata SoulSilver",
+    "it": "Versione Argento SoulSilver"
+  }
+}

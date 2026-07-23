@@ -26,6 +26,7 @@ const SPRITE_SETS = {
   emerald: { path: "versions/generation-iii/emerald", maxId: 386 },
   "firered-leafgreen": { path: "versions/generation-iii/firered-leafgreen", maxId: 386 },
   platinum: { path: "versions/generation-iv/platinum", maxId: 493 },
+  "heartgold-soulsilver": { path: "versions/generation-iv/heartgold-soulsilver", maxId: 493 },
 };
 
 // Local ball id (see src/lib/catchrate.ts) -> PokeAPI item sprite name.
