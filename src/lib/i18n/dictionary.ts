@@ -367,6 +367,8 @@ const de = {
     missedHint: "Eigene geflohene/besiegte Encounter",
     caused: "Verursacht",
     causedHint: "Von diesem Spieler verschuldete Link-Tode",
+    teamBstCol: "Team-BST",
+    teamBstColHint: "BST der Team-Pokémon (jetzt → voll entwickelt)",
   },
   actions: {
     unknownPokemon: (id: number) => `Unbekannte Pokémon-ID: ${id}`,
@@ -753,6 +755,8 @@ const en: Dictionary = {
     missedHint: "Own fled/killed encounters",
     caused: "Caused",
     causedHint: "Link deaths this player caused",
+    teamBstCol: "Team BST",
+    teamBstColHint: "BST of the team's Pokémon (now → fully evolved)",
   },
   actions: {
     unknownPokemon: (id: number) => `Unknown Pokémon id: ${id}`,
@@ -1139,6 +1143,8 @@ const fr: Dictionary = {
     missedHint: "Rencontres propres en fuite/vaincues",
     caused: "Causées",
     causedHint: "Morts de liens causées par ce joueur",
+    teamBstCol: "BST équipe",
+    teamBstColHint: "BST des Pokémon de l'équipe (actuel → pleinement évolué)",
   },
   actions: {
     unknownPokemon: (id: number) => `ID de Pokémon inconnu : ${id}`,
@@ -1526,6 +1532,8 @@ const es: Dictionary = {
     missedHint: "Encuentros propios huidos/derrotados",
     caused: "Causadas",
     causedHint: "Muertes de enlaces causadas por este jugador",
+    teamBstCol: "BST equipo",
+    teamBstColHint: "BST de los Pokémon del equipo (actual → totalmente evolucionado)",
   },
   actions: {
     unknownPokemon: (id: number) => `ID de Pokémon desconocido: ${id}`,
@@ -1913,6 +1921,8 @@ const it: Dictionary = {
     missedHint: "Incontri propri fuggiti/sconfitti",
     caused: "Causate",
     causedHint: "Morti dei legami causate da questo giocatore",
+    teamBstCol: "BST squadra",
+    teamBstColHint: "BST dei Pokémon della squadra (attuale → completamente evoluto)",
   },
   actions: {
     unknownPokemon: (id: number) => `ID Pokémon sconosciuto: ${id}`,

@@ -108,6 +108,8 @@ export default async function OverviewPage({
   // --- Counts, team BST and the memorial in one pass over the links.
   const caught = new Map<Player, number>(PLAYERS.map((p) => [p, 0]));
   const caused = new Map<Player, number>(PLAYERS.map((p) => [p, 0]));
+  const teamSummePlayer = new Map<Player, number>(PLAYERS.map((p) => [p, 0]));
+  const teamSummeMaxPlayer = new Map<Player, number>(PLAYERS.map((p) => [p, 0]));
   let totalDeaths = 0;
   let teamSumme = 0;
   let teamSummeMax = 0;
@@ -140,13 +142,17 @@ export default async function OverviewPage({
       if (e.status !== EncounterStatus.CAUGHT) continue;
       caught.set(e.player, (caught.get(e.player) ?? 0) + 1);
       if (link.teamPosition !== null) {
-        teamSumme += getPokemonById(e.currentPokemonId)?.stats.Summe ?? 0;
-        teamSummeMax += maxEvolvedSumme(
+        const summe = getPokemonById(e.currentPokemonId)?.stats.Summe ?? 0;
+        const summeMax = maxEvolvedSumme(
           e.currentPokemonId,
           (id) => getEvolutionById(id, evoOptions)?.evolvesTo ?? [],
           (id) => getPokemonById(id)?.stats.Summe ?? 0,
           game.dexLimit,
         );
+        teamSumme += summe;
+        teamSummeMax += summeMax;
+        teamSummePlayer.set(e.player, (teamSummePlayer.get(e.player) ?? 0) + summe);
+        teamSummeMaxPlayer.set(e.player, (teamSummeMaxPlayer.get(e.player) ?? 0) + summeMax);
       }
     }
   }
@@ -163,6 +169,8 @@ export default async function OverviewPage({
       caught: caught.get(player) ?? 0,
       missed: missed.get(player) ?? 0,
       caused: caused.get(player) ?? 0,
+      teamSumme: teamSummePlayer.get(player) ?? 0,
+      teamSummeMax: teamSummeMaxPlayer.get(player) ?? 0,
     })),
     totalDeaths,
     teamSumme,

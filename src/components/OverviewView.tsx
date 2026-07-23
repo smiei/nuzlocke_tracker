@@ -10,7 +10,14 @@ import { PokemonSprite } from "@/components/PokemonSprite";
 import { usePlayerLabel } from "@/components/PlayerNamesProvider";
 
 export type OverviewStats = {
-  perPlayer: { player: Player; caught: number; missed: number; caused: number }[];
+  perPlayer: {
+    player: Player;
+    caught: number;
+    missed: number;
+    caused: number;
+    teamSumme: number;
+    teamSummeMax: number;
+  }[];
   totalDeaths: number;
   teamSumme: number;
   teamSummeMax: number;
@@ -88,6 +95,9 @@ export function OverviewView({
                 <th className="py-1 pr-4 font-medium tabular-nums" title={t.causedHint}>
                   {t.caused}
                 </th>
+                <th className="py-1 pr-4 font-medium tabular-nums" title={t.teamBstColHint}>
+                  {t.teamBstCol}
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -99,6 +109,10 @@ export function OverviewView({
                   <td className="py-1.5 pr-4 tabular-nums">{row.caught}</td>
                   <td className="py-1.5 pr-4 tabular-nums">{row.missed}</td>
                   <td className="py-1.5 pr-4 tabular-nums">{row.caused}</td>
+                  <td className="py-1.5 pr-4 tabular-nums">
+                    {row.teamSumme}
+                    <span className="text-zinc-400 dark:text-zinc-500"> → {row.teamSummeMax}</span>
+                  </td>
                 </tr>
               ))}
             </tbody>
