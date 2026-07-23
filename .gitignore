@@ -23,6 +23,7 @@
 # misc
 .DS_Store
 *.pem
+*.png
 
 # debug
 npm-debug.log*
@@ -53,8 +54,10 @@ next-env.d.ts
 /public/ball-sprites/
 
 # trainer sprites - copyrighted game artwork, user-provided (see
-# public/trainers/README.txt); kept out of the repo for publication
+# public/trainers/README.txt); kept out of the repo for publication.
+# Both the flat root and the per-game trainerSet subfolders.
 /public/trainers/*.png
+/public/trainers/**/*.png
 
 # Claude Code local settings (machine-specific, never committed)
 .claude/

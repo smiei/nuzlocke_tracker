@@ -15,10 +15,13 @@ export function LevelCapsView({
   runId,
   lang,
   levelCaps,
+  trainerSet,
 }: {
   runId: number;
   lang: Lang;
   levelCaps: LevelCapWithProgress[];
+  // Folder under public/trainers/ for game-specific avatars (see TrainerSprite).
+  trainerSet: string;
 }) {
   const router = useRouter();
   const t = translations[lang].levelcaps;
@@ -61,8 +64,14 @@ export function LevelCapsView({
                 : "hover:bg-zinc-50 dark:hover:bg-zinc-900"
             }`}
           >
-            {/* Sprite files are slugged from the canonical German name. */}
-            <TrainerSprite canonicalName={cap.sprite ?? cap.names.de} displayName={name} size={88} />
+            {/* Sprite files are slugged from the canonical German name; the
+                trainerSet folder allows game-specific art (e.g. the rival). */}
+            <TrainerSprite
+              canonicalName={cap.sprite ?? cap.names.de}
+              displayName={name}
+              trainerSet={trainerSet}
+              size={88}
+            />
             <div className="min-w-0 flex-1">
               <div
                 className={`truncate font-medium ${

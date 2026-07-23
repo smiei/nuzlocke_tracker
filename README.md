@@ -55,7 +55,7 @@ The download scripts need internet access once (PokeAPI); after that the app run
 
 ### Trainer sprites (optional, manual)
 
-The Journey page can show trainer avatars from `public/trainers/<slug>.png` (circular avatar next to the name). There is no automated, legally clean source for these – if a file is missing, an initial-letter placeholder is shown instead. The expected file names are listed in `public/trainers/README.txt`. These images are not part of the repo or the Docker image; provide them yourself.
+The Journey page can show trainer avatars (circular avatar next to the name), looked up game-first: `public/trainers/<trainerSet>/<slug>.png` (a per-game folder, so the rival can look different in Emerald vs Platinum; HeartGold/SoulSilver share `heartgold-soulsilver`) with a fallback to the flat `public/trainers/<slug>.png` (so a trainer shared across games, like Brock, needs only one file). There is no automated, legally clean source for these – if no file is found, an initial-letter placeholder is shown instead. The expected file names, folders, and slug rules are listed in `public/trainers/README.txt`. These images are not part of the repo or the Docker image; provide them yourself.
 
 ## Static data
 

@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { getLevelCaps } from "@/lib/data";
+import { getGameOrDefault, getLevelCaps } from "@/lib/data";
 import { prisma } from "@/lib/prisma";
 import { LinkStatus, Player, RunMode } from "@/generated/prisma/client";
 import { resolveRunId } from "@/lib/runs";
@@ -20,6 +20,8 @@ export default async function LevelCapsPage({
 
   const lang = await getLang();
   const t = translations[lang].levelcaps;
+  const game = getGameOrDefault(gameId);
+  const trainerSet = game.trainerSet ?? game.id;
   const levelCaps = getLevelCaps(gameId);
   const progress = await prisma.levelCapProgress.findMany({ where: { runId } });
   const defeatedIds = new Set(progress.filter((p) => p.defeated).map((p) => p.levelCapId));
@@ -74,7 +76,7 @@ export default async function LevelCapsPage({
           )}
         </div>
       )}
-      <LevelCapsView runId={runId} lang={lang} levelCaps={items} />
+      <LevelCapsView runId={runId} lang={lang} levelCaps={items} trainerSet={trainerSet} />
     </div>
   );
 }

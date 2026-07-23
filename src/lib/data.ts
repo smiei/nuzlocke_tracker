@@ -30,6 +30,13 @@ export type GameInfo = {
   spriteSet: string;
   // PokeAPI version group for level-up learnsets (data/learnsets/<vg>.json).
   versionGroup: string;
+  // Optional folder under public/trainers/ for game-specific trainer avatars,
+  // so a generic name like "Rivale" can differ per game (Emerald's rival isn't
+  // Platinum's). Missing files fall back to the flat public/trainers/ root, so
+  // trainers shared across games (e.g. Brock) need only one file there. Games
+  // with identical trainers (HeartGold/SoulSilver) point at the same set.
+  // Defaults to the game id when absent.
+  trainerSet?: string;
   names: LocalizedNames;
 };
 
