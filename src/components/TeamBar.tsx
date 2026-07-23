@@ -16,7 +16,9 @@ import { usePlayerLabel } from "@/components/PlayerNamesProvider";
 const TEAM_SIZE = 6;
 
 function linkLabel(link: SoulLinkView): string {
-  const names = link.encounters.map((e) => e.pokemonName);
+  // Prefer nicknames (already gated by the run's `nicknames` rule server-side:
+  // null when off, so this falls back to the species name automatically).
+  const names = link.encounters.map((e) => e.nickname ?? e.pokemonName);
   return names.length ? names.join(" & ") : link.routeName;
 }
 
