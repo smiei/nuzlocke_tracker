@@ -45,6 +45,26 @@
     "max_level": 15
   },
   {
+    "id": 22,
+    "names": {
+      "de": "Rivale",
+      "en": "Rival",
+      "fr": "Rival",
+      "es": "Rival",
+      "it": "Rivale"
+    },
+    "location": {
+      "de": "Metarost City",
+      "en": "Rustboro City",
+      "fr": "Mérouville",
+      "es": "Ciudad Férrica",
+      "it": "Ferrugipoli"
+    },
+    "badge": null,
+    "max_level": null,
+    "sprite": "rivale"
+  },
+  {
     "id": 3,
     "names": {
       "de": "Kamillo",
@@ -90,6 +110,25 @@
     "sprite": "rivale"
   },
   {
+    "id": 23,
+    "names": {
+      "de": "Heiko",
+      "en": "Wally",
+      "fr": "Timmy",
+      "es": "Blasco",
+      "it": "Wally"
+    },
+    "location": {
+      "de": "Malvenfroh City",
+      "en": "Mauville City",
+      "fr": "Lavandia",
+      "es": "Ciudad Malvalona",
+      "it": "Ciclamipoli"
+    },
+    "badge": null,
+    "max_level": null
+  },
+  {
     "id": 5,
     "names": {
       "de": "Walter",
@@ -117,11 +156,11 @@
   {
     "id": 6,
     "names": {
-      "de": "Maxie",
-      "en": "Maxie",
-      "fr": "Max",
-      "es": "Magno",
-      "it": "Maxie"
+      "de": "Kalle",
+      "en": "Tabitha",
+      "fr": "Kelvin",
+      "es": "Tatiano",
+      "it": "Ottavio"
     },
     "location": {
       "de": "Schlackenberg",
@@ -184,6 +223,25 @@
     "max_level": 31
   },
   {
+    "id": 24,
+    "names": {
+      "de": "Kordula",
+      "en": "Shelly",
+      "fr": "Sarah",
+      "es": "Silvina",
+      "it": "Ada"
+    },
+    "location": {
+      "de": "Klima-Institut",
+      "en": "Weather Institute",
+      "fr": "Institut Météo",
+      "es": "Instituto Meteorológico",
+      "it": "Weather Institute"
+    },
+    "badge": null,
+    "max_level": null
+  },
+  {
     "id": 9,
     "names": {
       "de": "Rivale",
@@ -193,11 +251,11 @@
       "it": "Rivale"
     },
     "location": {
-      "de": "Route 119",
-      "en": "Route 119",
-      "fr": "Route 119",
-      "es": "Ruta 119",
-      "it": "Percorso 119"
+      "de": "Klima-Institut",
+      "en": "Weather Institute",
+      "fr": "Institut Météo",
+      "es": "Instituto Meteorológico",
+      "it": "Weather Institute"
     },
     "badge": null,
     "max_level": null,
@@ -229,6 +287,44 @@
     "max_level": 33
   },
   {
+    "id": 25,
+    "names": {
+      "de": "Kalle",
+      "en": "Tabitha",
+      "fr": "Kelvin",
+      "es": "Tatiano",
+      "it": "Ottavio"
+    },
+    "location": {
+      "de": "Magma-Versteck",
+      "en": "Magma Hideout",
+      "fr": "Planque Magma",
+      "es": "Guarida Magma",
+      "it": "Covo Magma"
+    },
+    "badge": null,
+    "max_level": null
+  },
+  {
+    "id": 12,
+    "names": {
+      "de": "Maxie",
+      "en": "Maxie",
+      "fr": "Max",
+      "es": "Magno",
+      "it": "Maxie"
+    },
+    "location": {
+      "de": "Magma-Versteck",
+      "en": "Magma Hideout",
+      "fr": "Planque Magma",
+      "es": "Guarida Magma",
+      "it": "Covo Magma"
+    },
+    "badge": null,
+    "max_level": null
+  },
+  {
     "id": 11,
     "names": {
       "de": "Rivale",
@@ -249,20 +345,20 @@
     "sprite": "rivale"
   },
   {
-    "id": 12,
+    "id": 26,
     "names": {
-      "de": "Maxie",
-      "en": "Maxie",
-      "fr": "Max",
-      "es": "Magno",
-      "it": "Maxie"
+      "de": "Wolfgang",
+      "en": "Matt",
+      "fr": "Matthieu",
+      "es": "Matías",
+      "it": "Alan"
     },
     "location": {
-      "de": "Magma-Versteck",
-      "en": "Magma Hideout",
-      "fr": "Planque Magma",
-      "es": "Guarida Magma",
-      "it": "Covo Magma"
+      "de": "Aqua-Versteck",
+      "en": "Aqua Hideout",
+      "fr": "Repaire Aqua",
+      "es": "Guarida Aqua",
+      "it": "Covo Aqua"
     },
     "badge": null,
     "max_level": null
@@ -291,6 +387,44 @@
       "it": "Medaglia Mente"
     },
     "max_level": 42
+  },
+  {
+    "id": 27,
+    "names": {
+      "de": "Maxie & Kalle",
+      "en": "Maxie & Tabitha",
+      "fr": "Max & Kelvin",
+      "es": "Magno & Tatiano",
+      "it": "Maxie & Ottavio"
+    },
+    "location": {
+      "de": "Raumfahrtzentrum von Moosbach",
+      "en": "Mossdeep Space Center",
+      "fr": "Centre Spatial d'Algatia",
+      "es": "Centro Espacial de Algaria",
+      "it": "Centro Spaziale di Verdeazzupoli"
+    },
+    "badge": null,
+    "max_level": null
+  },
+  {
+    "id": 28,
+    "names": {
+      "de": "Kordula",
+      "en": "Shelly",
+      "fr": "Sarah",
+      "es": "Silvina",
+      "it": "Ada"
+    },
+    "location": {
+      "de": "Tiefseehöhle",
+      "en": "Seafloor Cavern",
+      "fr": "Caverne Fondmer",
+      "es": "Caverna Abisal",
+      "it": "Antro Abissale"
+    },
+    "badge": null,
+    "max_level": null
   },
   {
     "id": 14,
@@ -449,5 +583,24 @@
     },
     "badge": null,
     "max_level": 58
+  },
+  {
+    "id": 29,
+    "names": {
+      "de": "Troy Trumm",
+      "en": "Steven",
+      "fr": "Pierre Rochard",
+      "es": "Máximo Peñas",
+      "it": "Rocco Petri"
+    },
+    "location": {
+      "de": "Meteorfälle",
+      "en": "Meteor Falls",
+      "fr": "Site Météore",
+      "es": "Cascada Meteoro",
+      "it": "Cascate Meteora"
+    },
+    "badge": null,
+    "max_level": null
   }
 ]

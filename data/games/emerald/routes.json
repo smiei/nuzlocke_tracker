@@ -13,22 +13,22 @@
   {
     "id": 2,
     "names": {
-      "de": "Route 101",
-      "en": "Route 101",
-      "fr": "Route 101",
-      "es": "Ruta 101",
-      "it": "Percorso 101"
+      "de": "Wurzelheim",
+      "en": "Littleroot Town",
+      "fr": "Bourg-en-Vol",
+      "es": "Villa Raíz",
+      "it": "Albanova"
     },
     "type": "route"
   },
   {
     "id": 3,
     "names": {
-      "de": "Route 103",
-      "en": "Route 103",
-      "fr": "Route 103",
-      "es": "Ruta 103",
-      "it": "Percorso 103"
+      "de": "Route 101",
+      "en": "Route 101",
+      "fr": "Route 101",
+      "es": "Ruta 101",
+      "it": "Percorso 101"
     },
     "type": "route"
   },
@@ -46,6 +46,17 @@
   {
     "id": 5,
     "names": {
+      "de": "Route 103",
+      "en": "Route 103",
+      "fr": "Route 103",
+      "es": "Ruta 103",
+      "it": "Percorso 103"
+    },
+    "type": "route"
+  },
+  {
+    "id": 6,
+    "names": {
       "de": "Blütenburg City",
       "en": "Petalburg City",
       "fr": "Clémenti-Ville",
@@ -55,7 +66,7 @@
     "type": "route"
   },
   {
-    "id": 6,
+    "id": 7,
     "names": {
       "de": "Route 104",
       "en": "Route 104",
@@ -66,9 +77,9 @@
     "type": "route"
   },
   {
-    "id": 7,
+    "id": 8,
     "names": {
-      "de": "Petalwald",
+      "de": "Blütenburgwald",
       "en": "Petalburg Woods",
       "fr": "Bois Clémenti",
       "es": "Bosque Petalia",
@@ -77,29 +88,29 @@
     "type": "route"
   },
   {
-    "id": 8,
-    "names": {
-      "de": "Route 116",
-      "en": "Route 116",
-      "fr": "Route 116",
-      "es": "Ruta 116",
-      "it": "Percorso 116"
-    },
-    "type": "route"
-  },
-  {
     "id": 9,
     "names": {
-      "de": "Metaflurtunnel",
-      "en": "Rusturf Tunnel",
-      "fr": "Tunnel Mérazon",
-      "es": "Túnel Fervergal",
-      "it": "Tunnel Menferro"
+      "de": "Metarost City",
+      "en": "Rustboro City",
+      "fr": "Mérouville",
+      "es": "Ciudad Férrica",
+      "it": "Ferrugipoli"
     },
     "type": "route"
   },
   {
     "id": 10,
+    "names": {
+      "de": "Fossil Metarost City",
+      "en": "Fossil Rustboro City",
+      "fr": "Fossile Mérouville",
+      "es": "Fossil Rustboro City",
+      "it": "Fossil Rustboro City"
+    },
+    "type": "static"
+  },
+  {
+    "id": 11,
     "names": {
       "de": "Route 105",
       "en": "Route 105",
@@ -110,35 +121,24 @@
     "type": "route"
   },
   {
-    "id": 11,
+    "id": 12,
+    "names": {
+      "de": "Regice Inselhöhle",
+      "en": "Regice Island Cave",
+      "fr": "Regice Grotte de l’Îlot",
+      "es": "Regice Cueva Insular",
+      "it": "Regice Grotta Insulare"
+    },
+    "type": "static"
+  },
+  {
+    "id": 13,
     "names": {
       "de": "Route 106",
       "en": "Route 106",
       "fr": "Chenal 106",
       "es": "Ruta 106",
       "it": "Percorso 106"
-    },
-    "type": "route"
-  },
-  {
-    "id": 12,
-    "names": {
-      "de": "Faustauhaven",
-      "en": "Dewford Town",
-      "fr": "Myokara",
-      "es": "Pueblo Azuliza",
-      "it": "Bluruvia"
-    },
-    "type": "route"
-  },
-  {
-    "id": 13,
-    "names": {
-      "de": "Granithöhle",
-      "en": "Granite Cave",
-      "fr": "Grotte Granite",
-      "es": "Cueva Granito",
-      "it": "Grotta Pietrosa"
     },
     "type": "route"
   },
@@ -178,17 +178,6 @@
   {
     "id": 17,
     "names": {
-      "de": "Graphitport City",
-      "en": "Slateport City",
-      "fr": "Poivressel",
-      "es": "Ciudad Portual",
-      "it": "Porto Selcepoli"
-    },
-    "type": "route"
-  },
-  {
-    "id": 18,
-    "names": {
       "de": "Route 110",
       "en": "Route 110",
       "fr": "Route 110",
@@ -198,18 +187,7 @@
     "type": "route"
   },
   {
-    "id": 19,
-    "names": {
-      "de": "Route 117",
-      "en": "Route 117",
-      "fr": "Route 117",
-      "es": "Ruta 117",
-      "it": "Percorso 117"
-    },
-    "type": "route"
-  },
-  {
-    "id": 20,
+    "id": 18,
     "names": {
       "de": "Route 111",
       "en": "Route 111",
@@ -220,29 +198,18 @@
     "type": "route"
   },
   {
-    "id": 21,
+    "id": 19,
     "names": {
-      "de": "Wunderturm",
-      "en": "Mirage Tower",
-      "fr": "Tour Mirage",
-      "es": "Mirage Tower",
-      "it": "Mirage Tower"
-    },
-    "type": "route"
-  },
-  {
-    "id": 22,
-    "names": {
-      "de": "Fossil Wunderturm",
-      "en": "Fossil Mirage Tower",
-      "fr": "Fossile Tour Mirage",
-      "es": "Fossil Mirage Tower",
-      "it": "Fossil Mirage Tower"
+      "de": "Regirock Wüstenruine",
+      "en": "Regirock Desert Ruins",
+      "fr": "Regirock Ruines Désert",
+      "es": "Regirock Ruinas del Desierto",
+      "it": "Regirock Rovine Sabbiose"
     },
     "type": "static"
   },
   {
-    "id": 23,
+    "id": 20,
     "names": {
       "de": "Route 112",
       "en": "Route 112",
@@ -253,18 +220,7 @@
     "type": "route"
   },
   {
-    "id": 24,
-    "names": {
-      "de": "Feuriger Pfad",
-      "en": "Fiery Path",
-      "fr": "Chemin Ardent",
-      "es": "Senda Ígnea",
-      "it": "Cammino Ardente"
-    },
-    "type": "route"
-  },
-  {
-    "id": 25,
+    "id": 21,
     "names": {
       "de": "Route 113",
       "en": "Route 113",
@@ -275,7 +231,7 @@
     "type": "route"
   },
   {
-    "id": 26,
+    "id": 22,
     "names": {
       "de": "Route 114",
       "en": "Route 114",
@@ -286,18 +242,7 @@
     "type": "route"
   },
   {
-    "id": 27,
-    "names": {
-      "de": "Meteorfälle",
-      "en": "Meteor Falls",
-      "fr": "Site Météore",
-      "es": "Cascada Meteoro",
-      "it": "Cascate Meteora"
-    },
-    "type": "route"
-  },
-  {
-    "id": 28,
+    "id": 23,
     "names": {
       "de": "Route 115",
       "en": "Route 115",
@@ -308,29 +253,29 @@
     "type": "route"
   },
   {
-    "id": 29,
+    "id": 24,
     "names": {
-      "de": "Schroffer Pass",
-      "en": "Jagged Pass",
-      "fr": "Sentier Sinuroc",
-      "es": "Desfiladero",
-      "it": "Passo Selvaggio"
+      "de": "Route 116",
+      "en": "Route 116",
+      "fr": "Route 116",
+      "es": "Ruta 116",
+      "it": "Percorso 116"
     },
     "type": "route"
   },
   {
-    "id": 30,
+    "id": 25,
     "names": {
-      "de": "Isso-Ei Bad Lavastadt",
-      "en": "Wynaut Egg Lavaridge Town",
-      "fr": "Œuf d'Okéoké Vermilava",
-      "es": "Huevo de Wynaut Pueblo Lavacalda",
-      "it": "Uovo di Wynaut Cuordilava"
+      "de": "Route 117",
+      "en": "Route 117",
+      "fr": "Route 117",
+      "es": "Ruta 117",
+      "it": "Percorso 117"
     },
-    "type": "static"
+    "type": "route"
   },
   {
-    "id": 31,
+    "id": 26,
     "names": {
       "de": "Route 118",
       "en": "Route 118",
@@ -341,7 +286,7 @@
     "type": "route"
   },
   {
-    "id": 32,
+    "id": 27,
     "names": {
       "de": "Route 119",
       "en": "Route 119",
@@ -352,9 +297,9 @@
     "type": "route"
   },
   {
-    "id": 33,
+    "id": 28,
     "names": {
-      "de": "Formeo Wetterinstitut",
+      "de": "Formeo Klima-Institut",
       "en": "Castform Weather Institute",
       "fr": "Morphéo Institut Météo",
       "es": "Castform Instituto Meteorológico",
@@ -363,7 +308,18 @@
     "type": "static"
   },
   {
-    "id": 34,
+    "id": 29,
+    "names": {
+      "de": "Kecleon Route 119",
+      "en": "Kecleon Route 119",
+      "fr": "Kecleon Route 119",
+      "es": "Kecleon Ruta 119",
+      "it": "Kecleon Percorso 119"
+    },
+    "type": "static"
+  },
+  {
+    "id": 30,
     "names": {
       "de": "Route 120",
       "en": "Route 120",
@@ -374,7 +330,7 @@
     "type": "route"
   },
   {
-    "id": 35,
+    "id": 31,
     "names": {
       "de": "Kecleon Route 120",
       "en": "Kecleon Route 120",
@@ -385,7 +341,18 @@
     "type": "static"
   },
   {
-    "id": 36,
+    "id": 32,
+    "names": {
+      "de": "Registeel Grabmal",
+      "en": "Registeel Ancient Tomb",
+      "fr": "Registeel Tombeau Antique",
+      "es": "Registeel Tumba Antigua",
+      "it": "Registeel Tomba Antica"
+    },
+    "type": "static"
+  },
+  {
+    "id": 33,
     "names": {
       "de": "Route 121",
       "en": "Route 121",
@@ -396,18 +363,7 @@
     "type": "route"
   },
   {
-    "id": 37,
-    "names": {
-      "de": "Safari-Zone",
-      "en": "Safari Zone",
-      "fr": "Parc Safari",
-      "es": "Zona Safari",
-      "it": "Zona Safari"
-    },
-    "type": "route"
-  },
-  {
-    "id": 38,
+    "id": 34,
     "names": {
       "de": "Route 122",
       "en": "Route 122",
@@ -418,18 +374,7 @@
     "type": "route"
   },
   {
-    "id": 39,
-    "names": {
-      "de": "Pyroberg",
-      "en": "Mt. Pyre",
-      "fr": "Mont Mémoria",
-      "es": "Monte Pírico",
-      "it": "Monte Pira"
-    },
-    "type": "route"
-  },
-  {
-    "id": 40,
+    "id": 35,
     "names": {
       "de": "Route 123",
       "en": "Route 123",
@@ -440,29 +385,7 @@
     "type": "route"
   },
   {
-    "id": 41,
-    "names": {
-      "de": "Seegrasulb City",
-      "en": "Lilycove City",
-      "fr": "Nénucrique",
-      "es": "Ciudad Calagua",
-      "it": "Porto Alghepoli"
-    },
-    "type": "route"
-  },
-  {
-    "id": 42,
-    "names": {
-      "de": "Lektrobal Aqua-Versteck",
-      "en": "Electrode Aqua Hideout",
-      "fr": "Électrode Repaire Aqua",
-      "es": "Electrode Guarida Aqua",
-      "it": "Electrode Covo Aqua"
-    },
-    "type": "static"
-  },
-  {
-    "id": 43,
+    "id": 36,
     "names": {
       "de": "Route 124",
       "en": "Route 124",
@@ -473,18 +396,7 @@
     "type": "route"
   },
   {
-    "id": 44,
-    "names": {
-      "de": "Moosbach City",
-      "en": "Mossdeep City",
-      "fr": "Algatia",
-      "es": "Ciudad Algaria",
-      "it": "Verdeazzupoli"
-    },
-    "type": "route"
-  },
-  {
-    "id": 45,
+    "id": 37,
     "names": {
       "de": "Route 125",
       "en": "Route 125",
@@ -495,18 +407,7 @@
     "type": "route"
   },
   {
-    "id": 46,
-    "names": {
-      "de": "Küstenhöhle",
-      "en": "Shoal Cave",
-      "fr": "Grotte Tréfonds",
-      "es": "Cueva Cardumen",
-      "it": "Grotta Ondosa"
-    },
-    "type": "route"
-  },
-  {
-    "id": 47,
+    "id": 38,
     "names": {
       "de": "Route 126",
       "en": "Route 126",
@@ -517,18 +418,7 @@
     "type": "route"
   },
   {
-    "id": 48,
-    "names": {
-      "de": "Xeneroville",
-      "en": "Sootopolis City",
-      "fr": "Atalanopolis",
-      "es": "Arrecípolis",
-      "it": "Ceneride"
-    },
-    "type": "route"
-  },
-  {
-    "id": 49,
+    "id": 39,
     "names": {
       "de": "Route 127",
       "en": "Route 127",
@@ -539,7 +429,7 @@
     "type": "route"
   },
   {
-    "id": 50,
+    "id": 40,
     "names": {
       "de": "Route 128",
       "en": "Route 128",
@@ -550,7 +440,7 @@
     "type": "route"
   },
   {
-    "id": 51,
+    "id": 41,
     "names": {
       "de": "Route 129",
       "en": "Route 129",
@@ -561,7 +451,7 @@
     "type": "route"
   },
   {
-    "id": 52,
+    "id": 42,
     "names": {
       "de": "Route 130",
       "en": "Route 130",
@@ -572,7 +462,7 @@
     "type": "route"
   },
   {
-    "id": 53,
+    "id": 43,
     "names": {
       "de": "Route 131",
       "en": "Route 131",
@@ -583,18 +473,7 @@
     "type": "route"
   },
   {
-    "id": 54,
-    "names": {
-      "de": "Floßbrunn",
-      "en": "Pacifidlog Town",
-      "fr": "Pacifiville",
-      "es": "Pueblo Oromar",
-      "it": "Orocea"
-    },
-    "type": "route"
-  },
-  {
-    "id": 55,
+    "id": 44,
     "names": {
       "de": "Route 132",
       "en": "Route 132",
@@ -605,7 +484,7 @@
     "type": "route"
   },
   {
-    "id": 56,
+    "id": 45,
     "names": {
       "de": "Route 133",
       "en": "Route 133",
@@ -616,7 +495,7 @@
     "type": "route"
   },
   {
-    "id": 57,
+    "id": 46,
     "names": {
       "de": "Route 134",
       "en": "Route 134",
@@ -627,15 +506,137 @@
     "type": "route"
   },
   {
-    "id": 58,
+    "id": 47,
     "names": {
-      "de": "Verlassenes Schiff",
-      "en": "Abandoned Ship",
-      "fr": "Épave",
-      "es": "Barco Abandonado",
-      "it": "Abandoned Ship"
+      "de": "Metarost-Tunnel",
+      "en": "Rusturf Tunnel",
+      "fr": "Tunnel Mérazon",
+      "es": "Túnel Fervergal",
+      "it": "Tunnel Menferro"
     },
     "type": "route"
+  },
+  {
+    "id": 48,
+    "names": {
+      "de": "Faustauhaven",
+      "en": "Dewford Town",
+      "fr": "Myokara",
+      "es": "Pueblo Azuliza",
+      "it": "Bluruvia"
+    },
+    "type": "route"
+  },
+  {
+    "id": 49,
+    "names": {
+      "de": "Granithöhle",
+      "en": "Granite Cave",
+      "fr": "Grotte Granite",
+      "es": "Cueva Granito",
+      "it": "Grotta Pietrosa"
+    },
+    "type": "route"
+  },
+  {
+    "id": 50,
+    "names": {
+      "de": "Graphitport City",
+      "en": "Slateport City",
+      "fr": "Poivressel",
+      "es": "Ciudad Portual",
+      "it": "Porto Selcepoli"
+    },
+    "type": "route"
+  },
+  {
+    "id": 51,
+    "names": {
+      "de": "Wandelhöhle",
+      "en": "Altering Cave",
+      "fr": "Grotte Métamo",
+      "es": "Altering Cave",
+      "it": "Altering Cave"
+    },
+    "type": "route",
+    "postgame": true
+  },
+  {
+    "id": 52,
+    "names": {
+      "de": "Meteorfälle",
+      "en": "Meteor Falls",
+      "fr": "Site Météore",
+      "es": "Cascada Meteoro",
+      "it": "Cascate Meteora"
+    },
+    "type": "route"
+  },
+  {
+    "id": 53,
+    "names": {
+      "de": "Steilpass",
+      "en": "Jagged Pass",
+      "fr": "Sentier Sinuroc",
+      "es": "Desfiladero",
+      "it": "Passo Selvaggio"
+    },
+    "type": "route"
+  },
+  {
+    "id": 54,
+    "names": {
+      "de": "Bad Lavastadt",
+      "en": "Lavaridge Town",
+      "fr": "Vermilava",
+      "es": "Pueblo Lavacalda",
+      "it": "Cuordilava"
+    },
+    "type": "route"
+  },
+  {
+    "id": 55,
+    "names": {
+      "de": "Isso-Ei Bad Lavastadt",
+      "en": "Wynaut Egg Lavaridge Town",
+      "fr": "Œuf d'Okéoké Vermilava",
+      "es": "Huevo de Wynaut Pueblo Lavacalda",
+      "it": "Uovo di Wynaut Cuordilava"
+    },
+    "type": "static"
+  },
+  {
+    "id": 56,
+    "names": {
+      "de": "Feuriger Pfad",
+      "en": "Fiery Path",
+      "fr": "Chemin Ardent",
+      "es": "Senda Ígnea",
+      "it": "Cammino Ardente"
+    },
+    "type": "route"
+  },
+  {
+    "id": 57,
+    "names": {
+      "de": "Wunderturm",
+      "en": "Mirage Tower",
+      "fr": "Tour Mirage",
+      "es": "Mirage Tower",
+      "it": "Mirage Tower"
+    },
+    "type": "route"
+  },
+  {
+    "id": 58,
+    "names": {
+      "de": "Fossil Wunderturm",
+      "en": "Fossil Mirage Tower",
+      "fr": "Fossile Tour Mirage",
+      "es": "Fossil Mirage Tower",
+      "it": "Fossil Mirage Tower"
+    },
+    "type": "static"
   },
   {
     "id": 59,
@@ -651,93 +652,104 @@
   {
     "id": 60,
     "names": {
-      "de": "Voltobal Neu Malvenfroh",
-      "en": "Voltorb New Mauville",
-      "fr": "Voltorbe New Lavandia",
-      "es": "Voltorb Malvalanova",
-      "it": "Voltorb Ciclanova"
+      "de": "Voltobal/Lektrobal Neu Malvenfroh",
+      "en": "Voltorb/Electrode New Mauville",
+      "fr": "Voltorbe/Électrode New Lavandia",
+      "es": "Voltorb/Electrode Malvalanova",
+      "it": "Voltorb/Electrode Ciclanova"
     },
     "type": "static"
   },
   {
     "id": 61,
     "names": {
-      "de": "Tiefseehöhle",
-      "en": "Seafloor Cavern",
-      "fr": "Caverne Fondmer",
-      "es": "Caverna Abisal",
-      "it": "Antro Abissale"
+      "de": "Baumhausen City",
+      "en": "Fortree City",
+      "fr": "Cimetronelle",
+      "es": "Ciudad Arborada",
+      "it": "Forestopoli"
     },
     "type": "route"
   },
   {
     "id": 62,
     "names": {
-      "de": "Himmelturm",
-      "en": "Sky Pillar",
-      "fr": "Pilier Céleste",
-      "es": "Pilar Celeste",
-      "it": "Torre dei Cieli"
+      "de": "Safari-Zone",
+      "en": "Safari Zone",
+      "fr": "Parc Safari",
+      "es": "Zona Safari",
+      "it": "Zona Safari"
     },
     "type": "route"
   },
   {
     "id": 63,
     "names": {
-      "de": "Rayquaza Himmelturm",
-      "en": "Rayquaza Sky Pillar",
-      "fr": "Rayquaza Pilier Céleste",
-      "es": "Rayquaza Pilar Celeste",
-      "it": "Rayquaza Torre dei Cieli"
+      "de": "Pyroberg",
+      "en": "Mt. Pyre",
+      "fr": "Mont Mémoria",
+      "es": "Monte Pírico",
+      "it": "Monte Pira"
     },
-    "type": "static"
+    "type": "route"
   },
   {
     "id": 64,
     "names": {
-      "de": "Siegesstraße",
-      "en": "Victory Road",
-      "fr": "Route Victoire",
-      "es": "Calle Victoria",
-      "it": "Via Vittoria"
+      "de": "Magma-Versteck",
+      "en": "Magma Hideout",
+      "fr": "Planque Magma",
+      "es": "Guarida Magma",
+      "it": "Covo Magma"
     },
     "type": "route"
   },
   {
     "id": 65,
     "names": {
-      "de": "Regirock Wüstenruinen",
-      "en": "Regirock Desert Ruins",
-      "fr": "Regirock Ruines Désert",
-      "es": "Regirock Ruinas del Desierto",
-      "it": "Regirock Rovine Sabbiose"
+      "de": "Aqua-Versteck",
+      "en": "Aqua Hideout",
+      "fr": "Repaire Aqua",
+      "es": "Guarida Aqua",
+      "it": "Covo Aqua"
     },
-    "type": "static"
+    "type": "route"
   },
   {
     "id": 66,
     "names": {
-      "de": "Regice Inselhöhle",
-      "en": "Regice Island Cave",
-      "fr": "Regice Grotte de l’Îlot",
-      "es": "Regice Cueva Insular",
-      "it": "Regice Grotta Insulare"
+      "de": "Lektrobal Aqua-Versteck",
+      "en": "Electrode Aqua Hideout",
+      "fr": "Électrode Repaire Aqua",
+      "es": "Electrode Guarida Aqua",
+      "it": "Electrode Covo Aqua"
     },
     "type": "static"
   },
   {
     "id": 67,
     "names": {
-      "de": "Registeel Grabmal",
-      "en": "Registeel Ancient Tomb",
-      "fr": "Registeel Tombeau Antique",
-      "es": "Registeel Tumba Antigua",
-      "it": "Registeel Tomba Antica"
+      "de": "Seegrasulb City",
+      "en": "Lilycove City",
+      "fr": "Nénucrique",
+      "es": "Ciudad Calagua",
+      "it": "Porto Alghepoli"
     },
-    "type": "static"
+    "type": "route"
   },
   {
     "id": 68,
+    "names": {
+      "de": "Moosbach City",
+      "en": "Mossdeep City",
+      "fr": "Algatia",
+      "es": "Ciudad Algaria",
+      "it": "Verdeazzupoli"
+    },
+    "type": "route"
+  },
+  {
+    "id": 69,
     "names": {
       "de": "Tanhel Moosbach City",
       "en": "Beldum Mossdeep City",
@@ -749,31 +761,188 @@
     "postgame": true
   },
   {
-    "id": 69,
-    "names": {
-      "de": "Latias/Latios (Roaming)",
-      "en": "Latias/Latios (Roaming)",
-      "fr": "Latias/Latios (itinérant)",
-      "es": "Latias/Latios (errante)",
-      "it": "Latias/Latios (vagante)"
-    },
-    "type": "static",
-    "postgame": true
-  },
-  {
     "id": 70,
     "names": {
-      "de": "Kyogre Meereshöhle",
-      "en": "Kyogre Marine Cave",
-      "fr": "Kyogre Grotte Marine",
-      "es": "Kyogre Marine Cave",
-      "it": "Kyogre Marine Cave"
+      "de": "Küstenhöhle",
+      "en": "Shoal Cave",
+      "fr": "Grotte Tréfonds",
+      "es": "Cueva Cardumen",
+      "it": "Grotta Ondosa"
     },
-    "type": "static",
-    "postgame": true
+    "type": "route"
   },
   {
     "id": 71,
+    "names": {
+      "de": "Tiefseehöhle",
+      "en": "Seafloor Cavern",
+      "fr": "Caverne Fondmer",
+      "es": "Caverna Abisal",
+      "it": "Antro Abissale"
+    },
+    "type": "route"
+  },
+  {
+    "id": 72,
+    "names": {
+      "de": "Xeneroville",
+      "en": "Sootopolis City",
+      "fr": "Atalanopolis",
+      "es": "Arrecípolis",
+      "it": "Ceneride"
+    },
+    "type": "route"
+  },
+  {
+    "id": 73,
+    "names": {
+      "de": "Urzeithöhle",
+      "en": "Cave of Origin",
+      "fr": "Grotte Origine",
+      "es": "Cueva Ancestral",
+      "it": "Grotta dei Tempi"
+    },
+    "type": "route"
+  },
+  {
+    "id": 74,
+    "names": {
+      "de": "Himmelturm",
+      "en": "Sky Pillar",
+      "fr": "Pilier Céleste",
+      "es": "Pilar Celeste",
+      "it": "Torre dei Cieli"
+    },
+    "type": "route"
+  },
+  {
+    "id": 75,
+    "names": {
+      "de": "Rayquaza Himmelturm",
+      "en": "Rayquaza Sky Pillar",
+      "fr": "Rayquaza Pilier Céleste",
+      "es": "Rayquaza Pilar Celeste",
+      "it": "Rayquaza Torre dei Cieli"
+    },
+    "type": "static"
+  },
+  {
+    "id": 76,
+    "names": {
+      "de": "Floßbrunn",
+      "en": "Pacifidlog Town",
+      "fr": "Pacifiville",
+      "es": "Pueblo Oromar",
+      "it": "Orocea"
+    },
+    "type": "route"
+  },
+  {
+    "id": 77,
+    "names": {
+      "de": "Wundereiland",
+      "en": "Mirage Island",
+      "fr": "Mirage Island",
+      "es": "Isla espejismo",
+      "it": "Mirage Island"
+    },
+    "type": "route"
+  },
+  {
+    "id": 78,
+    "names": {
+      "de": "Schiffswrack",
+      "en": "Abandoned Ship",
+      "fr": "Épave",
+      "es": "Barco Abandonado",
+      "it": "Abandoned Ship"
+    },
+    "type": "route"
+  },
+  {
+    "id": 79,
+    "names": {
+      "de": "Prachtpolis City",
+      "en": "Ever Grande City",
+      "fr": "Éternara",
+      "es": "Ciudad Colosalia",
+      "it": "Iridopoli"
+    },
+    "type": "route"
+  },
+  {
+    "id": 80,
+    "names": {
+      "de": "Siegesstraße",
+      "en": "Victory Road",
+      "fr": "Route Victoire",
+      "es": "Calle Victoria",
+      "it": "Via Vittoria"
+    },
+    "type": "route"
+  },
+  {
+    "id": 81,
+    "names": {
+      "de": "MS Tide",
+      "en": "S.S. Tidal",
+      "fr": "Le Marina",
+      "es": "S.S. Marea",
+      "it": "M/N Marea"
+    },
+    "type": "route",
+    "postgame": true
+  },
+  {
+    "id": 82,
+    "names": {
+      "de": "Kampfzone",
+      "en": "Battle Frontier",
+      "fr": "Zone de Combat",
+      "es": "Frente de Batalla",
+      "it": "Parco Lotta"
+    },
+    "type": "route",
+    "postgame": true
+  },
+  {
+    "id": 83,
+    "names": {
+      "de": "Mogelbaum Kampfzone",
+      "en": "Sudowoodo Battle Frontier",
+      "fr": "Simularbre Zone de Combat",
+      "es": "Sudowoodo Frente de Batalla",
+      "it": "Sudowoodo Parco Lotta"
+    },
+    "type": "static",
+    "postgame": true
+  },
+  {
+    "id": 84,
+    "names": {
+      "de": "Handwerkerhöhle",
+      "en": "Artisan Cave",
+      "fr": "Grotte Atelier",
+      "es": "Artisan Cave",
+      "it": "Artisan Cave"
+    },
+    "type": "route",
+    "postgame": true
+  },
+  {
+    "id": 85,
+    "names": {
+      "de": "Wüstenunterführung",
+      "en": "Desert Underpass",
+      "fr": "Voie du Désert",
+      "es": "Desert Underpass",
+      "it": "Desert Underpass"
+    },
+    "type": "route",
+    "postgame": true
+  },
+  {
+    "id": 86,
     "names": {
       "de": "Groudon Terrahöhle",
       "en": "Groudon Terra Cave",
@@ -785,49 +954,25 @@
     "postgame": true
   },
   {
-    "id": 72,
+    "id": 87,
     "names": {
-      "de": "Wandelhöhle",
-      "en": "Altering Cave",
-      "fr": "Grotte Métamo",
-      "es": "Altering Cave",
-      "it": "Altering Cave"
+      "de": "Kyogre Ozeanhöhle",
+      "en": "Kyogre Marine Cave",
+      "fr": "Kyogre Grotte Marine",
+      "es": "Kyogre Marine Cave",
+      "it": "Kyogre Marine Cave"
     },
-    "type": "route",
+    "type": "static",
     "postgame": true
   },
   {
-    "id": 73,
+    "id": 88,
     "names": {
-      "de": "Wüstenpassage",
-      "en": "Desert Underpass",
-      "fr": "Voie du Désert",
-      "es": "Desert Underpass",
-      "it": "Desert Underpass"
-    },
-    "type": "route",
-    "postgame": true
-  },
-  {
-    "id": 74,
-    "names": {
-      "de": "Malerhöhle",
-      "en": "Artisan Cave",
-      "fr": "Grotte Atelier",
-      "es": "Artisan Cave",
-      "it": "Artisan Cave"
-    },
-    "type": "route",
-    "postgame": true
-  },
-  {
-    "id": 75,
-    "names": {
-      "de": "Mogelbaum Kampfzone",
-      "en": "Sudowoodo Battle Frontier",
-      "fr": "Simularbre Zone de Combat",
-      "es": "Sudowoodo Frente de Batalla",
-      "it": "Sudowoodo Parco Lotta"
+      "de": "Latias/Latios (Roaming)",
+      "en": "Latias/Latios (Roaming)",
+      "fr": "Latias/Latios (itinérant)",
+      "es": "Latias/Latios (errante)",
+      "it": "Latias/Latios (vagante)"
     },
     "type": "static",
     "postgame": true
