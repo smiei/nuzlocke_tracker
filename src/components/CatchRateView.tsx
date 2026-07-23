@@ -8,15 +8,12 @@ import { ballHasCondition, getBallIdsForGeneration, STATUS_IDS, computeCatchChan
 import type { EffectivenessTable } from "@/lib/effectiveness";
 import { computeDefenseMultipliers } from "@/lib/effectiveness";
 import { quickCatch } from "@/lib/actions";
-import { usePersistentState } from "@/lib/usePersistentState";
 import { formatActionError } from "@/lib/actionErrors";
 import { Player, RunMode } from "@/generated/prisma/enums";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import { translations } from "@/lib/i18n/dictionary";
 import { pokemonName } from "@/lib/i18n/localize";
 import { typesForGeneration } from "@/lib/pokemonTypes";
-import { PokemonCombobox } from "@/components/PokemonCombobox";
-import { PokemonInfoButton } from "@/components/PokemonDetailProvider";
 import { usePlayerLabel } from "@/components/PlayerNamesProvider";
 import { PokemonSprite } from "@/components/PokemonSprite";
 import { TypeBadge } from "@/components/TypeBadge";
@@ -123,7 +120,7 @@ function BallPicker({
   );
 }
 
-type SharedProps = {
+export type CatchSharedProps = {
   runId: number;
   mode: RunMode;
   pokemonList: Pokemon[];
@@ -135,9 +132,10 @@ type SharedProps = {
   attackTypes: string[];
 };
 
-type CatchCardState = {
-  id: number;
-  selectedId: number | null;
+// The per-card catch inputs. Which Pokémon is selected lives one level up (the
+// combined Kampf & Fang card shares it with the battle view), so it is passed
+// in as selectedId rather than owned here.
+export type CatchBodyState = {
   ball: BallId;
   hpPercent: number;
   level: number;
@@ -146,25 +144,25 @@ type CatchCardState = {
   conditionMet: boolean;
 };
 
-function newCatchCard(id: number): CatchCardState {
-  return { id, selectedId: null, ball: "poke", hpPercent: 100, level: 50, status: "none", turn: 1, conditionMet: true };
+export function newCatchBody(): CatchBodyState {
+  return { ball: "poke", hpPercent: 100, level: 50, status: "none", turn: 1, conditionMet: true };
 }
 
-// One independent catch calculator (Pokémon + ball + HP + status + condition),
-// with weaknesses and the quick-catch dropdowns. Several can be shown at once.
-// Controlled by the parent so the whole set persists per client.
-function CatchCard({
+// The "Wild" body of a combined card: ball + HP + status + condition, the catch
+// chance, the selected Pokémon's weaknesses, and the quick-catch dropdowns. The
+// Pokémon is picked once in the card header and handed down as selectedId.
+export function CatchCardBody({
   shared,
+  selectedId,
   state,
   onChange,
-  onRemove,
 }: {
-  shared: SharedProps;
-  state: CatchCardState;
-  onChange: (patch: Partial<CatchCardState>) => void;
-  onRemove?: () => void;
+  shared: CatchSharedProps;
+  selectedId: number | null;
+  state: CatchBodyState;
+  onChange: (patch: Partial<CatchBodyState>) => void;
 }) {
-  const { runId, mode, pokemonList, catchRates, lockedFamilies, generation, openSlots, effectiveness, attackTypes } = shared;
+  const { runId, mode, pokemonList, catchRates, generation, openSlots, effectiveness, attackTypes } = shared;
   const router = useRouter();
   const { lang } = useLanguage();
   const t = translations[lang].catchrate;
@@ -172,13 +170,12 @@ function CatchCard({
   const playerLabel = usePlayerLabel();
   const ballIds = getBallIdsForGeneration(generation);
 
-  const { selectedId, ball, hpPercent, level, status, turn, conditionMet } = state;
+  const { ball, hpPercent, level, status, turn, conditionMet } = state;
   const [caughtMsg, setCaughtMsg] = useState<string | null>(null);
   const [catching, startCatch] = useTransition();
 
   const selected = pokemonList.find((p) => p.id === selectedId) ?? null;
   const baseRate = selected ? catchRates[selected.id] : undefined;
-  const isLocked = selected ? lockedFamilies.has(selected.family_id) : false;
   const selectedTypes = selected ? typesForGeneration(selected.id, selected.types, generation) : [];
 
   const result =
@@ -198,7 +195,7 @@ function CatchCard({
   const ballNote = (t.ballNotes as Partial<Record<BallId, string>>)[ball];
   const hasCondition = ballHasCondition(ball);
 
-  // Defensive matchups for the selected Pokémon (#4).
+  // Defensive matchups for the selected Pokémon.
   const weaknessGroups = useMemo(() => {
     if (!selected) return [];
     const mult = computeDefenseMultipliers(effectiveness, selectedTypes, attackTypes);
@@ -251,37 +248,7 @@ function CatchCard({
   const isSoulLink = mode === RunMode.SOULLINK;
 
   return (
-    <div className="relative max-w-xl rounded-lg border border-zinc-200 p-4 dark:border-zinc-800">
-      {onRemove && (
-        <button
-          type="button"
-          onClick={onRemove}
-          aria-label="×"
-          className="absolute right-2 top-2 rounded p-1 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
-        >
-          ✕
-        </button>
-      )}
-
-      <div className="mb-4">
-        <div className="flex items-center gap-2 pr-6">
-          <div className="min-w-0 flex-1">
-            <PokemonCombobox
-              lang={lang}
-              pokemonList={pokemonList}
-              selectedId={selectedId}
-              onSelect={(id) => onChange({ selectedId: id })}
-              onClear={() => onChange({ selectedId: null })}
-              lockedFamilyIds={lockedFamilies}
-            />
-          </div>
-          <PokemonInfoButton pokemonId={selectedId} label={selected ? pokemonName(selected, lang) : ""} />
-        </div>
-        {isLocked && (
-          <p className="mt-2 text-xs text-amber-600 dark:text-amber-400">⚠ {t.lockWarning}</p>
-        )}
-      </div>
-
+    <>
       <div className="grid grid-cols-2 gap-3">
         <div className="col-span-2 sm:col-span-1">
           <label className={labelClass}>{t.ballLabel}</label>
@@ -363,7 +330,7 @@ function CatchCard({
         )}
       </div>
 
-      {/* Conditional-ball checkbox (#1): the bonus only counts when checked. */}
+      {/* Conditional-ball checkbox: the bonus only counts when checked. */}
       {hasCondition && (
         <label className="mt-3 flex cursor-pointer items-start gap-2">
           <input
@@ -414,7 +381,7 @@ function CatchCard({
         )}
       </div>
 
-      {/* Type weaknesses of the selected Pokémon (#4) */}
+      {/* Type weaknesses of the selected Pokémon */}
       {selected && weaknessGroups.length > 0 && (
         <div className="mt-3">
           <div className="flex flex-col gap-1">
@@ -459,82 +426,6 @@ function CatchCard({
           <p className="mt-2 text-xs text-emerald-600 dark:text-emerald-400">{caughtMsg}</p>
         )}
       </div>
-    </div>
-  );
-}
-
-export function CatchRateView({
-  runId,
-  mode,
-  pokemonList,
-  catchRates,
-  lockedFamilyIds,
-  generation,
-  openSlots,
-  effectiveness,
-  attackTypes,
-}: {
-  runId: number;
-  mode: RunMode;
-  pokemonList: Pokemon[];
-  catchRates: Record<number, number>;
-  lockedFamilyIds: number[];
-  generation: number;
-  openSlots: OpenSlot[];
-  effectiveness: EffectivenessTable;
-  attackTypes: string[];
-}) {
-  const { lang } = useLanguage();
-  const t = translations[lang].catchrate;
-  const lockedFamilies = useMemo(() => new Set(lockedFamilyIds), [lockedFamilyIds]);
-
-  // Persisted per client, so a tab switch / reload keeps each card's inputs
-  // and the number of cards. Never synced across devices.
-  const [cards, setCards] = usePersistentState<CatchCardState[]>("nuzlocke:catchrate:cards", [
-    newCatchCard(0),
-  ]);
-
-  const shared: SharedProps = {
-    runId,
-    mode,
-    pokemonList,
-    catchRates,
-    lockedFamilies,
-    generation,
-    openSlots,
-    effectiveness,
-    attackTypes,
-  };
-
-  return (
-    <div>
-      <h2 className="mb-4 text-xl font-semibold">{t.heading}</h2>
-      <div className="flex flex-col gap-4">
-        {cards.map((card) => (
-          <CatchCard
-            key={card.id}
-            shared={shared}
-            state={card}
-            onChange={(patch) =>
-              setCards((cs) => cs.map((c) => (c.id === card.id ? { ...c, ...patch } : c)))
-            }
-            onRemove={
-              cards.length > 1
-                ? () => setCards((cs) => cs.filter((c) => c.id !== card.id))
-                : undefined
-            }
-          />
-        ))}
-      </div>
-      <button
-        type="button"
-        onClick={() =>
-          setCards((cs) => [...cs, newCatchCard(Math.max(-1, ...cs.map((c) => c.id)) + 1)])
-        }
-        className="mt-3 flex max-w-xl items-center justify-center gap-1.5 rounded-lg border border-dashed border-zinc-300 px-3 py-2.5 text-sm font-medium text-zinc-500 transition-colors hover:border-zinc-400 hover:bg-zinc-50 hover:text-zinc-700 dark:border-zinc-700 dark:text-zinc-400 dark:hover:border-zinc-600 dark:hover:bg-zinc-900 dark:hover:text-zinc-200"
-      >
-        <span className="text-lg leading-none">+</span> {t.addCard}
-      </button>
-    </div>
+    </>
   );
 }

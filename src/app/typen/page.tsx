@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import {
+  getCatchRates,
   getEffectiveness,
   getEvolutions,
   getGameOrDefault,
@@ -8,26 +9,29 @@ import {
   getMoveset,
   getPokemonById,
   getPokemonList,
+  getRoutes,
 } from "@/lib/data";
 import { getTypesForGeneration } from "@/lib/effectiveness";
 import { explosiveMove } from "@/lib/learnset";
 import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
 import { getLang } from "@/lib/i18n/getLang";
-import { pokemonName } from "@/lib/i18n/localize";
+import { pokemonName, routeName } from "@/lib/i18n/localize";
 import { typesForGeneration } from "@/lib/pokemonTypes";
 import { LinkStatus, Player, RunMode } from "@/generated/prisma/client";
 import type { TeamMember } from "@/components/TeamWeaknessesView";
-import { BattleView } from "@/components/BattleView";
+import type { OpenSlot } from "@/components/CatchRateView";
+import { AnalyzeView } from "@/components/AnalyzeView";
 import { SpriteSetProvider } from "@/components/SpriteSetProvider";
 import { PokemonDetailProvider } from "@/components/PokemonDetailProvider";
 import { PlayerNamesProvider } from "@/components/PlayerNamesProvider";
 
-// Run-scoped: the Battle tab uses the run's game (type chart, dex, sprites,
-// level-up movesets) and its current team for the matchup comparison.
+// Run-scoped: the combined Kampf & Fang tab uses the run's game (type chart,
+// dex, sprites, catch mechanics, level-up movesets) and its current team for
+// the battle matchup / the quick-catch dropdowns.
 export const dynamic = "force-dynamic";
 
-export default async function BattlePage({
+export default async function AnalyzePage({
   searchParams,
 }: {
   searchParams: Promise<{ run?: string }>;
@@ -38,23 +42,50 @@ export default async function BattlePage({
 
   const lang = await getLang();
   const game = getGameOrDefault(gameId);
+  const pokemonList = getPokemonList(game.dexLimit);
   const moveset = getMoveset(game.versionGroup);
   const moves = getMoves();
 
+  const catchRates = Object.fromEntries(
+    getCatchRates().map((entry) => [entry.id, entry.catch_rate]),
+  );
+
+  const encounters = await prisma.encounter.findMany({ where: { runId } });
+
+  // Families already used by ANY encounter in this run are locked by the
+  // Species Clause - the calculator only warns, never blocks. Clause off -> no
+  // marks at all.
+  const lockedFamilyIds = settings.speciesClause
+    ? [...new Set(encounters.map((e) => e.familyId))]
+    : [];
+
+  // Open (route, player) slots for the quick-catch dropdown: pairs without an
+  // encounter yet. Statics honor the run's "statics" rule; Classic lists only
+  // Player 1.
+  const routes = getRoutes(gameId).filter((r) => settings.statics || r.type === "route");
+  const players = mode === RunMode.CLASSIC ? [Player.PLAYER1] : [Player.PLAYER1, Player.PLAYER2];
+  const openSlots: OpenSlot[] = [];
+  for (const player of players) {
+    for (const route of routes) {
+      const taken = encounters.some((e) => e.routeId === route.id && e.player === player);
+      if (!taken) openSlots.push({ routeId: route.id, player, routeName: routeName(route, lang) });
+    }
+  }
+
   // Precompute which obtainable Pokémon can go boom (self-destruct/explosion)
-  // so the Battle tab can warn about the selected opponent.
+  // so the Trainer view can warn about the selected opponent.
   const explosiveMap: Record<number, { name: string; level: number }> = {};
-  for (const p of getPokemonList(game.dexLimit)) {
+  for (const p of pokemonList) {
     const boom = explosiveMove(moveset, moves, p.id, lang);
     if (boom) explosiveMap[p.id] = { name: boom.name, level: boom.level };
   }
 
+  // Current team per player for the battle matchup.
   const teamLinks = await prisma.soulLink.findMany({
     where: { runId, teamPosition: { not: null }, status: LinkStatus.ALIVE },
     include: { encounters: true },
     orderBy: { teamPosition: "asc" },
   });
-
   const byPlayer = new Map<Player, TeamMember[]>([
     [Player.PLAYER1, []],
     [Player.PLAYER2, []],
@@ -71,7 +102,6 @@ export default async function BattlePage({
       });
     }
   }
-
   const teams =
     mode === RunMode.CLASSIC
       ? [{ player: Player.PLAYER1, members: byPlayer.get(Player.PLAYER1) ?? [] }]
@@ -80,30 +110,37 @@ export default async function BattlePage({
           { player: Player.PLAYER2, members: byPlayer.get(Player.PLAYER2) ?? [] },
         ];
 
+  const effectiveness = getEffectiveness(game.generation);
+  const attackTypes = getTypesForGeneration(game.generation);
+
   return (
     <SpriteSetProvider spriteSet={game.spriteSet}>
       <PlayerNamesProvider names={settings.playerNames} lang={lang}>
         <PokemonDetailProvider
-          pokemonList={getPokemonList(game.dexLimit)}
+          pokemonList={pokemonList}
           evolutions={getEvolutions({
             gameId,
             impossible: settings.evolutionOverridesImpossible,
             easier: settings.evolutionOverridesEasier,
           })}
           moveData={{ movesets: moveset, moves }}
-          effectiveness={getEffectiveness(game.generation)}
+          effectiveness={effectiveness}
           generation={game.generation}
           dexLimit={game.dexLimit}
           lang={lang}
         >
-          <BattleView
-            pokemonList={getPokemonList(game.dexLimit)}
-            table={getEffectiveness(game.generation)}
-            attackTypes={getTypesForGeneration(game.generation)}
+          <AnalyzeView
+            runId={runId}
+            mode={mode}
+            pokemonList={pokemonList}
             generation={game.generation}
+            effectiveness={effectiveness}
+            attackTypes={attackTypes}
+            catchRates={catchRates}
+            lockedFamilyIds={lockedFamilyIds}
+            openSlots={openSlots}
             learnset={getLearnset(game.versionGroup)}
             teams={teams}
-            mode={mode}
             explosiveMap={explosiveMap}
           />
         </PokemonDetailProvider>

@@ -7,6 +7,7 @@ import {
   getMoveset,
   getPokemonList,
 } from "@/lib/data";
+import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
 import { getLang } from "@/lib/i18n/getLang";
 import { translations } from "@/lib/i18n/dictionary";
@@ -35,6 +36,13 @@ export default async function PokedexPage({
     impossible: settings.evolutionOverridesImpossible,
     easier: settings.evolutionOverridesEasier,
   });
+  // Evolution families already used in this run (Species Clause) - for the
+  // Pokédex availability filter.
+  const encounters = await prisma.encounter.findMany({
+    where: { runId },
+    select: { familyId: true },
+  });
+  const lockedFamilyIds = [...new Set(encounters.map((e) => e.familyId))];
 
   return (
     <SpriteSetProvider spriteSet={game.spriteSet}>
@@ -49,7 +57,7 @@ export default async function PokedexPage({
       >
         <div>
           <h2 className="mb-4 text-xl font-semibold">{translations[lang].pokedex.heading}</h2>
-          <PokedexTable pokemon={pokemon} />
+          <PokedexTable pokemon={pokemon} lockedFamilyIds={lockedFamilyIds} />
         </div>
       </PokemonDetailProvider>
     </SpriteSetProvider>

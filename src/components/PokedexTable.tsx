@@ -43,11 +43,28 @@ function getSortValue(
   }
 }
 
-export function PokedexTable({ pokemon }: { pokemon: Pokemon[] }) {
+export function PokedexTable({
+  pokemon,
+  lockedFamilyIds,
+}: {
+  pokemon: Pokemon[];
+  // Evolution families already used in the run (Species Clause) - powers the
+  // availability filter and dims locked rows.
+  lockedFamilyIds: number[];
+}) {
   const { lang } = useLanguage();
   const detail = usePokemonDetail();
   const t = translations[lang].pokedex;
   const columns = t.columns;
+  const locked = useMemo(() => new Set(lockedFamilyIds), [lockedFamilyIds]);
+  const [avail, setAvail] = useState<"all" | "available" | "locked">("all");
+
+  // Counts over the full (dex-limited) list, shown in the toggle labels.
+  const { availableCount, lockedCount } = useMemo(() => {
+    let lockedCount = 0;
+    for (const p of pokemon) if (locked.has(p.family_id)) lockedCount++;
+    return { lockedCount, availableCount: pokemon.length - lockedCount };
+  }, [pokemon, locked]);
 
   const COLUMNS: { key: ColumnKey; label: string; align?: "right"; hideClass?: string }[] = [
     { key: "id", label: columns.id, hideClass: "hidden md:table-cell" },
@@ -105,6 +122,16 @@ export function PokedexTable({ pokemon }: { pokemon: Pokemon[] }) {
     return copy;
   }, [pokemon, sortKey, sortDir, ranks, lang]);
 
+  const visible = useMemo(
+    () =>
+      avail === "all"
+        ? sorted
+        : sorted.filter((p) =>
+            avail === "locked" ? locked.has(p.family_id) : !locked.has(p.family_id),
+          ),
+    [sorted, avail, locked],
+  );
+
   const query = search.trim().toLowerCase();
   const suggestions = useMemo(() => {
     if (!query) return [];
@@ -122,7 +149,8 @@ export function PokedexTable({ pokemon }: { pokemon: Pokemon[] }) {
 
   return (
     <div>
-      <div ref={searchRef} className="relative mb-4 max-w-sm">
+      <div className="mb-4 flex flex-wrap items-center gap-2">
+        <div ref={searchRef} className="relative w-full max-w-sm">
         <input
           type="text"
           value={search}
@@ -150,6 +178,35 @@ export function PokedexTable({ pokemon }: { pokemon: Pokemon[] }) {
               </li>
             ))}
           </ul>
+        )}
+        </div>
+        {lockedFamilyIds.length > 0 && (
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              aria-pressed={avail === "available"}
+              onClick={() => setAvail((a) => (a === "available" ? "all" : "available"))}
+              className={`rounded-md border px-3 py-1.5 text-sm font-medium transition-colors ${
+                avail === "available"
+                  ? "border-emerald-500 bg-emerald-500 text-white dark:border-emerald-600 dark:bg-emerald-600"
+                  : "border-zinc-300 text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+              }`}
+            >
+              {t.filterAvailable} ({availableCount})
+            </button>
+            <button
+              type="button"
+              aria-pressed={avail === "locked"}
+              onClick={() => setAvail((a) => (a === "locked" ? "all" : "locked"))}
+              className={`rounded-md border px-3 py-1.5 text-sm font-medium transition-colors ${
+                avail === "locked"
+                  ? "border-amber-500 bg-amber-500 text-white dark:border-amber-600 dark:bg-amber-600"
+                  : "border-zinc-300 text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+              }`}
+            >
+              {t.filterLocked} ({lockedCount})
+            </button>
+          </div>
         )}
       </div>
       <div className="overflow-x-auto rounded-md border border-zinc-200 dark:border-zinc-800">
@@ -179,16 +236,19 @@ export function PokedexTable({ pokemon }: { pokemon: Pokemon[] }) {
             </tr>
           </thead>
           <tbody>
-            {sorted.map((p) => {
+            {visible.map((p) => {
               const name = pokemonName(p, lang);
               const isMatch = query.length > 0 && name.toLowerCase().includes(query);
               const isSelected = p.id === selectedId;
+              const isLocked = avail === "all" && locked.has(p.family_id);
               return (
                 <tr
                   key={p.id}
                   id={`pokemon-row-${p.id}`}
                   onClick={() => detail?.open(p.id)}
                   className={`cursor-pointer border-b border-zinc-100 last:border-0 hover:bg-zinc-50 dark:border-zinc-900 dark:hover:bg-zinc-800/50 ${
+                    isLocked ? "opacity-45" : ""
+                  } ${
                     isSelected
                       ? "bg-blue-50 ring-1 ring-inset ring-blue-400 dark:bg-blue-950/40"
                       : isMatch

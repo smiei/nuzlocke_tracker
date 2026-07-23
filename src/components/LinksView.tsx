@@ -17,8 +17,10 @@ import { EvolveButton, RevertButton } from "@/components/EvolveControls";
 import { TeamBar } from "@/components/TeamBar";
 import { TypeBadge } from "@/components/TypeBadge";
 import { usePlayerLabel } from "@/components/PlayerNamesProvider";
+import { usePersistentState } from "@/lib/usePersistentState";
 
-const SORT_STORAGE_KEY = "nuzlocke:linksSortBySumme";
+const SORT_MODE_KEY = "nuzlocke:linksSortMode";
+type SortMode = "default" | "summe" | "summeMax";
 
 export function LinksView({
   runId,
@@ -36,7 +38,7 @@ export function LinksView({
   const playerLabel = usePlayerLabel();
   const [pendingId, setPendingId] = useState<number | null>(null);
   const [, startTransition] = useTransition();
-  const [sortBySumme, setSortBySumme] = useState(false);
+  const [sortMode, setSortMode] = usePersistentState<SortMode>(SORT_MODE_KEY, "default");
   const [evolvableOnly, setEvolvableOnly] = useState(false);
   const [hideTeam, setHideTeam] = useState(false);
   const [typeFilter, setTypeFilter] = useState<string[]>([]);
@@ -46,10 +48,6 @@ export function LinksView({
   const typeMenuRef = useRef<HTMLDivElement>(null);
   const t = translations[lang];
   const isClassic = mode === RunMode.CLASSIC;
-
-  useEffect(() => {
-    setSortBySumme(localStorage.getItem(SORT_STORAGE_KEY) === "true");
-  }, []);
 
   useEffect(() => {
     function onClickOutside(event: MouseEvent) {
@@ -73,11 +71,6 @@ export function LinksView({
     );
   }
 
-  function handleSortChange(value: boolean) {
-    setSortBySumme(value);
-    localStorage.setItem(SORT_STORAGE_KEY, String(value));
-  }
-
   function totalSumme(link: SoulLinkView) {
     return link.encounters.reduce((sum, e) => sum + e.summe, 0);
   }
@@ -96,7 +89,11 @@ export function LinksView({
   const sortedLinks = [...soulLinks].sort(
     (a, b) =>
       Number(a.status === LinkStatus.DEAD) - Number(b.status === LinkStatus.DEAD) ||
-      (sortBySumme ? totalSumme(b) - totalSumme(a) : 0),
+      (sortMode === "summe"
+        ? totalSumme(b) - totalSumme(a)
+        : sortMode === "summeMax"
+          ? totalSummeMax(b) - totalSummeMax(a)
+          : 0),
   );
 
   const visibleLinks = sortedLinks.filter((link) => {
@@ -152,12 +149,13 @@ export function LinksView({
         </label>
         <select
           id="links-sort"
-          value={sortBySumme ? "summe" : "default"}
-          onChange={(e) => handleSortChange(e.target.value === "summe")}
+          value={sortMode}
+          onChange={(e) => setSortMode(e.target.value as SortMode)}
           className="rounded-md border border-zinc-200 bg-white px-2 py-1.5 text-sm dark:border-zinc-700 dark:bg-zinc-900"
         >
           <option value="default">{t.links.sortDefault}</option>
           <option value="summe">{t.links.sortSumme}</option>
+          <option value="summeMax">{t.links.sortSummeMax}</option>
         </select>
         <button
           type="button"

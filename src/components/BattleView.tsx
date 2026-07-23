@@ -1,6 +1,5 @@
 "use client";
 
-import { usePersistentState } from "@/lib/usePersistentState";
 import type { Pokemon } from "@/lib/data";
 import type { EffectivenessTable } from "@/lib/effectiveness";
 import { computeDefenseMultipliers, singleTypeMultiplier } from "@/lib/effectiveness";
@@ -11,15 +10,12 @@ import type { Player, RunMode } from "@/generated/prisma/client";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import type { Lang } from "@/lib/i18n/dictionary";
 import { translations } from "@/lib/i18n/dictionary";
-import { pokemonName } from "@/lib/i18n/localize";
-import { PokemonCombobox } from "@/components/PokemonCombobox";
 import { PokemonSprite } from "@/components/PokemonSprite";
 import { TypeBadge } from "@/components/TypeBadge";
 import { usePlayerLabel } from "@/components/PlayerNamesProvider";
-import { usePokemonDetail, PokemonInfoButton } from "@/components/PokemonDetailProvider";
+import { usePokemonDetail } from "@/components/PokemonDetailProvider";
 import type { TeamMember } from "@/components/TeamWeaknessesView";
 
-const EMPTY_LOCKS = new Set<number>();
 const MULTIPLIER_GROUPS = [4, 2, 0.5, 0.25, 0] as const;
 
 function TypeAbbrev({ type, lang, dimmed }: { type: string; lang: Lang; dimmed: boolean }) {
@@ -121,7 +117,7 @@ function TeamMatchup({
   );
 }
 
-type SharedProps = {
+export type BattleSharedProps = {
   pokemonList: Pokemon[];
   table: EffectivenessTable;
   // Gen-appropriate attack type list for the matrix (Gen 1 lacks Dark/Steel).
@@ -135,28 +131,24 @@ type SharedProps = {
   explosiveMap: Record<number, { name: string; level: number }>;
 };
 
-type BattleCardState = { id: number; selectedId: number | null; level: number };
-
-// One independent battle instance: an opponent + level with its stats,
-// defensive weaknesses, the team matchup, and the full type matrix. Several
-// can be open at once (e.g. scouting two trainers), each with its own pick.
-// Controlled by the parent so the whole set persists per client.
-function BattleCard({
+// The "Trainer" body of a combined card: an opponent level with its stats,
+// defensive weaknesses, the team matchup, and the full type matrix. The Pokémon
+// is picked once in the card header and handed down as selectedId.
+export function BattleCardBody({
   shared,
-  state,
+  selectedId,
+  level,
   onChange,
-  onRemove,
 }: {
-  shared: SharedProps;
-  state: BattleCardState;
-  onChange: (patch: Partial<BattleCardState>) => void;
-  onRemove?: () => void;
+  shared: BattleSharedProps;
+  selectedId: number | null;
+  level: number;
+  onChange: (patch: { level: number }) => void;
 }) {
   const { pokemonList, table, attackTypes, generation, learnset, teams, mode, explosiveMap } = shared;
   const { lang } = useLanguage();
   const t = translations[lang].typen;
   const playerLabel = usePlayerLabel();
-  const { selectedId, level } = state;
 
   const selectedRaw = pokemonList.find((p) => p.id === selectedId) ?? null;
   const explosive = selectedRaw ? explosiveMap[selectedRaw.id] ?? null : null;
@@ -183,61 +175,32 @@ function BattleCard({
   const hasTeam = teams.some((team) => team.members.length > 0);
 
   return (
-    <div className="relative rounded-xl border border-zinc-300 p-4 dark:border-zinc-700 sm:p-5">
-      {onRemove && (
-        <button
-          type="button"
-          onClick={onRemove}
-          aria-label="×"
-          className="absolute right-2 top-2 rounded p-1 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
-        >
-          ✕
-        </button>
-      )}
-
-      <div className={`mb-4 flex flex-wrap items-end gap-3 ${onRemove ? "pr-8" : ""}`}>
-        <div className="flex max-w-sm flex-1 items-center gap-2">
-          <div className="min-w-0 flex-1">
-            <PokemonCombobox
-              lang={lang}
-              pokemonList={pokemonList}
-              selectedId={selectedId}
-              onSelect={(id) => onChange({ selectedId: id })}
-              onClear={() => onChange({ selectedId: null })}
-              lockedFamilyIds={EMPTY_LOCKS}
-            />
-          </div>
-          <PokemonInfoButton
-            pokemonId={selectedId}
-            label={selectedRaw ? pokemonName(selectedRaw, lang) : ""}
+    <>
+      <div className="mb-4">
+        <label className="mb-1 block text-xs font-medium text-zinc-500 dark:text-zinc-400">
+          {t.levelLabel}
+        </label>
+        <div className="flex items-center gap-1">
+          <input
+            type="number"
+            min={1}
+            max={100}
+            value={level}
+            onChange={(e) => {
+              const n = Number(e.target.value);
+              onChange({
+                level: Number.isFinite(n) ? Math.min(100, Math.max(1, Math.round(n))) : 100,
+              });
+            }}
+            className="w-20 rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:focus:border-zinc-400"
           />
-        </div>
-        <div>
-          <label className="mb-1 block text-xs font-medium text-zinc-500 dark:text-zinc-400">
-            {t.levelLabel}
-          </label>
-          <div className="flex items-center gap-1">
-            <input
-              type="number"
-              min={1}
-              max={100}
-              value={level}
-              onChange={(e) => {
-                const n = Number(e.target.value);
-                onChange({
-                  level: Number.isFinite(n) ? Math.min(100, Math.max(1, Math.round(n))) : 100,
-                });
-              }}
-              className="w-20 rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:focus:border-zinc-400"
-            />
-            <button
-              type="button"
-              onClick={() => onChange({ level: 100 })}
-              className="rounded-md border border-zinc-300 px-2 py-2 text-xs font-medium text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-700 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
-            >
-              100
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={() => onChange({ level: 100 })}
+            className="rounded-md border border-zinc-300 px-2 py-2 text-xs font-medium text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-700 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
+          >
+            100
+          </button>
         </div>
       </div>
 
@@ -412,52 +375,6 @@ function BattleCard({
           </table>
         </div>
       </section>
-    </div>
-  );
-}
-
-export function BattleView(props: SharedProps) {
-  const { lang } = useLanguage();
-  const t = translations[lang].typen;
-
-  // Persisted per client, so a tab switch / reload keeps each opponent + level
-  // and the number of cards. Never synced across devices.
-  const [cards, setCards] = usePersistentState<BattleCardState[]>("nuzlocke:battle:cards", [
-    { id: 0, selectedId: null, level: 100 },
-  ]);
-
-  return (
-    <div>
-      <h2 className="mb-4 text-xl font-semibold">{t.battleHeading}</h2>
-      <div className="flex flex-col gap-5">
-        {cards.map((card) => (
-          <BattleCard
-            key={card.id}
-            shared={props}
-            state={card}
-            onChange={(patch) =>
-              setCards((cs) => cs.map((c) => (c.id === card.id ? { ...c, ...patch } : c)))
-            }
-            onRemove={
-              cards.length > 1
-                ? () => setCards((cs) => cs.filter((c) => c.id !== card.id))
-                : undefined
-            }
-          />
-        ))}
-      </div>
-      <button
-        type="button"
-        onClick={() =>
-          setCards((cs) => [
-            ...cs,
-            { id: Math.max(-1, ...cs.map((c) => c.id)) + 1, selectedId: null, level: 100 },
-          ])
-        }
-        className="mt-4 flex w-full items-center justify-center gap-1.5 rounded-xl border border-dashed border-zinc-300 px-3 py-3 text-sm font-medium text-zinc-500 transition-colors hover:border-zinc-400 hover:bg-zinc-50 hover:text-zinc-700 dark:border-zinc-700 dark:text-zinc-400 dark:hover:border-zinc-600 dark:hover:bg-zinc-900 dark:hover:text-zinc-200"
-      >
-        <span className="text-lg leading-none">+</span> {t.addCard}
-      </button>
-    </div>
+    </>
   );
 }

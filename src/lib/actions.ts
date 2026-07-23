@@ -34,6 +34,39 @@ export type SaveEncounterInput = {
 
 export type SaveEncounterResult = { success: true } | { success: false; error: ActionError };
 
+// Auto-team: drop a route's link into the lowest free team slot (0-5) unless it
+// already sits on the team. A full team is a no-op. Returns whether the link
+// ended up on a slot. Shared by saveEncounter (a new catch auto-joins the team
+// while slots are free) and quickCatch (one-tap catch from the Catchrate tab).
+// Not exported: internal helper, so it stays out of the server-action surface.
+async function autoAssignTeamSlot(runId: number, routeId: number): Promise<boolean> {
+  const link = await prisma.soulLink.findUnique({
+    where: { runId_routeId: { runId, routeId } },
+  });
+  if (!link) return false;
+  if (link.teamPosition !== null) return true;
+
+  const occupied = new Set(
+    (
+      await prisma.soulLink.findMany({
+        where: { runId, teamPosition: { not: null } },
+        select: { teamPosition: true },
+      })
+    ).map((l) => l.teamPosition as number),
+  );
+  let freeSlot: number | null = null;
+  for (let i = 0; i <= 5; i++) {
+    if (!occupied.has(i)) {
+      freeSlot = i;
+      break;
+    }
+  }
+  if (freeSlot === null) return false;
+
+  const assigned = await setTeamSlot(runId, freeSlot, link.id);
+  return assigned.success;
+}
+
 export async function saveEncounter(
   input: SaveEncounterInput,
 ): Promise<SaveEncounterResult> {
@@ -128,6 +161,13 @@ export async function saveEncounter(
     }
   });
 
+  // A fresh catch joins the team automatically while there is a free slot, so
+  // new links / solo catches show up on the team without a manual assign. Only
+  // caught encounters qualify; a full team is silently left as-is.
+  if (status === EncounterStatus.CAUGHT) {
+    await autoAssignTeamSlot(runId, routeId);
+  }
+
   revalidatePath("/tracker");
   revalidatePath("/links");
   publishChange(runId);
@@ -157,31 +197,12 @@ export async function quickCatch(
   });
   if (!saved.success) return saved;
 
+  // saveEncounter already dropped the fresh catch into a free team slot; report
+  // whether it landed on the team (a full team is not an error).
   const link = await prisma.soulLink.findUnique({
     where: { runId_routeId: { runId, routeId } },
   });
-  if (!link) return { success: true, addedToTeam: false };
-  if (link.teamPosition !== null) return { success: true, addedToTeam: true };
-
-  const occupied = new Set(
-    (
-      await prisma.soulLink.findMany({
-        where: { runId, teamPosition: { not: null } },
-        select: { teamPosition: true },
-      })
-    ).map((l) => l.teamPosition as number),
-  );
-  let freeSlot: number | null = null;
-  for (let i = 0; i <= 5; i++) {
-    if (!occupied.has(i)) {
-      freeSlot = i;
-      break;
-    }
-  }
-  if (freeSlot === null) return { success: true, addedToTeam: false };
-
-  const assigned = await setTeamSlot(runId, freeSlot, link.id);
-  return { success: true, addedToTeam: assigned.success };
+  return { success: true, addedToTeam: link?.teamPosition != null };
 }
 
 export type MarkDeadResult = { success: true } | { success: false; error: ActionError };

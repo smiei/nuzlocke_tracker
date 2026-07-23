@@ -10,7 +10,7 @@ import { PokemonSprite } from "@/components/PokemonSprite";
 import { usePlayerLabel } from "@/components/PlayerNamesProvider";
 
 export type OverviewStats = {
-  perPlayer: { player: Player; caught: number; deaths: number; caused: number }[];
+  perPlayer: { player: Player; caught: number; missed: number; caused: number }[];
   totalDeaths: number;
   teamSumme: number;
   teamSummeMax: number;
@@ -21,7 +21,9 @@ export type OverviewStats = {
 export type OverviewMemorialEntry = {
   soulLinkId: number;
   routeName: string;
-  pokemon: { id: number; name: string }[];
+  // name = nickname when set (else species); species carries the species name
+  // in parentheses when a nickname is shown.
+  pokemon: { id: number; name: string; species: string | null }[];
   deathPlayer: Player | null;
   deathCause: string | null;
 };
@@ -80,8 +82,12 @@ export function OverviewView({
               <tr className="text-left text-xs text-zinc-500 dark:text-zinc-400">
                 <th className="py-1 pr-4 font-medium">{t.player}</th>
                 <th className="py-1 pr-4 font-medium tabular-nums">{t.caught}</th>
-                <th className="py-1 pr-4 font-medium tabular-nums">{t.deaths}</th>
-                <th className="py-1 pr-4 font-medium tabular-nums">{t.caused}</th>
+                <th className="py-1 pr-4 font-medium tabular-nums" title={t.missedHint}>
+                  {t.missed}
+                </th>
+                <th className="py-1 pr-4 font-medium tabular-nums" title={t.causedHint}>
+                  {t.caused}
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -91,7 +97,7 @@ export function OverviewView({
                     {isClassic ? t.team : playerLabel(row.player)}
                   </td>
                   <td className="py-1.5 pr-4 tabular-nums">{row.caught}</td>
-                  <td className="py-1.5 pr-4 tabular-nums">{row.deaths}</td>
+                  <td className="py-1.5 pr-4 tabular-nums">{row.missed}</td>
                   <td className="py-1.5 pr-4 tabular-nums">{row.caused}</td>
                 </tr>
               ))}
@@ -159,11 +165,16 @@ export function OverviewView({
                 <div className="mb-1 text-xs font-medium text-zinc-500 dark:text-zinc-400">
                   {m.routeName}
                 </div>
-                <div className="flex items-center gap-2">
-                  {m.pokemon.map((p) => (
-                    <span key={p.id} className="flex items-center gap-1">
-                      <PokemonSprite pokemonId={p.id} name={p.name} size="sm" />
-                      <span className="text-sm">{p.name}</span>
+                <div className="flex flex-wrap items-center gap-2">
+                  {m.pokemon.map((p, i) => (
+                    <span key={i} className="flex items-center gap-1">
+                      <PokemonSprite pokemonId={p.id} name={p.species ?? p.name} size="sm" />
+                      <span className="text-sm">
+                        {p.name}
+                        {p.species && (
+                          <span className="text-zinc-400 dark:text-zinc-500"> ({p.species})</span>
+                        )}
+                      </span>
                     </span>
                   ))}
                 </div>

@@ -45,19 +45,18 @@ export default async function OverviewPage({
   // encounter, the pair never formed - the surviving catch is boxed and any
   // "dead" mark on it must NOT count as a death or show in the Memorial
   // (mirrors what the Pokémon tab hides). Classic runs never hide anything.
+  // A player's "missed encounters" = their own Fled/Killed catches (a partner
+  // catching on the same route is a separate, successful encounter and never
+  // counts against them). Same query also yields the failed routes to hide.
+  const failedEncounters = await prisma.encounter.findMany({
+    where: { runId, status: { in: [EncounterStatus.FLED, EncounterStatus.KILLED] } },
+    select: { routeId: true, player: true },
+  });
+  const missed = new Map<Player, number>(PLAYERS.map((p) => [p, 0]));
+  for (const e of failedEncounters) missed.set(e.player, (missed.get(e.player) ?? 0) + 1);
   const failedRouteIds =
     mode === RunMode.SOULLINK
-      ? new Set(
-          (
-            await prisma.encounter.findMany({
-              where: {
-                runId,
-                status: { in: [EncounterStatus.FLED, EncounterStatus.KILLED] },
-              },
-              select: { routeId: true },
-            })
-          ).map((e) => e.routeId),
-        )
+      ? new Set(failedEncounters.map((e) => e.routeId))
       : new Set<number>();
 
   const soulLinks = (
@@ -108,7 +107,6 @@ export default async function OverviewPage({
 
   // --- Counts, team BST and the memorial in one pass over the links.
   const caught = new Map<Player, number>(PLAYERS.map((p) => [p, 0]));
-  const deaths = new Map<Player, number>(PLAYERS.map((p) => [p, 0]));
   const caused = new Map<Player, number>(PLAYERS.map((p) => [p, 0]));
   let totalDeaths = 0;
   let teamSumme = 0;
@@ -129,27 +127,26 @@ export default async function OverviewPage({
         routeName: route ? routeName(route, lang) : `Route #${link.routeId}`,
         pokemon: link.encounters.map((e) => {
           const p = getPokemonById(e.currentPokemonId);
-          return { id: e.currentPokemonId, name: p ? pokemonName(p, lang) : `#${e.currentPokemonId}` };
+          const species = p ? pokemonName(p, lang) : `#${e.currentPokemonId}`;
+          const nick = settings.nicknames && e.nickname ? e.nickname : null;
+          return { id: e.currentPokemonId, name: nick ?? species, species: nick ? species : null };
         }),
         deathPlayer: link.deathPlayer,
         deathCause: link.deathCause,
       });
     }
+    if (isDead) continue;
     for (const e of link.encounters) {
       if (e.status !== EncounterStatus.CAUGHT) continue;
-      if (isDead) {
-        deaths.set(e.player, (deaths.get(e.player) ?? 0) + 1);
-      } else {
-        caught.set(e.player, (caught.get(e.player) ?? 0) + 1);
-        if (link.teamPosition !== null) {
-          teamSumme += getPokemonById(e.currentPokemonId)?.stats.Summe ?? 0;
-          teamSummeMax += maxEvolvedSumme(
-            e.currentPokemonId,
-            (id) => getEvolutionById(id, evoOptions)?.evolvesTo ?? [],
-            (id) => getPokemonById(id)?.stats.Summe ?? 0,
-            game.dexLimit,
-          );
-        }
+      caught.set(e.player, (caught.get(e.player) ?? 0) + 1);
+      if (link.teamPosition !== null) {
+        teamSumme += getPokemonById(e.currentPokemonId)?.stats.Summe ?? 0;
+        teamSummeMax += maxEvolvedSumme(
+          e.currentPokemonId,
+          (id) => getEvolutionById(id, evoOptions)?.evolvesTo ?? [],
+          (id) => getPokemonById(id)?.stats.Summe ?? 0,
+          game.dexLimit,
+        );
       }
     }
   }
@@ -164,7 +161,7 @@ export default async function OverviewPage({
     perPlayer: teams.map(({ player }) => ({
       player,
       caught: caught.get(player) ?? 0,
-      deaths: deaths.get(player) ?? 0,
+      missed: missed.get(player) ?? 0,
       caused: caused.get(player) ?? 0,
     })),
     totalDeaths,
