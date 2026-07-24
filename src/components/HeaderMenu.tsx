@@ -2,9 +2,10 @@
 
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { unzipSync } from "fflate";
 import { deleteRun, exportAllBackup, exportRunBackup, importBackup, renameRun } from "@/lib/actions";
 import { formatActionError } from "@/lib/actionErrors";
-import { parseBackup } from "@/lib/backupParse";
+import { BACKUP_FORMAT, BACKUP_VERSION, parseBackup, type BackupFile } from "@/lib/backupParse";
 import { useDialog } from "@/components/DialogProvider";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import { LANGS, translations } from "@/lib/i18n/dictionary";
@@ -26,8 +27,7 @@ function GearIcon({ className }: { className?: string }) {
   );
 }
 
-function downloadJson(filename: string, data: unknown) {
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+function downloadBlob(filename: string, blob: Blob) {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
@@ -36,6 +36,17 @@ function downloadJson(filename: string, data: unknown) {
   a.click();
   a.remove();
   URL.revokeObjectURL(url);
+}
+
+function downloadJson(filename: string, data: unknown) {
+  downloadBlob(filename, new Blob([JSON.stringify(data, null, 2)], { type: "application/json" }));
+}
+
+function base64ToBytes(base64: string): Uint8Array<ArrayBuffer> {
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return bytes;
 }
 
 const itemClass =
@@ -90,8 +101,14 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
     setOpen(false);
     startTransition(async () => {
       const result = await exportAllBackup();
-      if (result.success) downloadJson(result.filename, result.backup);
-      else await alert({ message: formatActionError(result.error, lang) });
+      if (result.success) {
+        downloadBlob(
+          result.filename,
+          new Blob([base64ToBytes(result.zipBase64)], { type: "application/zip" }),
+        );
+      } else {
+        await alert({ message: formatActionError(result.error, lang) });
+      }
     });
   }
 
@@ -105,7 +122,27 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
     event.target.value = ""; // allow re-picking the same file later
     if (!file) return;
 
-    const json = await file.text();
+    let json: string;
+    if (file.name.toLowerCase().endsWith(".zip")) {
+      const entries = unzipSync(new Uint8Array(await file.arrayBuffer()));
+      const decoder = new TextDecoder();
+      const parts = Object.values(entries)
+        .map((bytes) => parseBackup(decoder.decode(bytes)))
+        .filter((b): b is BackupFile => b !== null);
+      if (parts.length === 0) {
+        await alert({ message: formatActionError({ key: "backupInvalid" }, lang) });
+        return;
+      }
+      const merged: BackupFile = {
+        format: BACKUP_FORMAT,
+        version: BACKUP_VERSION,
+        exportedAt: new Date().toISOString(),
+        runs: parts.flatMap((p) => p.runs),
+      };
+      json = JSON.stringify(merged);
+    } else {
+      json = await file.text();
+    }
     const parsed = parseBackup(json);
     if (!parsed) {
       await alert({ message: formatActionError({ key: "backupInvalid" }, lang) });
@@ -184,7 +221,7 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
       <input
         ref={fileInputRef}
         type="file"
-        accept="application/json,.json"
+        accept="application/json,.json,application/zip,.zip"
         onChange={handleFileChange}
         className="hidden"
       />

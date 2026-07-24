@@ -14,7 +14,7 @@ import {
 import { EncounterStatus, LinkStatus, Player, RunMode } from "@/generated/prisma/client";
 import type { ActionError } from "@/lib/actionErrors";
 import type { BackupFile } from "@/lib/backup";
-import { applyBackup, backupFilename, buildBackup, parseBackup } from "@/lib/backup";
+import { applyBackup, backupFilename, buildBackup, buildBackupZip, parseBackup } from "@/lib/backup";
 import { DEFAULT_RULES } from "@/lib/defaultRules";
 import { parseRunSettings, RUN_SETTING_KEYS, type RunSettings } from "@/lib/runSettings";
 import type { Lang } from "@/lib/i18n/dictionary";
@@ -577,9 +577,15 @@ export async function exportRunBackup(runId: number): Promise<BackupResult> {
   return { success: true, backup, filename: backupFilename(run.name) };
 }
 
-export async function exportAllBackup(): Promise<BackupResult> {
-  const backup = await buildBackup();
-  return { success: true, backup, filename: backupFilename("all-runs") };
+export type BackupZipResult =
+  | { success: true; filename: string; zipBase64: string }
+  | { success: false; error: ActionError };
+
+// One JSON file per run, zipped - each entry is independently importable
+// (same shape a single-run export produces), instead of one combined JSON.
+export async function exportAllBackup(): Promise<BackupZipResult> {
+  const { filename, data } = await buildBackupZip();
+  return { success: true, filename, zipBase64: Buffer.from(data).toString("base64") };
 }
 
 export type ImportBackupResult =

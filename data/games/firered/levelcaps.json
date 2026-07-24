@@ -155,6 +155,26 @@
     "max_level": 24
   },
   {
+    "id": 19,
+    "names": {
+      "de": "Rivale",
+      "en": "Rival",
+      "fr": "Rival",
+      "es": "Rival",
+      "it": "Rivale"
+    },
+    "location": {
+      "de": "Pokémon-Turm, Lavandia",
+      "en": "Pokémon Tower, Lavender Town",
+      "fr": "Tour Pokémon, Lavanville",
+      "es": "Torre Pokémon, Pueblo Lavanda",
+      "it": "Torre Pokémon, Lavandonia"
+    },
+    "badge": null,
+    "max_level": null,
+    "sprite": "champ"
+  },
+  {
     "id": 4,
     "names": {
       "de": "Erika",
@@ -198,26 +218,6 @@
     "badge": null,
     "max_level": null,
     "sprite": "giovanni"
-  },
-  {
-    "id": 19,
-    "names": {
-      "de": "Rivale",
-      "en": "Rival",
-      "fr": "Rival",
-      "es": "Rival",
-      "it": "Rivale"
-    },
-    "location": {
-      "de": "Pokémon-Turm, Lavandia",
-      "en": "Pokémon Tower, Lavender Town",
-      "fr": "Tour Pokémon, Lavanville",
-      "es": "Torre Pokémon, Pueblo Lavanda",
-      "it": "Torre Pokémon, Lavandonia"
-    },
-    "badge": null,
-    "max_level": null,
-    "sprite": "champ"
   },
   {
     "id": 20,

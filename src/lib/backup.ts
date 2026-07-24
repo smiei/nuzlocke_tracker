@@ -1,11 +1,57 @@
+import { zipSync } from "fflate";
 import { prisma } from "@/lib/prisma";
+import type { Prisma } from "@/generated/prisma/client";
 
 // The types + parseBackup() live in backupParse.ts (no Prisma import, so the
 // Import dialog can use it client-side to preview a picked file's run names
 // before anything is sent to the server); re-exported here so existing
 // server-side imports of "@/lib/backup" keep working unchanged.
 export * from "@/lib/backupParse";
-import { BACKUP_FORMAT, BACKUP_VERSION, type BackupFile } from "@/lib/backupParse";
+import { BACKUP_FORMAT, BACKUP_VERSION, type BackupFile, type BackupRun } from "@/lib/backupParse";
+
+type RunWithRelations = Prisma.RunGetPayload<{
+  include: { soulLinks: true; encounters: true; levelCapProgress: true };
+}>;
+
+function runToBackupRun(run: RunWithRelations): BackupRun {
+  const routeBySoulLinkId = new Map(run.soulLinks.map((sl) => [sl.id, sl.routeId]));
+  return {
+    name: run.name,
+    mode: run.mode,
+    gameId: run.gameId,
+    rulesMarkdown: run.rulesMarkdown,
+    settingsJson: run.settingsJson,
+    createdAt: run.createdAt.toISOString(),
+    soulLinks: run.soulLinks.map((sl) => ({
+      routeId: sl.routeId,
+      status: sl.status,
+      teamPosition: sl.teamPosition,
+      deathPlayer: sl.deathPlayer,
+      deathCause: sl.deathCause,
+      createdAt: sl.createdAt.toISOString(),
+      updatedAt: sl.updatedAt.toISOString(),
+    })),
+    encounters: run.encounters.map((e) => ({
+      routeId: e.routeId,
+      player: e.player,
+      pokemonId: e.pokemonId,
+      currentPokemonId: e.currentPokemonId,
+      familyId: e.familyId,
+      nickname: e.nickname,
+      status: e.status,
+      isStatic: e.isStatic,
+      shiny: e.shiny,
+      soulLinkRouteId: e.soulLinkId !== null ? routeBySoulLinkId.get(e.soulLinkId) ?? null : null,
+      createdAt: e.createdAt.toISOString(),
+      updatedAt: e.updatedAt.toISOString(),
+    })),
+    levelCapProgress: run.levelCapProgress.map((lc) => ({
+      levelCapId: lc.levelCapId,
+      defeated: lc.defeated,
+      updatedAt: lc.updatedAt.toISOString(),
+    })),
+  };
+}
 
 export async function buildBackup(runIds?: number[]): Promise<BackupFile> {
   const runs = await prisma.run.findMany({
@@ -18,47 +64,40 @@ export async function buildBackup(runIds?: number[]): Promise<BackupFile> {
     format: BACKUP_FORMAT,
     version: BACKUP_VERSION,
     exportedAt: new Date().toISOString(),
-    runs: runs.map((run) => {
-      const routeBySoulLinkId = new Map(run.soulLinks.map((sl) => [sl.id, sl.routeId]));
-      return {
-        name: run.name,
-        mode: run.mode,
-        gameId: run.gameId,
-        rulesMarkdown: run.rulesMarkdown,
-        settingsJson: run.settingsJson,
-        createdAt: run.createdAt.toISOString(),
-        soulLinks: run.soulLinks.map((sl) => ({
-          routeId: sl.routeId,
-          status: sl.status,
-          teamPosition: sl.teamPosition,
-          deathPlayer: sl.deathPlayer,
-          deathCause: sl.deathCause,
-          createdAt: sl.createdAt.toISOString(),
-          updatedAt: sl.updatedAt.toISOString(),
-        })),
-        encounters: run.encounters.map((e) => ({
-          routeId: e.routeId,
-          player: e.player,
-          pokemonId: e.pokemonId,
-          currentPokemonId: e.currentPokemonId,
-          familyId: e.familyId,
-          nickname: e.nickname,
-          status: e.status,
-          isStatic: e.isStatic,
-          shiny: e.shiny,
-          soulLinkRouteId:
-            e.soulLinkId !== null ? routeBySoulLinkId.get(e.soulLinkId) ?? null : null,
-          createdAt: e.createdAt.toISOString(),
-          updatedAt: e.updatedAt.toISOString(),
-        })),
-        levelCapProgress: run.levelCapProgress.map((lc) => ({
-          levelCapId: lc.levelCapId,
-          defeated: lc.defeated,
-          updatedAt: lc.updatedAt.toISOString(),
-        })),
-      };
-    }),
+    runs: runs.map(runToBackupRun),
   };
+}
+
+// "Alle Runs sichern": one BackupFile-shaped JSON per run, zipped together,
+// instead of one combined JSON - each entry is independently importable
+// (matches the shape a single-run export already produces) and large
+// collections of runs no longer live in one unwieldy file.
+export async function buildBackupZip(): Promise<{ filename: string; data: Uint8Array }> {
+  const runs = await prisma.run.findMany({
+    orderBy: { createdAt: "asc" },
+    include: { soulLinks: true, encounters: true, levelCapProgress: true },
+  });
+
+  const usedNames = new Set<string>();
+  const files: Record<string, Uint8Array> = {};
+  for (const run of runs) {
+    const backup: BackupFile = {
+      format: BACKUP_FORMAT,
+      version: BACKUP_VERSION,
+      exportedAt: new Date().toISOString(),
+      runs: [runToBackupRun(run)],
+    };
+    let name = backupFilename(run.name);
+    let suffix = 2;
+    while (usedNames.has(name)) {
+      name = backupFilename(`${run.name}-${suffix}`);
+      suffix++;
+    }
+    usedNames.add(name);
+    files[name] = new TextEncoder().encode(JSON.stringify(backup, null, 2));
+  }
+
+  return { filename: backupFilename("all-runs", "zip"), data: zipSync(files) };
 }
 
 // Inserts every run in the backup as a NEW run (fresh ids), leaving existing
@@ -129,7 +168,7 @@ export async function applyBackup(backup: BackupFile): Promise<number> {
   return backup.runs.length;
 }
 
-export function backupFilename(runLabel: string): string {
+export function backupFilename(runLabel: string, ext: "json" | "zip" = "json"): string {
   const slug =
     runLabel
       .toLowerCase()
@@ -137,5 +176,5 @@ export function backupFilename(runLabel: string): string {
       .replace(/^-+|-+$/g, "")
       .slice(0, 40) || "run";
   const date = new Date().toISOString().slice(0, 10);
-  return `nuzlocke-${slug}-${date}.json`;
+  return `nuzlocke-${slug}-${date}.${ext}`;
 }
