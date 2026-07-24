@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
 import { getLang } from "@/lib/i18n/getLang";
 import { translations } from "@/lib/i18n/dictionary";
-import { computeLevelCapProgress } from "@/lib/progress";
+import { computeLevelCapProgress, eliteFourIndex } from "@/lib/progress";
 import { LevelCapsView } from "@/components/LevelCapsView";
 import { ProgressBar } from "@/components/ProgressBar";
 
@@ -29,6 +29,7 @@ export default async function LevelCapsPage({
 
   const items = levelCaps.map((cap) => ({ ...cap, defeated: defeatedIds.has(cap.id) }));
   const progress = computeLevelCapProgress(items);
+  const markerAt = eliteFourIndex(items);
 
   return (
     <div>
@@ -39,6 +40,8 @@ export default async function LevelCapsPage({
           total={progress.total}
           percent={progress.percent}
           title={t.progressTitle(progress.done, progress.total, progress.percent)}
+          markerAt={markerAt ?? undefined}
+          markerTitle={t.eliteFourMarker}
         />
       </div>
       <LevelCapsView runId={runId} lang={lang} levelCaps={items} trainerSet={trainerSet} />

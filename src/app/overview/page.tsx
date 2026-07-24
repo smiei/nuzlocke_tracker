@@ -18,7 +18,7 @@ import { getTypesForGeneration, teamOffensiveCoverage } from "@/lib/effectivenes
 import { attackTypesAtLevel } from "@/lib/learnset";
 import { maxEvolvedSumme } from "@/lib/evolutions";
 import { typesForGeneration } from "@/lib/pokemonTypes";
-import { computeLevelCapProgress, computeRouteProgress } from "@/lib/progress";
+import { computeLevelCapProgress, computeRouteProgress, eliteFourIndex } from "@/lib/progress";
 import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
 import { getLang } from "@/lib/i18n/getLang";
@@ -129,6 +129,7 @@ export default async function OverviewPage({
     settings.statics,
   );
   const levelCapProgress = computeLevelCapProgress(levelCapItems);
+  const levelCapMarkerAt = eliteFourIndex(levelCapItems);
 
   // Gym badges: every level-cap entry that awards one, generation-specific
   // icon (data/badges.json + scripts/download-badges.mjs), earned ones shown
@@ -266,6 +267,7 @@ export default async function OverviewPage({
             memorial={memorial}
             routeProgress={routeProgress}
             levelCapProgress={levelCapProgress}
+            levelCapMarkerAt={levelCapMarkerAt}
             badges={badges}
           />
         </PokemonDetailProvider>

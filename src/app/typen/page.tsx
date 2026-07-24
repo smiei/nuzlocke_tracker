@@ -144,6 +144,7 @@ export default async function AnalyzePage({
             learnset={getLearnset(game.versionGroup)}
             teams={teams}
             explosiveMap={explosiveMap}
+            settings={settings}
           />
         </PokemonDetailProvider>
       </PlayerNamesProvider>

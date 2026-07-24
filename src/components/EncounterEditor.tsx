@@ -17,7 +17,9 @@ import type { RunSettings } from "@/lib/runSettings";
 
 // In-game nicknames are capped at 10 characters; the input enforces this and
 // shows a live counter (the server slices to the same length as a safety net).
-const NICKNAME_MAX = 10;
+// Exported for the Catchrate tab's quick-catch confirm panel, which mirrors
+// this same field.
+export const NICKNAME_MAX = 10;
 
 // Colour the status control so a route's outcome is readable at a glance:
 // green = caught, red = killed, amber = fled.
@@ -157,6 +159,14 @@ export function EncounterEditor({
     });
   }
 
+  // A brand-new pick for a route with no encounter yet does NOT auto-save -
+  // it only updates local state, until "Bestätigen" commits pokemon/status/
+  // nickname/shiny together in one save. This is what previously made a row
+  // vanish from the Tracker tab's "Nur offene" filter the instant a species
+  // was picked, before nickname/shiny/status could be set. Editing an
+  // EXISTING encounter (current != null) keeps the old instant-save-per-
+  // field behavior - that row is already outside the "offene" filter, so the
+  // disappearing-row problem doesn't apply to it.
   function handleSelectPokemon(pokemonId: number) {
     setSelectedId(pokemonId);
     if (pokemonId !== current?.pokemonId) {
@@ -164,8 +174,8 @@ export function EncounterEditor({
       // flag don't carry over. Re-picking the same species keeps them.
       setNickname("");
       setShiny(false);
-      persist({ pokemonId, status, nickname: null, shiny: false });
-    } else {
+      if (current) persist({ pokemonId, status, nickname: null, shiny: false });
+    } else if (current) {
       persist({ pokemonId, status });
     }
   }
@@ -174,20 +184,27 @@ export function EncounterEditor({
     if (selectedId === null) return;
     const next = !shiny;
     setShiny(next);
-    persist({ pokemonId: selectedId, status, shiny: next });
+    if (current) persist({ pokemonId: selectedId, status, shiny: next });
   }
 
   function handleStatusChange(next: EncounterStatus) {
     setStatus(next);
-    if (selectedId !== null) persist({ pokemonId: selectedId, status: next });
+    if (current && selectedId !== null) persist({ pokemonId: selectedId, status: next });
   }
 
   // Saved on blur / Enter, not per keystroke - one server action per edit.
   function commitNickname() {
-    if (selectedId === null) return;
+    if (selectedId === null || !current) return;
     const trimmed = nickname.trim();
     if (trimmed === (current?.nickname ?? "")) return;
     persist({ pokemonId: selectedId, status, nickname: trimmed || null });
+  }
+
+  // Commits a brand-new encounter (pokemon + status + nickname + shiny) in
+  // one go, once the user is done filling in the row.
+  function handleConfirmNew() {
+    if (selectedId === null) return;
+    persist({ pokemonId: selectedId, status, nickname: nickname.trim() || null, shiny });
   }
 
   // Undo a mistaken entry: remove the encounter entirely. The confirm() must
@@ -287,6 +304,16 @@ export function EncounterEditor({
                 </span>
               )}
             </span>
+          )}
+          {!current && (
+            <button
+              type="button"
+              disabled={pending}
+              onClick={handleConfirmNew}
+              className="rounded border border-emerald-400 bg-emerald-50 px-2 py-1 font-medium text-emerald-700 transition-colors hover:bg-emerald-100 disabled:opacity-50 dark:border-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300"
+            >
+              {t.tracker.confirmEncounter}
+            </button>
           )}
           {current && (
             <button

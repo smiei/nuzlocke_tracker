@@ -6,6 +6,7 @@ import { computeDefenseMultipliers, singleTypeMultiplier } from "@/lib/effective
 import type { Learnset } from "@/lib/learnset";
 import { attackTypesAtLevel } from "@/lib/learnset";
 import { TYPE_COLORS, TYPE_LABELS, typesForGeneration } from "@/lib/pokemonTypes";
+import { useClampedIntInput } from "@/lib/useClampedIntInput";
 import type { Player, RunMode } from "@/generated/prisma/client";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import type { Lang } from "@/lib/i18n/dictionary";
@@ -145,13 +146,13 @@ export function BattleCardBody({
   level: number;
   onChange: (patch: { level: number }) => void;
 }) {
-  const { pokemonList, table, attackTypes, generation, learnset, teams, mode, explosiveMap } = shared;
+  const { pokemonList, table, attackTypes, generation, learnset, teams, mode } = shared;
   const { lang } = useLanguage();
   const t = translations[lang].typen;
   const playerLabel = usePlayerLabel();
+  const levelInput = useClampedIntInput(level, 1, 100, 100, (n) => onChange({ level: n }));
 
   const selectedRaw = pokemonList.find((p) => p.id === selectedId) ?? null;
-  const explosive = selectedRaw ? explosiveMap[selectedRaw.id] ?? null : null;
   const opponentTypes = selectedRaw
     ? typesForGeneration(selectedRaw.id, selectedRaw.types, generation)
     : [];
@@ -182,16 +183,9 @@ export function BattleCardBody({
         </label>
         <div className="flex items-center gap-1">
           <input
-            type="number"
-            min={1}
-            max={100}
-            value={level}
-            onChange={(e) => {
-              const n = Number(e.target.value);
-              onChange({
-                level: Number.isFinite(n) ? Math.min(100, Math.max(1, Math.round(n))) : 100,
-              });
-            }}
+            type="text"
+            inputMode="numeric"
+            {...levelInput}
             className="w-20 rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:focus:border-zinc-400"
           />
           <button
@@ -218,19 +212,6 @@ export function BattleCardBody({
                 <TypeBadge key={type} type={type} lang={lang} />
               ))}
             </div>
-
-            {/* Self-destruct / explosion warning */}
-            {explosive && (
-              <p
-                className={`mt-3 rounded-md px-2.5 py-1.5 text-sm font-medium ${
-                  explosive.level <= level
-                    ? "bg-red-100 text-red-700 dark:bg-red-950/50 dark:text-red-300"
-                    : "bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300"
-                }`}
-              >
-                {t.explosionWarn(explosive.name, explosive.level)}
-              </p>
-            )}
 
             {/* Opponent's damaging attack types at the chosen level */}
             <div className="mt-3 border-t border-zinc-100 pt-3 dark:border-zinc-800">

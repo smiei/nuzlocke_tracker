@@ -1,4 +1,5 @@
 import { Player } from "@/generated/prisma/enums";
+import type { LevelCap } from "@/lib/data";
 
 export type ProgressStats = { done: number; total: number; percent: number };
 
@@ -42,4 +43,14 @@ export function computeRouteProgress(
 export function computeLevelCapProgress(items: { defeated: boolean }[]): ProgressStats {
   const done = items.filter((i) => i.defeated).length;
   return { done, total: items.length, percent: toPercent(done, items.length) };
+}
+
+// Index of the first Elite Four entry, for a progress-bar marker showing
+// "everything up to here is regular trainers." `location.en === "Elite Four"`
+// reliably and exclusively identifies the Elite Four + Champion block (always
+// 5 contiguous entries) across every game pack's levelcaps.json, so this
+// needs no dedicated data field.
+export function eliteFourIndex(levelCaps: Pick<LevelCap, "location">[]): number | null {
+  const idx = levelCaps.findIndex((c) => c.location.en === "Elite Four");
+  return idx === -1 ? null : idx;
 }

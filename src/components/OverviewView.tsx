@@ -73,6 +73,7 @@ export function OverviewView({
   memorial,
   routeProgress,
   levelCapProgress,
+  levelCapMarkerAt,
   badges,
 }: {
   lang: Lang;
@@ -87,6 +88,7 @@ export function OverviewView({
   memorial: OverviewMemorialEntry[];
   routeProgress: ProgressStats;
   levelCapProgress: ProgressStats;
+  levelCapMarkerAt: number | null;
   badges: OverviewBadge[];
 }) {
   const t = translations[lang].overview;
@@ -125,6 +127,8 @@ export function OverviewView({
               done={levelCapProgress.done}
               total={levelCapProgress.total}
               percent={levelCapProgress.percent}
+              markerAt={levelCapMarkerAt ?? undefined}
+              markerTitle={translations[lang].levelcaps.eliteFourMarker}
             />
           </div>
         </div>

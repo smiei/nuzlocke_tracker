@@ -5,6 +5,7 @@ import type { Pokemon } from "@/lib/data";
 import type { EffectivenessTable } from "@/lib/effectiveness";
 import type { Learnset } from "@/lib/learnset";
 import type { Player, RunMode } from "@/generated/prisma/client";
+import type { RunSettings } from "@/lib/runSettings";
 import { usePersistentState } from "@/lib/usePersistentState";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import { translations } from "@/lib/i18n/dictionary";
@@ -55,10 +56,13 @@ function AnalyzeCard({
   const { lang } = useLanguage();
   const t = translations[lang].typen;
   const tCatch = translations[lang].catchrate;
-  const { selectedId, view } = state;
+  const { selectedId, view, battleLevel } = state;
 
   const selected = catchShared.pokemonList.find((p) => p.id === selectedId) ?? null;
   const isLocked = selected ? catchShared.lockedFamilies.has(selected.family_id) : false;
+  // Shown regardless of Wild/Trainer sub-view, since it matters for a wild
+  // catch too (it can blow up before you land the ball).
+  const explosive = selected ? battleShared.explosiveMap[selected.id] ?? null : null;
 
   return (
     <div className="relative rounded-xl border border-zinc-300 p-4 dark:border-zinc-700 sm:p-5">
@@ -89,6 +93,17 @@ function AnalyzeCard({
       </div>
       {isLocked && (
         <p className="mb-3 text-xs text-amber-600 dark:text-amber-400">⚠ {tCatch.lockWarning}</p>
+      )}
+      {explosive && (
+        <p
+          className={`mb-3 rounded-md px-2.5 py-1.5 text-sm font-medium ${
+            explosive.level <= battleLevel
+              ? "bg-red-100 text-red-700 dark:bg-red-950/50 dark:text-red-300"
+              : "bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-300"
+          }`}
+        >
+          {t.explosionWarn(explosive.name, explosive.level)}
+        </p>
       )}
 
       {/* Wild / Trainer toggle */}
@@ -143,6 +158,7 @@ export function AnalyzeView({
   learnset,
   teams,
   explosiveMap,
+  settings,
 }: {
   runId: number;
   mode: RunMode;
@@ -156,6 +172,7 @@ export function AnalyzeView({
   learnset: Learnset;
   teams: { player: Player; members: TeamMember[] }[];
   explosiveMap: Record<number, { name: string; level: number }>;
+  settings: RunSettings;
 }) {
   const { lang } = useLanguage();
   const t = translations[lang].typen;
@@ -171,6 +188,7 @@ export function AnalyzeView({
     openSlots,
     effectiveness,
     attackTypes,
+    settings,
   };
   const battleShared: BattleSharedProps = {
     pokemonList,

@@ -14,7 +14,7 @@ const de = {
   },
   nav: {
     tracker: "Encounter",
-    links: "Pokémon",
+    links: "Team",
     pokedex: "Pokédex",
     typen: "Kampf & Fang",
     weaknesses: "Team-Schwächen",
@@ -119,6 +119,7 @@ const de = {
     nicknameLabel: "Spitzname",
     postgameShow: (n: number) => `Post-Game Content anzeigen (${n} Gebiete)`,
     postgameHide: "Post-Game Content ausblenden",
+    confirmEncounter: "Bestätigen",
     progressTitle: (done: number, total: number, percent: number) =>
       `${done} von ${total} Routen abgeschlossen (${percent}%)`,
   },
@@ -190,6 +191,7 @@ const de = {
     maxLevel: "Max. Level",
     progressTitle: (done: number, total: number, percent: number) =>
       `${done} von ${total} Kämpfen abgeschlossen (${percent}%)`,
+    eliteFourMarker: "Ab hier: Top 4",
   },
   weaknesses: {
     heading: "Team-Schwächen",
@@ -260,6 +262,7 @@ const de = {
     caughtNoRoutes: "Keine offenen Routen mehr.",
     selectRoute: "Route wählen …",
     caughtDone: (name: string, route: string) => `${name} auf ${route} als gefangen eingetragen.`,
+    confirmCatch: "Fangen",
     conditionMet: "Bedingung erfüllt",
     addCard: "Weitere Kachel",
     ballLabel: "Pokéball",
@@ -418,7 +421,7 @@ const en: Dictionary = {
   },
   nav: {
     tracker: "Encounter",
-    links: "Pokémon",
+    links: "Team",
     pokedex: "Pokédex",
     typen: "Battle & Catch",
     weaknesses: "Team Weaknesses",
@@ -522,6 +525,7 @@ const en: Dictionary = {
     nicknameLabel: "Nickname",
     postgameShow: (n: number) => `Show post-game content (${n} areas)`,
     postgameHide: "Hide post-game content",
+    confirmEncounter: "Confirm",
     progressTitle: (done: number, total: number, percent: number) =>
       `${done} of ${total} routes completed (${percent}%)`,
   },
@@ -593,6 +597,7 @@ const en: Dictionary = {
     maxLevel: "Max Level",
     progressTitle: (done: number, total: number, percent: number) =>
       `${done} of ${total} battles completed (${percent}%)`,
+    eliteFourMarker: "Elite Four starts here",
   },
   weaknesses: {
     heading: "Team Weaknesses",
@@ -663,6 +668,7 @@ const en: Dictionary = {
     caughtNoRoutes: "No open routes left.",
     selectRoute: "Pick a route …",
     caughtDone: (name: string, route: string) => `Recorded ${name} as caught on ${route}.`,
+    confirmCatch: "Catch",
     conditionMet: "Condition met",
     addCard: "Add calculator",
     ballLabel: "Poké Ball",
@@ -819,7 +825,7 @@ const fr: Dictionary = {
   },
   nav: {
     tracker: "Rencontres",
-    links: "Pokémon",
+    links: "Équipe",
     pokedex: "Pokédex",
     typen: "Combat & Capture",
     weaknesses: "Faiblesses de l'équipe",
@@ -924,6 +930,7 @@ const fr: Dictionary = {
     nicknameLabel: "Surnom",
     postgameShow: (n: number) => `Afficher le contenu post-ligue (${n} zones)`,
     postgameHide: "Masquer le contenu post-ligue",
+    confirmEncounter: "Confirmer",
     progressTitle: (done: number, total: number, percent: number) =>
       `${done} routes sur ${total} terminées (${percent}%)`,
   },
@@ -997,6 +1004,7 @@ const fr: Dictionary = {
     maxLevel: "Niveau max",
     progressTitle: (done: number, total: number, percent: number) =>
       `${done} combats sur ${total} terminés (${percent}%)`,
+    eliteFourMarker: "Le Conseil 4 commence ici",
   },
   weaknesses: {
     heading: "Faiblesses de l'équipe",
@@ -1067,6 +1075,7 @@ const fr: Dictionary = {
     caughtNoRoutes: "Plus de routes ouvertes.",
     selectRoute: "Choisir une route …",
     caughtDone: (name: string, route: string) => `${name} enregistré comme capturé sur ${route}.`,
+    confirmCatch: "Attraper",
     conditionMet: "Condition remplie",
     addCard: "Ajouter une carte",
     ballLabel: "Poké Ball",
@@ -1224,7 +1233,7 @@ const es: Dictionary = {
   },
   nav: {
     tracker: "Encuentros",
-    links: "Pokémon",
+    links: "Equipo",
     pokedex: "Pokédex",
     typen: "Combate y captura",
     weaknesses: "Debilidades del equipo",
@@ -1328,6 +1337,7 @@ const es: Dictionary = {
     nicknameLabel: "Mote",
     postgameShow: (n: number) => `Mostrar contenido posjuego (${n} zonas)`,
     postgameHide: "Ocultar contenido posjuego",
+    confirmEncounter: "Confirmar",
     progressTitle: (done: number, total: number, percent: number) =>
       `${done} de ${total} rutas completadas (${percent}%)`,
   },
@@ -1401,6 +1411,7 @@ const es: Dictionary = {
     maxLevel: "Nivel máx.",
     progressTitle: (done: number, total: number, percent: number) =>
       `${done} de ${total} combates completados (${percent}%)`,
+    eliteFourMarker: "Aquí empieza el Alto Mando",
   },
   weaknesses: {
     heading: "Debilidades del equipo",
@@ -1471,6 +1482,7 @@ const es: Dictionary = {
     caughtNoRoutes: "No quedan rutas abiertas.",
     selectRoute: "Elegir ruta …",
     caughtDone: (name: string, route: string) => `${name} registrado como capturado en ${route}.`,
+    confirmCatch: "Capturar",
     conditionMet: "Condición cumplida",
     addCard: "Añadir tarjeta",
     ballLabel: "Poké Ball",
@@ -1628,7 +1640,7 @@ const it: Dictionary = {
   },
   nav: {
     tracker: "Incontri",
-    links: "Pokémon",
+    links: "Squadra",
     pokedex: "Pokédex",
     typen: "Lotta e cattura",
     weaknesses: "Debolezze della squadra",
@@ -1732,6 +1744,7 @@ const it: Dictionary = {
     nicknameLabel: "Soprannome",
     postgameShow: (n: number) => `Mostra contenuti post-gioco (${n} aree)`,
     postgameHide: "Nascondi contenuti post-gioco",
+    confirmEncounter: "Conferma",
     progressTitle: (done: number, total: number, percent: number) =>
       `${done} di ${total} percorsi completati (${percent}%)`,
   },
@@ -1805,6 +1818,7 @@ const it: Dictionary = {
     maxLevel: "Livello max",
     progressTitle: (done: number, total: number, percent: number) =>
       `${done} di ${total} combattimenti completati (${percent}%)`,
+    eliteFourMarker: "Qui inizia la Superquattro",
   },
   weaknesses: {
     heading: "Debolezze della squadra",
@@ -1875,6 +1889,7 @@ const it: Dictionary = {
     caughtNoRoutes: "Nessun percorso aperto rimasto.",
     selectRoute: "Scegli un percorso …",
     caughtDone: (name: string, route: string) => `${name} registrato come catturato su ${route}.`,
+    confirmCatch: "Cattura",
     conditionMet: "Condizione soddisfatta",
     addCard: "Aggiungi scheda",
     ballLabel: "Poké Ball",

@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { Player } from "@/generated/prisma/enums";
-import { isRouteDone, computeRouteProgress, computeLevelCapProgress } from "@/lib/progress";
+import { isRouteDone, computeRouteProgress, computeLevelCapProgress, eliteFourIndex } from "@/lib/progress";
 
 const routes = [
   { id: 1, type: "route" },
@@ -58,5 +58,22 @@ describe("computeLevelCapProgress", () => {
 
   it("returns 0% for an empty list", () => {
     expect(computeLevelCapProgress([])).toEqual({ done: 0, total: 0, percent: 0 });
+  });
+});
+
+describe("eliteFourIndex", () => {
+  it("returns the array index of the first Elite Four entry", () => {
+    const levelCaps = [
+      { location: { de: "Marmoria City", en: "Pewter City" } },
+      { location: { de: "Azuria City", en: "Cerulean City" } },
+      { location: { de: "Top 4", en: "Elite Four" } },
+      { location: { de: "Top 4", en: "Elite Four" } },
+    ];
+    expect(eliteFourIndex(levelCaps)).toBe(2);
+  });
+
+  it("returns null when there is no Elite Four entry", () => {
+    const levelCaps = [{ location: { de: "Marmoria City", en: "Pewter City" } }];
+    expect(eliteFourIndex(levelCaps)).toBeNull();
   });
 });

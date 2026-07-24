@@ -11,17 +11,6 @@
     "type": "static"
   },
   {
-    "id": 2,
-    "names": {
-      "de": "Alabastia",
-      "en": "Pallet Town",
-      "fr": "Bourg Palette",
-      "es": "Pueblo Paleta",
-      "it": "Biancavilla"
-    },
-    "type": "route"
-  },
-  {
     "id": 3,
     "names": {
       "de": "Route 1",
@@ -29,17 +18,6 @@
       "fr": "Route 1",
       "es": "Ruta 1",
       "it": "Percorso 1"
-    },
-    "type": "route"
-  },
-  {
-    "id": 4,
-    "names": {
-      "de": "Vertania City",
-      "en": "Viridian City",
-      "fr": "Jadielle",
-      "es": "Ciudad Verde",
-      "it": "Smeraldopoli"
     },
     "type": "route"
   },
@@ -121,28 +99,6 @@
     "type": "route"
   },
   {
-    "id": 54,
-    "names": {
-      "de": "Fossil Mondberg",
-      "en": "Fossil Mt. Moon",
-      "fr": "Fossile Mont Sélénite",
-      "es": "Fósil Monte Luna",
-      "it": "Fossile Monte Luna"
-    },
-    "type": "static"
-  },
-  {
-    "id": 11,
-    "names": {
-      "de": "Azuria City",
-      "en": "Cerulean City",
-      "fr": "Azuria",
-      "es": "Ciudad Celeste",
-      "it": "Celestopoli"
-    },
-    "type": "route"
-  },
-  {
     "id": 12,
     "names": {
       "de": "Route 24",
@@ -220,6 +176,28 @@
     "type": "route"
   },
   {
+    "id": 2,
+    "names": {
+      "de": "Alabastia",
+      "en": "Pallet Town",
+      "fr": "Bourg Palette",
+      "es": "Pueblo Paleta",
+      "it": "Biancavilla"
+    },
+    "type": "route"
+  },
+  {
+    "id": 4,
+    "names": {
+      "de": "Vertania City",
+      "en": "Viridian City",
+      "fr": "Jadielle",
+      "es": "Ciudad Verde",
+      "it": "Smeraldopoli"
+    },
+    "type": "route"
+  },
+  {
     "id": 19,
     "names": {
       "de": "Route 9",
@@ -253,17 +231,6 @@
     "type": "route"
   },
   {
-    "id": 22,
-    "names": {
-      "de": "Pokémon-Turm",
-      "en": "Pokémon Tower",
-      "fr": "Tour Pokémon",
-      "es": "Torre Pokémon",
-      "it": "Torre Pokémon"
-    },
-    "type": "route"
-  },
-  {
     "id": 23,
     "names": {
       "de": "Route 12",
@@ -273,17 +240,6 @@
       "it": "Percorso 12"
     },
     "type": "route"
-  },
-  {
-    "id": 55,
-    "names": {
-      "de": "Relaxo Route 12",
-      "en": "Snorlax Route 12",
-      "fr": "Ronflex Route 12",
-      "es": "Snorlax Ruta 12",
-      "it": "Snorlax Percorso 12"
-    },
-    "type": "static"
   },
   {
     "id": 24,
@@ -341,6 +297,28 @@
     "type": "route"
   },
   {
+    "id": 22,
+    "names": {
+      "de": "Pokémon-Turm",
+      "en": "Pokémon Tower",
+      "fr": "Tour Pokémon",
+      "es": "Torre Pokémon",
+      "it": "Torre Pokémon"
+    },
+    "type": "route"
+  },
+  {
+    "id": 55,
+    "names": {
+      "de": "Relaxo Route 12",
+      "en": "Snorlax Route 12",
+      "fr": "Ronflex Route 12",
+      "es": "Snorlax Ruta 12",
+      "it": "Snorlax Percorso 12"
+    },
+    "type": "static"
+  },
+  {
     "id": 57,
     "names": {
       "de": "Relaxo Route 16",
@@ -374,6 +352,39 @@
     "type": "route"
   },
   {
+    "id": 35,
+    "names": {
+      "de": "Route 13",
+      "en": "Route 13",
+      "fr": "Route 13",
+      "es": "Ruta 13",
+      "it": "Percorso 13"
+    },
+    "type": "route"
+  },
+  {
+    "id": 34,
+    "names": {
+      "de": "Route 14",
+      "en": "Route 14",
+      "fr": "Route 14",
+      "es": "Ruta 14",
+      "it": "Percorso 14"
+    },
+    "type": "route"
+  },
+  {
+    "id": 33,
+    "names": {
+      "de": "Route 15",
+      "en": "Route 15",
+      "fr": "Route 15",
+      "es": "Ruta 15",
+      "it": "Percorso 15"
+    },
+    "type": "route"
+  },
+  {
     "id": 31,
     "names": {
       "de": "Fuchsania City",
@@ -396,46 +407,13 @@
     "type": "route"
   },
   {
-    "id": 33,
+    "id": 11,
     "names": {
-      "de": "Route 15",
-      "en": "Route 15",
-      "fr": "Route 15",
-      "es": "Ruta 15",
-      "it": "Percorso 15"
-    },
-    "type": "route"
-  },
-  {
-    "id": 34,
-    "names": {
-      "de": "Route 14",
-      "en": "Route 14",
-      "fr": "Route 14",
-      "es": "Ruta 14",
-      "it": "Percorso 14"
-    },
-    "type": "route"
-  },
-  {
-    "id": 35,
-    "names": {
-      "de": "Route 13",
-      "en": "Route 13",
-      "fr": "Route 13",
-      "es": "Ruta 13",
-      "it": "Percorso 13"
-    },
-    "type": "route"
-  },
-  {
-    "id": 27,
-    "names": {
-      "de": "Saffronia City",
-      "en": "Saffron City",
-      "fr": "Safrania",
-      "es": "Ciudad Azafrán",
-      "it": "Zafferanopoli"
+      "de": "Azuria City",
+      "en": "Cerulean City",
+      "fr": "Azuria",
+      "es": "Ciudad Celeste",
+      "it": "Celestopoli"
     },
     "type": "route"
   },
@@ -462,28 +440,6 @@
     "type": "static"
   },
   {
-    "id": 36,
-    "names": {
-      "de": "Kraftwerk",
-      "en": "Power Plant",
-      "fr": "Centrale",
-      "es": "Central Energía",
-      "it": "Centrale Elettrica"
-    },
-    "type": "route"
-  },
-  {
-    "id": 60,
-    "names": {
-      "de": "Zapdos Kraftwerk",
-      "en": "Zapdos Power Plant",
-      "fr": "Électhor Centrale",
-      "es": "Zapdos Central Energía",
-      "it": "Zapdos Centrale Elettrica"
-    },
-    "type": "static"
-  },
-  {
     "id": 37,
     "names": {
       "de": "Route 19",
@@ -502,6 +458,17 @@
       "fr": "Chenal 20",
       "es": "Ruta 20",
       "it": "Percorso 20"
+    },
+    "type": "route"
+  },
+  {
+    "id": 45,
+    "names": {
+      "de": "Route 21",
+      "en": "Route 21",
+      "fr": "Chenal 21",
+      "es": "Ruta 21",
+      "it": "Percorso 21"
     },
     "type": "route"
   },
@@ -528,6 +495,28 @@
     "type": "static"
   },
   {
+    "id": 36,
+    "names": {
+      "de": "Kraftwerk",
+      "en": "Power Plant",
+      "fr": "Centrale",
+      "es": "Central Energía",
+      "it": "Centrale Elettrica"
+    },
+    "type": "route"
+  },
+  {
+    "id": 60,
+    "names": {
+      "de": "Zapdos Kraftwerk",
+      "en": "Zapdos Power Plant",
+      "fr": "Électhor Centrale",
+      "es": "Zapdos Central Energía",
+      "it": "Zapdos Centrale Elettrica"
+    },
+    "type": "static"
+  },
+  {
     "id": 40,
     "names": {
       "de": "Zinnoberinsel",
@@ -537,6 +526,17 @@
       "it": "Cinabropoli"
     },
     "type": "route"
+  },
+  {
+    "id": 54,
+    "names": {
+      "de": "Fossil Mondberg",
+      "en": "Fossil Mt. Moon",
+      "fr": "Fossile Mont Sélénite",
+      "es": "Fósil Monte Luna",
+      "it": "Fossile Monte Luna"
+    },
+    "type": "static"
   },
   {
     "id": 62,
@@ -669,17 +669,6 @@
       "it": "Hypno Berry Forest"
     },
     "type": "static"
-  },
-  {
-    "id": 45,
-    "names": {
-      "de": "Route 21",
-      "en": "Route 21",
-      "fr": "Chenal 21",
-      "es": "Ruta 21",
-      "it": "Percorso 21"
-    },
-    "type": "route"
   },
   {
     "id": 46,

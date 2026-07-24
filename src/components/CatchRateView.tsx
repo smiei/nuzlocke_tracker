@@ -9,6 +9,8 @@ import type { EffectivenessTable } from "@/lib/effectiveness";
 import { computeDefenseMultipliers } from "@/lib/effectiveness";
 import { quickCatch } from "@/lib/actions";
 import { formatActionError } from "@/lib/actionErrors";
+import { useClampedIntInput } from "@/lib/useClampedIntInput";
+import type { RunSettings } from "@/lib/runSettings";
 import { Player, RunMode } from "@/generated/prisma/enums";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import { translations } from "@/lib/i18n/dictionary";
@@ -18,16 +20,11 @@ import { usePlayerLabel } from "@/components/PlayerNamesProvider";
 import { usePokemonDetail } from "@/components/PokemonDetailProvider";
 import { PokemonSprite } from "@/components/PokemonSprite";
 import { TypeBadge } from "@/components/TypeBadge";
+import { NICKNAME_MAX } from "@/components/EncounterEditor";
 
 export type OpenSlot = { routeId: number; player: Player; routeName: string };
 
 const WEAKNESS_GROUPS = [4, 2, 0.5, 0.25, 0] as const;
-
-function clampInt(raw: string, min: number, max: number, fallback: number): number {
-  const n = Number(raw);
-  if (!Number.isFinite(n)) return fallback;
-  return Math.min(max, Math.max(min, Math.round(n)));
-}
 
 const inputClass =
   "w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:focus:border-zinc-400";
@@ -131,6 +128,7 @@ export type CatchSharedProps = {
   openSlots: OpenSlot[];
   effectiveness: EffectivenessTable;
   attackTypes: string[];
+  settings: RunSettings;
 };
 
 // The per-card catch inputs. Which Pokémon is selected lives one level up (the
@@ -149,39 +147,100 @@ export function newCatchBody(): CatchBodyState {
   return { ball: "poke", hpPercent: 100, level: 50, status: "none", turn: 1, conditionMet: true };
 }
 
-// A plain `value={n} onChange={clampInt(...)}` re-clamps every keystroke,
-// including the empty string left behind while deleting - which snaps back
-// to `min` before the next digit can be typed. Mobile number keyboards make
-// this unusable (deleting "100" to type "45" never gets past "1"). Buffering
-// the raw text separately and only committing (clamped) once it parses to a
-// number - restoring the last committed value on blur if the field was left
-// empty - lets the field go through an intermediate empty/partial state.
-function useClampedIntInput(
-  value: number,
-  min: number,
-  max: number,
-  fallback: number,
-  onCommit: (n: number) => void,
-) {
-  const [text, setText] = useState(String(value));
-  // Re-sync from an external value change (e.g. the "100" quick-set button,
-  // or a fresh state on Pokémon switch) during render rather than in an
-  // effect - React explicitly supports conditional setState mid-render (it
-  // re-renders immediately without committing/painting the stale version).
-  const [lastValue, setLastValue] = useState(value);
-  if (value !== lastValue) {
-    setLastValue(value);
-    setText(String(value));
+// A module-scope component (not an inline closure like the old
+// renderQuickCatchSelect) since it now owns local state - an inline
+// function-as-component defined inside another component's render body would
+// remount (and lose that state) on every render. Picking a route no longer
+// catches immediately: it reveals nickname/shiny fields (mirroring
+// EncounterEditor) and a confirm button, so a route doesn't need a second,
+// separate visit just to set those.
+function QuickCatchPanel({
+  slots,
+  disabled,
+  pending,
+  nicknamesEnabled,
+  shinyClauseEnabled,
+  onConfirm,
+}: {
+  slots: OpenSlot[];
+  disabled: boolean;
+  pending: boolean;
+  nicknamesEnabled: boolean;
+  shinyClauseEnabled: boolean;
+  onConfirm: (routeId: number, extra: { nickname: string | null; shiny: boolean }) => void;
+}) {
+  const { lang } = useLanguage();
+  const t = translations[lang].catchrate;
+  const tTracker = translations[lang].tracker;
+  const [routeId, setRouteId] = useState<number | "">("");
+  const [nickname, setNickname] = useState("");
+  const [shiny, setShiny] = useState(false);
+
+  function handleConfirm() {
+    if (routeId === "") return;
+    onConfirm(routeId, { nickname: nickname.trim() || null, shiny });
+    setRouteId("");
+    setNickname("");
+    setShiny(false);
   }
-  return {
-    value: text,
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-      const raw = e.target.value;
-      setText(raw);
-      if (raw !== "" && Number.isFinite(Number(raw))) onCommit(clampInt(raw, min, max, fallback));
-    },
-    onBlur: () => setText(String(value)),
-  };
+
+  return (
+    <div className="flex flex-col gap-1.5">
+      <select
+        value={routeId}
+        disabled={disabled || pending || slots.length === 0}
+        onChange={(e) => setRouteId(e.target.value ? Number(e.target.value) : "")}
+        className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-zinc-500 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-900 dark:focus:border-zinc-400"
+      >
+        <option value="">{t.selectRoute}</option>
+        {slots.map((s) => (
+          <option key={s.routeId} value={s.routeId}>
+            {s.routeName}
+          </option>
+        ))}
+      </select>
+      {routeId !== "" && (
+        <div className="flex flex-wrap items-center gap-2">
+          {shinyClauseEnabled && (
+            <button
+              type="button"
+              disabled={pending}
+              onClick={() => setShiny((s) => !s)}
+              aria-pressed={shiny}
+              title={tTracker.shinyToggle}
+              className={`rounded border px-1.5 py-1 text-xs transition-colors disabled:opacity-50 ${
+                shiny
+                  ? "border-amber-400 bg-amber-50 text-amber-600 dark:border-amber-600 dark:bg-amber-950/40 dark:text-amber-300"
+                  : "border-zinc-200 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:border-zinc-700 dark:text-zinc-500 dark:hover:bg-zinc-800"
+              }`}
+            >
+              ✨
+            </button>
+          )}
+          {nicknamesEnabled && (
+            <input
+              type="text"
+              value={nickname}
+              disabled={pending}
+              maxLength={NICKNAME_MAX}
+              placeholder={tTracker.nicknamePlaceholder}
+              aria-label={tTracker.nicknameLabel}
+              onChange={(e) => setNickname(e.target.value)}
+              className="w-28 rounded border border-zinc-300 bg-white px-1.5 py-1 text-xs outline-none placeholder:text-zinc-400 focus:border-zinc-500 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-950 dark:placeholder:text-zinc-600 dark:focus:border-zinc-400"
+            />
+          )}
+          <button
+            type="button"
+            disabled={pending}
+            onClick={handleConfirm}
+            className="rounded-md border border-emerald-400 bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700 transition-colors hover:bg-emerald-100 disabled:opacity-50 dark:border-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300"
+          >
+            {t.confirmCatch}
+          </button>
+        </div>
+      )}
+    </div>
+  );
 }
 
 // The "Wild" body of a combined card: ball + HP + status + condition, the catch
@@ -198,7 +257,8 @@ export function CatchCardBody({
   state: CatchBodyState;
   onChange: (patch: Partial<CatchBodyState>) => void;
 }) {
-  const { runId, mode, pokemonList, catchRates, generation, openSlots, effectiveness, attackTypes } = shared;
+  const { runId, mode, pokemonList, catchRates, generation, openSlots, effectiveness, attackTypes, settings } =
+    shared;
   const router = useRouter();
   const { lang } = useLanguage();
   const t = translations[lang].catchrate;
@@ -246,14 +306,18 @@ export function CatchCardBody({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected, effectiveness, attackTypes, generation, lang]);
 
-  function handleQuickCatch(routeId: number, player: Player) {
+  function handleQuickCatch(
+    routeId: number,
+    player: Player,
+    extra: { nickname: string | null; shiny: boolean },
+  ) {
     if (selected === null) return;
     const slot = openSlots.find((s) => s.routeId === routeId && s.player === player);
     if (!slot) return;
     const name = pokemonName(selected, lang);
     setCaughtMsg(null);
     startCatch(async () => {
-      const res = await quickCatch(runId, routeId, player, selected.id);
+      const res = await quickCatch(runId, routeId, player, selected.id, extra);
       if (res.success) {
         setCaughtMsg(t.caughtDone(name, slot.routeName));
         router.refresh();
@@ -263,24 +327,17 @@ export function CatchCardBody({
     });
   }
 
-  const renderQuickCatchSelect = (player: Player) => {
+  const renderQuickCatchPanel = (player: Player) => {
     const slots = openSlots.filter((s) => s.player === player);
     return (
-      <select
-        value=""
-        disabled={catching || selectedId === null || slots.length === 0}
-        onChange={(e) => {
-          if (e.target.value) handleQuickCatch(Number(e.target.value), player);
-        }}
-        className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-zinc-500 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-900 dark:focus:border-zinc-400"
-      >
-        <option value="">{t.selectRoute}</option>
-        {slots.map((s) => (
-          <option key={s.routeId} value={s.routeId}>
-            {s.routeName}
-          </option>
-        ))}
-      </select>
+      <QuickCatchPanel
+        slots={slots}
+        disabled={selectedId === null}
+        pending={catching}
+        nicknamesEnabled={settings.nicknames}
+        shinyClauseEnabled={settings.shinyClause}
+        onConfirm={(routeId, extra) => handleQuickCatch(routeId, player, extra)}
+      />
     );
   };
 
@@ -336,9 +393,8 @@ export function CatchCardBody({
             <label className={labelClass}>{t.levelLabel}</label>
             <div className="flex items-center gap-1">
               <input
-                type="number"
-                min={1}
-                max={100}
+                type="text"
+                inputMode="numeric"
                 {...levelInput}
                 className={inputClass}
               />
@@ -357,9 +413,8 @@ export function CatchCardBody({
           <div className="col-span-2 sm:col-span-1">
             <label className={labelClass}>{t.turnLabel}</label>
             <input
-              type="number"
-              min={1}
-              max={99}
+              type="text"
+              inputMode="numeric"
               {...turnInput}
               className={inputClass}
             />
@@ -460,15 +515,15 @@ export function CatchCardBody({
           <div className="grid gap-3 sm:grid-cols-2">
             <div>
               <label className={labelClass}>{playerLabel(Player.PLAYER1)}</label>
-              {renderQuickCatchSelect(Player.PLAYER1)}
+              {renderQuickCatchPanel(Player.PLAYER1)}
             </div>
             <div>
               <label className={labelClass}>{playerLabel(Player.PLAYER2)}</label>
-              {renderQuickCatchSelect(Player.PLAYER2)}
+              {renderQuickCatchPanel(Player.PLAYER2)}
             </div>
           </div>
         ) : (
-          renderQuickCatchSelect(Player.PLAYER1)
+          renderQuickCatchPanel(Player.PLAYER1)
         )}
         {caughtMsg && (
           <p className="mt-2 text-xs text-emerald-600 dark:text-emerald-400">{caughtMsg}</p>

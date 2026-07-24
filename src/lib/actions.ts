@@ -187,6 +187,7 @@ export async function quickCatch(
   routeId: number,
   player: Player,
   pokemonId: number,
+  options?: { nickname?: string | null; shiny?: boolean },
 ): Promise<QuickCatchResult> {
   const saved = await saveEncounter({
     runId,
@@ -194,6 +195,8 @@ export async function quickCatch(
     player,
     pokemonId,
     status: EncounterStatus.CAUGHT,
+    nickname: options?.nickname,
+    shiny: options?.shiny,
   });
   if (!saved.success) return saved;
 
