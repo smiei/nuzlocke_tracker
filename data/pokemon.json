@@ -21,7 +21,8 @@
       "Sp.-V.": 65,
       "Init.": 45,
       "Summe": 318
-    }
+    },
+    "legendary": false
   },
   {
     "id": 2,
@@ -45,7 +46,8 @@
       "Sp.-V.": 80,
       "Init.": 60,
       "Summe": 405
-    }
+    },
+    "legendary": false
   },
   {
     "id": 3,
@@ -69,7 +71,8 @@
       "Sp.-V.": 100,
       "Init.": 80,
       "Summe": 525
-    }
+    },
+    "legendary": false
   },
   {
     "id": 4,
@@ -92,7 +95,8 @@
       "Sp.-V.": 50,
       "Init.": 65,
       "Summe": 309
-    }
+    },
+    "legendary": false
   },
   {
     "id": 5,
@@ -115,7 +119,8 @@
       "Sp.-V.": 65,
       "Init.": 80,
       "Summe": 405
-    }
+    },
+    "legendary": false
   },
   {
     "id": 6,
@@ -139,7 +144,8 @@
       "Sp.-V.": 85,
       "Init.": 100,
       "Summe": 534
-    }
+    },
+    "legendary": false
   },
   {
     "id": 7,
@@ -162,7 +168,8 @@
       "Sp.-V.": 64,
       "Init.": 43,
       "Summe": 314
-    }
+    },
+    "legendary": false
   },
   {
     "id": 8,
@@ -185,7 +192,8 @@
       "Sp.-V.": 80,
       "Init.": 58,
       "Summe": 405
-    }
+    },
+    "legendary": false
   },
   {
     "id": 9,
@@ -208,7 +216,8 @@
       "Sp.-V.": 105,
       "Init.": 78,
       "Summe": 530
-    }
+    },
+    "legendary": false
   },
   {
     "id": 10,
@@ -231,7 +240,8 @@
       "Sp.-V.": 20,
       "Init.": 45,
       "Summe": 195
-    }
+    },
+    "legendary": false
   },
   {
     "id": 11,
@@ -254,7 +264,8 @@
       "Sp.-V.": 25,
       "Init.": 30,
       "Summe": 205
-    }
+    },
+    "legendary": false
   },
   {
     "id": 12,
@@ -278,7 +289,8 @@
       "Sp.-V.": 80,
       "Init.": 70,
       "Summe": 395
-    }
+    },
+    "legendary": false
   },
   {
     "id": 13,
@@ -302,7 +314,8 @@
       "Sp.-V.": 20,
       "Init.": 50,
       "Summe": 195
-    }
+    },
+    "legendary": false
   },
   {
     "id": 14,
@@ -326,7 +339,8 @@
       "Sp.-V.": 25,
       "Init.": 35,
       "Summe": 205
-    }
+    },
+    "legendary": false
   },
   {
     "id": 15,
@@ -350,7 +364,8 @@
       "Sp.-V.": 80,
       "Init.": 75,
       "Summe": 395
-    }
+    },
+    "legendary": false
   },
   {
     "id": 16,
@@ -374,7 +389,8 @@
       "Sp.-V.": 35,
       "Init.": 56,
       "Summe": 251
-    }
+    },
+    "legendary": false
   },
   {
     "id": 17,
@@ -398,7 +414,8 @@
       "Sp.-V.": 50,
       "Init.": 71,
       "Summe": 349
-    }
+    },
+    "legendary": false
   },
   {
     "id": 18,
@@ -422,7 +439,8 @@
       "Sp.-V.": 70,
       "Init.": 101,
       "Summe": 479
-    }
+    },
+    "legendary": false
   },
   {
     "id": 19,
@@ -445,7 +463,8 @@
       "Sp.-V.": 35,
       "Init.": 72,
       "Summe": 253
-    }
+    },
+    "legendary": false
   },
   {
     "id": 20,
@@ -468,7 +487,8 @@
       "Sp.-V.": 70,
       "Init.": 97,
       "Summe": 413
-    }
+    },
+    "legendary": false
   },
   {
     "id": 21,
@@ -492,7 +512,8 @@
       "Sp.-V.": 31,
       "Init.": 70,
       "Summe": 262
-    }
+    },
+    "legendary": false
   },
   {
     "id": 22,
@@ -516,7 +537,8 @@
       "Sp.-V.": 61,
       "Init.": 100,
       "Summe": 442
-    }
+    },
+    "legendary": false
   },
   {
     "id": 23,
@@ -539,7 +561,8 @@
       "Sp.-V.": 54,
       "Init.": 55,
       "Summe": 288
-    }
+    },
+    "legendary": false
   },
   {
     "id": 24,
@@ -562,7 +585,8 @@
       "Sp.-V.": 79,
       "Init.": 80,
       "Summe": 448
-    }
+    },
+    "legendary": false
   },
   {
     "id": 25,
@@ -585,7 +609,8 @@
       "Sp.-V.": 50,
       "Init.": 90,
       "Summe": 320
-    }
+    },
+    "legendary": false
   },
   {
     "id": 26,
@@ -608,7 +633,8 @@
       "Sp.-V.": 80,
       "Init.": 110,
       "Summe": 485
-    }
+    },
+    "legendary": false
   },
   {
     "id": 27,
@@ -631,7 +657,8 @@
       "Sp.-V.": 30,
       "Init.": 40,
       "Summe": 300
-    }
+    },
+    "legendary": false
   },
   {
     "id": 28,
@@ -654,7 +681,8 @@
       "Sp.-V.": 55,
       "Init.": 65,
       "Summe": 450
-    }
+    },
+    "legendary": false
   },
   {
     "id": 29,
@@ -677,7 +705,8 @@
       "Sp.-V.": 40,
       "Init.": 41,
       "Summe": 275
-    }
+    },
+    "legendary": false
   },
   {
     "id": 30,
@@ -700,7 +729,8 @@
       "Sp.-V.": 55,
       "Init.": 56,
       "Summe": 365
-    }
+    },
+    "legendary": false
   },
   {
     "id": 31,
@@ -724,7 +754,8 @@
       "Sp.-V.": 85,
       "Init.": 76,
       "Summe": 505
-    }
+    },
+    "legendary": false
   },
   {
     "id": 32,
@@ -747,7 +778,8 @@
       "Sp.-V.": 40,
       "Init.": 50,
       "Summe": 273
-    }
+    },
+    "legendary": false
   },
   {
     "id": 33,
@@ -770,7 +802,8 @@
       "Sp.-V.": 55,
       "Init.": 65,
       "Summe": 365
-    }
+    },
+    "legendary": false
   },
   {
     "id": 34,
@@ -794,7 +827,8 @@
       "Sp.-V.": 75,
       "Init.": 85,
       "Summe": 505
-    }
+    },
+    "legendary": false
   },
   {
     "id": 35,
@@ -817,7 +851,8 @@
       "Sp.-V.": 65,
       "Init.": 35,
       "Summe": 323
-    }
+    },
+    "legendary": false
   },
   {
     "id": 36,
@@ -840,7 +875,8 @@
       "Sp.-V.": 90,
       "Init.": 60,
       "Summe": 483
-    }
+    },
+    "legendary": false
   },
   {
     "id": 37,
@@ -863,7 +899,8 @@
       "Sp.-V.": 65,
       "Init.": 65,
       "Summe": 299
-    }
+    },
+    "legendary": false
   },
   {
     "id": 38,
@@ -886,7 +923,8 @@
       "Sp.-V.": 100,
       "Init.": 100,
       "Summe": 505
-    }
+    },
+    "legendary": false
   },
   {
     "id": 39,
@@ -909,7 +947,8 @@
       "Sp.-V.": 25,
       "Init.": 20,
       "Summe": 270
-    }
+    },
+    "legendary": false
   },
   {
     "id": 40,
@@ -932,7 +971,8 @@
       "Sp.-V.": 50,
       "Init.": 45,
       "Summe": 435
-    }
+    },
+    "legendary": false
   },
   {
     "id": 41,
@@ -956,7 +996,8 @@
       "Sp.-V.": 40,
       "Init.": 55,
       "Summe": 245
-    }
+    },
+    "legendary": false
   },
   {
     "id": 42,
@@ -980,7 +1021,8 @@
       "Sp.-V.": 75,
       "Init.": 90,
       "Summe": 455
-    }
+    },
+    "legendary": false
   },
   {
     "id": 43,
@@ -1004,7 +1046,8 @@
       "Sp.-V.": 65,
       "Init.": 30,
       "Summe": 320
-    }
+    },
+    "legendary": false
   },
   {
     "id": 44,
@@ -1028,7 +1071,8 @@
       "Sp.-V.": 75,
       "Init.": 40,
       "Summe": 395
-    }
+    },
+    "legendary": false
   },
   {
     "id": 45,
@@ -1052,7 +1096,8 @@
       "Sp.-V.": 90,
       "Init.": 50,
       "Summe": 490
-    }
+    },
+    "legendary": false
   },
   {
     "id": 46,
@@ -1076,7 +1121,8 @@
       "Sp.-V.": 55,
       "Init.": 25,
       "Summe": 285
-    }
+    },
+    "legendary": false
   },
   {
     "id": 47,
@@ -1100,7 +1146,8 @@
       "Sp.-V.": 80,
       "Init.": 30,
       "Summe": 405
-    }
+    },
+    "legendary": false
   },
   {
     "id": 48,
@@ -1124,7 +1171,8 @@
       "Sp.-V.": 55,
       "Init.": 45,
       "Summe": 305
-    }
+    },
+    "legendary": false
   },
   {
     "id": 49,
@@ -1148,7 +1196,8 @@
       "Sp.-V.": 75,
       "Init.": 90,
       "Summe": 450
-    }
+    },
+    "legendary": false
   },
   {
     "id": 50,
@@ -1171,7 +1220,8 @@
       "Sp.-V.": 45,
       "Init.": 95,
       "Summe": 265
-    }
+    },
+    "legendary": false
   },
   {
     "id": 51,
@@ -1194,7 +1244,8 @@
       "Sp.-V.": 70,
       "Init.": 120,
       "Summe": 425
-    }
+    },
+    "legendary": false
   },
   {
     "id": 52,
@@ -1217,7 +1268,8 @@
       "Sp.-V.": 40,
       "Init.": 90,
       "Summe": 290
-    }
+    },
+    "legendary": false
   },
   {
     "id": 53,
@@ -1240,7 +1292,8 @@
       "Sp.-V.": 65,
       "Init.": 115,
       "Summe": 440
-    }
+    },
+    "legendary": false
   },
   {
     "id": 54,
@@ -1263,7 +1316,8 @@
       "Sp.-V.": 50,
       "Init.": 55,
       "Summe": 320
-    }
+    },
+    "legendary": false
   },
   {
     "id": 55,
@@ -1286,7 +1340,8 @@
       "Sp.-V.": 80,
       "Init.": 85,
       "Summe": 500
-    }
+    },
+    "legendary": false
   },
   {
     "id": 56,
@@ -1309,7 +1364,8 @@
       "Sp.-V.": 45,
       "Init.": 70,
       "Summe": 305
-    }
+    },
+    "legendary": false
   },
   {
     "id": 57,
@@ -1332,7 +1388,8 @@
       "Sp.-V.": 70,
       "Init.": 95,
       "Summe": 455
-    }
+    },
+    "legendary": false
   },
   {
     "id": 58,
@@ -1355,7 +1412,8 @@
       "Sp.-V.": 50,
       "Init.": 60,
       "Summe": 350
-    }
+    },
+    "legendary": false
   },
   {
     "id": 59,
@@ -1378,7 +1436,8 @@
       "Sp.-V.": 80,
       "Init.": 95,
       "Summe": 555
-    }
+    },
+    "legendary": false
   },
   {
     "id": 60,
@@ -1401,7 +1460,8 @@
       "Sp.-V.": 40,
       "Init.": 90,
       "Summe": 300
-    }
+    },
+    "legendary": false
   },
   {
     "id": 61,
@@ -1424,7 +1484,8 @@
       "Sp.-V.": 50,
       "Init.": 90,
       "Summe": 385
-    }
+    },
+    "legendary": false
   },
   {
     "id": 62,
@@ -1448,7 +1509,8 @@
       "Sp.-V.": 90,
       "Init.": 70,
       "Summe": 510
-    }
+    },
+    "legendary": false
   },
   {
     "id": 63,
@@ -1471,7 +1533,8 @@
       "Sp.-V.": 55,
       "Init.": 90,
       "Summe": 310
-    }
+    },
+    "legendary": false
   },
   {
     "id": 64,
@@ -1494,7 +1557,8 @@
       "Sp.-V.": 70,
       "Init.": 105,
       "Summe": 400
-    }
+    },
+    "legendary": false
   },
   {
     "id": 65,
@@ -1517,7 +1581,8 @@
       "Sp.-V.": 95,
       "Init.": 120,
       "Summe": 500
-    }
+    },
+    "legendary": false
   },
   {
     "id": 66,
@@ -1540,7 +1605,8 @@
       "Sp.-V.": 35,
       "Init.": 35,
       "Summe": 305
-    }
+    },
+    "legendary": false
   },
   {
     "id": 67,
@@ -1563,7 +1629,8 @@
       "Sp.-V.": 60,
       "Init.": 45,
       "Summe": 405
-    }
+    },
+    "legendary": false
   },
   {
     "id": 68,
@@ -1586,7 +1653,8 @@
       "Sp.-V.": 85,
       "Init.": 55,
       "Summe": 505
-    }
+    },
+    "legendary": false
   },
   {
     "id": 69,
@@ -1610,7 +1678,8 @@
       "Sp.-V.": 30,
       "Init.": 40,
       "Summe": 300
-    }
+    },
+    "legendary": false
   },
   {
     "id": 70,
@@ -1634,7 +1703,8 @@
       "Sp.-V.": 45,
       "Init.": 55,
       "Summe": 390
-    }
+    },
+    "legendary": false
   },
   {
     "id": 71,
@@ -1658,7 +1728,8 @@
       "Sp.-V.": 70,
       "Init.": 70,
       "Summe": 490
-    }
+    },
+    "legendary": false
   },
   {
     "id": 72,
@@ -1682,7 +1753,8 @@
       "Sp.-V.": 100,
       "Init.": 70,
       "Summe": 335
-    }
+    },
+    "legendary": false
   },
   {
     "id": 73,
@@ -1706,7 +1778,8 @@
       "Sp.-V.": 120,
       "Init.": 100,
       "Summe": 515
-    }
+    },
+    "legendary": false
   },
   {
     "id": 74,
@@ -1730,7 +1803,8 @@
       "Sp.-V.": 30,
       "Init.": 20,
       "Summe": 300
-    }
+    },
+    "legendary": false
   },
   {
     "id": 75,
@@ -1754,7 +1828,8 @@
       "Sp.-V.": 45,
       "Init.": 35,
       "Summe": 390
-    }
+    },
+    "legendary": false
   },
   {
     "id": 76,
@@ -1778,7 +1853,8 @@
       "Sp.-V.": 65,
       "Init.": 45,
       "Summe": 495
-    }
+    },
+    "legendary": false
   },
   {
     "id": 77,
@@ -1801,7 +1877,8 @@
       "Sp.-V.": 65,
       "Init.": 90,
       "Summe": 410
-    }
+    },
+    "legendary": false
   },
   {
     "id": 78,
@@ -1824,7 +1901,8 @@
       "Sp.-V.": 80,
       "Init.": 105,
       "Summe": 500
-    }
+    },
+    "legendary": false
   },
   {
     "id": 79,
@@ -1848,7 +1926,8 @@
       "Sp.-V.": 40,
       "Init.": 15,
       "Summe": 315
-    }
+    },
+    "legendary": false
   },
   {
     "id": 80,
@@ -1872,7 +1951,8 @@
       "Sp.-V.": 80,
       "Init.": 30,
       "Summe": 490
-    }
+    },
+    "legendary": false
   },
   {
     "id": 81,
@@ -1896,7 +1976,8 @@
       "Sp.-V.": 55,
       "Init.": 45,
       "Summe": 325
-    }
+    },
+    "legendary": false
   },
   {
     "id": 82,
@@ -1920,7 +2001,8 @@
       "Sp.-V.": 70,
       "Init.": 70,
       "Summe": 465
-    }
+    },
+    "legendary": false
   },
   {
     "id": 83,
@@ -1944,7 +2026,8 @@
       "Sp.-V.": 62,
       "Init.": 60,
       "Summe": 377
-    }
+    },
+    "legendary": false
   },
   {
     "id": 84,
@@ -1968,7 +2051,8 @@
       "Sp.-V.": 35,
       "Init.": 75,
       "Summe": 310
-    }
+    },
+    "legendary": false
   },
   {
     "id": 85,
@@ -1992,7 +2076,8 @@
       "Sp.-V.": 60,
       "Init.": 110,
       "Summe": 470
-    }
+    },
+    "legendary": false
   },
   {
     "id": 86,
@@ -2015,7 +2100,8 @@
       "Sp.-V.": 70,
       "Init.": 45,
       "Summe": 325
-    }
+    },
+    "legendary": false
   },
   {
     "id": 87,
@@ -2039,7 +2125,8 @@
       "Sp.-V.": 95,
       "Init.": 70,
       "Summe": 475
-    }
+    },
+    "legendary": false
   },
   {
     "id": 88,
@@ -2062,7 +2149,8 @@
       "Sp.-V.": 50,
       "Init.": 25,
       "Summe": 325
-    }
+    },
+    "legendary": false
   },
   {
     "id": 89,
@@ -2085,7 +2173,8 @@
       "Sp.-V.": 100,
       "Init.": 50,
       "Summe": 500
-    }
+    },
+    "legendary": false
   },
   {
     "id": 90,
@@ -2108,7 +2197,8 @@
       "Sp.-V.": 25,
       "Init.": 40,
       "Summe": 305
-    }
+    },
+    "legendary": false
   },
   {
     "id": 91,
@@ -2132,7 +2222,8 @@
       "Sp.-V.": 45,
       "Init.": 70,
       "Summe": 525
-    }
+    },
+    "legendary": false
   },
   {
     "id": 92,
@@ -2156,7 +2247,8 @@
       "Sp.-V.": 35,
       "Init.": 80,
       "Summe": 310
-    }
+    },
+    "legendary": false
   },
   {
     "id": 93,
@@ -2180,7 +2272,8 @@
       "Sp.-V.": 55,
       "Init.": 95,
       "Summe": 405
-    }
+    },
+    "legendary": false
   },
   {
     "id": 94,
@@ -2204,7 +2297,8 @@
       "Sp.-V.": 75,
       "Init.": 110,
       "Summe": 500
-    }
+    },
+    "legendary": false
   },
   {
     "id": 95,
@@ -2228,7 +2322,8 @@
       "Sp.-V.": 45,
       "Init.": 70,
       "Summe": 385
-    }
+    },
+    "legendary": false
   },
   {
     "id": 96,
@@ -2251,7 +2346,8 @@
       "Sp.-V.": 90,
       "Init.": 42,
       "Summe": 328
-    }
+    },
+    "legendary": false
   },
   {
     "id": 97,
@@ -2274,7 +2370,8 @@
       "Sp.-V.": 115,
       "Init.": 67,
       "Summe": 483
-    }
+    },
+    "legendary": false
   },
   {
     "id": 98,
@@ -2297,7 +2394,8 @@
       "Sp.-V.": 25,
       "Init.": 50,
       "Summe": 325
-    }
+    },
+    "legendary": false
   },
   {
     "id": 99,
@@ -2320,7 +2418,8 @@
       "Sp.-V.": 50,
       "Init.": 75,
       "Summe": 475
-    }
+    },
+    "legendary": false
   },
   {
     "id": 100,
@@ -2343,7 +2442,8 @@
       "Sp.-V.": 55,
       "Init.": 100,
       "Summe": 330
-    }
+    },
+    "legendary": false
   },
   {
     "id": 101,
@@ -2366,7 +2466,8 @@
       "Sp.-V.": 80,
       "Init.": 150,
       "Summe": 490
-    }
+    },
+    "legendary": false
   },
   {
     "id": 102,
@@ -2390,7 +2491,8 @@
       "Sp.-V.": 45,
       "Init.": 40,
       "Summe": 325
-    }
+    },
+    "legendary": false
   },
   {
     "id": 103,
@@ -2414,7 +2516,8 @@
       "Sp.-V.": 75,
       "Init.": 55,
       "Summe": 530
-    }
+    },
+    "legendary": false
   },
   {
     "id": 104,
@@ -2437,7 +2540,8 @@
       "Sp.-V.": 50,
       "Init.": 35,
       "Summe": 320
-    }
+    },
+    "legendary": false
   },
   {
     "id": 105,
@@ -2460,7 +2564,8 @@
       "Sp.-V.": 80,
       "Init.": 45,
       "Summe": 425
-    }
+    },
+    "legendary": false
   },
   {
     "id": 106,
@@ -2483,7 +2588,8 @@
       "Sp.-V.": 110,
       "Init.": 87,
       "Summe": 455
-    }
+    },
+    "legendary": false
   },
   {
     "id": 107,
@@ -2506,7 +2612,8 @@
       "Sp.-V.": 110,
       "Init.": 76,
       "Summe": 455
-    }
+    },
+    "legendary": false
   },
   {
     "id": 108,
@@ -2529,7 +2636,8 @@
       "Sp.-V.": 75,
       "Init.": 30,
       "Summe": 385
-    }
+    },
+    "legendary": false
   },
   {
     "id": 109,
@@ -2552,7 +2660,8 @@
       "Sp.-V.": 45,
       "Init.": 35,
       "Summe": 340
-    }
+    },
+    "legendary": false
   },
   {
     "id": 110,
@@ -2575,7 +2684,8 @@
       "Sp.-V.": 70,
       "Init.": 60,
       "Summe": 490
-    }
+    },
+    "legendary": false
   },
   {
     "id": 111,
@@ -2599,7 +2709,8 @@
       "Sp.-V.": 30,
       "Init.": 25,
       "Summe": 345
-    }
+    },
+    "legendary": false
   },
   {
     "id": 112,
@@ -2623,7 +2734,8 @@
       "Sp.-V.": 45,
       "Init.": 40,
       "Summe": 485
-    }
+    },
+    "legendary": false
   },
   {
     "id": 113,
@@ -2646,7 +2758,8 @@
       "Sp.-V.": 105,
       "Init.": 50,
       "Summe": 450
-    }
+    },
+    "legendary": false
   },
   {
     "id": 114,
@@ -2669,7 +2782,8 @@
       "Sp.-V.": 40,
       "Init.": 60,
       "Summe": 435
-    }
+    },
+    "legendary": false
   },
   {
     "id": 115,
@@ -2692,7 +2806,8 @@
       "Sp.-V.": 80,
       "Init.": 90,
       "Summe": 490
-    }
+    },
+    "legendary": false
   },
   {
     "id": 116,
@@ -2715,7 +2830,8 @@
       "Sp.-V.": 25,
       "Init.": 60,
       "Summe": 295
-    }
+    },
+    "legendary": false
   },
   {
     "id": 117,
@@ -2738,7 +2854,8 @@
       "Sp.-V.": 45,
       "Init.": 85,
       "Summe": 440
-    }
+    },
+    "legendary": false
   },
   {
     "id": 118,
@@ -2761,7 +2878,8 @@
       "Sp.-V.": 50,
       "Init.": 63,
       "Summe": 320
-    }
+    },
+    "legendary": false
   },
   {
     "id": 119,
@@ -2784,7 +2902,8 @@
       "Sp.-V.": 80,
       "Init.": 68,
       "Summe": 450
-    }
+    },
+    "legendary": false
   },
   {
     "id": 120,
@@ -2807,7 +2926,8 @@
       "Sp.-V.": 55,
       "Init.": 85,
       "Summe": 340
-    }
+    },
+    "legendary": false
   },
   {
     "id": 121,
@@ -2831,7 +2951,8 @@
       "Sp.-V.": 85,
       "Init.": 115,
       "Summe": 520
-    }
+    },
+    "legendary": false
   },
   {
     "id": 122,
@@ -2854,7 +2975,8 @@
       "Sp.-V.": 120,
       "Init.": 90,
       "Summe": 460
-    }
+    },
+    "legendary": false
   },
   {
     "id": 123,
@@ -2878,7 +3000,8 @@
       "Sp.-V.": 80,
       "Init.": 105,
       "Summe": 500
-    }
+    },
+    "legendary": false
   },
   {
     "id": 124,
@@ -2902,7 +3025,8 @@
       "Sp.-V.": 95,
       "Init.": 95,
       "Summe": 455
-    }
+    },
+    "legendary": false
   },
   {
     "id": 125,
@@ -2925,7 +3049,8 @@
       "Sp.-V.": 85,
       "Init.": 105,
       "Summe": 490
-    }
+    },
+    "legendary": false
   },
   {
     "id": 126,
@@ -2948,7 +3073,8 @@
       "Sp.-V.": 85,
       "Init.": 93,
       "Summe": 495
-    }
+    },
+    "legendary": false
   },
   {
     "id": 127,
@@ -2971,7 +3097,8 @@
       "Sp.-V.": 70,
       "Init.": 85,
       "Summe": 500
-    }
+    },
+    "legendary": false
   },
   {
     "id": 128,
@@ -2994,7 +3121,8 @@
       "Sp.-V.": 70,
       "Init.": 110,
       "Summe": 490
-    }
+    },
+    "legendary": false
   },
   {
     "id": 129,
@@ -3017,7 +3145,8 @@
       "Sp.-V.": 20,
       "Init.": 80,
       "Summe": 200
-    }
+    },
+    "legendary": false
   },
   {
     "id": 130,
@@ -3041,7 +3170,8 @@
       "Sp.-V.": 100,
       "Init.": 81,
       "Summe": 540
-    }
+    },
+    "legendary": false
   },
   {
     "id": 131,
@@ -3065,7 +3195,8 @@
       "Sp.-V.": 95,
       "Init.": 60,
       "Summe": 535
-    }
+    },
+    "legendary": false
   },
   {
     "id": 132,
@@ -3088,7 +3219,8 @@
       "Sp.-V.": 48,
       "Init.": 48,
       "Summe": 288
-    }
+    },
+    "legendary": false
   },
   {
     "id": 133,
@@ -3111,7 +3243,8 @@
       "Sp.-V.": 65,
       "Init.": 55,
       "Summe": 325
-    }
+    },
+    "legendary": false
   },
   {
     "id": 134,
@@ -3134,7 +3267,8 @@
       "Sp.-V.": 95,
       "Init.": 65,
       "Summe": 525
-    }
+    },
+    "legendary": false
   },
   {
     "id": 135,
@@ -3157,7 +3291,8 @@
       "Sp.-V.": 95,
       "Init.": 130,
       "Summe": 525
-    }
+    },
+    "legendary": false
   },
   {
     "id": 136,
@@ -3180,7 +3315,8 @@
       "Sp.-V.": 110,
       "Init.": 65,
       "Summe": 525
-    }
+    },
+    "legendary": false
   },
   {
     "id": 137,
@@ -3203,7 +3339,8 @@
       "Sp.-V.": 75,
       "Init.": 40,
       "Summe": 395
-    }
+    },
+    "legendary": false
   },
   {
     "id": 138,
@@ -3227,7 +3364,8 @@
       "Sp.-V.": 55,
       "Init.": 35,
       "Summe": 355
-    }
+    },
+    "legendary": false
   },
   {
     "id": 139,
@@ -3251,7 +3389,8 @@
       "Sp.-V.": 70,
       "Init.": 55,
       "Summe": 495
-    }
+    },
+    "legendary": false
   },
   {
     "id": 140,
@@ -3275,7 +3414,8 @@
       "Sp.-V.": 45,
       "Init.": 55,
       "Summe": 355
-    }
+    },
+    "legendary": false
   },
   {
     "id": 141,
@@ -3299,7 +3439,8 @@
       "Sp.-V.": 70,
       "Init.": 80,
       "Summe": 495
-    }
+    },
+    "legendary": false
   },
   {
     "id": 142,
@@ -3323,7 +3464,8 @@
       "Sp.-V.": 75,
       "Init.": 130,
       "Summe": 515
-    }
+    },
+    "legendary": false
   },
   {
     "id": 143,
@@ -3346,7 +3488,8 @@
       "Sp.-V.": 110,
       "Init.": 30,
       "Summe": 540
-    }
+    },
+    "legendary": false
   },
   {
     "id": 144,
@@ -3370,7 +3513,8 @@
       "Sp.-V.": 125,
       "Init.": 85,
       "Summe": 580
-    }
+    },
+    "legendary": true
   },
   {
     "id": 145,
@@ -3394,7 +3538,8 @@
       "Sp.-V.": 90,
       "Init.": 100,
       "Summe": 580
-    }
+    },
+    "legendary": true
   },
   {
     "id": 146,
@@ -3418,7 +3563,8 @@
       "Sp.-V.": 85,
       "Init.": 90,
       "Summe": 580
-    }
+    },
+    "legendary": true
   },
   {
     "id": 147,
@@ -3441,7 +3587,8 @@
       "Sp.-V.": 50,
       "Init.": 50,
       "Summe": 300
-    }
+    },
+    "legendary": false
   },
   {
     "id": 148,
@@ -3464,7 +3611,8 @@
       "Sp.-V.": 70,
       "Init.": 70,
       "Summe": 420
-    }
+    },
+    "legendary": false
   },
   {
     "id": 149,
@@ -3488,7 +3636,8 @@
       "Sp.-V.": 100,
       "Init.": 80,
       "Summe": 600
-    }
+    },
+    "legendary": false
   },
   {
     "id": 150,
@@ -3511,7 +3660,8 @@
       "Sp.-V.": 90,
       "Init.": 130,
       "Summe": 680
-    }
+    },
+    "legendary": true
   },
   {
     "id": 151,
@@ -3534,7 +3684,8 @@
       "Sp.-V.": 100,
       "Init.": 100,
       "Summe": 600
-    }
+    },
+    "legendary": true
   },
   {
     "id": 152,
@@ -3557,7 +3708,8 @@
       "Sp.-V.": 65,
       "Init.": 45,
       "Summe": 318
-    }
+    },
+    "legendary": false
   },
   {
     "id": 153,
@@ -3580,7 +3732,8 @@
       "Sp.-V.": 80,
       "Init.": 60,
       "Summe": 405
-    }
+    },
+    "legendary": false
   },
   {
     "id": 154,
@@ -3603,7 +3756,8 @@
       "Sp.-V.": 100,
       "Init.": 80,
       "Summe": 525
-    }
+    },
+    "legendary": false
   },
   {
     "id": 155,
@@ -3626,7 +3780,8 @@
       "Sp.-V.": 50,
       "Init.": 65,
       "Summe": 309
-    }
+    },
+    "legendary": false
   },
   {
     "id": 156,
@@ -3649,7 +3804,8 @@
       "Sp.-V.": 65,
       "Init.": 80,
       "Summe": 405
-    }
+    },
+    "legendary": false
   },
   {
     "id": 157,
@@ -3672,7 +3828,8 @@
       "Sp.-V.": 85,
       "Init.": 100,
       "Summe": 534
-    }
+    },
+    "legendary": false
   },
   {
     "id": 158,
@@ -3695,7 +3852,8 @@
       "Sp.-V.": 48,
       "Init.": 43,
       "Summe": 314
-    }
+    },
+    "legendary": false
   },
   {
     "id": 159,
@@ -3718,7 +3876,8 @@
       "Sp.-V.": 63,
       "Init.": 58,
       "Summe": 405
-    }
+    },
+    "legendary": false
   },
   {
     "id": 160,
@@ -3741,7 +3900,8 @@
       "Sp.-V.": 83,
       "Init.": 78,
       "Summe": 530
-    }
+    },
+    "legendary": false
   },
   {
     "id": 161,
@@ -3764,7 +3924,8 @@
       "Sp.-V.": 45,
       "Init.": 20,
       "Summe": 215
-    }
+    },
+    "legendary": false
   },
   {
     "id": 162,
@@ -3787,7 +3948,8 @@
       "Sp.-V.": 55,
       "Init.": 90,
       "Summe": 415
-    }
+    },
+    "legendary": false
   },
   {
     "id": 163,
@@ -3811,7 +3973,8 @@
       "Sp.-V.": 56,
       "Init.": 50,
       "Summe": 262
-    }
+    },
+    "legendary": false
   },
   {
     "id": 164,
@@ -3835,7 +3998,8 @@
       "Sp.-V.": 96,
       "Init.": 70,
       "Summe": 452
-    }
+    },
+    "legendary": false
   },
   {
     "id": 165,
@@ -3859,7 +4023,8 @@
       "Sp.-V.": 80,
       "Init.": 55,
       "Summe": 265
-    }
+    },
+    "legendary": false
   },
   {
     "id": 166,
@@ -3883,7 +4048,8 @@
       "Sp.-V.": 110,
       "Init.": 85,
       "Summe": 390
-    }
+    },
+    "legendary": false
   },
   {
     "id": 167,
@@ -3907,7 +4073,8 @@
       "Sp.-V.": 40,
       "Init.": 30,
       "Summe": 250
-    }
+    },
+    "legendary": false
   },
   {
     "id": 168,
@@ -3931,7 +4098,8 @@
       "Sp.-V.": 70,
       "Init.": 40,
       "Summe": 400
-    }
+    },
+    "legendary": false
   },
   {
     "id": 169,
@@ -3955,7 +4123,8 @@
       "Sp.-V.": 80,
       "Init.": 130,
       "Summe": 535
-    }
+    },
+    "legendary": false
   },
   {
     "id": 170,
@@ -3979,7 +4148,8 @@
       "Sp.-V.": 56,
       "Init.": 67,
       "Summe": 330
-    }
+    },
+    "legendary": false
   },
   {
     "id": 171,
@@ -4003,7 +4173,8 @@
       "Sp.-V.": 76,
       "Init.": 67,
       "Summe": 460
-    }
+    },
+    "legendary": false
   },
   {
     "id": 172,
@@ -4026,7 +4197,8 @@
       "Sp.-V.": 35,
       "Init.": 60,
       "Summe": 205
-    }
+    },
+    "legendary": false
   },
   {
     "id": 173,
@@ -4049,7 +4221,8 @@
       "Sp.-V.": 55,
       "Init.": 15,
       "Summe": 218
-    }
+    },
+    "legendary": false
   },
   {
     "id": 174,
@@ -4072,7 +4245,8 @@
       "Sp.-V.": 20,
       "Init.": 15,
       "Summe": 210
-    }
+    },
+    "legendary": false
   },
   {
     "id": 175,
@@ -4095,7 +4269,8 @@
       "Sp.-V.": 65,
       "Init.": 20,
       "Summe": 245
-    }
+    },
+    "legendary": false
   },
   {
     "id": 176,
@@ -4118,7 +4293,8 @@
       "Sp.-V.": 105,
       "Init.": 40,
       "Summe": 405
-    }
+    },
+    "legendary": false
   },
   {
     "id": 177,
@@ -4142,7 +4318,8 @@
       "Sp.-V.": 45,
       "Init.": 70,
       "Summe": 320
-    }
+    },
+    "legendary": false
   },
   {
     "id": 178,
@@ -4166,7 +4343,8 @@
       "Sp.-V.": 70,
       "Init.": 95,
       "Summe": 470
-    }
+    },
+    "legendary": false
   },
   {
     "id": 179,
@@ -4189,7 +4367,8 @@
       "Sp.-V.": 45,
       "Init.": 35,
       "Summe": 280
-    }
+    },
+    "legendary": false
   },
   {
     "id": 180,
@@ -4212,7 +4391,8 @@
       "Sp.-V.": 60,
       "Init.": 45,
       "Summe": 365
-    }
+    },
+    "legendary": false
   },
   {
     "id": 181,
@@ -4235,7 +4415,8 @@
       "Sp.-V.": 90,
       "Init.": 55,
       "Summe": 510
-    }
+    },
+    "legendary": false
   },
   {
     "id": 182,
@@ -4258,7 +4439,8 @@
       "Sp.-V.": 100,
       "Init.": 50,
       "Summe": 490
-    }
+    },
+    "legendary": false
   },
   {
     "id": 183,
@@ -4281,7 +4463,8 @@
       "Sp.-V.": 50,
       "Init.": 40,
       "Summe": 250
-    }
+    },
+    "legendary": false
   },
   {
     "id": 184,
@@ -4304,7 +4487,8 @@
       "Sp.-V.": 80,
       "Init.": 50,
       "Summe": 420
-    }
+    },
+    "legendary": false
   },
   {
     "id": 185,
@@ -4327,7 +4511,8 @@
       "Sp.-V.": 65,
       "Init.": 30,
       "Summe": 410
-    }
+    },
+    "legendary": false
   },
   {
     "id": 186,
@@ -4350,7 +4535,8 @@
       "Sp.-V.": 100,
       "Init.": 70,
       "Summe": 500
-    }
+    },
+    "legendary": false
   },
   {
     "id": 187,
@@ -4374,7 +4560,8 @@
       "Sp.-V.": 55,
       "Init.": 50,
       "Summe": 250
-    }
+    },
+    "legendary": false
   },
   {
     "id": 188,
@@ -4398,7 +4585,8 @@
       "Sp.-V.": 65,
       "Init.": 80,
       "Summe": 340
-    }
+    },
+    "legendary": false
   },
   {
     "id": 189,
@@ -4422,7 +4610,8 @@
       "Sp.-V.": 95,
       "Init.": 110,
       "Summe": 460
-    }
+    },
+    "legendary": false
   },
   {
     "id": 190,
@@ -4445,7 +4634,8 @@
       "Sp.-V.": 55,
       "Init.": 85,
       "Summe": 360
-    }
+    },
+    "legendary": false
   },
   {
     "id": 191,
@@ -4468,7 +4658,8 @@
       "Sp.-V.": 30,
       "Init.": 30,
       "Summe": 180
-    }
+    },
+    "legendary": false
   },
   {
     "id": 192,
@@ -4491,7 +4682,8 @@
       "Sp.-V.": 85,
       "Init.": 30,
       "Summe": 425
-    }
+    },
+    "legendary": false
   },
   {
     "id": 193,
@@ -4515,7 +4707,8 @@
       "Sp.-V.": 45,
       "Init.": 95,
       "Summe": 390
-    }
+    },
+    "legendary": false
   },
   {
     "id": 194,
@@ -4539,7 +4732,8 @@
       "Sp.-V.": 25,
       "Init.": 15,
       "Summe": 210
-    }
+    },
+    "legendary": false
   },
   {
     "id": 195,
@@ -4563,7 +4757,8 @@
       "Sp.-V.": 65,
       "Init.": 35,
       "Summe": 430
-    }
+    },
+    "legendary": false
   },
   {
     "id": 196,
@@ -4586,7 +4781,8 @@
       "Sp.-V.": 95,
       "Init.": 110,
       "Summe": 525
-    }
+    },
+    "legendary": false
   },
   {
     "id": 197,
@@ -4609,7 +4805,8 @@
       "Sp.-V.": 130,
       "Init.": 65,
       "Summe": 525
-    }
+    },
+    "legendary": false
   },
   {
     "id": 198,
@@ -4633,7 +4830,8 @@
       "Sp.-V.": 42,
       "Init.": 91,
       "Summe": 405
-    }
+    },
+    "legendary": false
   },
   {
     "id": 199,
@@ -4657,7 +4855,8 @@
       "Sp.-V.": 110,
       "Init.": 30,
       "Summe": 490
-    }
+    },
+    "legendary": false
   },
   {
     "id": 200,
@@ -4680,7 +4879,8 @@
       "Sp.-V.": 85,
       "Init.": 85,
       "Summe": 435
-    }
+    },
+    "legendary": false
   },
   {
     "id": 201,
@@ -4703,7 +4903,8 @@
       "Sp.-V.": 48,
       "Init.": 48,
       "Summe": 336
-    }
+    },
+    "legendary": false
   },
   {
     "id": 202,
@@ -4726,7 +4927,8 @@
       "Sp.-V.": 58,
       "Init.": 33,
       "Summe": 405
-    }
+    },
+    "legendary": false
   },
   {
     "id": 203,
@@ -4750,7 +4952,8 @@
       "Sp.-V.": 65,
       "Init.": 85,
       "Summe": 455
-    }
+    },
+    "legendary": false
   },
   {
     "id": 204,
@@ -4773,7 +4976,8 @@
       "Sp.-V.": 35,
       "Init.": 15,
       "Summe": 290
-    }
+    },
+    "legendary": false
   },
   {
     "id": 205,
@@ -4797,7 +5001,8 @@
       "Sp.-V.": 60,
       "Init.": 40,
       "Summe": 465
-    }
+    },
+    "legendary": false
   },
   {
     "id": 206,
@@ -4820,7 +5025,8 @@
       "Sp.-V.": 65,
       "Init.": 45,
       "Summe": 415
-    }
+    },
+    "legendary": false
   },
   {
     "id": 207,
@@ -4844,7 +5050,8 @@
       "Sp.-V.": 65,
       "Init.": 85,
       "Summe": 430
-    }
+    },
+    "legendary": false
   },
   {
     "id": 208,
@@ -4868,7 +5075,8 @@
       "Sp.-V.": 65,
       "Init.": 30,
       "Summe": 510
-    }
+    },
+    "legendary": false
   },
   {
     "id": 209,
@@ -4891,7 +5099,8 @@
       "Sp.-V.": 40,
       "Init.": 30,
       "Summe": 300
-    }
+    },
+    "legendary": false
   },
   {
     "id": 210,
@@ -4914,7 +5123,8 @@
       "Sp.-V.": 60,
       "Init.": 45,
       "Summe": 450
-    }
+    },
+    "legendary": false
   },
   {
     "id": 211,
@@ -4938,7 +5148,8 @@
       "Sp.-V.": 55,
       "Init.": 85,
       "Summe": 440
-    }
+    },
+    "legendary": false
   },
   {
     "id": 212,
@@ -4962,7 +5173,8 @@
       "Sp.-V.": 80,
       "Init.": 65,
       "Summe": 500
-    }
+    },
+    "legendary": false
   },
   {
     "id": 213,
@@ -4986,7 +5198,8 @@
       "Sp.-V.": 230,
       "Init.": 5,
       "Summe": 505
-    }
+    },
+    "legendary": false
   },
   {
     "id": 214,
@@ -5010,7 +5223,8 @@
       "Sp.-V.": 95,
       "Init.": 85,
       "Summe": 500
-    }
+    },
+    "legendary": false
   },
   {
     "id": 215,
@@ -5034,7 +5248,8 @@
       "Sp.-V.": 75,
       "Init.": 115,
       "Summe": 430
-    }
+    },
+    "legendary": false
   },
   {
     "id": 216,
@@ -5057,7 +5272,8 @@
       "Sp.-V.": 50,
       "Init.": 40,
       "Summe": 330
-    }
+    },
+    "legendary": false
   },
   {
     "id": 217,
@@ -5080,7 +5296,8 @@
       "Sp.-V.": 75,
       "Init.": 55,
       "Summe": 500
-    }
+    },
+    "legendary": false
   },
   {
     "id": 218,
@@ -5103,7 +5320,8 @@
       "Sp.-V.": 40,
       "Init.": 20,
       "Summe": 250
-    }
+    },
+    "legendary": false
   },
   {
     "id": 219,
@@ -5127,7 +5345,8 @@
       "Sp.-V.": 80,
       "Init.": 30,
       "Summe": 430
-    }
+    },
+    "legendary": false
   },
   {
     "id": 220,
@@ -5151,7 +5370,8 @@
       "Sp.-V.": 30,
       "Init.": 50,
       "Summe": 250
-    }
+    },
+    "legendary": false
   },
   {
     "id": 221,
@@ -5175,7 +5395,8 @@
       "Sp.-V.": 60,
       "Init.": 50,
       "Summe": 450
-    }
+    },
+    "legendary": false
   },
   {
     "id": 222,
@@ -5199,7 +5420,8 @@
       "Sp.-V.": 95,
       "Init.": 35,
       "Summe": 410
-    }
+    },
+    "legendary": false
   },
   {
     "id": 223,
@@ -5222,7 +5444,8 @@
       "Sp.-V.": 35,
       "Init.": 65,
       "Summe": 300
-    }
+    },
+    "legendary": false
   },
   {
     "id": 224,
@@ -5245,7 +5468,8 @@
       "Sp.-V.": 75,
       "Init.": 45,
       "Summe": 480
-    }
+    },
+    "legendary": false
   },
   {
     "id": 225,
@@ -5269,7 +5493,8 @@
       "Sp.-V.": 45,
       "Init.": 75,
       "Summe": 330
-    }
+    },
+    "legendary": false
   },
   {
     "id": 226,
@@ -5293,7 +5518,8 @@
       "Sp.-V.": 140,
       "Init.": 70,
       "Summe": 485
-    }
+    },
+    "legendary": false
   },
   {
     "id": 227,
@@ -5317,7 +5543,8 @@
       "Sp.-V.": 70,
       "Init.": 70,
       "Summe": 465
-    }
+    },
+    "legendary": false
   },
   {
     "id": 228,
@@ -5341,7 +5568,8 @@
       "Sp.-V.": 50,
       "Init.": 65,
       "Summe": 330
-    }
+    },
+    "legendary": false
   },
   {
     "id": 229,
@@ -5365,7 +5593,8 @@
       "Sp.-V.": 80,
       "Init.": 95,
       "Summe": 500
-    }
+    },
+    "legendary": false
   },
   {
     "id": 230,
@@ -5389,7 +5618,8 @@
       "Sp.-V.": 95,
       "Init.": 85,
       "Summe": 540
-    }
+    },
+    "legendary": false
   },
   {
     "id": 231,
@@ -5412,7 +5642,8 @@
       "Sp.-V.": 40,
       "Init.": 40,
       "Summe": 330
-    }
+    },
+    "legendary": false
   },
   {
     "id": 232,
@@ -5435,7 +5666,8 @@
       "Sp.-V.": 60,
       "Init.": 50,
       "Summe": 500
-    }
+    },
+    "legendary": false
   },
   {
     "id": 233,
@@ -5458,7 +5690,8 @@
       "Sp.-V.": 95,
       "Init.": 60,
       "Summe": 515
-    }
+    },
+    "legendary": false
   },
   {
     "id": 234,
@@ -5481,7 +5714,8 @@
       "Sp.-V.": 65,
       "Init.": 85,
       "Summe": 465
-    }
+    },
+    "legendary": false
   },
   {
     "id": 235,
@@ -5504,7 +5738,8 @@
       "Sp.-V.": 45,
       "Init.": 75,
       "Summe": 250
-    }
+    },
+    "legendary": false
   },
   {
     "id": 236,
@@ -5527,7 +5762,8 @@
       "Sp.-V.": 35,
       "Init.": 35,
       "Summe": 210
-    }
+    },
+    "legendary": false
   },
   {
     "id": 237,
@@ -5550,7 +5786,8 @@
       "Sp.-V.": 110,
       "Init.": 70,
       "Summe": 455
-    }
+    },
+    "legendary": false
   },
   {
     "id": 238,
@@ -5574,7 +5811,8 @@
       "Sp.-V.": 65,
       "Init.": 65,
       "Summe": 305
-    }
+    },
+    "legendary": false
   },
   {
     "id": 239,
@@ -5597,7 +5835,8 @@
       "Sp.-V.": 55,
       "Init.": 95,
       "Summe": 360
-    }
+    },
+    "legendary": false
   },
   {
     "id": 240,
@@ -5620,7 +5859,8 @@
       "Sp.-V.": 55,
       "Init.": 83,
       "Summe": 365
-    }
+    },
+    "legendary": false
   },
   {
     "id": 241,
@@ -5643,7 +5883,8 @@
       "Sp.-V.": 70,
       "Init.": 100,
       "Summe": 490
-    }
+    },
+    "legendary": false
   },
   {
     "id": 242,
@@ -5666,7 +5907,8 @@
       "Sp.-V.": 135,
       "Init.": 55,
       "Summe": 540
-    }
+    },
+    "legendary": false
   },
   {
     "id": 243,
@@ -5689,7 +5931,8 @@
       "Sp.-V.": 100,
       "Init.": 115,
       "Summe": 580
-    }
+    },
+    "legendary": true
   },
   {
     "id": 244,
@@ -5712,7 +5955,8 @@
       "Sp.-V.": 75,
       "Init.": 100,
       "Summe": 580
-    }
+    },
+    "legendary": true
   },
   {
     "id": 245,
@@ -5735,7 +5979,8 @@
       "Sp.-V.": 115,
       "Init.": 85,
       "Summe": 580
-    }
+    },
+    "legendary": true
   },
   {
     "id": 246,
@@ -5759,7 +6004,8 @@
       "Sp.-V.": 50,
       "Init.": 41,
       "Summe": 300
-    }
+    },
+    "legendary": false
   },
   {
     "id": 247,
@@ -5783,7 +6029,8 @@
       "Sp.-V.": 70,
       "Init.": 51,
       "Summe": 410
-    }
+    },
+    "legendary": false
   },
   {
     "id": 248,
@@ -5807,7 +6054,8 @@
       "Sp.-V.": 100,
       "Init.": 61,
       "Summe": 600
-    }
+    },
+    "legendary": false
   },
   {
     "id": 249,
@@ -5831,7 +6079,8 @@
       "Sp.-V.": 154,
       "Init.": 110,
       "Summe": 680
-    }
+    },
+    "legendary": true
   },
   {
     "id": 250,
@@ -5855,7 +6104,8 @@
       "Sp.-V.": 154,
       "Init.": 90,
       "Summe": 680
-    }
+    },
+    "legendary": true
   },
   {
     "id": 251,
@@ -5879,7 +6129,8 @@
       "Sp.-V.": 100,
       "Init.": 100,
       "Summe": 600
-    }
+    },
+    "legendary": true
   },
   {
     "id": 252,
@@ -5902,7 +6153,8 @@
       "Sp.-V.": 55,
       "Init.": 70,
       "Summe": 310
-    }
+    },
+    "legendary": false
   },
   {
     "id": 253,
@@ -5925,7 +6177,8 @@
       "Sp.-V.": 65,
       "Init.": 95,
       "Summe": 405
-    }
+    },
+    "legendary": false
   },
   {
     "id": 254,
@@ -5948,7 +6201,8 @@
       "Sp.-V.": 85,
       "Init.": 120,
       "Summe": 530
-    }
+    },
+    "legendary": false
   },
   {
     "id": 255,
@@ -5971,7 +6225,8 @@
       "Sp.-V.": 50,
       "Init.": 45,
       "Summe": 310
-    }
+    },
+    "legendary": false
   },
   {
     "id": 256,
@@ -5995,7 +6250,8 @@
       "Sp.-V.": 60,
       "Init.": 55,
       "Summe": 405
-    }
+    },
+    "legendary": false
   },
   {
     "id": 257,
@@ -6019,7 +6275,8 @@
       "Sp.-V.": 70,
       "Init.": 80,
       "Summe": 530
-    }
+    },
+    "legendary": false
   },
   {
     "id": 258,
@@ -6042,7 +6299,8 @@
       "Sp.-V.": 50,
       "Init.": 40,
       "Summe": 310
-    }
+    },
+    "legendary": false
   },
   {
     "id": 259,
@@ -6066,7 +6324,8 @@
       "Sp.-V.": 70,
       "Init.": 50,
       "Summe": 405
-    }
+    },
+    "legendary": false
   },
   {
     "id": 260,
@@ -6090,7 +6349,8 @@
       "Sp.-V.": 90,
       "Init.": 60,
       "Summe": 535
-    }
+    },
+    "legendary": false
   },
   {
     "id": 261,
@@ -6113,7 +6373,8 @@
       "Sp.-V.": 30,
       "Init.": 35,
       "Summe": 220
-    }
+    },
+    "legendary": false
   },
   {
     "id": 262,
@@ -6136,7 +6397,8 @@
       "Sp.-V.": 60,
       "Init.": 70,
       "Summe": 420
-    }
+    },
+    "legendary": false
   },
   {
     "id": 263,
@@ -6159,7 +6421,8 @@
       "Sp.-V.": 41,
       "Init.": 60,
       "Summe": 240
-    }
+    },
+    "legendary": false
   },
   {
     "id": 264,
@@ -6182,7 +6445,8 @@
       "Sp.-V.": 61,
       "Init.": 100,
       "Summe": 420
-    }
+    },
+    "legendary": false
   },
   {
     "id": 265,
@@ -6205,7 +6469,8 @@
       "Sp.-V.": 30,
       "Init.": 20,
       "Summe": 195
-    }
+    },
+    "legendary": false
   },
   {
     "id": 266,
@@ -6228,7 +6493,8 @@
       "Sp.-V.": 25,
       "Init.": 15,
       "Summe": 205
-    }
+    },
+    "legendary": false
   },
   {
     "id": 267,
@@ -6252,7 +6518,8 @@
       "Sp.-V.": 50,
       "Init.": 65,
       "Summe": 395
-    }
+    },
+    "legendary": false
   },
   {
     "id": 268,
@@ -6275,7 +6542,8 @@
       "Sp.-V.": 25,
       "Init.": 15,
       "Summe": 205
-    }
+    },
+    "legendary": false
   },
   {
     "id": 269,
@@ -6299,7 +6567,8 @@
       "Sp.-V.": 90,
       "Init.": 65,
       "Summe": 385
-    }
+    },
+    "legendary": false
   },
   {
     "id": 270,
@@ -6323,7 +6592,8 @@
       "Sp.-V.": 50,
       "Init.": 30,
       "Summe": 220
-    }
+    },
+    "legendary": false
   },
   {
     "id": 271,
@@ -6347,7 +6617,8 @@
       "Sp.-V.": 70,
       "Init.": 50,
       "Summe": 340
-    }
+    },
+    "legendary": false
   },
   {
     "id": 272,
@@ -6371,7 +6642,8 @@
       "Sp.-V.": 100,
       "Init.": 70,
       "Summe": 480
-    }
+    },
+    "legendary": false
   },
   {
     "id": 273,
@@ -6394,7 +6666,8 @@
       "Sp.-V.": 30,
       "Init.": 30,
       "Summe": 220
-    }
+    },
+    "legendary": false
   },
   {
     "id": 274,
@@ -6418,7 +6691,8 @@
       "Sp.-V.": 40,
       "Init.": 60,
       "Summe": 340
-    }
+    },
+    "legendary": false
   },
   {
     "id": 275,
@@ -6442,7 +6716,8 @@
       "Sp.-V.": 60,
       "Init.": 80,
       "Summe": 480
-    }
+    },
+    "legendary": false
   },
   {
     "id": 276,
@@ -6466,7 +6741,8 @@
       "Sp.-V.": 30,
       "Init.": 85,
       "Summe": 270
-    }
+    },
+    "legendary": false
   },
   {
     "id": 277,
@@ -6490,7 +6766,8 @@
       "Sp.-V.": 50,
       "Init.": 125,
       "Summe": 455
-    }
+    },
+    "legendary": false
   },
   {
     "id": 278,
@@ -6514,7 +6791,8 @@
       "Sp.-V.": 30,
       "Init.": 85,
       "Summe": 270
-    }
+    },
+    "legendary": false
   },
   {
     "id": 279,
@@ -6538,7 +6816,8 @@
       "Sp.-V.": 70,
       "Init.": 65,
       "Summe": 440
-    }
+    },
+    "legendary": false
   },
   {
     "id": 280,
@@ -6561,7 +6840,8 @@
       "Sp.-V.": 35,
       "Init.": 40,
       "Summe": 198
-    }
+    },
+    "legendary": false
   },
   {
     "id": 281,
@@ -6584,7 +6864,8 @@
       "Sp.-V.": 55,
       "Init.": 50,
       "Summe": 278
-    }
+    },
+    "legendary": false
   },
   {
     "id": 282,
@@ -6607,7 +6888,8 @@
       "Sp.-V.": 115,
       "Init.": 80,
       "Summe": 518
-    }
+    },
+    "legendary": false
   },
   {
     "id": 283,
@@ -6631,7 +6913,8 @@
       "Sp.-V.": 52,
       "Init.": 65,
       "Summe": 269
-    }
+    },
+    "legendary": false
   },
   {
     "id": 284,
@@ -6655,7 +6938,8 @@
       "Sp.-V.": 82,
       "Init.": 80,
       "Summe": 454
-    }
+    },
+    "legendary": false
   },
   {
     "id": 285,
@@ -6678,7 +6962,8 @@
       "Sp.-V.": 60,
       "Init.": 35,
       "Summe": 295
-    }
+    },
+    "legendary": false
   },
   {
     "id": 286,
@@ -6702,7 +6987,8 @@
       "Sp.-V.": 60,
       "Init.": 70,
       "Summe": 460
-    }
+    },
+    "legendary": false
   },
   {
     "id": 287,
@@ -6725,7 +7011,8 @@
       "Sp.-V.": 35,
       "Init.": 30,
       "Summe": 280
-    }
+    },
+    "legendary": false
   },
   {
     "id": 288,
@@ -6748,7 +7035,8 @@
       "Sp.-V.": 55,
       "Init.": 90,
       "Summe": 440
-    }
+    },
+    "legendary": false
   },
   {
     "id": 289,
@@ -6771,7 +7059,8 @@
       "Sp.-V.": 65,
       "Init.": 100,
       "Summe": 670
-    }
+    },
+    "legendary": false
   },
   {
     "id": 290,
@@ -6795,7 +7084,8 @@
       "Sp.-V.": 30,
       "Init.": 40,
       "Summe": 266
-    }
+    },
+    "legendary": false
   },
   {
     "id": 291,
@@ -6819,7 +7109,8 @@
       "Sp.-V.": 50,
       "Init.": 160,
       "Summe": 456
-    }
+    },
+    "legendary": false
   },
   {
     "id": 292,
@@ -6843,7 +7134,8 @@
       "Sp.-V.": 30,
       "Init.": 40,
       "Summe": 236
-    }
+    },
+    "legendary": false
   },
   {
     "id": 293,
@@ -6866,7 +7158,8 @@
       "Sp.-V.": 23,
       "Init.": 28,
       "Summe": 240
-    }
+    },
+    "legendary": false
   },
   {
     "id": 294,
@@ -6889,7 +7182,8 @@
       "Sp.-V.": 43,
       "Init.": 48,
       "Summe": 360
-    }
+    },
+    "legendary": false
   },
   {
     "id": 295,
@@ -6912,7 +7206,8 @@
       "Sp.-V.": 73,
       "Init.": 68,
       "Summe": 490
-    }
+    },
+    "legendary": false
   },
   {
     "id": 296,
@@ -6935,7 +7230,8 @@
       "Sp.-V.": 30,
       "Init.": 25,
       "Summe": 237
-    }
+    },
+    "legendary": false
   },
   {
     "id": 297,
@@ -6958,7 +7254,8 @@
       "Sp.-V.": 60,
       "Init.": 50,
       "Summe": 474
-    }
+    },
+    "legendary": false
   },
   {
     "id": 298,
@@ -6981,7 +7278,8 @@
       "Sp.-V.": 40,
       "Init.": 20,
       "Summe": 190
-    }
+    },
+    "legendary": false
   },
   {
     "id": 299,
@@ -7004,7 +7302,8 @@
       "Sp.-V.": 90,
       "Init.": 30,
       "Summe": 375
-    }
+    },
+    "legendary": false
   },
   {
     "id": 300,
@@ -7027,7 +7326,8 @@
       "Sp.-V.": 35,
       "Init.": 50,
       "Summe": 260
-    }
+    },
+    "legendary": false
   },
   {
     "id": 301,
@@ -7050,7 +7350,8 @@
       "Sp.-V.": 55,
       "Init.": 90,
       "Summe": 400
-    }
+    },
+    "legendary": false
   },
   {
     "id": 302,
@@ -7074,7 +7375,8 @@
       "Sp.-V.": 65,
       "Init.": 50,
       "Summe": 380
-    }
+    },
+    "legendary": false
   },
   {
     "id": 303,
@@ -7097,7 +7399,8 @@
       "Sp.-V.": 55,
       "Init.": 50,
       "Summe": 380
-    }
+    },
+    "legendary": false
   },
   {
     "id": 304,
@@ -7121,7 +7424,8 @@
       "Sp.-V.": 40,
       "Init.": 30,
       "Summe": 330
-    }
+    },
+    "legendary": false
   },
   {
     "id": 305,
@@ -7145,7 +7449,8 @@
       "Sp.-V.": 50,
       "Init.": 40,
       "Summe": 430
-    }
+    },
+    "legendary": false
   },
   {
     "id": 306,
@@ -7169,7 +7474,8 @@
       "Sp.-V.": 60,
       "Init.": 50,
       "Summe": 530
-    }
+    },
+    "legendary": false
   },
   {
     "id": 307,
@@ -7193,7 +7499,8 @@
       "Sp.-V.": 55,
       "Init.": 60,
       "Summe": 280
-    }
+    },
+    "legendary": false
   },
   {
     "id": 308,
@@ -7217,7 +7524,8 @@
       "Sp.-V.": 75,
       "Init.": 80,
       "Summe": 410
-    }
+    },
+    "legendary": false
   },
   {
     "id": 309,
@@ -7240,7 +7548,8 @@
       "Sp.-V.": 40,
       "Init.": 65,
       "Summe": 295
-    }
+    },
+    "legendary": false
   },
   {
     "id": 310,
@@ -7263,7 +7572,8 @@
       "Sp.-V.": 60,
       "Init.": 105,
       "Summe": 475
-    }
+    },
+    "legendary": false
   },
   {
     "id": 311,
@@ -7286,7 +7596,8 @@
       "Sp.-V.": 75,
       "Init.": 95,
       "Summe": 405
-    }
+    },
+    "legendary": false
   },
   {
     "id": 312,
@@ -7309,7 +7620,8 @@
       "Sp.-V.": 85,
       "Init.": 95,
       "Summe": 405
-    }
+    },
+    "legendary": false
   },
   {
     "id": 313,
@@ -7332,7 +7644,8 @@
       "Sp.-V.": 85,
       "Init.": 85,
       "Summe": 430
-    }
+    },
+    "legendary": false
   },
   {
     "id": 314,
@@ -7355,7 +7668,8 @@
       "Sp.-V.": 85,
       "Init.": 85,
       "Summe": 430
-    }
+    },
+    "legendary": false
   },
   {
     "id": 315,
@@ -7379,7 +7693,8 @@
       "Sp.-V.": 80,
       "Init.": 65,
       "Summe": 400
-    }
+    },
+    "legendary": false
   },
   {
     "id": 316,
@@ -7402,7 +7717,8 @@
       "Sp.-V.": 53,
       "Init.": 40,
       "Summe": 302
-    }
+    },
+    "legendary": false
   },
   {
     "id": 317,
@@ -7425,7 +7741,8 @@
       "Sp.-V.": 83,
       "Init.": 55,
       "Summe": 467
-    }
+    },
+    "legendary": false
   },
   {
     "id": 318,
@@ -7449,7 +7766,8 @@
       "Sp.-V.": 20,
       "Init.": 65,
       "Summe": 305
-    }
+    },
+    "legendary": false
   },
   {
     "id": 319,
@@ -7473,7 +7791,8 @@
       "Sp.-V.": 40,
       "Init.": 95,
       "Summe": 460
-    }
+    },
+    "legendary": false
   },
   {
     "id": 320,
@@ -7496,7 +7815,8 @@
       "Sp.-V.": 35,
       "Init.": 60,
       "Summe": 400
-    }
+    },
+    "legendary": false
   },
   {
     "id": 321,
@@ -7519,7 +7839,8 @@
       "Sp.-V.": 45,
       "Init.": 60,
       "Summe": 500
-    }
+    },
+    "legendary": false
   },
   {
     "id": 322,
@@ -7543,7 +7864,8 @@
       "Sp.-V.": 45,
       "Init.": 35,
       "Summe": 305
-    }
+    },
+    "legendary": false
   },
   {
     "id": 323,
@@ -7567,7 +7889,8 @@
       "Sp.-V.": 75,
       "Init.": 40,
       "Summe": 460
-    }
+    },
+    "legendary": false
   },
   {
     "id": 324,
@@ -7590,7 +7913,8 @@
       "Sp.-V.": 70,
       "Init.": 20,
       "Summe": 470
-    }
+    },
+    "legendary": false
   },
   {
     "id": 325,
@@ -7613,7 +7937,8 @@
       "Sp.-V.": 80,
       "Init.": 60,
       "Summe": 330
-    }
+    },
+    "legendary": false
   },
   {
     "id": 326,
@@ -7636,7 +7961,8 @@
       "Sp.-V.": 110,
       "Init.": 80,
       "Summe": 470
-    }
+    },
+    "legendary": false
   },
   {
     "id": 327,
@@ -7659,7 +7985,8 @@
       "Sp.-V.": 60,
       "Init.": 60,
       "Summe": 360
-    }
+    },
+    "legendary": false
   },
   {
     "id": 328,
@@ -7682,7 +8009,8 @@
       "Sp.-V.": 45,
       "Init.": 10,
       "Summe": 290
-    }
+    },
+    "legendary": false
   },
   {
     "id": 329,
@@ -7706,7 +8034,8 @@
       "Sp.-V.": 50,
       "Init.": 70,
       "Summe": 340
-    }
+    },
+    "legendary": false
   },
   {
     "id": 330,
@@ -7730,7 +8059,8 @@
       "Sp.-V.": 80,
       "Init.": 100,
       "Summe": 520
-    }
+    },
+    "legendary": false
   },
   {
     "id": 331,
@@ -7753,7 +8083,8 @@
       "Sp.-V.": 40,
       "Init.": 35,
       "Summe": 335
-    }
+    },
+    "legendary": false
   },
   {
     "id": 332,
@@ -7777,7 +8108,8 @@
       "Sp.-V.": 60,
       "Init.": 55,
       "Summe": 475
-    }
+    },
+    "legendary": false
   },
   {
     "id": 333,
@@ -7801,7 +8133,8 @@
       "Sp.-V.": 75,
       "Init.": 50,
       "Summe": 310
-    }
+    },
+    "legendary": false
   },
   {
     "id": 334,
@@ -7825,7 +8158,8 @@
       "Sp.-V.": 105,
       "Init.": 80,
       "Summe": 490
-    }
+    },
+    "legendary": false
   },
   {
     "id": 335,
@@ -7848,7 +8182,8 @@
       "Sp.-V.": 60,
       "Init.": 90,
       "Summe": 458
-    }
+    },
+    "legendary": false
   },
   {
     "id": 336,
@@ -7871,7 +8206,8 @@
       "Sp.-V.": 60,
       "Init.": 65,
       "Summe": 458
-    }
+    },
+    "legendary": false
   },
   {
     "id": 337,
@@ -7895,7 +8231,8 @@
       "Sp.-V.": 85,
       "Init.": 70,
       "Summe": 460
-    }
+    },
+    "legendary": false
   },
   {
     "id": 338,
@@ -7919,7 +8256,8 @@
       "Sp.-V.": 65,
       "Init.": 70,
       "Summe": 460
-    }
+    },
+    "legendary": false
   },
   {
     "id": 339,
@@ -7943,7 +8281,8 @@
       "Sp.-V.": 41,
       "Init.": 60,
       "Summe": 288
-    }
+    },
+    "legendary": false
   },
   {
     "id": 340,
@@ -7967,7 +8306,8 @@
       "Sp.-V.": 71,
       "Init.": 60,
       "Summe": 468
-    }
+    },
+    "legendary": false
   },
   {
     "id": 341,
@@ -7990,7 +8330,8 @@
       "Sp.-V.": 35,
       "Init.": 35,
       "Summe": 308
-    }
+    },
+    "legendary": false
   },
   {
     "id": 342,
@@ -8014,7 +8355,8 @@
       "Sp.-V.": 55,
       "Init.": 55,
       "Summe": 468
-    }
+    },
+    "legendary": false
   },
   {
     "id": 343,
@@ -8038,7 +8380,8 @@
       "Sp.-V.": 70,
       "Init.": 55,
       "Summe": 300
-    }
+    },
+    "legendary": false
   },
   {
     "id": 344,
@@ -8062,7 +8405,8 @@
       "Sp.-V.": 120,
       "Init.": 75,
       "Summe": 500
-    }
+    },
+    "legendary": false
   },
   {
     "id": 345,
@@ -8086,7 +8430,8 @@
       "Sp.-V.": 87,
       "Init.": 23,
       "Summe": 355
-    }
+    },
+    "legendary": false
   },
   {
     "id": 346,
@@ -8110,7 +8455,8 @@
       "Sp.-V.": 107,
       "Init.": 43,
       "Summe": 495
-    }
+    },
+    "legendary": false
   },
   {
     "id": 347,
@@ -8134,7 +8480,8 @@
       "Sp.-V.": 50,
       "Init.": 75,
       "Summe": 355
-    }
+    },
+    "legendary": false
   },
   {
     "id": 348,
@@ -8158,7 +8505,8 @@
       "Sp.-V.": 80,
       "Init.": 45,
       "Summe": 495
-    }
+    },
+    "legendary": false
   },
   {
     "id": 349,
@@ -8181,7 +8529,8 @@
       "Sp.-V.": 55,
       "Init.": 80,
       "Summe": 200
-    }
+    },
+    "legendary": false
   },
   {
     "id": 350,
@@ -8204,7 +8553,8 @@
       "Sp.-V.": 125,
       "Init.": 81,
       "Summe": 540
-    }
+    },
+    "legendary": false
   },
   {
     "id": 351,
@@ -8227,7 +8577,8 @@
       "Sp.-V.": 70,
       "Init.": 70,
       "Summe": 420
-    }
+    },
+    "legendary": false
   },
   {
     "id": 352,
@@ -8250,7 +8601,8 @@
       "Sp.-V.": 120,
       "Init.": 40,
       "Summe": 440
-    }
+    },
+    "legendary": false
   },
   {
     "id": 353,
@@ -8273,7 +8625,8 @@
       "Sp.-V.": 33,
       "Init.": 45,
       "Summe": 295
-    }
+    },
+    "legendary": false
   },
   {
     "id": 354,
@@ -8296,7 +8649,8 @@
       "Sp.-V.": 63,
       "Init.": 65,
       "Summe": 455
-    }
+    },
+    "legendary": false
   },
   {
     "id": 355,
@@ -8319,7 +8673,8 @@
       "Sp.-V.": 90,
       "Init.": 25,
       "Summe": 295
-    }
+    },
+    "legendary": false
   },
   {
     "id": 356,
@@ -8342,7 +8697,8 @@
       "Sp.-V.": 130,
       "Init.": 25,
       "Summe": 455
-    }
+    },
+    "legendary": false
   },
   {
     "id": 357,
@@ -8366,7 +8722,8 @@
       "Sp.-V.": 87,
       "Init.": 51,
       "Summe": 460
-    }
+    },
+    "legendary": false
   },
   {
     "id": 358,
@@ -8389,7 +8746,8 @@
       "Sp.-V.": 90,
       "Init.": 65,
       "Summe": 455
-    }
+    },
+    "legendary": false
   },
   {
     "id": 359,
@@ -8412,7 +8770,8 @@
       "Sp.-V.": 60,
       "Init.": 75,
       "Summe": 465
-    }
+    },
+    "legendary": false
   },
   {
     "id": 360,
@@ -8435,7 +8794,8 @@
       "Sp.-V.": 48,
       "Init.": 23,
       "Summe": 260
-    }
+    },
+    "legendary": false
   },
   {
     "id": 361,
@@ -8458,7 +8818,8 @@
       "Sp.-V.": 50,
       "Init.": 50,
       "Summe": 300
-    }
+    },
+    "legendary": false
   },
   {
     "id": 362,
@@ -8481,7 +8842,8 @@
       "Sp.-V.": 80,
       "Init.": 80,
       "Summe": 480
-    }
+    },
+    "legendary": false
   },
   {
     "id": 363,
@@ -8505,7 +8867,8 @@
       "Sp.-V.": 50,
       "Init.": 25,
       "Summe": 290
-    }
+    },
+    "legendary": false
   },
   {
     "id": 364,
@@ -8529,7 +8892,8 @@
       "Sp.-V.": 70,
       "Init.": 45,
       "Summe": 410
-    }
+    },
+    "legendary": false
   },
   {
     "id": 365,
@@ -8553,7 +8917,8 @@
       "Sp.-V.": 90,
       "Init.": 65,
       "Summe": 530
-    }
+    },
+    "legendary": false
   },
   {
     "id": 366,
@@ -8576,7 +8941,8 @@
       "Sp.-V.": 55,
       "Init.": 32,
       "Summe": 345
-    }
+    },
+    "legendary": false
   },
   {
     "id": 367,
@@ -8599,7 +8965,8 @@
       "Sp.-V.": 75,
       "Init.": 52,
       "Summe": 485
-    }
+    },
+    "legendary": false
   },
   {
     "id": 368,
@@ -8622,7 +8989,8 @@
       "Sp.-V.": 75,
       "Init.": 52,
       "Summe": 485
-    }
+    },
+    "legendary": false
   },
   {
     "id": 369,
@@ -8646,7 +9014,8 @@
       "Sp.-V.": 65,
       "Init.": 55,
       "Summe": 485
-    }
+    },
+    "legendary": false
   },
   {
     "id": 370,
@@ -8669,7 +9038,8 @@
       "Sp.-V.": 65,
       "Init.": 97,
       "Summe": 330
-    }
+    },
+    "legendary": false
   },
   {
     "id": 371,
@@ -8692,7 +9062,8 @@
       "Sp.-V.": 30,
       "Init.": 50,
       "Summe": 300
-    }
+    },
+    "legendary": false
   },
   {
     "id": 372,
@@ -8715,7 +9086,8 @@
       "Sp.-V.": 50,
       "Init.": 50,
       "Summe": 420
-    }
+    },
+    "legendary": false
   },
   {
     "id": 373,
@@ -8739,7 +9111,8 @@
       "Sp.-V.": 80,
       "Init.": 100,
       "Summe": 600
-    }
+    },
+    "legendary": false
   },
   {
     "id": 374,
@@ -8763,7 +9136,8 @@
       "Sp.-V.": 60,
       "Init.": 30,
       "Summe": 300
-    }
+    },
+    "legendary": false
   },
   {
     "id": 375,
@@ -8787,7 +9161,8 @@
       "Sp.-V.": 80,
       "Init.": 50,
       "Summe": 420
-    }
+    },
+    "legendary": false
   },
   {
     "id": 376,
@@ -8811,7 +9186,8 @@
       "Sp.-V.": 90,
       "Init.": 70,
       "Summe": 600
-    }
+    },
+    "legendary": false
   },
   {
     "id": 377,
@@ -8834,7 +9210,8 @@
       "Sp.-V.": 100,
       "Init.": 50,
       "Summe": 580
-    }
+    },
+    "legendary": true
   },
   {
     "id": 378,
@@ -8857,7 +9234,8 @@
       "Sp.-V.": 200,
       "Init.": 50,
       "Summe": 580
-    }
+    },
+    "legendary": true
   },
   {
     "id": 379,
@@ -8880,7 +9258,8 @@
       "Sp.-V.": 150,
       "Init.": 50,
       "Summe": 580
-    }
+    },
+    "legendary": true
   },
   {
     "id": 380,
@@ -8904,7 +9283,8 @@
       "Sp.-V.": 130,
       "Init.": 110,
       "Summe": 600
-    }
+    },
+    "legendary": true
   },
   {
     "id": 381,
@@ -8928,7 +9308,8 @@
       "Sp.-V.": 110,
       "Init.": 110,
       "Summe": 600
-    }
+    },
+    "legendary": true
   },
   {
     "id": 382,
@@ -8951,7 +9332,8 @@
       "Sp.-V.": 140,
       "Init.": 90,
       "Summe": 670
-    }
+    },
+    "legendary": true
   },
   {
     "id": 383,
@@ -8974,7 +9356,8 @@
       "Sp.-V.": 90,
       "Init.": 90,
       "Summe": 670
-    }
+    },
+    "legendary": true
   },
   {
     "id": 384,
@@ -8998,7 +9381,8 @@
       "Sp.-V.": 90,
       "Init.": 95,
       "Summe": 680
-    }
+    },
+    "legendary": true
   },
   {
     "id": 385,
@@ -9022,7 +9406,8 @@
       "Sp.-V.": 100,
       "Init.": 100,
       "Summe": 600
-    }
+    },
+    "legendary": true
   },
   {
     "id": 386,
@@ -9045,7 +9430,8 @@
       "Sp.-V.": 50,
       "Init.": 150,
       "Summe": 600
-    }
+    },
+    "legendary": true
   },
   {
     "id": 387,
@@ -9068,7 +9454,8 @@
       "Sp.-V.": 55,
       "Init.": 31,
       "Summe": 318
-    }
+    },
+    "legendary": false
   },
   {
     "id": 388,
@@ -9091,7 +9478,8 @@
       "Sp.-V.": 65,
       "Init.": 36,
       "Summe": 405
-    }
+    },
+    "legendary": false
   },
   {
     "id": 389,
@@ -9115,7 +9503,8 @@
       "Sp.-V.": 85,
       "Init.": 56,
       "Summe": 525
-    }
+    },
+    "legendary": false
   },
   {
     "id": 390,
@@ -9138,7 +9527,8 @@
       "Sp.-V.": 44,
       "Init.": 61,
       "Summe": 309
-    }
+    },
+    "legendary": false
   },
   {
     "id": 391,
@@ -9162,7 +9552,8 @@
       "Sp.-V.": 52,
       "Init.": 81,
       "Summe": 405
-    }
+    },
+    "legendary": false
   },
   {
     "id": 392,
@@ -9186,7 +9577,8 @@
       "Sp.-V.": 71,
       "Init.": 108,
       "Summe": 534
-    }
+    },
+    "legendary": false
   },
   {
     "id": 393,
@@ -9209,7 +9601,8 @@
       "Sp.-V.": 56,
       "Init.": 40,
       "Summe": 314
-    }
+    },
+    "legendary": false
   },
   {
     "id": 394,
@@ -9232,7 +9625,8 @@
       "Sp.-V.": 76,
       "Init.": 50,
       "Summe": 405
-    }
+    },
+    "legendary": false
   },
   {
     "id": 395,
@@ -9256,7 +9650,8 @@
       "Sp.-V.": 101,
       "Init.": 60,
       "Summe": 530
-    }
+    },
+    "legendary": false
   },
   {
     "id": 396,
@@ -9280,7 +9675,8 @@
       "Sp.-V.": 30,
       "Init.": 60,
       "Summe": 245
-    }
+    },
+    "legendary": false
   },
   {
     "id": 397,
@@ -9304,7 +9700,8 @@
       "Sp.-V.": 40,
       "Init.": 80,
       "Summe": 340
-    }
+    },
+    "legendary": false
   },
   {
     "id": 398,
@@ -9328,7 +9725,8 @@
       "Sp.-V.": 60,
       "Init.": 100,
       "Summe": 485
-    }
+    },
+    "legendary": false
   },
   {
     "id": 399,
@@ -9351,7 +9749,8 @@
       "Sp.-V.": 40,
       "Init.": 31,
       "Summe": 250
-    }
+    },
+    "legendary": false
   },
   {
     "id": 400,
@@ -9375,7 +9774,8 @@
       "Sp.-V.": 60,
       "Init.": 71,
       "Summe": 410
-    }
+    },
+    "legendary": false
   },
   {
     "id": 401,
@@ -9398,7 +9798,8 @@
       "Sp.-V.": 41,
       "Init.": 25,
       "Summe": 194
-    }
+    },
+    "legendary": false
   },
   {
     "id": 402,
@@ -9421,7 +9822,8 @@
       "Sp.-V.": 51,
       "Init.": 65,
       "Summe": 384
-    }
+    },
+    "legendary": false
   },
   {
     "id": 403,
@@ -9444,7 +9846,8 @@
       "Sp.-V.": 34,
       "Init.": 45,
       "Summe": 263
-    }
+    },
+    "legendary": false
   },
   {
     "id": 404,
@@ -9467,7 +9870,8 @@
       "Sp.-V.": 49,
       "Init.": 60,
       "Summe": 363
-    }
+    },
+    "legendary": false
   },
   {
     "id": 405,
@@ -9490,7 +9894,8 @@
       "Sp.-V.": 79,
       "Init.": 70,
       "Summe": 523
-    }
+    },
+    "legendary": false
   },
   {
     "id": 406,
@@ -9514,7 +9919,8 @@
       "Sp.-V.": 70,
       "Init.": 55,
       "Summe": 280
-    }
+    },
+    "legendary": false
   },
   {
     "id": 407,
@@ -9538,7 +9944,8 @@
       "Sp.-V.": 105,
       "Init.": 90,
       "Summe": 515
-    }
+    },
+    "legendary": false
   },
   {
     "id": 408,
@@ -9561,7 +9968,8 @@
       "Sp.-V.": 30,
       "Init.": 58,
       "Summe": 350
-    }
+    },
+    "legendary": false
   },
   {
     "id": 409,
@@ -9584,7 +9992,8 @@
       "Sp.-V.": 50,
       "Init.": 58,
       "Summe": 495
-    }
+    },
+    "legendary": false
   },
   {
     "id": 410,
@@ -9608,7 +10017,8 @@
       "Sp.-V.": 88,
       "Init.": 30,
       "Summe": 350
-    }
+    },
+    "legendary": false
   },
   {
     "id": 411,
@@ -9632,7 +10042,8 @@
       "Sp.-V.": 138,
       "Init.": 30,
       "Summe": 495
-    }
+    },
+    "legendary": false
   },
   {
     "id": 412,
@@ -9655,7 +10066,8 @@
       "Sp.-V.": 45,
       "Init.": 36,
       "Summe": 224
-    }
+    },
+    "legendary": false
   },
   {
     "id": 413,
@@ -9679,7 +10091,8 @@
       "Sp.-V.": 105,
       "Init.": 36,
       "Summe": 424
-    }
+    },
+    "legendary": false
   },
   {
     "id": 414,
@@ -9703,7 +10116,8 @@
       "Sp.-V.": 50,
       "Init.": 66,
       "Summe": 424
-    }
+    },
+    "legendary": false
   },
   {
     "id": 415,
@@ -9727,7 +10141,8 @@
       "Sp.-V.": 42,
       "Init.": 70,
       "Summe": 244
-    }
+    },
+    "legendary": false
   },
   {
     "id": 416,
@@ -9751,7 +10166,8 @@
       "Sp.-V.": 102,
       "Init.": 40,
       "Summe": 474
-    }
+    },
+    "legendary": false
   },
   {
     "id": 417,
@@ -9774,7 +10190,8 @@
       "Sp.-V.": 90,
       "Init.": 95,
       "Summe": 405
-    }
+    },
+    "legendary": false
   },
   {
     "id": 418,
@@ -9797,7 +10214,8 @@
       "Sp.-V.": 30,
       "Init.": 85,
       "Summe": 330
-    }
+    },
+    "legendary": false
   },
   {
     "id": 419,
@@ -9820,7 +10238,8 @@
       "Sp.-V.": 50,
       "Init.": 115,
       "Summe": 495
-    }
+    },
+    "legendary": false
   },
   {
     "id": 420,
@@ -9843,7 +10262,8 @@
       "Sp.-V.": 53,
       "Init.": 35,
       "Summe": 275
-    }
+    },
+    "legendary": false
   },
   {
     "id": 421,
@@ -9866,7 +10286,8 @@
       "Sp.-V.": 78,
       "Init.": 85,
       "Summe": 450
-    }
+    },
+    "legendary": false
   },
   {
     "id": 422,
@@ -9889,7 +10310,8 @@
       "Sp.-V.": 62,
       "Init.": 34,
       "Summe": 325
-    }
+    },
+    "legendary": false
   },
   {
     "id": 423,
@@ -9913,7 +10335,8 @@
       "Sp.-V.": 82,
       "Init.": 39,
       "Summe": 475
-    }
+    },
+    "legendary": false
   },
   {
     "id": 424,
@@ -9936,7 +10359,8 @@
       "Sp.-V.": 66,
       "Init.": 115,
       "Summe": 482
-    }
+    },
+    "legendary": false
   },
   {
     "id": 425,
@@ -9960,7 +10384,8 @@
       "Sp.-V.": 44,
       "Init.": 70,
       "Summe": 348
-    }
+    },
+    "legendary": false
   },
   {
     "id": 426,
@@ -9984,7 +10409,8 @@
       "Sp.-V.": 54,
       "Init.": 80,
       "Summe": 498
-    }
+    },
+    "legendary": false
   },
   {
     "id": 427,
@@ -10007,7 +10433,8 @@
       "Sp.-V.": 56,
       "Init.": 85,
       "Summe": 350
-    }
+    },
+    "legendary": false
   },
   {
     "id": 428,
@@ -10030,7 +10457,8 @@
       "Sp.-V.": 96,
       "Init.": 105,
       "Summe": 480
-    }
+    },
+    "legendary": false
   },
   {
     "id": 429,
@@ -10053,7 +10481,8 @@
       "Sp.-V.": 105,
       "Init.": 105,
       "Summe": 495
-    }
+    },
+    "legendary": false
   },
   {
     "id": 430,
@@ -10077,7 +10506,8 @@
       "Sp.-V.": 52,
       "Init.": 71,
       "Summe": 505
-    }
+    },
+    "legendary": false
   },
   {
     "id": 431,
@@ -10100,7 +10530,8 @@
       "Sp.-V.": 37,
       "Init.": 85,
       "Summe": 310
-    }
+    },
+    "legendary": false
   },
   {
     "id": 432,
@@ -10123,7 +10554,8 @@
       "Sp.-V.": 59,
       "Init.": 112,
       "Summe": 452
-    }
+    },
+    "legendary": false
   },
   {
     "id": 433,
@@ -10146,7 +10578,8 @@
       "Sp.-V.": 50,
       "Init.": 45,
       "Summe": 285
-    }
+    },
+    "legendary": false
   },
   {
     "id": 434,
@@ -10170,7 +10603,8 @@
       "Sp.-V.": 41,
       "Init.": 74,
       "Summe": 329
-    }
+    },
+    "legendary": false
   },
   {
     "id": 435,
@@ -10194,7 +10628,8 @@
       "Sp.-V.": 61,
       "Init.": 84,
       "Summe": 479
-    }
+    },
+    "legendary": false
   },
   {
     "id": 436,
@@ -10218,7 +10653,8 @@
       "Sp.-V.": 86,
       "Init.": 23,
       "Summe": 300
-    }
+    },
+    "legendary": false
   },
   {
     "id": 437,
@@ -10242,7 +10678,8 @@
       "Sp.-V.": 116,
       "Init.": 33,
       "Summe": 500
-    }
+    },
+    "legendary": false
   },
   {
     "id": 438,
@@ -10265,7 +10702,8 @@
       "Sp.-V.": 45,
       "Init.": 10,
       "Summe": 290
-    }
+    },
+    "legendary": false
   },
   {
     "id": 439,
@@ -10289,7 +10727,8 @@
       "Sp.-V.": 90,
       "Init.": 60,
       "Summe": 310
-    }
+    },
+    "legendary": false
   },
   {
     "id": 440,
@@ -10312,7 +10751,8 @@
       "Sp.-V.": 65,
       "Init.": 30,
       "Summe": 220
-    }
+    },
+    "legendary": false
   },
   {
     "id": 441,
@@ -10336,7 +10776,8 @@
       "Sp.-V.": 42,
       "Init.": 91,
       "Summe": 411
-    }
+    },
+    "legendary": false
   },
   {
     "id": 442,
@@ -10360,7 +10801,8 @@
       "Sp.-V.": 108,
       "Init.": 35,
       "Summe": 485
-    }
+    },
+    "legendary": false
   },
   {
     "id": 443,
@@ -10384,7 +10826,8 @@
       "Sp.-V.": 45,
       "Init.": 42,
       "Summe": 300
-    }
+    },
+    "legendary": false
   },
   {
     "id": 444,
@@ -10408,7 +10851,8 @@
       "Sp.-V.": 55,
       "Init.": 82,
       "Summe": 410
-    }
+    },
+    "legendary": false
   },
   {
     "id": 445,
@@ -10432,7 +10876,8 @@
       "Sp.-V.": 85,
       "Init.": 102,
       "Summe": 600
-    }
+    },
+    "legendary": false
   },
   {
     "id": 446,
@@ -10455,7 +10900,8 @@
       "Sp.-V.": 85,
       "Init.": 5,
       "Summe": 390
-    }
+    },
+    "legendary": false
   },
   {
     "id": 447,
@@ -10478,7 +10924,8 @@
       "Sp.-V.": 40,
       "Init.": 60,
       "Summe": 285
-    }
+    },
+    "legendary": false
   },
   {
     "id": 448,
@@ -10502,7 +10949,8 @@
       "Sp.-V.": 70,
       "Init.": 90,
       "Summe": 525
-    }
+    },
+    "legendary": false
   },
   {
     "id": 449,
@@ -10525,7 +10973,8 @@
       "Sp.-V.": 42,
       "Init.": 32,
       "Summe": 330
-    }
+    },
+    "legendary": false
   },
   {
     "id": 450,
@@ -10548,7 +10997,8 @@
       "Sp.-V.": 72,
       "Init.": 47,
       "Summe": 525
-    }
+    },
+    "legendary": false
   },
   {
     "id": 451,
@@ -10572,7 +11022,8 @@
       "Sp.-V.": 55,
       "Init.": 65,
       "Summe": 330
-    }
+    },
+    "legendary": false
   },
   {
     "id": 452,
@@ -10596,7 +11047,8 @@
       "Sp.-V.": 75,
       "Init.": 95,
       "Summe": 500
-    }
+    },
+    "legendary": false
   },
   {
     "id": 453,
@@ -10620,7 +11072,8 @@
       "Sp.-V.": 40,
       "Init.": 50,
       "Summe": 300
-    }
+    },
+    "legendary": false
   },
   {
     "id": 454,
@@ -10644,7 +11097,8 @@
       "Sp.-V.": 65,
       "Init.": 85,
       "Summe": 490
-    }
+    },
+    "legendary": false
   },
   {
     "id": 455,
@@ -10667,7 +11121,8 @@
       "Sp.-V.": 72,
       "Init.": 46,
       "Summe": 454
-    }
+    },
+    "legendary": false
   },
   {
     "id": 456,
@@ -10690,7 +11145,8 @@
       "Sp.-V.": 61,
       "Init.": 66,
       "Summe": 330
-    }
+    },
+    "legendary": false
   },
   {
     "id": 457,
@@ -10713,7 +11169,8 @@
       "Sp.-V.": 86,
       "Init.": 91,
       "Summe": 460
-    }
+    },
+    "legendary": false
   },
   {
     "id": 458,
@@ -10737,7 +11194,8 @@
       "Sp.-V.": 120,
       "Init.": 50,
       "Summe": 345
-    }
+    },
+    "legendary": false
   },
   {
     "id": 459,
@@ -10761,7 +11219,8 @@
       "Sp.-V.": 60,
       "Init.": 40,
       "Summe": 334
-    }
+    },
+    "legendary": false
   },
   {
     "id": 460,
@@ -10785,7 +11244,8 @@
       "Sp.-V.": 85,
       "Init.": 60,
       "Summe": 494
-    }
+    },
+    "legendary": false
   },
   {
     "id": 461,
@@ -10809,7 +11269,8 @@
       "Sp.-V.": 85,
       "Init.": 125,
       "Summe": 510
-    }
+    },
+    "legendary": false
   },
   {
     "id": 462,
@@ -10833,7 +11294,8 @@
       "Sp.-V.": 90,
       "Init.": 60,
       "Summe": 535
-    }
+    },
+    "legendary": false
   },
   {
     "id": 463,
@@ -10856,7 +11318,8 @@
       "Sp.-V.": 95,
       "Init.": 50,
       "Summe": 515
-    }
+    },
+    "legendary": false
   },
   {
     "id": 464,
@@ -10880,7 +11343,8 @@
       "Sp.-V.": 55,
       "Init.": 40,
       "Summe": 535
-    }
+    },
+    "legendary": false
   },
   {
     "id": 465,
@@ -10903,7 +11367,8 @@
       "Sp.-V.": 50,
       "Init.": 50,
       "Summe": 535
-    }
+    },
+    "legendary": false
   },
   {
     "id": 466,
@@ -10926,7 +11391,8 @@
       "Sp.-V.": 85,
       "Init.": 95,
       "Summe": 540
-    }
+    },
+    "legendary": false
   },
   {
     "id": 467,
@@ -10949,7 +11415,8 @@
       "Sp.-V.": 95,
       "Init.": 83,
       "Summe": 540
-    }
+    },
+    "legendary": false
   },
   {
     "id": 468,
@@ -10973,7 +11440,8 @@
       "Sp.-V.": 115,
       "Init.": 80,
       "Summe": 545
-    }
+    },
+    "legendary": false
   },
   {
     "id": 469,
@@ -10997,7 +11465,8 @@
       "Sp.-V.": 56,
       "Init.": 95,
       "Summe": 515
-    }
+    },
+    "legendary": false
   },
   {
     "id": 470,
@@ -11020,7 +11489,8 @@
       "Sp.-V.": 65,
       "Init.": 95,
       "Summe": 525
-    }
+    },
+    "legendary": false
   },
   {
     "id": 471,
@@ -11043,7 +11513,8 @@
       "Sp.-V.": 95,
       "Init.": 65,
       "Summe": 525
-    }
+    },
+    "legendary": false
   },
   {
     "id": 472,
@@ -11067,7 +11538,8 @@
       "Sp.-V.": 75,
       "Init.": 95,
       "Summe": 510
-    }
+    },
+    "legendary": false
   },
   {
     "id": 473,
@@ -11091,7 +11563,8 @@
       "Sp.-V.": 60,
       "Init.": 80,
       "Summe": 530
-    }
+    },
+    "legendary": false
   },
   {
     "id": 474,
@@ -11114,7 +11587,8 @@
       "Sp.-V.": 75,
       "Init.": 90,
       "Summe": 535
-    }
+    },
+    "legendary": false
   },
   {
     "id": 475,
@@ -11138,7 +11612,8 @@
       "Sp.-V.": 115,
       "Init.": 80,
       "Summe": 518
-    }
+    },
+    "legendary": false
   },
   {
     "id": 476,
@@ -11162,7 +11637,8 @@
       "Sp.-V.": 150,
       "Init.": 40,
       "Summe": 525
-    }
+    },
+    "legendary": false
   },
   {
     "id": 477,
@@ -11185,7 +11661,8 @@
       "Sp.-V.": 135,
       "Init.": 45,
       "Summe": 525
-    }
+    },
+    "legendary": false
   },
   {
     "id": 478,
@@ -11209,7 +11686,8 @@
       "Sp.-V.": 70,
       "Init.": 110,
       "Summe": 480
-    }
+    },
+    "legendary": false
   },
   {
     "id": 479,
@@ -11233,7 +11711,8 @@
       "Sp.-V.": 77,
       "Init.": 91,
       "Summe": 440
-    }
+    },
+    "legendary": false
   },
   {
     "id": 480,
@@ -11256,7 +11735,8 @@
       "Sp.-V.": 130,
       "Init.": 95,
       "Summe": 580
-    }
+    },
+    "legendary": true
   },
   {
     "id": 481,
@@ -11279,7 +11759,8 @@
       "Sp.-V.": 105,
       "Init.": 80,
       "Summe": 580
-    }
+    },
+    "legendary": true
   },
   {
     "id": 482,
@@ -11302,7 +11783,8 @@
       "Sp.-V.": 70,
       "Init.": 115,
       "Summe": 580
-    }
+    },
+    "legendary": true
   },
   {
     "id": 483,
@@ -11326,7 +11808,8 @@
       "Sp.-V.": 100,
       "Init.": 90,
       "Summe": 680
-    }
+    },
+    "legendary": true
   },
   {
     "id": 484,
@@ -11350,7 +11833,8 @@
       "Sp.-V.": 120,
       "Init.": 100,
       "Summe": 680
-    }
+    },
+    "legendary": true
   },
   {
     "id": 485,
@@ -11374,7 +11858,8 @@
       "Sp.-V.": 106,
       "Init.": 77,
       "Summe": 600
-    }
+    },
+    "legendary": true
   },
   {
     "id": 486,
@@ -11397,7 +11882,8 @@
       "Sp.-V.": 110,
       "Init.": 100,
       "Summe": 670
-    }
+    },
+    "legendary": true
   },
   {
     "id": 487,
@@ -11421,7 +11907,8 @@
       "Sp.-V.": 120,
       "Init.": 90,
       "Summe": 680
-    }
+    },
+    "legendary": true
   },
   {
     "id": 488,
@@ -11444,7 +11931,8 @@
       "Sp.-V.": 120,
       "Init.": 85,
       "Summe": 580
-    }
+    },
+    "legendary": true
   },
   {
     "id": 489,
@@ -11467,7 +11955,8 @@
       "Sp.-V.": 80,
       "Init.": 80,
       "Summe": 480
-    }
+    },
+    "legendary": true
   },
   {
     "id": 490,
@@ -11490,7 +11979,8 @@
       "Sp.-V.": 100,
       "Init.": 100,
       "Summe": 600
-    }
+    },
+    "legendary": true
   },
   {
     "id": 491,
@@ -11513,7 +12003,8 @@
       "Sp.-V.": 90,
       "Init.": 125,
       "Summe": 600
-    }
+    },
+    "legendary": true
   },
   {
     "id": 492,
@@ -11536,7 +12027,8 @@
       "Sp.-V.": 100,
       "Init.": 100,
       "Summe": 600
-    }
+    },
+    "legendary": true
   },
   {
     "id": 493,
@@ -11559,6 +12051,7 @@
       "Sp.-V.": 120,
       "Init.": 120,
       "Summe": 720
-    }
+    },
+    "legendary": true
   }
 ]

@@ -58,6 +58,7 @@ export function PokedexTable({
   const columns = t.columns;
   const locked = useMemo(() => new Set(lockedFamilyIds), [lockedFamilyIds]);
   const [avail, setAvail] = useState<"all" | "available" | "locked">("all");
+  const [onlyLegendary, setOnlyLegendary] = useState(false);
 
   // Counts over the full (dex-limited) list, shown in the toggle labels.
   const { availableCount, lockedCount } = useMemo(() => {
@@ -65,6 +66,10 @@ export function PokedexTable({
     for (const p of pokemon) if (locked.has(p.family_id)) lockedCount++;
     return { lockedCount, availableCount: pokemon.length - lockedCount };
   }, [pokemon, locked]);
+  const legendaryCount = useMemo(
+    () => pokemon.filter((p) => p.legendary).length,
+    [pokemon],
+  );
 
   const COLUMNS: { key: ColumnKey; label: string; align?: "right"; hideClass?: string }[] = [
     { key: "id", label: columns.id, hideClass: "hidden md:table-cell" },
@@ -122,15 +127,16 @@ export function PokedexTable({
     return copy;
   }, [pokemon, sortKey, sortDir, ranks, lang]);
 
-  const visible = useMemo(
-    () =>
-      avail === "all"
-        ? sorted
-        : sorted.filter((p) =>
-            avail === "locked" ? locked.has(p.family_id) : !locked.has(p.family_id),
-          ),
-    [sorted, avail, locked],
-  );
+  const visible = useMemo(() => {
+    let list = sorted;
+    if (avail !== "all") {
+      list = list.filter((p) =>
+        avail === "locked" ? locked.has(p.family_id) : !locked.has(p.family_id),
+      );
+    }
+    if (onlyLegendary) list = list.filter((p) => p.legendary);
+    return list;
+  }, [sorted, avail, locked, onlyLegendary]);
 
   const query = search.trim().toLowerCase();
   const suggestions = useMemo(() => {
@@ -208,6 +214,18 @@ export function PokedexTable({
             </button>
           </div>
         )}
+        <button
+          type="button"
+          aria-pressed={onlyLegendary}
+          onClick={() => setOnlyLegendary((v) => !v)}
+          className={`rounded-md border px-3 py-1.5 text-sm font-medium transition-colors ${
+            onlyLegendary
+              ? "border-violet-500 bg-violet-500 text-white dark:border-violet-600 dark:bg-violet-600"
+              : "border-zinc-300 text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+          }`}
+        >
+          {t.filterLegendary} ({legendaryCount})
+        </button>
       </div>
       <div className="overflow-x-auto rounded-md border border-zinc-200 dark:border-zinc-800">
         <table className="w-full border-collapse text-sm">

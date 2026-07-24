@@ -80,6 +80,7 @@ async function main() {
           types: mon.types.map((t) => t.type.name),
           family_id: idFromUrl(chain.chain.species.url),
           stats,
+          legendary: species.is_legendary === true || species.is_mythical === true,
         };
       }),
     );

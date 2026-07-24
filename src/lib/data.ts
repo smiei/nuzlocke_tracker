@@ -78,6 +78,9 @@ export type Pokemon = {
   types: string[];
   family_id: number;
   stats: PokemonStats;
+  // Legendary OR mythical (PokeAPI's is_legendary/is_mythical combined into
+  // one flag - the Pokédex tab's filter doesn't distinguish the two).
+  legendary: boolean;
 };
 
 export type LevelCap = {

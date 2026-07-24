@@ -162,6 +162,7 @@ const de = {
     filterAll: "Alle",
     filterAvailable: "Nur verfügbare",
     filterLocked: "Nur gesperrte",
+    filterLegendary: "Nur Legendäre",
     columns: {
       id: "ID",
       name: "Name",
@@ -568,6 +569,7 @@ const en: Dictionary = {
     filterAll: "All",
     filterAvailable: "Only available",
     filterLocked: "Only locked",
+    filterLegendary: "Only legendaries",
     columns: {
       id: "ID",
       name: "Name",
@@ -975,6 +977,7 @@ const fr: Dictionary = {
     filterAll: "Tous",
     filterAvailable: "Disponibles",
     filterLocked: "Bloqués",
+    filterLegendary: "Légendaires uniquement",
     columns: {
       id: "ID",
       name: "Nom",
@@ -1382,6 +1385,7 @@ const es: Dictionary = {
     filterAll: "Todos",
     filterAvailable: "Solo disponibles",
     filterLocked: "Solo bloqueados",
+    filterLegendary: "Solo legendarios",
     columns: {
       id: "ID",
       name: "Nombre",
@@ -1789,6 +1793,7 @@ const it: Dictionary = {
     filterAll: "Tutti",
     filterAvailable: "Solo disponibili",
     filterLocked: "Solo bloccati",
+    filterLegendary: "Solo leggendari",
     columns: {
       id: "ID",
       name: "Nome",
