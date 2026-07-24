@@ -584,14 +584,23 @@ export type ImportBackupResult =
   | { success: false; error: ActionError };
 
 // Non-destructive: imported runs are ADDED as new runs, existing data is never
-// touched or overwritten.
-export async function importBackup(json: string): Promise<ImportBackupResult> {
+// touched or overwritten. `names`, when given, overrides each backup run's
+// stored name (same order as `parsed.runs`) - the Import dialog always
+// collects a fresh name per run so a re-imported backup never silently
+// shadows a newer run that kept the original name.
+export async function importBackup(json: string, names?: string[]): Promise<ImportBackupResult> {
   const parsed = parseBackup(json);
   if (!parsed) {
     return { success: false, error: { key: "backupInvalid" } };
   }
   if (parsed.runs.length === 0) {
     return { success: false, error: { key: "backupEmpty" } };
+  }
+  if (names) {
+    parsed.runs = parsed.runs.map((run, i) => {
+      const name = names[i]?.trim();
+      return name ? { ...run, name } : run;
+    });
   }
 
   // Catch unexpected failures (e.g. filesystem/permission problems) so the

@@ -130,34 +130,59 @@ export function OverviewView({
         </div>
       </section>
 
+      {/* Badges */}
+      <section>
+        <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+          {t.badgesHeading}
+        </h3>
+        {badges.length === 0 ? (
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">{t.badgesEmpty}</p>
+        ) : (
+          <div className="flex flex-wrap gap-3">
+            {badges.map((b) => (
+              <BadgeIcon
+                key={b.id}
+                nameEn={b.badge.en}
+                label={localizeName(b.badge, lang)}
+                earned={b.defeated}
+              />
+            ))}
+          </div>
+        )}
+      </section>
+
       {/* Dashboard */}
       <section>
         <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
           {t.dashboard}
         </h3>
 
-        <div className={`grid grid-cols-2 gap-3 ${deathTally ? "sm:grid-cols-4" : "sm:grid-cols-3"}`}>
-          {deathTally && (
-            <div className="rounded-lg border border-zinc-200 p-3 dark:border-zinc-800">
-              <div className="mb-1.5 text-xs text-zinc-500 dark:text-zinc-400">
-                💀 {t.deathTallyHeading}
-              </div>
-              <div className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
-                {([Player.PLAYER1, Player.PLAYER2] as const).map((p) => (
-                  <span key={p} className="flex items-baseline gap-1">
-                    <span className="text-xl font-bold tabular-nums">{deathTally[p]}</span>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+          <div className="rounded-lg border border-zinc-200 p-3 dark:border-zinc-800">
+            <div className="mb-1.5 text-sm font-medium text-zinc-500 dark:text-zinc-400">
+              💀 {deathTally ? t.deathTallyHeading : t.totalDeaths}
+            </div>
+            <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+              <span className="flex items-baseline gap-1.5">
+                <span className="text-2xl font-bold tabular-nums">{stats.totalDeaths}</span>
+                {deathTally && (
+                  <span className="text-xs text-zinc-600 dark:text-zinc-300">{t.totalDeaths}</span>
+                )}
+              </span>
+              {deathTally &&
+                ([Player.PLAYER1, Player.PLAYER2] as const).map((p) => (
+                  <span key={p} className="flex items-baseline gap-1.5">
+                    <span className="text-2xl font-bold tabular-nums">{deathTally[p]}</span>
                     <span className="text-xs text-zinc-600 dark:text-zinc-300">{playerLabel(p)}</span>
                   </span>
                 ))}
-              </div>
-              {deathTally.unattributed > 0 && (
-                <div className="mt-1 text-[11px] text-zinc-400 dark:text-zinc-500">
-                  {t.deathTallyUnattributed(deathTally.unattributed)}
-                </div>
-              )}
             </div>
-          )}
-          <StatTile value={stats.totalDeaths} label={t.totalDeaths} />
+            {deathTally && deathTally.unattributed > 0 && (
+              <div className="mt-1 text-[11px] text-zinc-400 dark:text-zinc-500">
+                {t.deathTallyUnattributed(deathTally.unattributed)}
+              </div>
+            )}
+          </div>
           <StatTile value={`${stats.teamSumme} → ${stats.teamSummeMax}`} label={t.teamBst} />
           <StatTile
             value={`${safeTarget(stats.capCurrent)} → ${safeTarget(stats.capNext)}`}
@@ -198,27 +223,6 @@ export function OverviewView({
             </tbody>
           </table>
         </div>
-      </section>
-
-      {/* Badges */}
-      <section>
-        <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
-          {t.badgesHeading}
-        </h3>
-        {badges.length === 0 ? (
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">{t.badgesEmpty}</p>
-        ) : (
-          <div className="flex flex-wrap gap-3">
-            {badges.map((b) => (
-              <BadgeIcon
-                key={b.id}
-                nameEn={b.badge.en}
-                label={localizeName(b.badge, lang)}
-                earned={b.defeated}
-              />
-            ))}
-          </div>
-        )}
       </section>
 
       {/* Team coverage: defensive (reused) + offensive gaps */}

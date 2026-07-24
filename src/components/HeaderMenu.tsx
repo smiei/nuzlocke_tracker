@@ -4,11 +4,13 @@ import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { deleteRun, exportAllBackup, exportRunBackup, importBackup, renameRun } from "@/lib/actions";
 import { formatActionError } from "@/lib/actionErrors";
+import { parseBackup } from "@/lib/backupParse";
 import { useDialog } from "@/components/DialogProvider";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import { LANGS, translations } from "@/lib/i18n/dictionary";
 import type { RunSummary } from "@/lib/types";
 import { RenameRunDialog } from "@/components/RenameRunDialog";
+import { ImportBackupDialog } from "@/components/ImportBackupDialog";
 import { TabOrderDialog } from "@/components/TabOrderDialog";
 
 function GearIcon({ className }: { className?: string }) {
@@ -50,6 +52,9 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
   const [open, setOpen] = useState(false);
   const [renameOpen, setRenameOpen] = useState(false);
   const [tabOrderOpen, setTabOrderOpen] = useState(false);
+  const [importState, setImportState] = useState<{ json: string; runs: { name: string }[] } | null>(
+    null,
+  );
   const [pending, startTransition] = useTransition();
   const containerRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -99,12 +104,30 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
     const file = event.target.files?.[0];
     event.target.value = ""; // allow re-picking the same file later
     if (!file) return;
-    if (!(await confirm({ message: t.backup.confirmImport }))) return;
 
+    const json = await file.text();
+    const parsed = parseBackup(json);
+    if (!parsed) {
+      await alert({ message: formatActionError({ key: "backupInvalid" }, lang) });
+      return;
+    }
+    if (parsed.runs.length === 0) {
+      await alert({ message: formatActionError({ key: "backupEmpty" }, lang) });
+      return;
+    }
+    // Naming is asked for every time (see ImportBackupDialog) rather than
+    // reusing the backup's stored name - re-importing an old backup of a run
+    // that's since moved on used to silently shadow the newer run under the
+    // same name.
+    setImportState({ json, runs: parsed.runs.map((r) => ({ name: r.name })) });
+  }
+
+  function handleImportConfirm(names: string[]) {
+    if (!importState) return;
     startTransition(async () => {
-      const text = await file.text();
-      const result = await importBackup(text);
+      const result = await importBackup(importState.json, names);
       if (result.success) {
+        setImportState(null);
         router.refresh();
         await alert({ message: t.backup.importSuccess(result.runCount) });
       } else {
@@ -242,6 +265,16 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
         onRename={handleRename}
       />
       <TabOrderDialog open={tabOrderOpen} onClose={() => setTabOrderOpen(false)} />
+      {importState && (
+        <ImportBackupDialog
+          lang={lang}
+          pending={pending}
+          runs={importState.runs}
+          existingNames={runs.map((r) => r.name)}
+          onClose={() => setImportState(null)}
+          onConfirm={handleImportConfirm}
+        />
+      )}
     </div>
   );
 }
