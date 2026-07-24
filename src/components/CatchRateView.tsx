@@ -149,6 +149,41 @@ export function newCatchBody(): CatchBodyState {
   return { ball: "poke", hpPercent: 100, level: 50, status: "none", turn: 1, conditionMet: true };
 }
 
+// A plain `value={n} onChange={clampInt(...)}` re-clamps every keystroke,
+// including the empty string left behind while deleting - which snaps back
+// to `min` before the next digit can be typed. Mobile number keyboards make
+// this unusable (deleting "100" to type "45" never gets past "1"). Buffering
+// the raw text separately and only committing (clamped) once it parses to a
+// number - restoring the last committed value on blur if the field was left
+// empty - lets the field go through an intermediate empty/partial state.
+function useClampedIntInput(
+  value: number,
+  min: number,
+  max: number,
+  fallback: number,
+  onCommit: (n: number) => void,
+) {
+  const [text, setText] = useState(String(value));
+  // Re-sync from an external value change (e.g. the "100" quick-set button,
+  // or a fresh state on Pokémon switch) during render rather than in an
+  // effect - React explicitly supports conditional setState mid-render (it
+  // re-renders immediately without committing/painting the stale version).
+  const [lastValue, setLastValue] = useState(value);
+  if (value !== lastValue) {
+    setLastValue(value);
+    setText(String(value));
+  }
+  return {
+    value: text,
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+      const raw = e.target.value;
+      setText(raw);
+      if (raw !== "" && Number.isFinite(Number(raw))) onCommit(clampInt(raw, min, max, fallback));
+    },
+    onBlur: () => setText(String(value)),
+  };
+}
+
 // The "Wild" body of a combined card: ball + HP + status + condition, the catch
 // chance, the selected Pokémon's weaknesses, and the quick-catch dropdowns. The
 // Pokémon is picked once in the card header and handed down as selectedId.
@@ -175,6 +210,8 @@ export function CatchCardBody({
   const { ball, hpPercent, level, status, turn, conditionMet } = state;
   const [caughtMsg, setCaughtMsg] = useState<string | null>(null);
   const [catching, startCatch] = useTransition();
+  const levelInput = useClampedIntInput(level, 1, 100, 50, (n) => onChange({ level: n }));
+  const turnInput = useClampedIntInput(turn, 1, 99, 1, (n) => onChange({ turn: n }));
 
   const selected = pokemonList.find((p) => p.id === selectedId) ?? null;
   const baseRate = selected ? catchRates[selected.id] : undefined;
@@ -302,8 +339,7 @@ export function CatchCardBody({
                 type="number"
                 min={1}
                 max={100}
-                value={level}
-                onChange={(e) => onChange({ level: clampInt(e.target.value, 1, 100, 50) })}
+                {...levelInput}
                 className={inputClass}
               />
               <button
@@ -324,8 +360,7 @@ export function CatchCardBody({
               type="number"
               min={1}
               max={99}
-              value={turn}
-              onChange={(e) => onChange({ turn: clampInt(e.target.value, 1, 99, 1) })}
+              {...turnInput}
               className={inputClass}
             />
           </div>

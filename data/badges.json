@@ -1,0 +1,42 @@
+{
+  "Kanto": [
+    "Boulder Badge",
+    "Cascade Badge",
+    "Thunder Badge",
+    "Rainbow Badge",
+    "Soul Badge",
+    "Marsh Badge",
+    "Volcano Badge",
+    "Earth Badge"
+  ],
+  "Johto": [
+    "Zephyr Badge",
+    "Hive Badge",
+    "Plain Badge",
+    "Fog Badge",
+    "Storm Badge",
+    "Mineral Badge",
+    "Glacier Badge",
+    "Rising Badge"
+  ],
+  "Hoenn": [
+    "Stone Badge",
+    "Knuckle Badge",
+    "Dynamo Badge",
+    "Heat Badge",
+    "Balance Badge",
+    "Feather Badge",
+    "Mind Badge",
+    "Rain Badge"
+  ],
+  "Sinnoh": [
+    "Coal Badge",
+    "Forest Badge",
+    "Cobble Badge",
+    "Fen Badge",
+    "Relic Badge",
+    "Mine Badge",
+    "Icicle Badge",
+    "Beacon Badge"
+  ]
+}

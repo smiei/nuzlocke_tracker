@@ -4,7 +4,9 @@ import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
 import { getLang } from "@/lib/i18n/getLang";
 import { translations } from "@/lib/i18n/dictionary";
+import { computeLevelCapProgress } from "@/lib/progress";
 import { LevelCapsView } from "@/components/LevelCapsView";
+import { ProgressBar } from "@/components/ProgressBar";
 
 export const dynamic = "force-dynamic";
 
@@ -22,14 +24,23 @@ export default async function LevelCapsPage({
   const game = getGameOrDefault(gameId);
   const trainerSet = game.trainerSet ?? game.id;
   const levelCaps = getLevelCaps(gameId);
-  const progress = await prisma.levelCapProgress.findMany({ where: { runId } });
-  const defeatedIds = new Set(progress.filter((p) => p.defeated).map((p) => p.levelCapId));
+  const progressRows = await prisma.levelCapProgress.findMany({ where: { runId } });
+  const defeatedIds = new Set(progressRows.filter((p) => p.defeated).map((p) => p.levelCapId));
 
   const items = levelCaps.map((cap) => ({ ...cap, defeated: defeatedIds.has(cap.id) }));
+  const progress = computeLevelCapProgress(items);
 
   return (
     <div>
-      <h2 className="mb-4 text-xl font-semibold">{t.heading}</h2>
+      <div className="mb-4 flex items-center justify-between gap-3">
+        <h2 className="text-xl font-semibold">{t.heading}</h2>
+        <ProgressBar
+          done={progress.done}
+          total={progress.total}
+          percent={progress.percent}
+          title={t.progressTitle(progress.done, progress.total, progress.percent)}
+        />
+      </div>
       <LevelCapsView runId={runId} lang={lang} levelCaps={items} trainerSet={trainerSet} />
     </div>
   );

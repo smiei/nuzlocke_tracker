@@ -12,11 +12,13 @@ import {
   getPokemonById,
   getPokemonList,
   getRouteById,
+  getRoutes,
 } from "@/lib/data";
 import { getTypesForGeneration, teamOffensiveCoverage } from "@/lib/effectiveness";
 import { attackTypesAtLevel } from "@/lib/learnset";
 import { maxEvolvedSumme } from "@/lib/evolutions";
 import { typesForGeneration } from "@/lib/pokemonTypes";
+import { computeLevelCapProgress, computeRouteProgress } from "@/lib/progress";
 import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
 import { getLang } from "@/lib/i18n/getLang";
@@ -27,6 +29,7 @@ import { PlayerNamesProvider } from "@/components/PlayerNamesProvider";
 import { PokemonDetailProvider } from "@/components/PokemonDetailProvider";
 import {
   OverviewView,
+  type OverviewBadge,
   type OverviewDeathTally,
   type OverviewMemorialEntry,
   type OverviewStats,
@@ -74,7 +77,11 @@ export default async function OverviewPage({
       orderBy: { routeId: "asc" },
     })
   ).filter((link) => !failedRouteIds.has(link.routeId));
-  const progress = await prisma.levelCapProgress.findMany({ where: { runId } });
+  // Unfiltered (any status, both players) - the route-progress bar counts a
+  // route "done" once every player slot has an entry at all, same as the
+  // Tracker tab, regardless of whether a pair ever formed.
+  const allEncounters = await prisma.encounter.findMany({ where: { runId } });
+  const capProgressRows = await prisma.levelCapProgress.findMany({ where: { runId } });
   const evoOptions = {
     gameId,
     impossible: settings.evolutionOverridesImpossible,
@@ -104,10 +111,31 @@ export default async function OverviewPage({
   // Level caps: last earned cap + the next one (computed early - the
   // offensive-gap coverage below is judged against the team's current cap,
   // not their theoretical level-100 moveset).
-  const defeatedIds = new Set(progress.filter((p) => p.defeated).map((p) => p.levelCapId));
-  const caps = getLevelCaps(gameId).filter((c) => c.max_level !== null);
+  const defeatedIds = new Set(capProgressRows.filter((p) => p.defeated).map((p) => p.levelCapId));
+  const levelCapItems = getLevelCaps(gameId).map((cap) => ({
+    ...cap,
+    defeated: defeatedIds.has(cap.id),
+  }));
+  const caps = levelCapItems.filter((c) => c.max_level !== null);
   const capCurrent = caps.filter((c) => defeatedIds.has(c.id)).at(-1)?.max_level ?? null;
   const capNext = caps.find((c) => !defeatedIds.has(c.id))?.max_level ?? null;
+
+  // Progress bars (Encounter tab's + Journey tab's), mirrored at the top of
+  // the Overview tab.
+  const routeProgress = computeRouteProgress(
+    getRoutes(gameId),
+    allEncounters,
+    mode === RunMode.CLASSIC,
+    settings.statics,
+  );
+  const levelCapProgress = computeLevelCapProgress(levelCapItems);
+
+  // Gym badges: every level-cap entry that awards one, generation-specific
+  // icon (data/badges.json + scripts/download-badges.mjs), earned ones shown
+  // normally and the rest grayed out but still visible.
+  const badges: OverviewBadge[] = levelCapItems
+    .filter((c) => c.badge !== null)
+    .map((c) => ({ id: c.id, badge: c.badge!, defeated: c.defeated }));
 
   // --- Offensive coverage gaps per player, at the team's current level cap
   // (a move only "counts" if the team could actually have it by now).
@@ -236,6 +264,9 @@ export default async function OverviewPage({
             stats={stats}
             deathTally={deathTally}
             memorial={memorial}
+            routeProgress={routeProgress}
+            levelCapProgress={levelCapProgress}
+            badges={badges}
           />
         </PokemonDetailProvider>
       </PlayerNamesProvider>

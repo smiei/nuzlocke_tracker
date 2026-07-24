@@ -1,0 +1,45 @@
+import { Player } from "@/generated/prisma/enums";
+
+export type ProgressStats = { done: number; total: number; percent: number };
+
+type RouteLike = { id: number; type: string; postgame?: boolean };
+type EncounterLike = { routeId: number; player: Player };
+
+// A route counts as "done" once every player slot has an entry (any status):
+// both players in SoulLink, player 1 in Classic.
+export function isRouteDone(
+  route: RouteLike,
+  encounters: EncounterLike[],
+  isClassic: boolean,
+): boolean {
+  const p1 = encounters.some((e) => e.routeId === route.id && e.player === Player.PLAYER1);
+  if (isClassic) return p1;
+  const p2 = encounters.some((e) => e.routeId === route.id && e.player === Player.PLAYER2);
+  return p1 && p2;
+}
+
+function toPercent(done: number, total: number): number {
+  return total > 0 ? Math.round((done / total) * 100) : 0;
+}
+
+// Overall encounter completion for the Tracker tab's progress bar - always
+// against every trackable, non-post-game route, independent of any "open
+// only" filter the caller might apply to its own rendered list.
+export function computeRouteProgress(
+  routes: RouteLike[],
+  encounters: EncounterLike[],
+  isClassic: boolean,
+  statics: boolean,
+): ProgressStats {
+  const trackable = statics ? routes : routes.filter((r) => r.type === "route");
+  const nonPostgame = trackable.filter((r) => !r.postgame);
+  const done = nonPostgame.filter((r) => isRouteDone(r, encounters, isClassic)).length;
+  return { done, total: nonPostgame.length, percent: toPercent(done, nonPostgame.length) };
+}
+
+// Journey tab completion: how many boss fights (gyms, rivals, Elite Four, ...)
+// have been checked off, out of all of them.
+export function computeLevelCapProgress(items: { defeated: boolean }[]): ProgressStats {
+  const done = items.filter((i) => i.defeated).length;
+  return { done, total: items.length, percent: toPercent(done, items.length) };
+}

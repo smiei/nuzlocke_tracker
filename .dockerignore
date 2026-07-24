@@ -10,9 +10,10 @@ npm-debug.log*
 .DS_Store
 
 # Copyrighted game artwork stays out of the (public) image: Pokémon sprites
-# are auto-downloaded from PokeAPI on first container start into a volume,
-# trainer sprites are user-provided via a volume mount.
+# and badge icons are auto-downloaded on first container start into a
+# volume, trainer sprites are user-provided via a volume mount.
 public/pokemon-sprites
 public/ball-sprites
+public/badges
 public/trainers/*.png
 public/trainers/**/*.png

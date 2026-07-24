@@ -12,7 +12,8 @@
     "generate:names": "node scripts/generate-names.mjs",
     "generate:learnsets": "node scripts/generate-learnsets.mjs",
     "download:sprites": "node scripts/download-sprites.mjs",
-    "download:catchrates": "node scripts/download-catchrates.mjs"
+    "download:catchrates": "node scripts/download-catchrates.mjs",
+    "download:badges": "node scripts/download-badges.mjs"
   },
   "dependencies": {
     "@prisma/client": "^6.19.3",
@@ -22,7 +23,8 @@
     "prisma": "^6.19.3",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "react-markdown": "^10.1.0"
+    "react-markdown": "^10.1.0",
+    "sharp": "^0.34.5"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

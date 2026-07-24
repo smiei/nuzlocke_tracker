@@ -7,7 +7,9 @@ import { Player } from "@/generated/prisma/enums";
 import type { Lang } from "@/lib/i18n/dictionary";
 import { translations } from "@/lib/i18n/dictionary";
 import { routeName } from "@/lib/i18n/localize";
+import { isRouteDone, computeRouteProgress } from "@/lib/progress";
 import { EncounterEditor } from "@/components/EncounterEditor";
+import { ProgressBar } from "@/components/ProgressBar";
 import { usePlayerLabel } from "@/components/PlayerNamesProvider";
 import type { RunSettings } from "@/lib/runSettings";
 
@@ -36,22 +38,17 @@ export function TrackerView({
   const [showPostgame, setShowPostgame] = useState(false);
   const [openOnly, setOpenOnly] = useState(false);
 
-  // A route counts as "done" once every player slot has an entry (any
-  // status): both players in SoulLink, player 1 in Classic.
-  function isRouteDone(route: Route): boolean {
-    const p1 = encounters.some((e) => e.routeId === route.id && e.player === Player.PLAYER1);
-    if (isClassic) return p1;
-    const p2 = encounters.some((e) => e.routeId === route.id && e.player === Player.PLAYER2);
-    return p1 && p2;
-  }
-
   // "statics" rule off = static locations aren't tracked at all. The full
   // `routes` array still goes to the editors below - it's their lookup table
   // for route names in clause warnings, which may point at a static route.
   const trackable = settings.statics ? routes : routes.filter((r) => r.type === "route");
-  const visible = openOnly ? trackable.filter((r) => !isRouteDone(r)) : trackable;
+  const visible = openOnly ? trackable.filter((r) => !isRouteDone(r, encounters, isClassic)) : trackable;
   const mainRoutes = visible.filter((r) => !r.postgame);
   const postgameRoutes = visible.filter((r) => r.postgame);
+
+  // Overall completion, independent of the "Nur offene" filter above -
+  // post-game areas don't count toward "the run" until the league is beaten.
+  const progress = computeRouteProgress(routes, encounters, isClassic, settings.statics);
 
   function renderRoute(route: Route) {
     // SoulLink: exactly one of the two players has an entry -> the other
@@ -140,7 +137,7 @@ export function TrackerView({
 
   return (
     <div>
-      <div className="mb-3 flex items-center gap-2">
+      <div className="mb-3 flex items-center justify-between gap-3">
         <button
           type="button"
           onClick={() => setOpenOnly((v) => !v)}
@@ -153,6 +150,12 @@ export function TrackerView({
         >
           {tTracker.openOnly}
         </button>
+        <ProgressBar
+          done={progress.done}
+          total={progress.total}
+          percent={progress.percent}
+          title={tTracker.progressTitle(progress.done, progress.total, progress.percent)}
+        />
       </div>
       <div className="flex flex-col divide-y divide-zinc-200 rounded-md border border-zinc-200 dark:divide-zinc-800 dark:border-zinc-800">
       {mainRoutes.map(renderRoute)}

@@ -53,6 +53,10 @@ next-env.d.ts
 /public/pokemon-sprites/
 /public/ball-sprites/
 
+# gym badge icons - downloaded/cropped via scripts/download-badges.mjs from a
+# third-party source, regenerable, same non-commercial-artwork policy
+/public/badges/
+
 # trainer sprites - copyrighted game artwork, user-provided (see
 # public/trainers/README.txt); kept out of the repo for publication.
 # Both the flat root and the per-game trainerSet subfolders.

@@ -4,9 +4,14 @@ import { Player, RunMode } from "@/generated/prisma/enums";
 import type { EffectivenessTable } from "@/lib/effectiveness";
 import type { Lang } from "@/lib/i18n/dictionary";
 import { translations } from "@/lib/i18n/dictionary";
+import type { LocalizedNames } from "@/lib/i18n/localize";
+import { localizeName } from "@/lib/i18n/localize";
+import type { ProgressStats } from "@/lib/progress";
 import { TeamWeaknessesView, type TeamMember } from "@/components/TeamWeaknessesView";
 import { TypeBadge } from "@/components/TypeBadge";
 import { PokemonSprite } from "@/components/PokemonSprite";
+import { ProgressBar } from "@/components/ProgressBar";
+import { BadgeIcon } from "@/components/BadgeIcon";
 import { usePlayerLabel } from "@/components/PlayerNamesProvider";
 
 export type OverviewStats = {
@@ -26,6 +31,8 @@ export type OverviewStats = {
 };
 
 export type OverviewDeathTally = { PLAYER1: number; PLAYER2: number; unattributed: number };
+
+export type OverviewBadge = { id: number; badge: LocalizedNames; defeated: boolean };
 
 export type OverviewMemorialEntry = {
   soulLinkId: number;
@@ -64,6 +71,9 @@ export function OverviewView({
   stats,
   deathTally,
   memorial,
+  routeProgress,
+  levelCapProgress,
+  badges,
 }: {
   lang: Lang;
   mode: RunMode;
@@ -75,6 +85,9 @@ export function OverviewView({
   stats: OverviewStats;
   deathTally: OverviewDeathTally | null;
   memorial: OverviewMemorialEntry[];
+  routeProgress: ProgressStats;
+  levelCapProgress: ProgressStats;
+  badges: OverviewBadge[];
 }) {
   const t = translations[lang].overview;
   const tLinks = translations[lang].links;
@@ -84,6 +97,38 @@ export function OverviewView({
   return (
     <div className="space-y-8">
       <h2 className="text-xl font-semibold">{t.heading}</h2>
+
+      {/* Progress: the same two bars shown on the Encounter and Journey
+          tabs, just bigger. */}
+      <section>
+        <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+          {t.progress}
+        </h3>
+        <div className="flex flex-col gap-4 sm:flex-row sm:gap-10">
+          <div>
+            <div className="mb-1 text-xs font-medium text-zinc-500 dark:text-zinc-400">
+              {t.encounterProgress}
+            </div>
+            <ProgressBar
+              size="md"
+              done={routeProgress.done}
+              total={routeProgress.total}
+              percent={routeProgress.percent}
+            />
+          </div>
+          <div>
+            <div className="mb-1 text-xs font-medium text-zinc-500 dark:text-zinc-400">
+              {t.battleProgress}
+            </div>
+            <ProgressBar
+              size="md"
+              done={levelCapProgress.done}
+              total={levelCapProgress.total}
+              percent={levelCapProgress.percent}
+            />
+          </div>
+        </div>
+      </section>
 
       {/* Dashboard */}
       <section>
@@ -153,6 +198,27 @@ export function OverviewView({
             </tbody>
           </table>
         </div>
+      </section>
+
+      {/* Badges */}
+      <section>
+        <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+          {t.badgesHeading}
+        </h3>
+        {badges.length === 0 ? (
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">{t.badgesEmpty}</p>
+        ) : (
+          <div className="flex flex-wrap gap-3">
+            {badges.map((b) => (
+              <BadgeIcon
+                key={b.id}
+                nameEn={b.badge.en}
+                label={localizeName(b.badge, lang)}
+                earned={b.defeated}
+              />
+            ))}
+          </div>
+        )}
       </section>
 
       {/* Team coverage: defensive (reused) + offensive gaps */}

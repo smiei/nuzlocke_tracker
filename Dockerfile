@@ -38,11 +38,11 @@ COPY --from=builder /app/.next ./.next
 # Baked into the image so the app runs standalone; can still be overridden by
 # bind-mounting a host directory over /app/data (e.g. via docker-compose).
 COPY --from=builder /app/data ./data
-# Needed at container start: the entrypoint downloads the Pokémon sprites via
-# scripts/download-sprites.mjs if they're missing (they are deliberately NOT
-# in this image - see .dockerignore).
+# Needed at container start: the entrypoint downloads the Pokémon sprites and
+# badge icons via scripts/download-*.mjs if they're missing (they are
+# deliberately NOT in this image - see .dockerignore).
 COPY --from=builder /app/scripts ./scripts
-RUN mkdir -p /app/public/pokemon-sprites /app/public/ball-sprites /app/public/trainers
+RUN mkdir -p /app/public/pokemon-sprites /app/public/ball-sprites /app/public/trainers /app/public/badges
 # The generated Prisma client (incl. the native query engine binary for this
 # platform) lives outside node_modules; Next's build doesn't bundle it, so it
 # must be copied explicitly or the client can't find its query engine.

@@ -111,6 +111,8 @@ const de = {
     nicknameLabel: "Spitzname",
     postgameShow: (n: number) => `Post-Game Content anzeigen (${n} Gebiete)`,
     postgameHide: "Post-Game Content ausblenden",
+    progressTitle: (done: number, total: number, percent: number) =>
+      `${done} von ${total} Routen abgeschlossen (${percent}%)`,
   },
   links: {
     emptySoullink: "Noch keine SoulLinks – fange im Encounter-Tab dein erstes Pokémon.",
@@ -178,6 +180,8 @@ const de = {
   levelcaps: {
     heading: "Reise",
     maxLevel: "Max. Level",
+    progressTitle: (done: number, total: number, percent: number) =>
+      `${done} von ${total} Kämpfen abgeschlossen (${percent}%)`,
   },
   weaknesses: {
     heading: "Team-Schwächen",
@@ -347,6 +351,11 @@ const de = {
   },
   overview: {
     heading: "Übersicht",
+    progress: "Fortschritt",
+    encounterProgress: "Encounter",
+    battleProgress: "Kämpfe",
+    badgesHeading: "Orden",
+    badgesEmpty: "Für dieses Spiel sind keine Orden hinterlegt.",
     dashboard: "Dashboard",
     coverage: "Team-Abdeckung",
     offensiveGaps: "Offensive Lücken",
@@ -498,6 +507,8 @@ const en: Dictionary = {
     nicknameLabel: "Nickname",
     postgameShow: (n: number) => `Show post-game content (${n} areas)`,
     postgameHide: "Hide post-game content",
+    progressTitle: (done: number, total: number, percent: number) =>
+      `${done} of ${total} routes completed (${percent}%)`,
   },
   links: {
     emptySoullink: "No SoulLinks yet – catch your first Pokémon in the Encounter tab.",
@@ -565,6 +576,8 @@ const en: Dictionary = {
   levelcaps: {
     heading: "Journey",
     maxLevel: "Max Level",
+    progressTitle: (done: number, total: number, percent: number) =>
+      `${done} of ${total} battles completed (${percent}%)`,
   },
   weaknesses: {
     heading: "Team Weaknesses",
@@ -734,6 +747,11 @@ const en: Dictionary = {
   },
   overview: {
     heading: "Overview",
+    progress: "Progress",
+    encounterProgress: "Encounters",
+    battleProgress: "Battles",
+    badgesHeading: "Badges",
+    badgesEmpty: "No badges are configured for this game.",
     dashboard: "Dashboard",
     coverage: "Team coverage",
     offensiveGaps: "Offensive gaps",
@@ -883,6 +901,8 @@ const fr: Dictionary = {
     nicknameLabel: "Surnom",
     postgameShow: (n: number) => `Afficher le contenu post-ligue (${n} zones)`,
     postgameHide: "Masquer le contenu post-ligue",
+    progressTitle: (done: number, total: number, percent: number) =>
+      `${done} routes sur ${total} terminées (${percent}%)`,
   },
   links: {
     emptySoullink:
@@ -952,6 +972,8 @@ const fr: Dictionary = {
   levelcaps: {
     heading: "Aventure",
     maxLevel: "Niveau max",
+    progressTitle: (done: number, total: number, percent: number) =>
+      `${done} combats sur ${total} terminés (${percent}%)`,
   },
   weaknesses: {
     heading: "Faiblesses de l'équipe",
@@ -1121,6 +1143,11 @@ const fr: Dictionary = {
   },
   overview: {
     heading: "Aperçu",
+    progress: "Progression",
+    encounterProgress: "Rencontres",
+    battleProgress: "Combats",
+    badgesHeading: "Badges",
+    badgesEmpty: "Aucun badge n'est configuré pour ce jeu.",
     dashboard: "Tableau de bord",
     coverage: "Couverture d'équipe",
     offensiveGaps: "Lacunes offensives",
@@ -1271,6 +1298,8 @@ const es: Dictionary = {
     nicknameLabel: "Mote",
     postgameShow: (n: number) => `Mostrar contenido posjuego (${n} zonas)`,
     postgameHide: "Ocultar contenido posjuego",
+    progressTitle: (done: number, total: number, percent: number) =>
+      `${done} de ${total} rutas completadas (${percent}%)`,
   },
   links: {
     emptySoullink:
@@ -1340,6 +1369,8 @@ const es: Dictionary = {
   levelcaps: {
     heading: "Aventura",
     maxLevel: "Nivel máx.",
+    progressTitle: (done: number, total: number, percent: number) =>
+      `${done} de ${total} combates completados (${percent}%)`,
   },
   weaknesses: {
     heading: "Debilidades del equipo",
@@ -1509,6 +1540,11 @@ const es: Dictionary = {
   },
   overview: {
     heading: "Resumen",
+    progress: "Progreso",
+    encounterProgress: "Encuentros",
+    battleProgress: "Combates",
+    badgesHeading: "Medallas",
+    badgesEmpty: "No hay medallas configuradas para este juego.",
     dashboard: "Panel",
     coverage: "Cobertura del equipo",
     offensiveGaps: "Huecos ofensivos",
@@ -1659,6 +1695,8 @@ const it: Dictionary = {
     nicknameLabel: "Soprannome",
     postgameShow: (n: number) => `Mostra contenuti post-gioco (${n} aree)`,
     postgameHide: "Nascondi contenuti post-gioco",
+    progressTitle: (done: number, total: number, percent: number) =>
+      `${done} di ${total} percorsi completati (${percent}%)`,
   },
   links: {
     emptySoullink:
@@ -1728,6 +1766,8 @@ const it: Dictionary = {
   levelcaps: {
     heading: "Viaggio",
     maxLevel: "Livello max",
+    progressTitle: (done: number, total: number, percent: number) =>
+      `${done} di ${total} combattimenti completati (${percent}%)`,
   },
   weaknesses: {
     heading: "Debolezze della squadra",
@@ -1897,6 +1937,11 @@ const it: Dictionary = {
   },
   overview: {
     heading: "Panoramica",
+    progress: "Progresso",
+    encounterProgress: "Incontri",
+    battleProgress: "Combattimenti",
+    badgesHeading: "Medaglie",
+    badgesEmpty: "Nessuna medaglia configurata per questo gioco.",
     dashboard: "Dashboard",
     coverage: "Copertura squadra",
     offensiveGaps: "Lacune offensive",
