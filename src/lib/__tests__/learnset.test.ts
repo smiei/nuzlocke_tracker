@@ -4,9 +4,11 @@ import {
   moveListAtLevel,
   explosiveMove,
   tmLearnMethods,
+  historicalMoveType,
   type Learnset,
   type Moveset,
   type MovesTable,
+  type MoveTypeHistoryEntry,
   type TmCompatEntry,
 } from "@/lib/learnset";
 
@@ -51,8 +53,36 @@ describe("attackTypesAtLevel", () => {
 
 describe("moveListAtLevel", () => {
   it("localizes and filters level-up moves up to the level", () => {
-    const list = moveListAtLevel(moveset, moves, 1, 10, "en");
+    const list = moveListAtLevel(moveset, moves, 1, 10, "en", 4, []);
     expect(list.map((m) => `${m.level}:${m.name}`)).toEqual(["1:Tackle", "7:Vine Whip"]);
+  });
+
+  it("applies a historical type override when one is given", () => {
+    const history: MoveTypeHistoryEntry[] = [
+      { slug: "vine-whip", type: "normal", maxGeneration: 1 },
+    ];
+    // Gen 4: override doesn't apply (maxGeneration 1) -> current data type.
+    expect(moveListAtLevel(moveset, moves, 1, 10, "en", 4, history).find((m) => m.name === "Vine Whip")?.type).toBe("grass");
+    // Gen 1: override applies.
+    expect(moveListAtLevel(moveset, moves, 1, 10, "en", 1, history).find((m) => m.name === "Vine Whip")?.type).toBe("normal");
+  });
+});
+
+describe("historicalMoveType", () => {
+  const history: MoveTypeHistoryEntry[] = [
+    { slug: "bite", type: "normal", maxGeneration: 2 },
+    { slug: "charm", type: "normal", maxGeneration: 5 },
+  ];
+  it("returns the historical type when the generation is covered", () => {
+    expect(historicalMoveType(history, "bite", 1, "dark")).toBe("normal");
+    expect(historicalMoveType(history, "bite", 2, "dark")).toBe("normal");
+    expect(historicalMoveType(history, "charm", 4, "fairy")).toBe("normal");
+  });
+  it("falls back to the current type once the generation is past maxGeneration", () => {
+    expect(historicalMoveType(history, "bite", 3, "dark")).toBe("dark");
+  });
+  it("falls back to the current type for moves with no history entry", () => {
+    expect(historicalMoveType(history, "tackle", 1, "normal")).toBe("normal");
   });
 });
 

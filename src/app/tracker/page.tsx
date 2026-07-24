@@ -4,6 +4,7 @@ import {
   getEvolutions,
   getGameOrDefault,
   getMoves,
+  getMoveTypeHistory,
   getMoveset,
   getRoutes,
   getPokemonList,
@@ -49,6 +50,7 @@ export default async function TrackerPage({
               easier: settings.evolutionOverridesEasier,
             })}
             moveData={{ movesets: getMoveset(game.versionGroup), moves: getMoves() }}
+            moveTypeHistory={getMoveTypeHistory()}
             effectiveness={getEffectiveness(game.generation)}
             generation={game.generation}
             dexLimit={game.dexLimit}

@@ -2,7 +2,7 @@
 
 import { useEffect, type ReactNode } from "react";
 import type { Pokemon, EvolutionEntry } from "@/lib/data";
-import type { Moveset, MovesTable } from "@/lib/learnset";
+import type { Moveset, MovesTable, MoveTypeHistoryEntry } from "@/lib/learnset";
 import { moveListAtLevel } from "@/lib/learnset";
 import type { EffectivenessTable } from "@/lib/effectiveness";
 import { computeDefenseMultipliers, getTypesForGeneration } from "@/lib/effectiveness";
@@ -41,6 +41,7 @@ export function PokemonDetailModal({
   evolutions,
   movesets,
   moves,
+  moveTypeHistory,
   effectiveness,
   generation,
   dexLimit,
@@ -53,6 +54,7 @@ export function PokemonDetailModal({
   evolutions: EvolutionEntry[];
   movesets: Moveset;
   moves: MovesTable;
+  moveTypeHistory: MoveTypeHistoryEntry[];
   effectiveness: EffectivenessTable;
   generation: number;
   dexLimit: number;
@@ -79,7 +81,15 @@ export function PokemonDetailModal({
   };
 
   const types = typesForGeneration(pokemon.id, pokemon.types, generation);
-  const moveList = moveListAtLevel(movesets, moves, pokemon.id, 100, lang);
+  const moveList = moveListAtLevel(
+    movesets,
+    moves,
+    pokemon.id,
+    100,
+    lang,
+    generation,
+    moveTypeHistory,
+  );
   const maxBST = generation >= 4 ? 720 : 680;
   const rank = computePokemonRanks(allPokemon).get(pokemon.id) ?? 0;
 

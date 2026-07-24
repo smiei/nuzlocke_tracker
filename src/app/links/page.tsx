@@ -8,6 +8,7 @@ import {
   getEvolutionById,
   getEvolutions,
   getMoves,
+  getMoveTypeHistory,
   getMoveset,
   getLevelCaps,
 } from "@/lib/data";
@@ -173,6 +174,7 @@ export default async function LinksPage({
             pokemonList={getPokemonList(game.dexLimit)}
             evolutions={getEvolutions(evoOptions)}
             moveData={{ movesets: getMoveset(game.versionGroup), moves: getMoves() }}
+            moveTypeHistory={getMoveTypeHistory()}
             effectiveness={getEffectiveness(game.generation)}
             generation={game.generation}
             dexLimit={game.dexLimit}

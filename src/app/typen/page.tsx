@@ -6,6 +6,7 @@ import {
   getGameOrDefault,
   getLearnset,
   getMoves,
+  getMoveTypeHistory,
   getMoveset,
   getPokemonById,
   getPokemonList,
@@ -124,6 +125,7 @@ export default async function AnalyzePage({
             easier: settings.evolutionOverridesEasier,
           })}
           moveData={{ movesets: moveset, moves }}
+          moveTypeHistory={getMoveTypeHistory()}
           effectiveness={effectiveness}
           generation={game.generation}
           dexLimit={game.dexLimit}

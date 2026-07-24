@@ -13,7 +13,18 @@
 //
 // Approximation: PokeAPI's move `damage_class` is the Gen-4+ view. For the
 // only distinction we need (damaging vs. status) that's stable across gens.
-// A handful of Gen-1/2 move-type changes are ignored.
+//
+// data/moves.json stores each move's CURRENT (latest-generation) type, same
+// as PokeAPI. A few moves were retyped at some point in the games' real
+// history though (Bite/Gust/Karate Chop/Sand Attack: Normal until Gen 3;
+// Charm/Moonlight/Sweet Kiss: Normal until Fairy existed in Gen 6; Curse: the
+// old "???" type until Gen 6) - data/move-type-history.json hand-curates
+// those (found via each move's PokeAPI `past_values`) and is applied here
+// per-version-group when building the DAMAGING-type learnsets (which double
+// as object keys, so they can't stay wrong the way a display-only field
+// could) - see historicalMoveType() in src/lib/learnset.ts, which the
+// Pokédex move list applies the same table through at render time instead,
+// since moves.json itself is shared/generation-agnostic.
 //
 // Run manually: node scripts/generate-learnsets.mjs
 import { mkdir, readFile, readdir, writeFile } from "node:fs/promises";
@@ -34,10 +45,26 @@ async function fetchJson(url) {
   return res.json();
 }
 
+// slug -> { type, maxGeneration } for O(1) lookup while building learnsets.
+async function loadMoveTypeHistory() {
+  const raw = JSON.parse(
+    await readFile(path.join(dataDir, "move-type-history.json"), "utf-8"),
+  );
+  return new Map(raw.map((e) => [e.slug, e]));
+}
+
+// The type a move actually had in the given generation - see
+// data/move-type-history.json and the header comment above.
+function historicalType(moveTypeHistory, slug, generation, currentType) {
+  const entry = moveTypeHistory.get(slug);
+  return entry && generation <= entry.maxGeneration ? entry.type : currentType;
+}
+
 async function main() {
   // Which version groups do the installed game packs need, and up to which id?
   const gameDirs = await readdir(path.join(dataDir, "games"), { withFileTypes: true });
   const versionGroups = new Map(); // vg -> maxDexId needed
+  const vgGeneration = new Map(); // vg -> generation (for historicalType())
   for (const dir of gameDirs) {
     if (!dir.isDirectory()) continue;
     try {
@@ -47,10 +74,12 @@ async function main() {
       const vg = game.versionGroup;
       if (!vg) continue;
       versionGroups.set(vg, Math.max(versionGroups.get(vg) ?? 0, game.dexLimit ?? 0));
+      vgGeneration.set(vg, game.generation);
     } catch {
       // No game.json - skip.
     }
   }
+  const moveTypeHistory = await loadMoveTypeHistory();
 
   const maxId = Math.max(0, ...versionGroups.values());
   // slug -> { type, damaging, names } (fetched once, reused across all games).
@@ -123,11 +152,13 @@ async function main() {
           for (const [vg, lvl] of levelPerVg) {
             // Full moveset (all level-up moves).
             (movesets.get(vg)[pid] ??= []).push([lvl, slug]);
-            // Damaging-type coverage learnset.
+            // Damaging-type coverage learnset - type corrected for this
+            // version group's generation (see historicalType() above).
             if (info.damaging) {
+              const type = historicalType(moveTypeHistory, slug, vgGeneration.get(vg), info.type);
               const table = typeLearnsets.get(vg);
               const entry = (table[pid] ??= {});
-              entry[info.type] = Math.min(entry[info.type] ?? Infinity, lvl);
+              entry[type] = Math.min(entry[type] ?? Infinity, lvl);
             }
           }
           for (const vg of machineVgs) {

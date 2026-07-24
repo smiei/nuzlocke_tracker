@@ -8,6 +8,7 @@ import type { Lang } from "@/lib/i18n/dictionary";
 import { translations } from "@/lib/i18n/dictionary";
 import { PokemonSprite } from "@/components/PokemonSprite";
 import { usePlayerLabel } from "@/components/PlayerNamesProvider";
+import { usePokemonDetail } from "@/components/PokemonDetailProvider";
 
 export type TeamMember = {
   encounterId: number;
@@ -55,6 +56,7 @@ function TeamTable({
   lang: Lang;
 }) {
   const t = translations[lang].weaknesses;
+  const detail = usePokemonDetail();
 
   const memberMults = members.map((m) =>
     computeDefenseMultipliers(table, m.types, attackTypes),
@@ -86,12 +88,28 @@ function TeamTable({
             </th>
             {members.map((m) => (
               <th key={m.encounterId} className="p-0 pb-1 text-center" title={m.name}>
-                <PokemonSprite
-                  pokemonId={m.pokemonId}
-                  name={m.name}
-                  size="md"
-                  className="mx-auto h-8 w-8 sm:h-12 sm:w-12"
-                />
+                {detail ? (
+                  <button
+                    type="button"
+                    onClick={() => detail.open(m.pokemonId)}
+                    aria-label={m.name}
+                    className="mx-auto block cursor-pointer rounded transition-opacity hover:opacity-80"
+                  >
+                    <PokemonSprite
+                      pokemonId={m.pokemonId}
+                      name={m.name}
+                      size="md"
+                      className="mx-auto h-8 w-8 sm:h-12 sm:w-12"
+                    />
+                  </button>
+                ) : (
+                  <PokemonSprite
+                    pokemonId={m.pokemonId}
+                    name={m.name}
+                    size="md"
+                    className="mx-auto h-8 w-8 sm:h-12 sm:w-12"
+                  />
+                )}
               </th>
             ))}
             <th className="px-1 text-center text-[10px] font-medium text-red-500 sm:px-3 sm:text-xs dark:text-red-400">

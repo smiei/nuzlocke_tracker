@@ -4,6 +4,7 @@ import {
   getEvolutions,
   getGameOrDefault,
   getMoves,
+  getMoveTypeHistory,
   getMoveset,
   getPokemonList,
 } from "@/lib/data";
@@ -50,6 +51,7 @@ export default async function PokedexPage({
         pokemonList={pokemon}
         evolutions={evolutions}
         moveData={{ movesets: getMoveset(game.versionGroup), moves: getMoves() }}
+        moveTypeHistory={getMoveTypeHistory()}
         effectiveness={getEffectiveness(game.generation)}
         generation={game.generation}
         dexLimit={game.dexLimit}

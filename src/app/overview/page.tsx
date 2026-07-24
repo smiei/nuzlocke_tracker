@@ -2,10 +2,15 @@ import { redirect } from "next/navigation";
 import {
   getEffectiveness,
   getEvolutionById,
+  getEvolutions,
   getGameOrDefault,
   getLearnset,
   getLevelCaps,
+  getMoves,
+  getMoveset,
+  getMoveTypeHistory,
   getPokemonById,
+  getPokemonList,
   getRouteById,
 } from "@/lib/data";
 import { getTypesForGeneration, teamOffensiveCoverage } from "@/lib/effectiveness";
@@ -19,8 +24,10 @@ import { pokemonName, routeName } from "@/lib/i18n/localize";
 import { EncounterStatus, LinkStatus, Player, RunMode } from "@/generated/prisma/client";
 import { SpriteSetProvider } from "@/components/SpriteSetProvider";
 import { PlayerNamesProvider } from "@/components/PlayerNamesProvider";
+import { PokemonDetailProvider } from "@/components/PokemonDetailProvider";
 import {
   OverviewView,
+  type OverviewDeathTally,
   type OverviewMemorialEntry,
   type OverviewStats,
 } from "@/components/OverviewView";
@@ -29,6 +36,9 @@ import type { TeamMember } from "@/components/TeamWeaknessesView";
 export const dynamic = "force-dynamic";
 
 const PLAYERS = [Player.PLAYER1, Player.PLAYER2] as const;
+// Attack-type coverage below the first level cap (no cap defeated yet) is
+// judged against a starter-level team, not an empty one.
+const FALLBACK_LEVEL = 5;
 
 export default async function OverviewPage({
   searchParams,
@@ -45,18 +55,16 @@ export default async function OverviewPage({
   // encounter, the pair never formed - the surviving catch is boxed and any
   // "dead" mark on it must NOT count as a death or show in the Memorial
   // (mirrors what the Pokémon tab hides). Classic runs never hide anything.
-  // A player's "missed encounters" = their own Fled/Killed catches (a partner
-  // catching on the same route is a separate, successful encounter and never
-  // counts against them). Same query also yields the failed routes to hide.
-  const failedEncounters = await prisma.encounter.findMany({
-    where: { runId, status: { in: [EncounterStatus.FLED, EncounterStatus.KILLED] } },
-    select: { routeId: true, player: true },
-  });
-  const missed = new Map<Player, number>(PLAYERS.map((p) => [p, 0]));
-  for (const e of failedEncounters) missed.set(e.player, (missed.get(e.player) ?? 0) + 1);
   const failedRouteIds =
     mode === RunMode.SOULLINK
-      ? new Set(failedEncounters.map((e) => e.routeId))
+      ? new Set(
+          (
+            await prisma.encounter.findMany({
+              where: { runId, status: { in: [EncounterStatus.FLED, EncounterStatus.KILLED] } },
+              select: { routeId: true },
+            })
+          ).map((e) => e.routeId),
+        )
       : new Set<number>();
 
   const soulLinks = (
@@ -93,24 +101,37 @@ export default async function OverviewPage({
       ? [{ player: Player.PLAYER1, members: teamByPlayer.get(Player.PLAYER1) ?? [] }]
       : PLAYERS.map((p) => ({ player: p, members: teamByPlayer.get(p) ?? [] }));
 
-  // --- Offensive coverage gaps per player.
+  // Level caps: last earned cap + the next one (computed early - the
+  // offensive-gap coverage below is judged against the team's current cap,
+  // not their theoretical level-100 moveset).
+  const defeatedIds = new Set(progress.filter((p) => p.defeated).map((p) => p.levelCapId));
+  const caps = getLevelCaps(gameId).filter((c) => c.max_level !== null);
+  const capCurrent = caps.filter((c) => defeatedIds.has(c.id)).at(-1)?.max_level ?? null;
+  const capNext = caps.find((c) => !defeatedIds.has(c.id))?.max_level ?? null;
+
+  // --- Offensive coverage gaps per player, at the team's current level cap
+  // (a move only "counts" if the team could actually have it by now).
   const table = getEffectiveness(game.generation);
   const defenderTypes = getTypesForGeneration(game.generation);
   const learnset = getLearnset(game.versionGroup);
+  const coverageLevel = capCurrent ?? FALLBACK_LEVEL;
   const offensiveGaps = teams.map(({ player, members }) => {
     const atkTypes = new Set<string>();
     for (const m of members) {
-      for (const a of attackTypesAtLevel(learnset, m.pokemonId, 100)) atkTypes.add(a.type);
+      for (const a of attackTypesAtLevel(learnset, m.pokemonId, coverageLevel)) atkTypes.add(a.type);
     }
     return { player, gaps: teamOffensiveCoverage(table, [...atkTypes], defenderTypes).gaps };
   });
 
-  // --- Counts, team BST and the memorial in one pass over the links.
+  // --- Counts, team/bank BST, death tally and the memorial in one pass.
   const caught = new Map<Player, number>(PLAYERS.map((p) => [p, 0]));
   const caused = new Map<Player, number>(PLAYERS.map((p) => [p, 0]));
   const teamSummePlayer = new Map<Player, number>(PLAYERS.map((p) => [p, 0]));
   const teamSummeMaxPlayer = new Map<Player, number>(PLAYERS.map((p) => [p, 0]));
+  const bankSummePlayer = new Map<Player, number>(PLAYERS.map((p) => [p, 0]));
+  const bankSummeMaxPlayer = new Map<Player, number>(PLAYERS.map((p) => [p, 0]));
   let totalDeaths = 0;
+  let unattributedDeaths = 0;
   let teamSumme = 0;
   let teamSummeMax = 0;
   const memorial: OverviewMemorialEntry[] = [];
@@ -119,9 +140,11 @@ export default async function OverviewPage({
     const isDead = link.status === LinkStatus.DEAD;
     if (isDead) {
       totalDeaths++;
-      // "Caused" mirrors the Journey scoreboard: only pairs that actually formed.
-      if (link.deathPlayer && link.encounters.length >= 2) {
-        caused.set(link.deathPlayer, (caused.get(link.deathPlayer) ?? 0) + 1);
+      // Death-tally scoreboard: only pairs that actually formed (both
+      // players caught) count, same as the Journey tab's version did.
+      if (link.encounters.length >= 2) {
+        if (link.deathPlayer) caused.set(link.deathPlayer, (caused.get(link.deathPlayer) ?? 0) + 1);
+        else unattributedDeaths++;
       }
       const route = getRouteById(gameId, link.routeId);
       memorial.push({
@@ -141,36 +164,44 @@ export default async function OverviewPage({
     for (const e of link.encounters) {
       if (e.status !== EncounterStatus.CAUGHT) continue;
       caught.set(e.player, (caught.get(e.player) ?? 0) + 1);
+      const summe = getPokemonById(e.currentPokemonId)?.stats.Summe ?? 0;
+      const summeMax = maxEvolvedSumme(
+        e.currentPokemonId,
+        (id) => getEvolutionById(id, evoOptions)?.evolvesTo ?? [],
+        (id) => getPokemonById(id)?.stats.Summe ?? 0,
+        game.dexLimit,
+      );
       if (link.teamPosition !== null) {
-        const summe = getPokemonById(e.currentPokemonId)?.stats.Summe ?? 0;
-        const summeMax = maxEvolvedSumme(
-          e.currentPokemonId,
-          (id) => getEvolutionById(id, evoOptions)?.evolvesTo ?? [],
-          (id) => getPokemonById(id)?.stats.Summe ?? 0,
-          game.dexLimit,
-        );
         teamSumme += summe;
         teamSummeMax += summeMax;
         teamSummePlayer.set(e.player, (teamSummePlayer.get(e.player) ?? 0) + summe);
         teamSummeMaxPlayer.set(e.player, (teamSummeMaxPlayer.get(e.player) ?? 0) + summeMax);
+      } else {
+        // "Bank": caught, alive, but not on the 6-slot team.
+        bankSummePlayer.set(e.player, (bankSummePlayer.get(e.player) ?? 0) + summe);
+        bankSummeMaxPlayer.set(e.player, (bankSummeMaxPlayer.get(e.player) ?? 0) + summeMax);
       }
     }
   }
 
-  // Level caps: last earned cap + the next one.
-  const defeatedIds = new Set(progress.filter((p) => p.defeated).map((p) => p.levelCapId));
-  const caps = getLevelCaps(gameId).filter((c) => c.max_level !== null);
-  const capCurrent = caps.filter((c) => defeatedIds.has(c.id)).at(-1)?.max_level ?? null;
-  const capNext = caps.find((c) => !defeatedIds.has(c.id))?.max_level ?? null;
+  const deathTallyTotal = (caused.get(Player.PLAYER1) ?? 0) + (caused.get(Player.PLAYER2) ?? 0) + unattributedDeaths;
+  const deathTally: OverviewDeathTally | null =
+    mode === RunMode.SOULLINK && deathTallyTotal > 0
+      ? {
+          PLAYER1: caused.get(Player.PLAYER1) ?? 0,
+          PLAYER2: caused.get(Player.PLAYER2) ?? 0,
+          unattributed: unattributedDeaths,
+        }
+      : null;
 
   const stats: OverviewStats = {
     perPlayer: teams.map(({ player }) => ({
       player,
       caught: caught.get(player) ?? 0,
-      missed: missed.get(player) ?? 0,
-      caused: caused.get(player) ?? 0,
       teamSumme: teamSummePlayer.get(player) ?? 0,
       teamSummeMax: teamSummeMaxPlayer.get(player) ?? 0,
+      bankSumme: bankSummePlayer.get(player) ?? 0,
+      bankSummeMax: bankSummeMaxPlayer.get(player) ?? 0,
     })),
     totalDeaths,
     teamSumme,
@@ -179,19 +210,34 @@ export default async function OverviewPage({
     capNext,
   };
 
+  const pokemonList = getPokemonList(game.dexLimit);
+
   return (
     <SpriteSetProvider spriteSet={game.spriteSet}>
       <PlayerNamesProvider names={settings.playerNames} lang={lang}>
-        <OverviewView
+        <PokemonDetailProvider
+          pokemonList={pokemonList}
+          evolutions={getEvolutions(evoOptions)}
+          moveData={{ movesets: getMoveset(game.versionGroup), moves: getMoves() }}
+          moveTypeHistory={getMoveTypeHistory()}
+          effectiveness={table}
+          generation={game.generation}
+          dexLimit={game.dexLimit}
           lang={lang}
-          mode={mode}
-          teams={teams}
-          table={table}
-          attackTypes={defenderTypes}
-          offensiveGaps={offensiveGaps}
-          stats={stats}
-          memorial={memorial}
-        />
+        >
+          <OverviewView
+            lang={lang}
+            mode={mode}
+            teams={teams}
+            table={table}
+            attackTypes={defenderTypes}
+            offensiveGaps={offensiveGaps}
+            coverageLevel={coverageLevel}
+            stats={stats}
+            deathTally={deathTally}
+            memorial={memorial}
+          />
+        </PokemonDetailProvider>
       </PlayerNamesProvider>
     </SpriteSetProvider>
   );

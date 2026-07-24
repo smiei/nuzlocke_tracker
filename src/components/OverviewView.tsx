@@ -13,8 +13,8 @@ export type OverviewStats = {
   perPlayer: {
     player: Player;
     caught: number;
-    missed: number;
-    caused: number;
+    bankSumme: number;
+    bankSummeMax: number;
     teamSumme: number;
     teamSummeMax: number;
   }[];
@@ -24,6 +24,8 @@ export type OverviewStats = {
   capCurrent: number | null;
   capNext: number | null;
 };
+
+export type OverviewDeathTally = { PLAYER1: number; PLAYER2: number; unattributed: number };
 
 export type OverviewMemorialEntry = {
   soulLinkId: number;
@@ -44,6 +46,13 @@ function StatTile({ value, label }: { value: string | number; label: string }) {
   );
 }
 
+// House rule: one team member may reach the boss's own level, the rest stay
+// two levels below - the same "-2" convention as the Journey tab's target
+// level, applied here to both the current and the next cap.
+function safeTarget(level: number | null): string {
+  return level === null ? "–" : String(level - 2);
+}
+
 export function OverviewView({
   lang,
   mode,
@@ -51,7 +60,9 @@ export function OverviewView({
   table,
   attackTypes,
   offensiveGaps,
+  coverageLevel,
   stats,
+  deathTally,
   memorial,
 }: {
   lang: Lang;
@@ -60,7 +71,9 @@ export function OverviewView({
   table: EffectivenessTable;
   attackTypes: string[];
   offensiveGaps: { player: Player; gaps: string[] }[];
+  coverageLevel: number;
   stats: OverviewStats;
+  deathTally: OverviewDeathTally | null;
   memorial: OverviewMemorialEntry[];
 }) {
   const t = translations[lang].overview;
@@ -77,11 +90,34 @@ export function OverviewView({
         <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
           {t.dashboard}
         </h3>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+
+        <div className={`grid grid-cols-2 gap-3 ${deathTally ? "sm:grid-cols-4" : "sm:grid-cols-3"}`}>
+          {deathTally && (
+            <div className="rounded-lg border border-zinc-200 p-3 dark:border-zinc-800">
+              <div className="mb-1.5 text-xs text-zinc-500 dark:text-zinc-400">
+                💀 {t.deathTallyHeading}
+              </div>
+              <div className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
+                {([Player.PLAYER1, Player.PLAYER2] as const).map((p) => (
+                  <span key={p} className="flex items-baseline gap-1">
+                    <span className="text-xl font-bold tabular-nums">{deathTally[p]}</span>
+                    <span className="text-xs text-zinc-600 dark:text-zinc-300">{playerLabel(p)}</span>
+                  </span>
+                ))}
+              </div>
+              {deathTally.unattributed > 0 && (
+                <div className="mt-1 text-[11px] text-zinc-400 dark:text-zinc-500">
+                  {t.deathTallyUnattributed(deathTally.unattributed)}
+                </div>
+              )}
+            </div>
+          )}
           <StatTile value={stats.totalDeaths} label={t.totalDeaths} />
           <StatTile value={`${stats.teamSumme} → ${stats.teamSummeMax}`} label={t.teamBst} />
-          <StatTile value={stats.capCurrent ?? "–"} label={t.capCurrent} />
-          <StatTile value={stats.capNext ?? "–"} label={t.capNext} />
+          <StatTile
+            value={`${safeTarget(stats.capCurrent)} → ${safeTarget(stats.capNext)}`}
+            label={t.levelCap}
+          />
         </div>
         <div className="mt-3 overflow-x-auto">
           <table className="w-full text-sm">
@@ -89,11 +125,8 @@ export function OverviewView({
               <tr className="text-left text-xs text-zinc-500 dark:text-zinc-400">
                 <th className="py-1 pr-4 font-medium">{t.player}</th>
                 <th className="py-1 pr-4 font-medium tabular-nums">{t.caught}</th>
-                <th className="py-1 pr-4 font-medium tabular-nums" title={t.missedHint}>
-                  {t.missed}
-                </th>
-                <th className="py-1 pr-4 font-medium tabular-nums" title={t.causedHint}>
-                  {t.caused}
+                <th className="py-1 pr-4 font-medium tabular-nums" title={t.bankBstColHint}>
+                  {t.bankBstCol}
                 </th>
                 <th className="py-1 pr-4 font-medium tabular-nums" title={t.teamBstColHint}>
                   {t.teamBstCol}
@@ -107,8 +140,10 @@ export function OverviewView({
                     {isClassic ? t.team : playerLabel(row.player)}
                   </td>
                   <td className="py-1.5 pr-4 tabular-nums">{row.caught}</td>
-                  <td className="py-1.5 pr-4 tabular-nums">{row.missed}</td>
-                  <td className="py-1.5 pr-4 tabular-nums">{row.caused}</td>
+                  <td className="py-1.5 pr-4 tabular-nums">
+                    {row.bankSumme}
+                    <span className="text-zinc-400 dark:text-zinc-500"> → {row.bankSummeMax}</span>
+                  </td>
                   <td className="py-1.5 pr-4 tabular-nums">
                     {row.teamSumme}
                     <span className="text-zinc-400 dark:text-zinc-500"> → {row.teamSummeMax}</span>
@@ -136,13 +171,19 @@ export function OverviewView({
                   key={o.player}
                   className="min-w-[260px] flex-1 rounded-lg border border-zinc-200 p-4 dark:border-zinc-800"
                 >
-                  <h4 className="mb-2 text-sm font-semibold text-zinc-600 dark:text-zinc-300">
+                  <h4 className="mb-2 flex items-center gap-1.5 text-sm font-semibold text-zinc-600 dark:text-zinc-300">
                     {t.offensiveGaps}
                     {!isClassic && (
-                      <span className="ml-2 font-normal text-zinc-400 dark:text-zinc-500">
+                      <span className="font-normal text-zinc-400 dark:text-zinc-500">
                         · {playerLabel(o.player)}
                       </span>
                     )}
+                    <span
+                      className="inline-flex h-4 w-4 shrink-0 cursor-help items-center justify-center rounded-full border border-zinc-300 text-[10px] font-serif italic text-zinc-400 dark:border-zinc-600 dark:text-zinc-500"
+                      title={t.offensiveGapsInfo(coverageLevel)}
+                    >
+                      i
+                    </span>
                   </h4>
                   {o.gaps.length === 0 ? (
                     <p className="text-sm text-emerald-600 dark:text-emerald-400">{t.noGaps}</p>

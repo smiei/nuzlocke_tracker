@@ -1,0 +1,10 @@
+[
+  { "slug": "bite", "type": "normal", "maxGeneration": 2 },
+  { "slug": "gust", "type": "normal", "maxGeneration": 2 },
+  { "slug": "karate-chop", "type": "normal", "maxGeneration": 2 },
+  { "slug": "sand-attack", "type": "normal", "maxGeneration": 2 },
+  { "slug": "charm", "type": "normal", "maxGeneration": 5 },
+  { "slug": "moonlight", "type": "normal", "maxGeneration": 5 },
+  { "slug": "sweet-kiss", "type": "normal", "maxGeneration": 5 },
+  { "slug": "curse", "type": "unknown", "maxGeneration": 5 }
+]

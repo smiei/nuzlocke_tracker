@@ -15,6 +15,7 @@ import { translations } from "@/lib/i18n/dictionary";
 import { pokemonName } from "@/lib/i18n/localize";
 import { typesForGeneration } from "@/lib/pokemonTypes";
 import { usePlayerLabel } from "@/components/PlayerNamesProvider";
+import { usePokemonDetail } from "@/components/PokemonDetailProvider";
 import { PokemonSprite } from "@/components/PokemonSprite";
 import { TypeBadge } from "@/components/TypeBadge";
 
@@ -168,6 +169,7 @@ export function CatchCardBody({
   const t = translations[lang].catchrate;
   const tTypen = translations[lang].typen;
   const playerLabel = usePlayerLabel();
+  const detail = usePokemonDetail();
   const ballIds = getBallIdsForGeneration(generation);
 
   const { ball, hpPercent, level, status, turn, conditionMet } = state;
@@ -356,7 +358,18 @@ export function CatchCardBody({
         ) : (
           <div className="rounded-lg border border-zinc-200 p-3 dark:border-zinc-800">
             <div className="flex items-center gap-4">
-              <PokemonSprite pokemonId={selected.id} name={pokemonName(selected, lang)} size="lg" />
+              {detail ? (
+                <button
+                  type="button"
+                  onClick={() => detail.open(selected.id)}
+                  aria-label={pokemonName(selected, lang)}
+                  className="shrink-0 cursor-pointer rounded transition-opacity hover:opacity-80"
+                >
+                  <PokemonSprite pokemonId={selected.id} name={pokemonName(selected, lang)} size="lg" />
+                </button>
+              ) : (
+                <PokemonSprite pokemonId={selected.id} name={pokemonName(selected, lang)} size="lg" />
+              )}
               <div>
                 <div className="mb-1 flex items-center gap-2">
                   <span className="font-medium">{pokemonName(selected, lang)}</span>

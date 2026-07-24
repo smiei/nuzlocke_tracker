@@ -20,6 +20,8 @@ export const TYPE_LABELS: Record<Lang, Record<string, string>> = {
     dark: "Unlicht",
     steel: "Stahl",
     fairy: "Fee",
+    // Curse's pre-Gen-6 type ("???" in-game) - see move-type-history.json.
+    unknown: "???",
   },
   en: {
     normal: "Normal",
@@ -40,6 +42,7 @@ export const TYPE_LABELS: Record<Lang, Record<string, string>> = {
     dark: "Dark",
     steel: "Steel",
     fairy: "Fairy",
+    unknown: "???",
   },
   fr: {
     normal: "Normal",
@@ -60,6 +63,7 @@ export const TYPE_LABELS: Record<Lang, Record<string, string>> = {
     dark: "Ténèbres",
     steel: "Acier",
     fairy: "Fée",
+    unknown: "???",
   },
   es: {
     normal: "Normal",
@@ -80,6 +84,7 @@ export const TYPE_LABELS: Record<Lang, Record<string, string>> = {
     dark: "Siniestro",
     steel: "Acero",
     fairy: "Hada",
+    unknown: "???",
   },
   it: {
     normal: "Normale",
@@ -100,6 +105,7 @@ export const TYPE_LABELS: Record<Lang, Record<string, string>> = {
     dark: "Buio",
     steel: "Acciaio",
     fairy: "Folletto",
+    unknown: "???",
   },
 };
 
@@ -139,4 +145,6 @@ export const TYPE_COLORS: Record<string, string> = {
   dark: "#705848",
   steel: "#B8B8D0",
   fairy: "#EE99AC",
+  // Curse's pre-Gen-6 "???" type - a defunct oddity, not a real battling type.
+  unknown: "#68A090",
 };

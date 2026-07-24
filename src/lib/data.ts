@@ -2,7 +2,13 @@ import fs from "node:fs";
 import path from "node:path";
 import type { EffectivenessTable } from "@/lib/effectiveness";
 import type { LocalizedNames } from "@/lib/i18n/localize";
-import type { Learnset, Moveset, MovesTable, TmCompatTable } from "@/lib/learnset";
+import type {
+  Learnset,
+  Moveset,
+  MovesTable,
+  MoveTypeHistoryEntry,
+  TmCompatTable,
+} from "@/lib/learnset";
 
 // Static reference data lives in /data as JSON, not in the DB (see project spec).
 // Read fresh from disk on every call (no in-memory caching) so the bind-mounted
@@ -276,6 +282,16 @@ export function getMoves(): MovesTable {
     return readJson<MovesTable>("moves.json");
   } catch {
     return {};
+  }
+}
+
+// Hand-curated corrections for moves whose type PokeAPI only tracks as its
+// current (latest-generation) value - see MoveTypeHistoryEntry.
+export function getMoveTypeHistory(): MoveTypeHistoryEntry[] {
+  try {
+    return readJson<MoveTypeHistoryEntry[]>("move-type-history.json");
+  } catch {
+    return [];
   }
 }
 

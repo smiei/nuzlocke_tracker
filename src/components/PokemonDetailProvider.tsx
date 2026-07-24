@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState } from "react";
 import type { Pokemon, EvolutionEntry } from "@/lib/data";
-import type { Moveset, MovesTable } from "@/lib/learnset";
+import type { Moveset, MovesTable, MoveTypeHistoryEntry } from "@/lib/learnset";
 import type { EffectivenessTable } from "@/lib/effectiveness";
 import type { Lang } from "@/lib/i18n/dictionary";
 import { PokemonDetailModal } from "@/components/PokemonDetailModal";
@@ -19,6 +19,7 @@ export function PokemonDetailProvider({
   pokemonList,
   evolutions,
   moveData,
+  moveTypeHistory,
   effectiveness,
   generation,
   dexLimit,
@@ -28,6 +29,7 @@ export function PokemonDetailProvider({
   pokemonList: Pokemon[];
   evolutions: EvolutionEntry[];
   moveData: { movesets: Moveset; moves: MovesTable };
+  moveTypeHistory: MoveTypeHistoryEntry[];
   effectiveness: EffectivenessTable;
   generation: number;
   dexLimit: number;
@@ -47,6 +49,7 @@ export function PokemonDetailProvider({
           evolutions={evolutions}
           movesets={moveData.movesets}
           moves={moveData.moves}
+          moveTypeHistory={moveTypeHistory}
           effectiveness={effectiveness}
           generation={generation}
           dexLimit={dexLimit}
