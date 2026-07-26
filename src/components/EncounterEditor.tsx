@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import type { Pokemon, Route } from "@/lib/data";
 import type { Encounter } from "@/generated/prisma/client";
 import { EncounterStatus, type Player } from "@/generated/prisma/enums";
-import { saveEncounter, clearEncounter } from "@/lib/actions";
+import { saveEncounter, saveEncounterDraft, clearEncounter } from "@/lib/actions";
 import { formatActionError } from "@/lib/actionErrors";
 import { useDialog } from "@/components/DialogProvider";
 import type { Lang } from "@/lib/i18n/dictionary";
@@ -14,6 +14,7 @@ import { pokemonName, routeName } from "@/lib/i18n/localize";
 import { PokemonCombobox } from "@/components/PokemonCombobox";
 import { PokemonInfoButton } from "@/components/PokemonDetailProvider";
 import type { RunSettings } from "@/lib/runSettings";
+import type { EncounterDraft } from "@/lib/draftStore";
 
 // In-game nicknames are capped at 10 characters; the input enforces this and
 // shows a live counter (the server slices to the same length as a safety net).
@@ -40,6 +41,7 @@ export function EncounterEditor({
   routes,
   pokemonList,
   encounters,
+  draft,
 }: {
   runId: number;
   lang: Lang;
@@ -49,6 +51,10 @@ export function EncounterEditor({
   routes: Route[];
   pokemonList: Pokemon[];
   encounters: Encounter[];
+  // The other clients' not-yet-confirmed pick for this exact route/player, if
+  // any (see saveEncounterDraft) - null once a real Encounter exists, since
+  // `current` then takes over.
+  draft: EncounterDraft | null;
 }) {
   const router = useRouter();
   const { confirm } = useDialog();
@@ -86,11 +92,18 @@ export function EncounterEditor({
     return evolved ? pokemonName(evolved, lang) : null;
   }, [current, pokemonList, lang]);
 
-  const [selectedId, setSelectedId] = useState<number | null>(current?.pokemonId ?? null);
-  const [status, setStatus] = useState<EncounterStatus>(current?.status ?? EncounterStatus.CAUGHT);
-  const [nickname, setNickname] = useState(current?.nickname ?? "");
+  // While there is no real Encounter yet, another client's unconfirmed pick
+  // (draft) fills in for it - so every client shows the same in-progress row
+  // even before "Bestätigen". `current` always wins once it exists.
+  const [selectedId, setSelectedId] = useState<number | null>(
+    current?.pokemonId ?? draft?.pokemonId ?? null,
+  );
+  const [status, setStatus] = useState<EncounterStatus>(
+    current?.status ?? draft?.status ?? EncounterStatus.CAUGHT,
+  );
+  const [nickname, setNickname] = useState(current?.nickname ?? draft?.nickname ?? "");
   const [nickFocused, setNickFocused] = useState(false);
-  const [shiny, setShiny] = useState(current?.shiny ?? false);
+  const [shiny, setShiny] = useState(current?.shiny ?? draft?.shiny ?? false);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
@@ -100,11 +113,20 @@ export function EncounterEditor({
   })();
 
   useEffect(() => {
-    setSelectedId(current?.pokemonId ?? null);
-    setStatus(current?.status ?? EncounterStatus.CAUGHT);
-    setNickname(current?.nickname ?? "");
-    setShiny(current?.shiny ?? false);
-  }, [current?.pokemonId, current?.status, current?.nickname, current?.shiny]);
+    setSelectedId(current?.pokemonId ?? draft?.pokemonId ?? null);
+    setStatus(current?.status ?? draft?.status ?? EncounterStatus.CAUGHT);
+    setNickname(current?.nickname ?? draft?.nickname ?? "");
+    setShiny(current?.shiny ?? draft?.shiny ?? false);
+  }, [
+    current?.pokemonId,
+    current?.status,
+    current?.nickname,
+    current?.shiny,
+    draft?.pokemonId,
+    draft?.status,
+    draft?.nickname,
+    draft?.shiny,
+  ]);
 
   // Static/gift is a fixed property of the location (routes.json `type`),
   // no longer a user-set checkbox.
@@ -151,19 +173,32 @@ export function EncounterEditor({
       } else {
         setError(formatActionError(result.error, lang));
         // Revert the optimistic UI change - the save was rejected server-side.
-        setSelectedId(current?.pokemonId ?? null);
-        setStatus(current?.status ?? EncounterStatus.CAUGHT);
-        setNickname(current?.nickname ?? "");
-        setShiny(current?.shiny ?? false);
+        setSelectedId(current?.pokemonId ?? draft?.pokemonId ?? null);
+        setStatus(current?.status ?? draft?.status ?? EncounterStatus.CAUGHT);
+        setNickname(current?.nickname ?? draft?.nickname ?? "");
+        setShiny(current?.shiny ?? draft?.shiny ?? false);
       }
     });
   }
 
+  // Broadcasts an unconfirmed pick to every other client (see
+  // saveEncounterDraft) - fire-and-forget, no DB write, no pending/disabled
+  // state tied to it, so it never interrupts fast picking/typing.
+  function broadcastDraft(next: {
+    pokemonId: number | null;
+    status: EncounterStatus;
+    nickname: string;
+    shiny: boolean;
+  }) {
+    void saveEncounterDraft({ runId, routeId, player, ...next });
+  }
+
   // A brand-new pick for a route with no encounter yet does NOT auto-save -
-  // it only updates local state, until "Bestätigen" commits pokemon/status/
-  // nickname/shiny together in one save. This is what previously made a row
-  // vanish from the Tracker tab's "Nur offene" filter the instant a species
-  // was picked, before nickname/shiny/status could be set. Editing an
+  // it only updates local state (broadcast as a draft so every other client
+  // sees the same in-progress row), until "Bestätigen" commits pokemon/
+  // status/nickname/shiny together in one save. This is what previously made
+  // a row vanish from the Tracker tab's "Nur offene" filter the instant a
+  // species was picked, before nickname/shiny/status could be set. Editing an
   // EXISTING encounter (current != null) keeps the old instant-save-per-
   // field behavior - that row is already outside the "offene" filter, so the
   // disappearing-row problem doesn't apply to it.
@@ -175,8 +210,11 @@ export function EncounterEditor({
       setNickname("");
       setShiny(false);
       if (current) persist({ pokemonId, status, nickname: null, shiny: false });
+      else broadcastDraft({ pokemonId, status, nickname: "", shiny: false });
     } else if (current) {
       persist({ pokemonId, status });
+    } else {
+      broadcastDraft({ pokemonId, status, nickname, shiny });
     }
   }
 
@@ -185,19 +223,27 @@ export function EncounterEditor({
     const next = !shiny;
     setShiny(next);
     if (current) persist({ pokemonId: selectedId, status, shiny: next });
+    else broadcastDraft({ pokemonId: selectedId, status, nickname, shiny: next });
   }
 
   function handleStatusChange(next: EncounterStatus) {
     setStatus(next);
-    if (current && selectedId !== null) persist({ pokemonId: selectedId, status: next });
+    if (selectedId === null) return;
+    if (current) persist({ pokemonId: selectedId, status: next });
+    else broadcastDraft({ pokemonId: selectedId, status: next, nickname, shiny });
   }
 
-  // Saved on blur / Enter, not per keystroke - one server action per edit.
+  // Saved on blur / Enter, not per keystroke - one server action/broadcast per
+  // edit.
   function commitNickname() {
-    if (selectedId === null || !current) return;
+    if (selectedId === null) return;
     const trimmed = nickname.trim();
-    if (trimmed === (current?.nickname ?? "")) return;
-    persist({ pokemonId: selectedId, status, nickname: trimmed || null });
+    if (current) {
+      if (trimmed === (current?.nickname ?? "")) return;
+      persist({ pokemonId: selectedId, status, nickname: trimmed || null });
+    } else {
+      broadcastDraft({ pokemonId: selectedId, status, nickname: trimmed, shiny });
+    }
   }
 
   // Commits a brand-new encounter (pokemon + status + nickname + shiny) in

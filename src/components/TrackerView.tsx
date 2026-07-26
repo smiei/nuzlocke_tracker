@@ -12,6 +12,7 @@ import { EncounterEditor } from "@/components/EncounterEditor";
 import { ProgressBar } from "@/components/ProgressBar";
 import { usePlayerLabel } from "@/components/PlayerNamesProvider";
 import type { RunSettings } from "@/lib/runSettings";
+import type { EncounterDraft } from "@/lib/draftStore";
 
 export function TrackerView({
   runId,
@@ -21,6 +22,7 @@ export function TrackerView({
   routes,
   pokemonList,
   encounters,
+  drafts,
 }: {
   runId: number;
   mode: RunMode;
@@ -29,6 +31,7 @@ export function TrackerView({
   routes: Route[];
   pokemonList: Pokemon[];
   encounters: Encounter[];
+  drafts: EncounterDraft[];
 }) {
   const playerLabel = usePlayerLabel();
   const tTracker = translations[lang].tracker;
@@ -95,6 +98,7 @@ export function TrackerView({
               routes={routes}
               pokemonList={pokemonList}
               encounters={encounters}
+              draft={drafts.find((d) => d.routeId === route.id && d.player === Player.PLAYER1) ?? null}
             />
           ) : (
             <>
@@ -111,6 +115,7 @@ export function TrackerView({
                   routes={routes}
                   pokemonList={pokemonList}
                   encounters={encounters}
+                  draft={drafts.find((d) => d.routeId === route.id && d.player === Player.PLAYER1) ?? null}
                 />
               </div>
               <div>
@@ -126,6 +131,7 @@ export function TrackerView({
                   routes={routes}
                   pokemonList={pokemonList}
                   encounters={encounters}
+                  draft={drafts.find((d) => d.routeId === route.id && d.player === Player.PLAYER2) ?? null}
                 />
               </div>
             </>

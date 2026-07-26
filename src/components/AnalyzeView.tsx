@@ -84,8 +84,19 @@ function AnalyzeCard({
             lang={lang}
             pokemonList={catchShared.pokemonList}
             selectedId={selectedId}
-            onSelect={(id) => onChange({ selectedId: id })}
-            onClear={() => onChange({ selectedId: null })}
+            onSelect={(id) =>
+              onChange(
+                id === selectedId
+                  ? { selectedId: id }
+                  : { selectedId: id, wild: { ...state.wild, ball: "poke", status: "none", hpPercent: 100 } },
+              )
+            }
+            onClear={() =>
+              onChange({
+                selectedId: null,
+                wild: { ...state.wild, ball: "poke", status: "none", hpPercent: 100 },
+              })
+            }
             lockedFamilyIds={catchShared.lockedFamilies}
           />
         </div>
