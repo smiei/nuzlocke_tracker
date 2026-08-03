@@ -5,14 +5,36 @@
 //      -> the "Kampf" tab's offensive coverage + team matchup.
 //  data/movesets/<vg>.json   { id: [[level, slug], ...] }  ALL level-up moves
 //      -> the Pokédex info card's move list + the self-destruct/explosion warn.
-//  data/moves.json           { slug: { names:{de,en,..}, type, damaging } }
-//      -> localized move names / type / damage-class, shared across games.
+//  data/moves.json           { slug: { names, type, damaging, power, ... } }
+//      -> localized move names/flavor text + type + battle stats, shared
+//         across games (see the per-move shape below).
 //  data/tm-compat/<vg>.json  { slug: { machine?:{kind,ids}, tutor?:ids } }
 //      -> the TM/HM/tutor tab: which Pokémon can OFFICIALLY learn a move via
 //         machine (kind = "tm"|"hm") or a move tutor, per version group.
 //
-// Approximation: PokeAPI's move `damage_class` is the Gen-4+ view. For the
-// only distinction we need (damaging vs. status) that's stable across gens.
+// PokeAPI reports each move's CURRENT (latest-generation) power/accuracy/pp/
+// effect chance, and its `past_values` list what a field used to be. Those
+// entries are keyed by the version group in which the change TOOK EFFECT, so
+// the listed value applied through the generation BEFORE it - converted here
+// into `past: [{ maxGeneration, power?, accuracy?, pp?, effectChance? }]`
+// (value applied through that generation, inclusive), matching the
+// maxGeneration convention data/move-type-history.json already uses. This
+// matters: roughly a fifth of moves had different numbers in Gen 3 (Thunder
+// 120->110, Rapid Spin 20->50, Pin Missile 14/85->25/95, ...). Resolved per
+// field at render time by moveStatsForGeneration() in src/lib/learnset.ts.
+// `past_values[].type` is deliberately NOT used - historical retypes stay
+// hand-curated in data/move-type-history.json, one source of truth.
+//
+// `damageClass` is likewise PokeAPI's Gen-4+ view and is only correct from
+// Gen 4 on: before the physical/special split, the category followed the
+// move's TYPE, not the move (Gen 3 Bite = special, Gust/Shadow Ball =
+// physical). damageClassForGeneration() in src/lib/learnset.ts applies that
+// rule at render time; "status" itself is stable across all generations.
+//
+// `flavor` is the localized in-game description (all 5 UI languages). The
+// mechanically precise effect_entries exist in English/French only, and the
+// German flavor text only goes back to Gen 6, so this is deliberately the
+// modern wording - the numbers above are what carry the generation accuracy.
 //
 // data/moves.json stores each move's CURRENT (latest-generation) type, same
 // as PokeAPI. A few moves were retyped at some point in the games' real
@@ -60,6 +82,69 @@ function historicalType(moveTypeHistory, slug, generation, currentType) {
   return entry && generation <= entry.maxGeneration ? entry.type : currentType;
 }
 
+const ROMAN = { i: 1, ii: 2, iii: 3, iv: 4, v: 5, vi: 6, vii: 7, viii: 8, ix: 9 };
+
+// version-group name -> generation number, for turning PokeAPI's
+// past_values[].version_group into our maxGeneration convention.
+async function loadVersionGroupGenerations() {
+  const list = await fetchJson("https://pokeapi.co/api/v2/version-group?limit=200");
+  const map = new Map();
+  const batch = 8;
+  for (let i = 0; i < list.results.length; i += batch) {
+    await Promise.all(
+      list.results.slice(i, i + batch).map(async (r) => {
+        const d = await fetchJson(r.url);
+        map.set(d.name, ROMAN[d.generation.name.replace("generation-", "")] ?? 99);
+      }),
+    );
+  }
+  return map;
+}
+
+// PokeAPI past_values -> [{ maxGeneration, power?, accuracy?, pp?,
+// effectChance? }], sorted oldest-first. A null field means "unchanged at
+// that point", so it's simply omitted and resolution falls through to the
+// next entry (or the current value) - see the header comment.
+function buildPastValues(move, vgGenerations) {
+  const out = [];
+  for (const pv of move.past_values ?? []) {
+    const gen = vgGenerations.get(pv.version_group?.name);
+    if (!gen || gen > 90) continue;
+    // The change took effect IN that version group, so the old value applied
+    // through the generation before it.
+    const entry = { maxGeneration: gen - 1 };
+    if (pv.power != null) entry.power = pv.power;
+    if (pv.accuracy != null) entry.accuracy = pv.accuracy;
+    if (pv.pp != null) entry.pp = pv.pp;
+    if (pv.effect_chance != null) entry.effectChance = pv.effect_chance;
+    if (Object.keys(entry).length > 1) out.push(entry);
+  }
+  return out.sort((a, b) => a.maxGeneration - b.maxGeneration);
+}
+
+// Localized in-game description: the most recent wording available per
+// language (German only goes back to Gen 6, so there is nothing older to
+// prefer). Newlines are soft-wrap artifacts of the games' text boxes.
+function buildFlavor(move, vgGenerations) {
+  const flavor = {};
+  for (const lang of LANGS) {
+    const entries = (move.flavor_text_entries ?? []).filter((e) => e.language?.name === lang);
+    if (entries.length === 0) continue;
+    let best = entries[entries.length - 1];
+    let bestGen = -1;
+    for (const e of entries) {
+      const gen = vgGenerations.get(e.version_group?.name) ?? -1;
+      if (gen >= bestGen) {
+        bestGen = gen;
+        best = e;
+      }
+    }
+    const text = best.flavor_text?.replace(/[\n\f\r]+/g, " ").replace(/\s+/g, " ").trim();
+    if (text) flavor[lang] = text;
+  }
+  return flavor;
+}
+
 async function main() {
   // Which version groups do the installed game packs need, and up to which id?
   const gameDirs = await readdir(path.join(dataDir, "games"), { withFileTypes: true });
@@ -80,6 +165,7 @@ async function main() {
     }
   }
   const moveTypeHistory = await loadMoveTypeHistory();
+  const vgGenerations = await loadVersionGroupGenerations();
 
   const maxId = Math.max(0, ...versionGroups.values());
   // slug -> { type, damaging, names } (fetched once, reused across all games).
@@ -106,17 +192,28 @@ async function main() {
           const machineVgs = new Set();
           const tutorVgs = new Set();
           for (const v of m.version_group_details) {
-            const vg = v.version_group.name;
-            if (!movesets.has(vg)) continue;
-            if (pid > (versionGroups.get(vg) ?? 0)) continue;
-            const method = v.move_learn_method.name;
-            if (method === "level-up") {
-              const lvl = v.level_learned_at || 1;
-              levelPerVg.set(vg, Math.min(levelPerVg.get(vg) ?? Infinity, lvl));
-            } else if (method === "machine") {
-              machineVgs.add(vg);
-            } else if (method === "tutor") {
-              tutorVgs.add(vg);
+            const rawVg = v.version_group.name;
+            // Known PokeAPI gap: Deoxys (386) is only tagged "ruby-sapphire"
+            // for its Gen 3 moves, never "emerald"/"firered-leafgreen" - even
+            // though the in-game Gen 3 movepool is identical across all
+            // three. Mirror ruby-sapphire onto both so it doesn't silently
+            // end up with an empty moveset again.
+            const effectiveVgs =
+              pid === 386 && rawVg === "ruby-sapphire"
+                ? ["emerald", "firered-leafgreen"]
+                : [rawVg];
+            for (const vg of effectiveVgs) {
+              if (!movesets.has(vg)) continue;
+              if (pid > (versionGroups.get(vg) ?? 0)) continue;
+              const method = v.move_learn_method.name;
+              if (method === "level-up") {
+                const lvl = v.level_learned_at || 1;
+                levelPerVg.set(vg, Math.min(levelPerVg.get(vg) ?? Infinity, lvl));
+              } else if (method === "machine") {
+                machineVgs.add(vg);
+              } else if (method === "tutor") {
+                tutorVgs.add(vg);
+              }
             }
           }
           if (levelPerVg.size === 0 && machineVgs.size === 0 && tutorVgs.size === 0) continue;
@@ -130,10 +227,19 @@ async function main() {
               const hit = move.names.find((n) => n.language?.name === lang);
               names[lang] = hit?.name ?? move.names.find((n) => n.language?.name === "en")?.name ?? slug;
             }
+            const past = buildPastValues(move, vgGenerations);
+            const flavor = buildFlavor(move, vgGenerations);
             moveCache.set(slug, {
               type: move.type.name,
               damaging: move.damage_class?.name !== "status",
+              damageClass: move.damage_class?.name ?? "status",
+              power: move.power ?? null,
+              accuracy: move.accuracy ?? null,
+              pp: move.pp ?? null,
+              effectChance: move.effect_chance ?? null,
               names,
+              ...(Object.keys(flavor).length > 0 && { flavor }),
+              ...(past.length > 0 && { past }),
             });
             const kinds = {};
             for (const mac of move.machines ?? []) {

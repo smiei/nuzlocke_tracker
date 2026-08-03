@@ -1,9 +1,11 @@
 import fs from "node:fs";
 import path from "node:path";
 import type { EffectivenessTable } from "@/lib/effectiveness";
+import type { Lang } from "@/lib/i18n/dictionary";
 import type { LocalizedNames } from "@/lib/i18n/localize";
 import type {
   Learnset,
+  MoveInfo,
   Moveset,
   MovesTable,
   MoveTypeHistoryEntry,
@@ -280,9 +282,25 @@ export function getMoveset(versionGroup: string): Moveset {
   }
 }
 
-export function getMoves(): MovesTable {
+// On disk each move carries its description in all five UI languages; the
+// table is handed to a client component, so shipping all of them would put
+// ~4x more JSON on the wire than the page can ever show.
+type MoveInfoFile = Omit<MoveInfo, "flavor"> & { flavor?: Record<string, string> };
+
+// Localized move names/descriptions + battle stats, shared across games.
+// `lang` picks which description survives into the payload (falling back
+// lang -> en -> de like localizeName does); omit it to drop descriptions
+// entirely, for consumers that only need names and types.
+export function getMoves(lang?: Lang): MovesTable {
   try {
-    return readJson<MovesTable>("moves.json");
+    const raw = readJson<Record<string, MoveInfoFile>>("moves.json");
+    const out: MovesTable = {};
+    for (const [slug, info] of Object.entries(raw)) {
+      const { flavor, ...rest } = info;
+      const text = lang ? flavor?.[lang] ?? flavor?.en ?? flavor?.de : undefined;
+      out[slug] = text ? { ...rest, flavor: text } : rest;
+    }
+    return out;
   } catch {
     return {};
   }

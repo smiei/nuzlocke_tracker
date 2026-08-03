@@ -1,11 +1,14 @@
 import { describe, it, expect } from "vitest";
 import {
   attackTypesAtLevel,
+  damageClassForGeneration,
   moveListAtLevel,
+  moveStatsForGeneration,
   explosiveMove,
   tmLearnMethods,
   historicalMoveType,
   type Learnset,
+  type MoveInfo,
   type Moveset,
   type MovesTable,
   type MoveTypeHistoryEntry,
@@ -65,6 +68,141 @@ describe("moveListAtLevel", () => {
     expect(moveListAtLevel(moveset, moves, 1, 10, "en", 4, history).find((m) => m.name === "Vine Whip")?.type).toBe("grass");
     // Gen 1: override applies.
     expect(moveListAtLevel(moveset, moves, 1, 10, "en", 1, history).find((m) => m.name === "Vine Whip")?.type).toBe("normal");
+  });
+});
+
+describe("damageClassForGeneration", () => {
+  it("uses the move's own class from Gen 4 on", () => {
+    expect(damageClassForGeneration(4, "dark", "physical")).toBe("physical");
+    expect(damageClassForGeneration(9, "ghost", "special")).toBe("special");
+  });
+
+  it("derives the class from the TYPE before the Gen 4 split", () => {
+    // Bite/Crunch are Dark -> special in Gen 3, physical from Gen 4.
+    expect(damageClassForGeneration(3, "dark", "physical")).toBe("special");
+    // Gust/Shadow Ball are Flying/Ghost -> physical in Gen 3, special later.
+    expect(damageClassForGeneration(3, "flying", "special")).toBe("physical");
+    expect(damageClassForGeneration(3, "ghost", "special")).toBe("physical");
+    // Unchanged either way.
+    expect(damageClassForGeneration(3, "water", "special")).toBe("special");
+    expect(damageClassForGeneration(3, "ground", "physical")).toBe("physical");
+  });
+
+  it("keeps status moves as status in every generation", () => {
+    expect(damageClassForGeneration(1, "normal", "status", false)).toBe("status");
+    expect(damageClassForGeneration(4, "normal", "status", false)).toBe("status");
+    // A damaging=false move with no recorded class still reads as status.
+    expect(damageClassForGeneration(3, "normal", undefined, false)).toBe("status");
+  });
+});
+
+describe("moveStatsForGeneration", () => {
+  // Thunderbolt: 95 power through Gen 5, 90 from Gen 6.
+  const thunderbolt: MoveInfo = {
+    type: "electric",
+    damaging: true,
+    names: { en: "Thunderbolt" },
+    power: 90,
+    accuracy: 100,
+    pp: 15,
+    effectChance: 10,
+    past: [{ maxGeneration: 5, power: 95 }],
+  };
+  // Tackle: 35/95 through Gen 4, 50 power through Gen 6, 40/100 today.
+  const tackle: MoveInfo = {
+    type: "normal",
+    damaging: true,
+    names: { en: "Tackle" },
+    power: 40,
+    accuracy: 100,
+    pp: 35,
+    effectChance: null,
+    past: [
+      { maxGeneration: 4, power: 35, accuracy: 95 },
+      { maxGeneration: 6, power: 50 },
+    ],
+  };
+
+  it("returns the value in effect for that generation", () => {
+    expect(moveStatsForGeneration(thunderbolt, 3).power).toBe(95);
+    expect(moveStatsForGeneration(thunderbolt, 5).power).toBe(95);
+    expect(moveStatsForGeneration(thunderbolt, 6).power).toBe(90);
+  });
+
+  it("resolves each field independently across past entries", () => {
+    expect(moveStatsForGeneration(tackle, 3)).toMatchObject({ power: 35, accuracy: 95 });
+    // Gen 5: power comes from the later entry, accuracy already fell through
+    // to the current value (the Gen-6 entry doesn't record one).
+    expect(moveStatsForGeneration(tackle, 5)).toMatchObject({ power: 50, accuracy: 100 });
+    expect(moveStatsForGeneration(tackle, 9)).toMatchObject({ power: 40, accuracy: 100 });
+  });
+
+  it("falls back to the current values when there is no history", () => {
+    const info: MoveInfo = {
+      type: "normal",
+      damaging: true,
+      names: { en: "X" },
+      power: 60,
+      accuracy: 85,
+      pp: 20,
+      effectChance: null,
+    };
+    expect(moveStatsForGeneration(info, 1)).toEqual({
+      power: 60,
+      accuracy: 85,
+      pp: 20,
+      effectChance: null,
+    });
+  });
+
+  it("reports nulls for a move with no recorded stats at all", () => {
+    const bare: MoveInfo = { type: "normal", damaging: true, names: { en: "X" } };
+    expect(moveStatsForGeneration(bare, 3)).toEqual({
+      power: null,
+      accuracy: null,
+      pp: null,
+      effectChance: null,
+    });
+  });
+});
+
+describe("moveListAtLevel move details", () => {
+  const detailed: MovesTable = {
+    bite: {
+      type: "dark",
+      damaging: true,
+      names: { en: "Bite" },
+      damageClass: "physical",
+      power: 60,
+      accuracy: 100,
+      pp: 25,
+      effectChance: 30,
+      flavor: "Bites the target.",
+    },
+  };
+  const set: Moveset = { "1": [[1, "bite"]] };
+
+  it("carries gen-accurate stats, class and flavor onto the entry", () => {
+    const [gen3] = moveListAtLevel(set, detailed, 1, 100, "en", 3, []);
+    expect(gen3).toMatchObject({
+      name: "Bite",
+      damageClass: "special", // Dark is special pre-split
+      power: 60,
+      pp: 25,
+      effectChance: 30,
+      flavor: "Bites the target.",
+    });
+    // The modern class differs, so the hint field is populated.
+    expect(gen3.modernDamageClass).toBe("physical");
+    // Power never changed, so no hint.
+    expect(gen3.modernPower).toBeUndefined();
+  });
+
+  it("omits the hint fields entirely when nothing differs", () => {
+    const [gen4] = moveListAtLevel(set, detailed, 1, 100, "en", 4, []);
+    expect(gen4.damageClass).toBe("physical");
+    expect(gen4.modernDamageClass).toBeUndefined();
+    expect(gen4.modernAccuracy).toBeUndefined();
   });
 });
 

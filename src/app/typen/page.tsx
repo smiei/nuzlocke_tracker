@@ -45,7 +45,7 @@ export default async function AnalyzePage({
   const game = getGameOrDefault(gameId);
   const pokemonList = getPokemonList(game.dexLimit);
   const moveset = getMoveset(game.versionGroup);
-  const moves = getMoves();
+  const moves = getMoves(lang);
 
   const catchRates = Object.fromEntries(
     getCatchRates().map((entry) => [entry.id, entry.catch_rate]),

@@ -10,11 +10,59 @@ export type Learnset = Record<string, Record<string, number>>;
 // pokemonId -> [[level, moveSlug], ...] for ALL level-up moves (status too).
 export type Moveset = Record<string, [number, string][]>;
 
-// moveSlug -> localized names + type + damage class.
-export type MoveInfo = { type: string; damaging: boolean; names: Record<string, string> };
+export type MoveDamageClass = "physical" | "special" | "status";
+
+// A move's power/accuracy/pp/effect chance as it was through `maxGeneration`
+// (inclusive); a field that didn't change at that point is simply absent.
+// Built from PokeAPI's `past_values` by scripts/generate-learnsets.mjs - see
+// moveStatsForGeneration().
+export type MovePastValue = {
+  maxGeneration: number;
+  power?: number;
+  accuracy?: number;
+  pp?: number;
+  effectChance?: number;
+};
+
+// moveSlug -> localized names + type + battle stats. Everything past
+// `names` is optional so a moves.json generated before those fields existed
+// still loads (the UI just shows less), matching how the rest of the data
+// layer degrades rather than crashes.
+export type MoveInfo = {
+  type: string;
+  damaging: boolean;
+  names: Record<string, string>;
+  // PokeAPI's Gen-4+ view; use damageClassForGeneration() to read it.
+  damageClass?: MoveDamageClass;
+  power?: number | null;
+  accuracy?: number | null;
+  pp?: number | null;
+  effectChance?: number | null;
+  // Localized in-game description, already projected to the active language
+  // by getMoves(lang) so the whole 5-language table never ships to the client.
+  flavor?: string;
+  past?: MovePastValue[];
+};
 export type MovesTable = Record<string, MoveInfo>;
 
-export type MoveEntry = { level: number; name: string; type: string; damaging: boolean };
+export type MoveEntry = {
+  level: number;
+  name: string;
+  type: string;
+  damaging: boolean;
+  damageClass: MoveDamageClass;
+  flavor: string | null;
+  // Values as they were in this game's generation (see moveStatsForGeneration).
+  power: number | null;
+  accuracy: number | null;
+  pp: number | null;
+  effectChance: number | null;
+  // The modern values, set ONLY when they differ from the generation-accurate
+  // ones above - lets the UI add a quiet "heute X" hint without re-deriving.
+  modernPower?: number | null;
+  modernAccuracy?: number | null;
+  modernDamageClass?: MoveDamageClass;
+};
 
 // PokeAPI's `moves.json` type is always the move's CURRENT (latest-generation)
 // type; a handful of moves were retyped at some point in the games' history
@@ -35,6 +83,75 @@ export function historicalMoveType(
 ): string {
   const entry = history.find((h) => h.slug === slug && generation <= h.maxGeneration);
   return entry?.type ?? currentType;
+}
+
+// Before the Gen 4 physical/special split, a damaging move's category came
+// from its TYPE, not from the move itself - so PokeAPI's damage_class (the
+// Gen-4+ view) is simply wrong for Gen 1-3 games: Bite and Crunch were
+// special there, Gust and Shadow Ball physical. These are the types that
+// were physical; every other damaging type was special. (Gen 1 has neither
+// Dark nor Steel, which makes no difference to the lookup.)
+const PRE_SPLIT_PHYSICAL_TYPES = new Set([
+  "normal",
+  "fighting",
+  "flying",
+  "poison",
+  "ground",
+  "rock",
+  "bug",
+  "ghost",
+  "steel",
+]);
+
+// The category a move actually had in the given generation. `moveType` must
+// be the type it had THEN (i.e. run it through historicalMoveType first) -
+// Bite being Normal in Gen 1-2 and Dark in Gen 3 flips its category too.
+// "status" is stable across every generation and always passes through.
+export function damageClassForGeneration(
+  generation: number,
+  moveType: string,
+  currentClass: MoveDamageClass | undefined,
+  damaging = true,
+): MoveDamageClass {
+  const known = currentClass ?? (damaging ? "physical" : "status");
+  if (known === "status" || !damaging) return "status";
+  if (generation >= 4) return known;
+  return PRE_SPLIT_PHYSICAL_TYPES.has(moveType) ? "physical" : "special";
+}
+
+export type MoveStats = {
+  power: number | null;
+  accuracy: number | null;
+  pp: number | null;
+  effectChance: number | null;
+};
+
+type MoveStatKey = keyof MoveStats;
+
+// `past` is sorted oldest-first, so the first entry still covering this
+// generation holds the value that was in effect; a field missing from it
+// didn't change at that point, so the search falls through to the next entry
+// and finally to the move's current value.
+function statInGeneration(info: MoveInfo, field: MoveStatKey, generation: number): number | null {
+  for (const entry of info.past ?? []) {
+    if (generation > entry.maxGeneration) continue;
+    const value = entry[field];
+    if (value !== undefined) return value;
+  }
+  return info[field] ?? null;
+}
+
+// A move's power/accuracy/PP/effect chance as they were in the given
+// generation. Roughly a fifth of moves differ from their modern values in
+// Gen 3 (Thunder 120 vs. 110, Rapid Spin 20 vs. 50, ...), which is exactly
+// what a run in FireRed/Emerald needs to see.
+export function moveStatsForGeneration(info: MoveInfo, generation: number): MoveStats {
+  return {
+    power: statInGeneration(info, "power", generation),
+    accuracy: statInGeneration(info, "accuracy", generation),
+    pp: statInGeneration(info, "pp", generation),
+    effectChance: statInGeneration(info, "effectChance", generation),
+  };
 }
 
 // moveSlug -> which Pokémon can OFFICIALLY learn it via machine (TM/HM) or a
@@ -76,12 +193,32 @@ export function moveListAtLevel(
     .filter(([lvl]) => lvl <= level)
     .map(([lvl, slug]) => {
       const info = moves[slug];
-      return {
+      const damaging = info?.damaging ?? true;
+      // The category follows the type the move had back THEN, not its
+      // modern one - see damageClassForGeneration.
+      const type = historicalMoveType(moveTypeHistory, slug, generation, info?.type ?? "normal");
+      const modernType = info?.type ?? "normal";
+      const stats = info
+        ? moveStatsForGeneration(info, generation)
+        : { power: null, accuracy: null, pp: null, effectChance: null };
+      const damageClass = damageClassForGeneration(generation, type, info?.damageClass, damaging);
+      const modernDamageClass = damageClassForGeneration(9, modernType, info?.damageClass, damaging);
+
+      const entry: MoveEntry = {
         level: lvl,
         name: info?.names[lang] ?? info?.names.en ?? slug,
-        type: historicalMoveType(moveTypeHistory, slug, generation, info?.type ?? "normal"),
-        damaging: info?.damaging ?? true,
+        type,
+        damaging,
+        damageClass,
+        flavor: info?.flavor ?? null,
+        ...stats,
       };
+      // Only surface the modern value where it actually differs, so the UI
+      // can render the "heute X" hint by presence alone.
+      if ((info?.power ?? null) !== stats.power) entry.modernPower = info?.power ?? null;
+      if ((info?.accuracy ?? null) !== stats.accuracy) entry.modernAccuracy = info?.accuracy ?? null;
+      if (modernDamageClass !== damageClass) entry.modernDamageClass = modernDamageClass;
+      return entry;
     });
 }
 

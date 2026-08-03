@@ -1,8 +1,14 @@
 "use client";
 
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import type { Pokemon, EvolutionEntry } from "@/lib/data";
-import type { Moveset, MovesTable, MoveTypeHistoryEntry } from "@/lib/learnset";
+import type {
+  MoveDamageClass,
+  MoveEntry,
+  Moveset,
+  MovesTable,
+  MoveTypeHistoryEntry,
+} from "@/lib/learnset";
 import { moveListAtLevel } from "@/lib/learnset";
 import type { EffectivenessTable } from "@/lib/effectiveness";
 import { computeDefenseMultipliers, getTypesForGeneration } from "@/lib/effectiveness";
@@ -33,6 +39,118 @@ function statColor(value: number): string {
   if (value >= 60) return "bg-amber-400";
   if (value >= 40) return "bg-orange-400";
   return "bg-red-400";
+}
+
+// Physical/special/status get the games' own colour coding so the category
+// reads at a glance, the same way TypeBadge does for types.
+const DAMAGE_CLASS_STYLES: Record<MoveDamageClass, string> = {
+  physical:
+    "bg-orange-100 text-orange-800 dark:bg-orange-950/60 dark:text-orange-300",
+  special: "bg-sky-100 text-sky-800 dark:bg-sky-950/60 dark:text-sky-300",
+  status: "bg-zinc-200 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-200",
+};
+
+// One value tile in an expanded move's detail panel. `hint` carries the modern
+// value when this generation's differs (e.g. "heute 90").
+function MoveStat({ label, value, hint }: { label: string; value: ReactNode; hint?: string }) {
+  return (
+    <div className="rounded bg-white px-2 py-1.5 dark:bg-zinc-900/60">
+      <div className="text-[10px] uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
+        {label}
+      </div>
+      <div className="mt-0.5 font-semibold tabular-nums text-zinc-800 dark:text-zinc-100">
+        {value}
+      </div>
+      {hint && (
+        <div className="text-[10px] text-zinc-400 dark:text-zinc-500">{hint}</div>
+      )}
+    </div>
+  );
+}
+
+// A module-scope component (not an inline closure inside the modal's render
+// body) because each row owns its expanded state - an inline
+// function-as-component would remount and collapse on every parent render,
+// and nested components trip the React compiler here.
+function MoveRow({ move, lang }: { move: MoveEntry; lang: Lang }) {
+  const [open, setOpen] = useState(false);
+  const td = translations[lang].pokedex.detail;
+  // Status moves have no power, and a few moves never miss (accuracy null).
+  const num = (value: number | null) => (value == null ? "—" : String(value));
+
+  return (
+    <div>
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        title={td.moveDetails}
+        className="flex w-full items-center gap-2 rounded px-1 -mx-1 py-1 text-left text-sm transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-800"
+      >
+        <span className="w-10 shrink-0 text-xs tabular-nums text-zinc-400 dark:text-zinc-500">
+          {td.level(move.level)}
+        </span>
+        <TypeBadge type={move.type} lang={lang} />
+        <span className={`flex-1 ${move.damaging ? "" : "text-zinc-500 dark:text-zinc-400"}`}>
+          {move.name}
+        </span>
+        <span
+          className={`shrink-0 text-xs text-zinc-400 transition-transform dark:text-zinc-500 ${
+            open ? "rotate-90" : ""
+          }`}
+        >
+          ▸
+        </span>
+      </button>
+      {open && (
+        <div className="mb-1.5 ml-12 rounded-md bg-zinc-100 p-2 text-xs dark:bg-zinc-800/60">
+          <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4">
+            <MoveStat
+              label={td.movePower}
+              value={num(move.power)}
+              hint={move.modernPower !== undefined ? td.moveToday(num(move.modernPower)) : undefined}
+            />
+            <MoveStat
+              label={td.moveAccuracy}
+              value={num(move.accuracy)}
+              hint={
+                move.modernAccuracy !== undefined
+                  ? td.moveToday(num(move.modernAccuracy))
+                  : undefined
+              }
+            />
+            <MoveStat label={td.movePp} value={num(move.pp)} />
+            <MoveStat
+              label={td.moveCategory}
+              value={
+                <span
+                  className={`inline-block rounded px-1.5 py-0.5 text-[11px] font-semibold ${
+                    DAMAGE_CLASS_STYLES[move.damageClass]
+                  }`}
+                >
+                  {td.moveClass[move.damageClass]}
+                </span>
+              }
+              hint={
+                move.modernDamageClass !== undefined
+                  ? td.moveToday(td.moveClass[move.modernDamageClass])
+                  : undefined
+              }
+            />
+          </div>
+          {move.flavor && (
+            <div className="mt-2 border-t border-zinc-200 pt-2 dark:border-zinc-700">
+              <div className="mb-1 text-[10px] uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
+                {td.moveEffect}
+                {move.effectChance != null && ` · ${td.moveChance(move.effectChance)}`}
+              </div>
+              <p className="leading-relaxed text-zinc-600 dark:text-zinc-300">{move.flavor}</p>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
 }
 
 export function PokemonDetailModal({
@@ -281,15 +399,7 @@ export function PokemonDetailModal({
             </h3>
             <div className="divide-y divide-zinc-100 dark:divide-zinc-800">
               {moveList.map((mv, i) => (
-                <div key={`${mv.name}-${i}`} className="flex items-center gap-2 py-1 text-sm">
-                  <span className="w-10 shrink-0 text-xs tabular-nums text-zinc-400 dark:text-zinc-500">
-                    {td.level(mv.level)}
-                  </span>
-                  <TypeBadge type={mv.type} lang={lang} />
-                  <span className={mv.damaging ? "" : "text-zinc-500 dark:text-zinc-400"}>
-                    {mv.name}
-                  </span>
-                </div>
+                <MoveRow key={`${mv.name}-${i}`} move={mv} lang={lang} />
               ))}
             </div>
           </div>

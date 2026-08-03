@@ -247,7 +247,7 @@ export default async function OverviewPage({
         <PokemonDetailProvider
           pokemonList={pokemonList}
           evolutions={getEvolutions(evoOptions)}
-          moveData={{ movesets: getMoveset(game.versionGroup), moves: getMoves() }}
+          moveData={{ movesets: getMoveset(game.versionGroup), moves: getMoves(lang) }}
           moveTypeHistory={getMoveTypeHistory()}
           effectiveness={table}
           generation={game.generation}
