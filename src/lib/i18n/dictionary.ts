@@ -369,6 +369,7 @@ const de = {
     notLearnable: "Diese Attacke ist im Original keine TM/VM- oder Tutor-Attacke.",
     empty: "Noch keine lebenden Pokémon gefangen.",
     teamHeading: "Team",
+    bankHeading: "Bank",
     method: { tm: "TM", hm: "VM", tutor: "Tutor", level: "Lv." },
   },
   overview: {
@@ -785,6 +786,7 @@ const en: Dictionary = {
     notLearnable: "This move is not a TM/HM or tutor move in the original game.",
     empty: "No living Pokémon caught yet.",
     teamHeading: "Team",
+    bankHeading: "Bench",
     method: { tm: "TM", hm: "HM", tutor: "Tutor", level: "Lv." },
   },
   overview: {
@@ -1202,6 +1204,7 @@ const fr: Dictionary = {
     notLearnable: "Cette capacité n'est ni une CT/CS ni une capacité de tuteur dans le jeu d'origine.",
     empty: "Aucun Pokémon vivant capturé pour l'instant.",
     teamHeading: "Équipe",
+    bankHeading: "Banc",
     method: { tm: "CT", hm: "CS", tutor: "Tuteur", level: "Niv." },
   },
   overview: {
@@ -1619,6 +1622,7 @@ const es: Dictionary = {
     notLearnable: "Este movimiento no es una MT/MO ni un movimiento de tutor en el juego original.",
     empty: "Aún no has capturado ningún Pokémon vivo.",
     teamHeading: "Equipo",
+    bankHeading: "Banca",
     method: { tm: "MT", hm: "MO", tutor: "Tutor", level: "Niv." },
   },
   overview: {
@@ -2036,6 +2040,7 @@ const it: Dictionary = {
     notLearnable: "Questa mossa non è una MT/MN né una mossa da insegnamosse nel gioco originale.",
     empty: "Nessun Pokémon vivo catturato finora.",
     teamHeading: "Squadra",
+    bankHeading: "Panchina",
     method: { tm: "MT", hm: "MN", tutor: "Tutor", level: "Liv." },
   },
   overview: {

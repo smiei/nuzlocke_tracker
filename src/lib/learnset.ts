@@ -45,8 +45,10 @@ export type MoveInfo = {
 };
 export type MovesTable = Record<string, MoveInfo>;
 
-export type MoveEntry = {
-  level: number;
+// Everything the shared move-detail panel renders, resolved for one game's
+// generation. Used both per level-up move (Pokédex card) and for a single
+// looked-up move (TMs tab).
+export type MoveDetail = {
   name: string;
   type: string;
   damaging: boolean;
@@ -63,6 +65,8 @@ export type MoveEntry = {
   modernAccuracy?: number | null;
   modernDamageClass?: MoveDamageClass;
 };
+
+export type MoveEntry = MoveDetail & { level: number };
 
 // PokeAPI's `moves.json` type is always the move's CURRENT (latest-generation)
 // type; a handful of moves were retyped at some point in the games' history
@@ -191,35 +195,48 @@ export function moveListAtLevel(
   if (!list) return [];
   return list
     .filter(([lvl]) => lvl <= level)
-    .map(([lvl, slug]) => {
-      const info = moves[slug];
-      const damaging = info?.damaging ?? true;
-      // The category follows the type the move had back THEN, not its
-      // modern one - see damageClassForGeneration.
-      const type = historicalMoveType(moveTypeHistory, slug, generation, info?.type ?? "normal");
-      const modernType = info?.type ?? "normal";
-      const stats = info
-        ? moveStatsForGeneration(info, generation)
-        : { power: null, accuracy: null, pp: null, effectChance: null };
-      const damageClass = damageClassForGeneration(generation, type, info?.damageClass, damaging);
-      const modernDamageClass = damageClassForGeneration(9, modernType, info?.damageClass, damaging);
+    .map(([lvl, slug]) => ({
+      level: lvl,
+      ...moveDetail(moves, slug, lang, generation, moveTypeHistory),
+    }));
+}
 
-      const entry: MoveEntry = {
-        level: lvl,
-        name: info?.names[lang] ?? info?.names.en ?? slug,
-        type,
-        damaging,
-        damageClass,
-        flavor: info?.flavor ?? null,
-        ...stats,
-      };
-      // Only surface the modern value where it actually differs, so the UI
-      // can render the "heute X" hint by presence alone.
-      if ((info?.power ?? null) !== stats.power) entry.modernPower = info?.power ?? null;
-      if ((info?.accuracy ?? null) !== stats.accuracy) entry.modernAccuracy = info?.accuracy ?? null;
-      if (modernDamageClass !== damageClass) entry.modernDamageClass = modernDamageClass;
-      return entry;
-    });
+// One move's stats/category/description as they were in the given
+// generation, localized. Shared by the Pokédex card's level-up list and the
+// TMs tab's lookup, so both render from exactly the same resolution rules.
+export function moveDetail(
+  moves: MovesTable,
+  slug: string,
+  lang: Lang,
+  generation: number,
+  moveTypeHistory: MoveTypeHistoryEntry[],
+): MoveDetail {
+  const info = moves[slug];
+  const damaging = info?.damaging ?? true;
+  // The category follows the type the move had back THEN, not its modern
+  // one - see damageClassForGeneration.
+  const type = historicalMoveType(moveTypeHistory, slug, generation, info?.type ?? "normal");
+  const modernType = info?.type ?? "normal";
+  const stats = info
+    ? moveStatsForGeneration(info, generation)
+    : { power: null, accuracy: null, pp: null, effectChance: null };
+  const damageClass = damageClassForGeneration(generation, type, info?.damageClass, damaging);
+  const modernDamageClass = damageClassForGeneration(9, modernType, info?.damageClass, damaging);
+
+  const detail: MoveDetail = {
+    name: info?.names[lang] ?? info?.names.en ?? slug,
+    type,
+    damaging,
+    damageClass,
+    flavor: info?.flavor ?? null,
+    ...stats,
+  };
+  // Only surface the modern value where it actually differs, so the UI can
+  // render the "heute X" hint by presence alone.
+  if ((info?.power ?? null) !== stats.power) detail.modernPower = info?.power ?? null;
+  if ((info?.accuracy ?? null) !== stats.accuracy) detail.modernAccuracy = info?.accuracy ?? null;
+  if (modernDamageClass !== damageClass) detail.modernDamageClass = modernDamageClass;
+  return detail;
 }
 
 // The self-destruct / explosion move a Pokémon can learn (lowest level), or

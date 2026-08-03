@@ -1,16 +1,26 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import { Player, RunMode } from "@/generated/prisma/enums";
 import type { Lang } from "@/lib/i18n/dictionary";
 import { translations } from "@/lib/i18n/dictionary";
-import type { Moveset, TmCompatTable, TmLearnMethod } from "@/lib/learnset";
-import { tmLearnMethods } from "@/lib/learnset";
+import type {
+  Moveset,
+  MovesTable,
+  MoveTypeHistoryEntry,
+  TmCompatTable,
+  TmLearnMethod,
+} from "@/lib/learnset";
+import { moveDetail, tmLearnMethods } from "@/lib/learnset";
 import { MoveCombobox, type MoveOption } from "@/components/MoveCombobox";
+import { MoveDetailPanel } from "@/components/MoveDetailPanel";
 import { PokemonSprite } from "@/components/PokemonSprite";
 import { usePlayerLabel } from "@/components/PlayerNamesProvider";
+import { usePokemonDetail } from "@/components/PokemonDetailProvider";
 
-export type TmTeamMember = { pokemonId: number; name: string };
+// onTeam = sits in one of the 6 team slots; everything else is the bank
+// (caught and alive, but boxed).
+export type TmTeamMember = { pokemonId: number; name: string; onTeam: boolean };
 
 const METHOD_BADGE: Record<TmLearnMethod | "level", string> = {
   tm: "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300",
@@ -26,6 +36,9 @@ export function TmCompatView({
   moves,
   tmCompat,
   moveset,
+  movesTable,
+  generation,
+  moveTypeHistory,
 }: {
   lang: Lang;
   mode: RunMode;
@@ -33,16 +46,32 @@ export function TmCompatView({
   moves: MoveOption[];
   tmCompat: TmCompatTable;
   moveset: Moveset;
+  movesTable: MovesTable;
+  generation: number;
+  moveTypeHistory: MoveTypeHistoryEntry[];
 }) {
   const t = translations[lang].tms;
   const playerLabel = usePlayerLabel();
+  const detail = usePokemonDetail();
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
   const isClassic = mode === RunMode.CLASSIC;
 
   const entry = selectedSlug ? tmCompat[selectedSlug] : undefined;
   const isMachineOrTutor = !!entry && (!!entry.machine || !!entry.tutor);
 
-  // For each member: how they can learn the move (TM/HM/tutor) + level-up fallback.
+  // Stats/category/effect of the looked-up move, resolved to this game's
+  // generation - the same panel the Pokédex card shows per level-up move.
+  const selectedDetail = useMemo(
+    () =>
+      selectedSlug
+        ? moveDetail(movesTable, selectedSlug, lang, generation, moveTypeHistory)
+        : null,
+    [selectedSlug, movesTable, lang, generation, moveTypeHistory],
+  );
+
+  // For each member: how they can learn the move (TM/HM/tutor) + level-up
+  // fallback. The active team always sorts above the bank - that's the part
+  // you actually plan around - and learnability orders within each block.
   const rowsFor = useMemo(
     () =>
       (members: TmTeamMember[]) =>
@@ -54,7 +83,7 @@ export function TmCompatView({
               : false;
             return { ...m, methods, byLevel, rank: methods.length > 0 ? 0 : byLevel ? 1 : 2 };
           })
-          .sort((a, b) => a.rank - b.rank),
+          .sort((a, b) => Number(b.onTeam) - Number(a.onTeam) || a.rank - b.rank),
     [selectedSlug, entry, moveset],
   );
 
@@ -73,6 +102,12 @@ export function TmCompatView({
           onSelect={setSelectedSlug}
         />
       </div>
+
+      {selectedDetail && (
+        <div className="mb-4 max-w-lg">
+          <MoveDetailPanel move={selectedDetail} lang={lang} />
+        </div>
+      )}
 
       {!hasAnyMember ? (
         <p className="text-sm text-zinc-500 dark:text-zinc-400">{t.empty}</p>
@@ -94,41 +129,79 @@ export function TmCompatView({
                     className="min-w-[260px] flex-1 rounded-lg border border-zinc-200 p-4 dark:border-zinc-800"
                   >
                     <h3 className="mb-3 flex items-baseline justify-between gap-2 text-sm font-semibold text-zinc-600 dark:text-zinc-300">
-                      <span>{isClassic ? t.teamHeading : playerLabel(team.player)}</span>
+                      {/* Solo runs have a single section, and the Team/Bank
+                          dividers below already name the groups - only
+                          SoulLink needs a heading here, to tell the two
+                          players' sections apart. */}
+                      <span>{isClassic ? "" : playerLabel(team.player)}</span>
                       <span className="text-xs font-normal tabular-nums text-zinc-400 dark:text-zinc-500">
                         {rowsFor(team.members).filter((r) => r.methods.length > 0).length}/
                         {team.members.length}
                       </span>
                     </h3>
                     <ul className="flex flex-col gap-1.5">
-                      {rowsFor(team.members).map((r) => (
-                        <li
-                          key={r.pokemonId + "-" + r.name}
-                          className={`flex items-center gap-2 rounded px-1 py-0.5 ${
-                            r.methods.length === 0 ? "opacity-60" : ""
-                          }`}
-                        >
-                          <PokemonSprite pokemonId={r.pokemonId} name={r.name} size="sm" />
-                          <span className="flex-1 text-sm">{r.name}</span>
-                          {r.methods.length > 0 ? (
-                            r.methods.map((mth) => (
-                              <span
-                                key={mth}
-                                className={`rounded px-1.5 py-0.5 text-[10px] font-semibold ${METHOD_BADGE[mth]}`}
-                              >
-                                {t.method[mth]}
-                              </span>
-                            ))
-                          ) : r.byLevel ? (
-                            <span
-                              className={`rounded px-1.5 py-0.5 text-[10px] font-semibold ${METHOD_BADGE.level}`}
+                      {rowsFor(team.members).map((r, i, rows) => (
+                        <Fragment key={r.pokemonId + "-" + r.name}>
+                          {/* One labelled divider in front of each group, so
+                              the 6-slot team and the boxed rest read as two
+                              blocks with matching headings. */}
+                          {(i === 0 || rows[i - 1].onTeam !== r.onTeam) && (
+                            <li
+                              aria-hidden
+                              className={`flex items-center gap-2 text-[10px] uppercase tracking-wide text-zinc-400 dark:text-zinc-500 ${
+                                i === 0 ? "" : "mt-1 pt-1"
+                              }`}
                             >
-                              {t.method.level}
-                            </span>
-                          ) : (
-                            <span className="text-xs text-zinc-300 dark:text-zinc-600">–</span>
+                              <span className="h-px flex-1 bg-zinc-200 dark:bg-zinc-700" />
+                              {r.onTeam ? t.teamHeading : t.bankHeading}
+                              <span className="h-px flex-1 bg-zinc-200 dark:bg-zinc-700" />
+                            </li>
                           )}
-                        </li>
+                          <li
+                            className={`flex items-center gap-2 rounded px-1 py-0.5 ${
+                              r.methods.length === 0 ? "opacity-60" : ""
+                            } ${
+                              r.onTeam
+                                ? "bg-zinc-100 font-medium dark:bg-zinc-800/70"
+                                : ""
+                            }`}
+                          >
+                            {detail ? (
+                              <button
+                                type="button"
+                                onClick={() => detail.open(r.pokemonId)}
+                                title={r.name}
+                                className="flex min-w-0 flex-1 cursor-pointer items-center gap-2 rounded text-left transition-opacity hover:opacity-70"
+                              >
+                                <PokemonSprite pokemonId={r.pokemonId} name={r.name} size="sm" />
+                                <span className="truncate text-sm">{r.name}</span>
+                              </button>
+                            ) : (
+                              <>
+                                <PokemonSprite pokemonId={r.pokemonId} name={r.name} size="sm" />
+                                <span className="flex-1 text-sm">{r.name}</span>
+                              </>
+                            )}
+                            {r.methods.length > 0 ? (
+                              r.methods.map((mth) => (
+                                <span
+                                  key={mth}
+                                  className={`rounded px-1.5 py-0.5 text-[10px] font-semibold ${METHOD_BADGE[mth]}`}
+                                >
+                                  {t.method[mth]}
+                                </span>
+                              ))
+                            ) : r.byLevel ? (
+                              <span
+                                className={`rounded px-1.5 py-0.5 text-[10px] font-semibold ${METHOD_BADGE.level}`}
+                              >
+                                {t.method.level}
+                              </span>
+                            ) : (
+                              <span className="text-xs text-zinc-300 dark:text-zinc-600">–</span>
+                            )}
+                            </li>
+                        </Fragment>
                       ))}
                     </ul>
                   </section>

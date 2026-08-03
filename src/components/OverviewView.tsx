@@ -13,6 +13,7 @@ import { PokemonSprite } from "@/components/PokemonSprite";
 import { ProgressBar } from "@/components/ProgressBar";
 import { BadgeIcon } from "@/components/BadgeIcon";
 import { usePlayerLabel } from "@/components/PlayerNamesProvider";
+import { usePokemonDetail } from "@/components/PokemonDetailProvider";
 
 export type OverviewStats = {
   perPlayer: {
@@ -94,6 +95,7 @@ export function OverviewView({
   const t = translations[lang].overview;
   const tLinks = translations[lang].links;
   const playerLabel = usePlayerLabel();
+  const detail = usePokemonDetail();
   const isClassic = mode === RunMode.CLASSIC;
 
   return (
@@ -295,17 +297,36 @@ export function OverviewView({
                   {m.routeName}
                 </div>
                 <div className="flex flex-wrap items-center gap-2">
-                  {m.pokemon.map((p, i) => (
-                    <span key={i} className="flex items-center gap-1">
-                      <PokemonSprite pokemonId={p.id} name={p.species ?? p.name} size="sm" />
-                      <span className="text-sm">
-                        {p.name}
-                        {p.species && (
-                          <span className="text-zinc-400 dark:text-zinc-500"> ({p.species})</span>
-                        )}
+                  {m.pokemon.map((p, i) => {
+                    // Sprite + name together open the Pokédex card, same as
+                    // the sprite does on the Team/Encounter tabs.
+                    const body = (
+                      <>
+                        <PokemonSprite pokemonId={p.id} name={p.species ?? p.name} size="sm" />
+                        <span className="text-sm">
+                          {p.name}
+                          {p.species && (
+                            <span className="text-zinc-400 dark:text-zinc-500"> ({p.species})</span>
+                          )}
+                        </span>
+                      </>
+                    );
+                    return detail ? (
+                      <button
+                        key={i}
+                        type="button"
+                        onClick={() => detail.open(p.id)}
+                        title={p.species ?? p.name}
+                        className="flex cursor-pointer items-center gap-1 rounded transition-opacity hover:opacity-70"
+                      >
+                        {body}
+                      </button>
+                    ) : (
+                      <span key={i} className="flex items-center gap-1">
+                        {body}
                       </span>
-                    </span>
-                  ))}
+                    );
+                  })}
                 </div>
                 {(m.deathPlayer || m.deathCause) && (
                   <div className="mt-1 text-xs text-red-500 dark:text-red-400">

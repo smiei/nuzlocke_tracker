@@ -1,9 +1,13 @@
 import { redirect } from "next/navigation";
 import {
+  getEffectiveness,
+  getEvolutions,
   getGameOrDefault,
   getMoves,
   getMoveset,
+  getMoveTypeHistory,
   getPokemonById,
+  getPokemonList,
   getTmCompat,
 } from "@/lib/data";
 import { prisma } from "@/lib/prisma";
@@ -13,6 +17,7 @@ import { pokemonName } from "@/lib/i18n/localize";
 import { EncounterStatus, LinkStatus, Player, RunMode } from "@/generated/prisma/client";
 import { SpriteSetProvider } from "@/components/SpriteSetProvider";
 import { PlayerNamesProvider } from "@/components/PlayerNamesProvider";
+import { PokemonDetailProvider } from "@/components/PokemonDetailProvider";
 import { TmCompatView, type TmTeamMember } from "@/components/TmCompatView";
 import type { MoveOption } from "@/components/MoveCombobox";
 
@@ -48,11 +53,20 @@ export default async function TmsPage({
     if (e.soulLink?.status === LinkStatus.DEAD) continue;
     const pokemon = getPokemonById(e.currentPokemonId);
     if (!pokemon) continue;
-    if (seen.get(e.player)?.has(e.currentPokemonId)) continue;
+    const onTeam = e.soulLink?.teamPosition != null;
+    const members = byPlayer.get(e.player);
+    if (seen.get(e.player)?.has(e.currentPokemonId)) {
+      // Same species caught twice: it counts as "on the team" if ANY of them
+      // holds a team slot, so the dedup can't hide it down in the bank.
+      const existing = members?.find((m) => m.pokemonId === e.currentPokemonId);
+      if (existing && onTeam) existing.onTeam = true;
+      continue;
+    }
     seen.get(e.player)?.add(e.currentPokemonId);
-    byPlayer.get(e.player)?.push({
+    members?.push({
       pokemonId: e.currentPokemonId,
       name: pokemonName(pokemon, lang),
+      onTeam,
     });
   }
 
@@ -68,7 +82,10 @@ export default async function TmsPage({
   // tutor moves), localized and sorted by name.
   const moveset = getMoveset(game.versionGroup);
   const tmCompat = getTmCompat(game.versionGroup);
-  const movesTable = getMoves();
+  const moveTypeHistory = getMoveTypeHistory();
+  // With lang, so the move descriptions reach both the selected-move summary
+  // and the Pokédex card opened from a team row.
+  const movesTable = getMoves(lang);
   const slugs = new Set<string>(Object.keys(tmCompat));
   for (const list of Object.values(moveset)) for (const [, slug] of list) slugs.add(slug);
   const moves: MoveOption[] = [...slugs]
@@ -81,14 +98,32 @@ export default async function TmsPage({
   return (
     <SpriteSetProvider spriteSet={game.spriteSet}>
       <PlayerNamesProvider names={settings.playerNames} lang={lang}>
-        <TmCompatView
+        <PokemonDetailProvider
+          pokemonList={getPokemonList(game.dexLimit)}
+          evolutions={getEvolutions({
+            gameId,
+            impossible: settings.evolutionOverridesImpossible,
+            easier: settings.evolutionOverridesEasier,
+          })}
+          moveData={{ movesets: moveset, moves: movesTable }}
+          moveTypeHistory={moveTypeHistory}
+          effectiveness={getEffectiveness(game.generation)}
+          generation={game.generation}
+          dexLimit={game.dexLimit}
           lang={lang}
-          mode={mode}
-          teams={teams}
-          moves={moves}
-          tmCompat={tmCompat}
-          moveset={moveset}
-        />
+        >
+          <TmCompatView
+            lang={lang}
+            mode={mode}
+            teams={teams}
+            moves={moves}
+            tmCompat={tmCompat}
+            moveset={moveset}
+            movesTable={movesTable}
+            generation={game.generation}
+            moveTypeHistory={moveTypeHistory}
+          />
+        </PokemonDetailProvider>
       </PlayerNamesProvider>
     </SpriteSetProvider>
   );
