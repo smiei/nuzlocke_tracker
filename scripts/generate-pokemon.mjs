@@ -81,6 +81,8 @@ async function main() {
           family_id: idFromUrl(chain.chain.species.url),
           stats,
           legendary: species.is_legendary === true || species.is_mythical === true,
+          // PokeAPI reports hectograms; kilograms is what the games show.
+          weight: Math.round(mon.weight) / 10,
         };
       }),
     );

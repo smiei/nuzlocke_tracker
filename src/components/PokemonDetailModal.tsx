@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState, type ReactNode } from "react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import type { Pokemon, EvolutionEntry } from "@/lib/data";
 import type { MoveEntry, Moveset, MovesTable, MoveTypeHistoryEntry } from "@/lib/learnset";
 import { moveListAtLevel } from "@/lib/learnset";
@@ -34,6 +36,20 @@ function statColor(value: number): string {
   if (value >= 60) return "bg-amber-400";
   if (value >= 40) return "bg-orange-400";
   return "bg-red-400";
+}
+
+// One headline figure above the stat bars (rank / BST / weight).
+function MetaTile({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-md bg-zinc-100 px-2 py-1.5 text-center dark:bg-zinc-800/60">
+      <div className="text-[10px] uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
+        {label}
+      </div>
+      <div className="mt-0.5 text-sm font-semibold tabular-nums text-zinc-800 dark:text-zinc-100">
+        {value}
+      </div>
+    </div>
+  );
 }
 
 // A module-scope component (not an inline closure inside the modal's render
@@ -104,6 +120,7 @@ export function PokemonDetailModal({
 }) {
   const t = translations[lang];
   const td = t.pokedex.detail;
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -117,6 +134,11 @@ export function PokemonDetailModal({
     const p = allPokemon.find((x) => x.id === id);
     return p ? pokemonName(p, lang) : `#${id}`;
   };
+
+  // Jump to the Battle & Catch tab with this Pokémon already picked (see the
+  // ?pokemon= handling in AnalyzeView), carrying the current run along.
+  const runParam = searchParams.get("run");
+  const analyzeHref = `/typen?${runParam ? `run=${runParam}&` : ""}pokemon=${pokemon.id}`;
 
   const types = typesForGeneration(pokemon.id, pokemon.types, generation);
   const moveList = moveListAtLevel(
@@ -227,16 +249,31 @@ export function PokemonDetailModal({
           </div>
         </div>
 
-        {/* Rank + type weaknesses */}
+        {/* Headline figures + the jump into the Battle & Catch tab, so the
+            block above the stat bars reads at a glance instead of as a run
+            of loose label: value lines. */}
         <div className="mb-4 space-y-2">
-          <div className="text-sm">
-            <span className="text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
-              {td.rank}:{" "}
-            </span>
-            <span className="font-semibold">#{rank}</span>
+          <div className="grid grid-cols-3 gap-1.5">
+            <MetaTile label={td.rank} value={`#${rank}`} />
+            <MetaTile label={t.pokedex.columns.summe} value={String(pokemon.stats.Summe)} />
+            <MetaTile
+              label={td.weight}
+              value={
+                pokemon.weight != null
+                  ? `${pokemon.weight.toLocaleString(lang, { maximumFractionDigits: 1 })} kg`
+                  : "—"
+              }
+            />
           </div>
+          <Link
+            href={analyzeHref}
+            onClick={onClose}
+            className="flex items-center justify-center gap-1.5 rounded-md border border-zinc-200 px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-800 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
+          >
+            {td.openInAnalyze} <span aria-hidden>→</span>
+          </Link>
           {weaknessGroups.length > 0 && (
-            <div>
+            <div className="pt-1">
               <h3 className="mb-1 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
                 {td.weaknesses}
               </h3>

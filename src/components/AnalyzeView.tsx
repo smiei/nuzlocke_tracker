@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type { Pokemon } from "@/lib/data";
 import type { EffectivenessTable } from "@/lib/effectiveness";
 import type { Learnset } from "@/lib/learnset";
@@ -215,6 +216,36 @@ export function AnalyzeView({
   const [cards, setCards] = usePersistentState<AnalyzeCardState[]>("nuzlocke:analyze:cards", [
     newAnalyzeCard(0),
   ]);
+
+  // Arriving from a Pokédex info card's "Im Kampf & Fang öffnen" link:
+  // ?pokemon=<id> drops that species into the first card (resetting the catch
+  // inputs exactly like picking it by hand would) and is then stripped from
+  // the URL, so a later manual change isn't undone by a refresh.
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const pokemonParam = searchParams.get("pokemon");
+
+  useEffect(() => {
+    if (!pokemonParam) return;
+    const id = Number(pokemonParam);
+    if (Number.isFinite(id) && id > 0) {
+      setCards((cs) => {
+        const [first, ...rest] = cs.length > 0 ? cs : [newAnalyzeCard(0)];
+        if (first.selectedId === id) return cs;
+        return [
+          {
+            ...first,
+            selectedId: id,
+            wild: { ...first.wild, ball: "poke", status: "none", hpPercent: 100 },
+          },
+          ...rest,
+        ];
+      });
+    }
+    const run = searchParams.get("run");
+    router.replace(run ? `${pathname}?run=${run}` : pathname, { scroll: false });
+  }, [pokemonParam, pathname, router, searchParams, setCards]);
 
   return (
     <div>

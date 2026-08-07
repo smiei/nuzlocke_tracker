@@ -195,6 +195,8 @@ const de = {
       moveToday: (value: string) => `heute ${value}`,
       moveClass: { physical: "Physisch", special: "Speziell", status: "Status" },
       moveDetails: "Details ein-/ausblenden",
+      weight: "Gewicht",
+      openInAnalyze: "Im Kampf & Fang öffnen",
     },
   },
   levelcaps: {
@@ -612,6 +614,8 @@ const en: Dictionary = {
       moveToday: (value: string) => `today ${value}`,
       moveClass: { physical: "Physical", special: "Special", status: "Status" },
       moveDetails: "Toggle details",
+      weight: "Weight",
+      openInAnalyze: "Open in Battle & Catch",
     },
   },
   levelcaps: {
@@ -1030,6 +1034,8 @@ const fr: Dictionary = {
       moveToday: (value: string) => `auj. ${value}`,
       moveClass: { physical: "Physique", special: "Spéciale", status: "Statut" },
       moveDetails: "Afficher/masquer les détails",
+      weight: "Poids",
+      openInAnalyze: "Ouvrir dans Combat & Capture",
     },
   },
   levelcaps: {
@@ -1448,6 +1454,8 @@ const es: Dictionary = {
       moveToday: (value: string) => `hoy ${value}`,
       moveClass: { physical: "Físico", special: "Especial", status: "Estado" },
       moveDetails: "Mostrar/ocultar detalles",
+      weight: "Peso",
+      openInAnalyze: "Abrir en Combate y captura",
     },
   },
   levelcaps: {
@@ -1866,6 +1874,8 @@ const it: Dictionary = {
       moveToday: (value: string) => `oggi ${value}`,
       moveClass: { physical: "Fisico", special: "Speciale", status: "Stato" },
       moveDetails: "Mostra/nascondi dettagli",
+      weight: "Peso",
+      openInAnalyze: "Apri in Lotta e cattura",
     },
   },
   levelcaps: {

@@ -83,6 +83,10 @@ export type Pokemon = {
   // Legendary OR mythical (PokeAPI's is_legendary/is_mythical combined into
   // one flag - the Pokédex tab's filter doesn't distinguish the two).
   legendary: boolean;
+  // Kilograms, backfilled by scripts/generate-weights.mjs. Optional because
+  // it's displayed verbatim: a live-edited pokemon.json missing the field
+  // should drop the row, not render "undefined kg".
+  weight?: number;
 };
 
 export type LevelCap = {
