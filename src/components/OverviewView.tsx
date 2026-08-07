@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { Player, RunMode } from "@/generated/prisma/enums";
 import type { EffectivenessTable } from "@/lib/effectiveness";
 import type { Lang } from "@/lib/i18n/dictionary";
@@ -45,20 +46,44 @@ export type OverviewMemorialEntry = {
   deathCause: string | null;
 };
 
-function StatTile({ value, label }: { value: string | number; label: string }) {
+function StatTile({
+  value,
+  label,
+  size = "lg",
+}: {
+  value: ReactNode;
+  label: string;
+  // "sm" for values that carry four numbers (the level cap) - at the default
+  // size those overflow the tile on a two-column phone layout.
+  size?: "lg" | "sm";
+}) {
   return (
     <div className="rounded-lg border border-zinc-200 p-3 dark:border-zinc-800">
-      <div className="text-2xl font-bold tabular-nums">{value}</div>
+      <div className={`font-bold tabular-nums ${size === "lg" ? "text-2xl" : "text-base"}`}>
+        {value}
+      </div>
       <div className="text-xs text-zinc-500 dark:text-zinc-400">{label}</div>
     </div>
   );
 }
 
-// The full cap, same shape the Journey tab prints: the boss's own level, then
-// the level the rest of the team stays at (house rule: one member may match
-// the boss, everyone else sits two below).
-function capLabel(level: number | null): string {
-  return level === null ? "–" : `${level}/${level - 2}`;
+// A cap prints as "<boss level> / <team level>", same shape the Journey tab
+// uses: one member may match the boss, everyone else sits two below (house
+// rule). The TEAM level carries the emphasis - that's the one you can level
+// every new catch up to right now, so it's the number being looked for.
+function CapValue({ level, emphasize = false }: { level: number | null; emphasize?: boolean }) {
+  if (level === null) return <span>–</span>;
+  // Same colour and weight throughout - the only thing that stands out is the
+  // SIZE of the current cap's team level, the number every new catch can be
+  // raised to right now.
+  if (!emphasize) {
+    return <span className="whitespace-nowrap">{`${level} / ${level - 2}`}</span>;
+  }
+  return (
+    <span className="whitespace-nowrap">
+      {level} / <span className="text-2xl">{level - 2}</span>
+    </span>
+  );
 }
 
 export function OverviewView({
@@ -191,7 +216,14 @@ export function OverviewView({
           </div>
           <StatTile value={`${stats.teamSumme} → ${stats.teamSummeMax}`} label={t.teamBst} />
           <StatTile
-            value={`${capLabel(stats.capCurrent)} → ${capLabel(stats.capNext)}`}
+            size="sm"
+            value={
+              <span className="flex flex-wrap items-baseline gap-x-1.5">
+                <CapValue level={stats.capCurrent} emphasize />
+                <span>→</span>
+                <CapValue level={stats.capNext} />
+              </span>
+            }
             label={t.levelCap}
           />
         </div>
