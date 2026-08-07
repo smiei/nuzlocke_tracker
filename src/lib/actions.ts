@@ -509,6 +509,25 @@ export async function setTeamSlot(
   return { success: true };
 }
 
+// Empties all six team slots at once. Only the slot assignment is cleared -
+// the links themselves (and everything on the Encounter tab) are untouched,
+// exactly like setting each slot to "leer" by hand would.
+export async function clearTeam(runId: number): Promise<SetTeamSlotResult> {
+  const run = await prisma.run.findUnique({ where: { id: runId } });
+  if (!run) {
+    return { success: false, error: { key: "runNotFound", id: runId } };
+  }
+
+  await prisma.soulLink.updateMany({
+    where: { runId, teamPosition: { not: null } },
+    data: { teamPosition: null },
+  });
+
+  revalidatePath("/links");
+  publishChange(runId);
+  return { success: true };
+}
+
 export type CreateRunResult =
   | { success: true; runId: number }
   | { success: false; error: ActionError };

@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { SoulLinkView } from "@/lib/types";
 import { LinkStatus, Player, RunMode } from "@/generated/prisma/enums";
-import { markDead, setTeamSlot } from "@/lib/actions";
+import { clearTeam, markDead, setTeamSlot } from "@/lib/actions";
 import { formatActionError } from "@/lib/actionErrors";
 import { useDialog } from "@/components/DialogProvider";
 import type { Lang } from "@/lib/i18n/dictionary";
@@ -127,7 +127,7 @@ export function TeamBar({
   links: SoulLinkView[];
 }) {
   const router = useRouter();
-  const { alert } = useDialog();
+  const { alert, confirm } = useDialog();
   const playerLabel = usePlayerLabel();
   const [pending, startTransition] = useTransition();
   const [deadMenuId, setDeadMenuId] = useState<number | null>(null);
@@ -151,6 +151,18 @@ export function TeamBar({
     });
   }
 
+  // Emptying the whole team. The confirm() must run OUTSIDE startTransition -
+  // awaiting a dialog inside one keeps it pending on its own show/resolve
+  // update and deadlocks the page (same reason as EncounterEditor's clear).
+  async function handleClearTeam() {
+    if (!(await confirm({ message: t.links.clearTeamConfirm, danger: true }))) return;
+    startTransition(async () => {
+      const result = await clearTeam(runId);
+      if (!result.success) await alert({ message: formatActionError(result.error, lang) });
+      router.refresh();
+    });
+  }
+
   function handleMarkDead(soulLinkId: number, deathPlayer?: Player) {
     setDeadMenuId(null);
     const cause = deadCause;
@@ -164,9 +176,21 @@ export function TeamBar({
 
   return (
     <section className="mb-6">
-      <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
-        {t.links.teamHeading}
-      </h3>
+      <div className="mb-2 flex items-center justify-between gap-2">
+        <h3 className="text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+          {t.links.teamHeading}
+        </h3>
+        {slots.some((l) => l !== null) && (
+          <button
+            type="button"
+            disabled={pending}
+            onClick={handleClearTeam}
+            className="rounded border border-zinc-200 px-2 py-1 text-xs font-medium text-zinc-500 transition-colors hover:bg-red-50 hover:text-red-600 disabled:opacity-50 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-red-950/40 dark:hover:text-red-400"
+          >
+            {t.links.clearTeam}
+          </button>
+        )}
+      </div>
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {slots.map((link, i) => {
           return (

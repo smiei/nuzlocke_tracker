@@ -239,7 +239,7 @@ export function PokemonDetailModal({
         {/* Name, sprite and types stacked on the centre axis; the dex number
             moved down into the tiles below. Close button is absolute so it
             doesn't pull the name off-centre. */}
-        <div className="relative mb-3 flex flex-col items-center text-center">
+        <div className="relative mb-3 flex items-start gap-4">
           <button
             type="button"
             onClick={onClose}
@@ -248,14 +248,29 @@ export function PokemonDetailModal({
           >
             ✕
           </button>
-          <h2 className="max-w-[calc(100%-3rem)] text-lg font-semibold">
-            {pokemonName(pokemon, lang)}
-          </h2>
-          <PokemonSprite pokemonId={pokemon.id} name={pokemonName(pokemon, lang)} size="xl" />
-          <div className="mt-1.5 flex flex-wrap justify-center gap-1">
-            {types.map((type) => (
-              <TypeBadge key={type} type={type} lang={lang} />
-            ))}
+          {/* Left column: name centred over the sprite, types underneath.
+              shrink-0 keeps it at its natural width so the evolution tree
+              beside it takes the remaining space. */}
+          <div className="flex shrink-0 flex-col items-center text-center">
+            <h2 className="text-lg font-semibold">{pokemonName(pokemon, lang)}</h2>
+            <PokemonSprite pokemonId={pokemon.id} name={pokemonName(pokemon, lang)} size="xl" />
+            <div className="mt-1.5 flex flex-wrap justify-center gap-1">
+              {types.map((type) => (
+                <TypeBadge key={type} type={type} lang={lang} />
+              ))}
+            </div>
+          </div>
+          {/* Right column: the evolution family. pr-6 keeps it clear of the
+              absolutely positioned close button. */}
+          <div className="min-w-0 flex-1 pr-6">
+            <h3 className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+              {td.evolution}
+            </h3>
+            {!familyHasEvolution ? (
+              <p className="text-xs text-zinc-400 dark:text-zinc-500">{td.noEvolution}</p>
+            ) : (
+              <div>{renderEvoNode(rootId, 0)}</div>
+            )}
           </div>
         </div>
 
@@ -373,18 +388,6 @@ export function PokemonDetailModal({
               />
             </span>
           </div>
-        </div>
-
-        {/* Evolution */}
-        <div className="mb-4">
-          <h3 className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
-            {td.evolution}
-          </h3>
-          {!familyHasEvolution ? (
-            <p className="text-xs text-zinc-400 dark:text-zinc-500">{td.noEvolution}</p>
-          ) : (
-            <div>{renderEvoNode(rootId, 0)}</div>
-          )}
         </div>
 
         {/* Full level-up move list (bottom) */}

@@ -54,11 +54,11 @@ function StatTile({ value, label }: { value: string | number; label: string }) {
   );
 }
 
-// House rule: one team member may reach the boss's own level, the rest stay
-// two levels below - the same "-2" convention as the Journey tab's target
-// level, applied here to both the current and the next cap.
-function safeTarget(level: number | null): string {
-  return level === null ? "–" : String(level - 2);
+// The full cap, same shape the Journey tab prints: the boss's own level, then
+// the level the rest of the team stays at (house rule: one member may match
+// the boss, everyone else sits two below).
+function capLabel(level: number | null): string {
+  return level === null ? "–" : `${level}/${level - 2}`;
 }
 
 export function OverviewView({
@@ -191,7 +191,7 @@ export function OverviewView({
           </div>
           <StatTile value={`${stats.teamSumme} → ${stats.teamSummeMax}`} label={t.teamBst} />
           <StatTile
-            value={`${safeTarget(stats.capCurrent)} → ${safeTarget(stats.capNext)}`}
+            value={`${capLabel(stats.capCurrent)} → ${capLabel(stats.capNext)}`}
             label={t.levelCap}
           />
         </div>
