@@ -368,6 +368,49 @@ export async function evolveEncounter(
   return { success: true };
 }
 
+// Switches a caught Pokémon to one of its alternate formes (Deoxys Attack,
+// Wash Rotom, ...) or back to the base forme. Like evolving, this only ever
+// touches currentPokemonId - what was caught on the route is untouched - and
+// it never changes family_id, so the Species Clause is unaffected. The target
+// must be a forme of the CURRENT species (or that species itself), which also
+// stops a forme swap from doubling as an evolution.
+export async function setPokemonForm(
+  runId: number,
+  encounterId: number,
+  targetPokemonId: number,
+): Promise<EvolveResult> {
+  const encounter = await prisma.encounter.findUnique({
+    where: { id: encounterId },
+    include: { soulLink: true },
+  });
+  if (!encounter || encounter.runId !== runId) {
+    return { success: false, error: { key: "encounterNotFound", id: encounterId } };
+  }
+  if (encounter.soulLink?.status === LinkStatus.DEAD) {
+    return { success: false, error: { key: "deadCannotEvolve" } };
+  }
+
+  const current = getPokemonById(encounter.currentPokemonId);
+  const target = getPokemonById(targetPokemonId);
+  if (!current || !target) {
+    return { success: false, error: { key: "unknownPokemon", id: targetPokemonId } };
+  }
+  const currentSpecies = current.baseId ?? current.id;
+  const targetSpecies = target.baseId ?? target.id;
+  if (currentSpecies !== targetSpecies || target.family_id !== encounter.familyId) {
+    return { success: false, error: { key: "invalidFormTarget" } };
+  }
+
+  await prisma.encounter.update({
+    where: { id: encounterId },
+    data: { currentPokemonId: targetPokemonId },
+  });
+
+  revalidatePath("/links");
+  publishChange(runId);
+  return { success: true };
+}
+
 export async function revertEvolution(runId: number, encounterId: number): Promise<EvolveResult> {
   const encounter = await prisma.encounter.findUnique({
     where: { id: encounterId },

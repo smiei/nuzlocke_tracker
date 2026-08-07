@@ -8,6 +8,7 @@ import {
   getMoveset,
   getRoutes,
   getPokemonList,
+  getPokemonForms,
 } from "@/lib/data";
 import { prisma } from "@/lib/prisma";
 import { getEncounterDrafts } from "@/lib/draftStore";
@@ -46,6 +47,7 @@ export default async function TrackerPage({
         <PlayerNamesProvider names={settings.playerNames} lang={lang}>
           <PokemonDetailProvider
             pokemonList={pokemonList}
+            forms={getPokemonForms(game.dexLimit)}
             evolutions={getEvolutions({
               gameId,
               impossible: settings.evolutionOverridesImpossible,

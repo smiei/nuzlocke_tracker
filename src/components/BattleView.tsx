@@ -5,6 +5,7 @@ import type { EffectivenessTable } from "@/lib/effectiveness";
 import { computeDefenseMultipliers, singleTypeMultiplier } from "@/lib/effectiveness";
 import type { Learnset } from "@/lib/learnset";
 import { attackTypesAtLevel } from "@/lib/learnset";
+import { movepoolId } from "@/lib/forms";
 import { TYPE_COLORS, TYPE_LABELS, typesForGeneration } from "@/lib/pokemonTypes";
 import { useClampedIntInput } from "@/lib/useClampedIntInput";
 import type { Player, RunMode } from "@/generated/prisma/client";
@@ -159,8 +160,13 @@ export function BattleCardBody({
   // Stats card lists ALL damaging attack types (every level), independent of
   // the entered level. The team matchup below only counts types reachable by
   // the entered level.
-  const allAttacks = selectedRaw ? attackTypesAtLevel(learnset, selectedRaw.id, 100) : [];
-  const opponentAttacks = selectedRaw ? attackTypesAtLevel(learnset, selectedRaw.id, level) : [];
+  // Formes with their own movepool (Deoxys, Wormadam, Shaymin) get their own
+  // learnset rows; the rest fall back to their species.
+  const learnsetId = selectedRaw
+    ? movepoolId(selectedRaw, (id) => learnset[String(id)] !== undefined)
+    : 0;
+  const allAttacks = selectedRaw ? attackTypesAtLevel(learnset, learnsetId, 100) : [];
+  const opponentAttacks = selectedRaw ? attackTypesAtLevel(learnset, learnsetId, level) : [];
   const opponentAttackTypes = opponentAttacks.map((a) => a.type);
 
   const multipliers = selectedRaw ? computeDefenseMultipliers(table, opponentTypes, attackTypes) : null;

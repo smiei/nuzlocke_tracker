@@ -20,7 +20,15 @@ import { usePokemonDetail } from "@/components/PokemonDetailProvider";
 
 // onTeam = sits in one of the 6 team slots; everything else is the bank
 // (caught and alive, but boxed).
-export type TmTeamMember = { pokemonId: number; name: string; onTeam: boolean };
+export type TmTeamMember = {
+  // What to show (may be an alternate forme).
+  pokemonId: number;
+  // What to look learnability up under: TM/tutor compat and level-up movesets
+  // are keyed by species, and a forme inherits its species' movepool.
+  speciesId: number;
+  name: string;
+  onTeam: boolean;
+};
 
 const METHOD_BADGE: Record<TmLearnMethod | "level", string> = {
   tm: "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300",
@@ -77,9 +85,9 @@ export function TmCompatView({
       (members: TmTeamMember[]) =>
         members
           .map((m) => {
-            const methods = selectedSlug ? tmLearnMethods(entry, m.pokemonId) : [];
+            const methods = selectedSlug ? tmLearnMethods(entry, m.speciesId) : [];
             const byLevel = selectedSlug
-              ? (moveset[String(m.pokemonId)] ?? []).some(([, s]) => s === selectedSlug)
+              ? (moveset[String(m.speciesId)] ?? []).some(([, s]) => s === selectedSlug)
               : false;
             return { ...m, methods, byLevel, rank: methods.length > 0 ? 0 : byLevel ? 1 : 2 };
           })

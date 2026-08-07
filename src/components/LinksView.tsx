@@ -14,6 +14,7 @@ import { translations } from "@/lib/i18n/dictionary";
 import { AddToTeamButton } from "@/components/AddToTeamButton";
 import { EncounterTile } from "@/components/EncounterTile";
 import { EvolveButton, RevertButton } from "@/components/EvolveControls";
+import { FormPicker } from "@/components/FormPicker";
 import { TeamBar } from "@/components/TeamBar";
 import { TypeBadge } from "@/components/TypeBadge";
 import { usePlayerLabel } from "@/components/PlayerNamesProvider";
@@ -373,6 +374,13 @@ export function LinksView({
                           lang={lang}
                           encounterId={e.id}
                           targets={e.evolvesTo}
+                        />
+                        <FormPicker
+                          runId={runId}
+                          lang={lang}
+                          encounterId={e.id}
+                          currentId={e.pokemonId}
+                          options={e.formOptions}
                         />
                         {e.evolvesFrom && (
                           <RevertButton runId={runId} lang={lang} encounterId={e.id} />

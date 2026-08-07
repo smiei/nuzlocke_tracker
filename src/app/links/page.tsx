@@ -11,13 +11,16 @@ import {
   getMoveTypeHistory,
   getMoveset,
   getLevelCaps,
+  getRoutes,
+  getPokemonForms,
 } from "@/lib/data";
 import { EncounterStatus, Player, RunMode } from "@/generated/prisma/client";
 import { SpriteSetProvider } from "@/components/SpriteSetProvider";
 import { PokemonDetailProvider } from "@/components/PokemonDetailProvider";
 import { PlayerNamesProvider } from "@/components/PlayerNamesProvider";
-import { computePokemonRanks } from "@/lib/ranking";
+import { computePokemonRanks, rankForSumme } from "@/lib/ranking";
 import { maxEvolvedSumme } from "@/lib/evolutions";
+import { displayNameWithForm, formLabel, formsOfSpecies } from "@/lib/forms";
 import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
 import { getLang } from "@/lib/i18n/getLang";
@@ -77,7 +80,12 @@ export default async function LinksPage({
   // Ranks are computed within the game's dex, so "Rang #X" means the same
   // thing the Pokédex tab shows for that game.
   const game = getGameOrDefault(gameId);
-  const ranks = computePokemonRanks(getPokemonList(game.dexLimit));
+  const pokemonList = getPokemonList(game.dexLimit);
+  // Alternate formes are NOT part of pokemonList (ids 10001+ are outside the
+  // dex limit by construction) - they're a state a caught Pokémon switches
+  // into, never something the Pokédex lists.
+  const formEntries = getPokemonForms(game.dexLimit);
+  const ranks = computePokemonRanks(pokemonList);
 
   // Current level cap = the LAST DEFEATED Journey milestone with a cap (the
   // cap you have earned). House rule: only one Pokémon may reach the cap
@@ -110,11 +118,21 @@ export default async function LinksPage({
       // actually caught) is what the Tracker tab shows and never changes here.
       const pokemon = getPokemonById(e.currentPokemonId);
       const evo = getEvolutionById(e.currentPokemonId, evoOptions);
+      // Alternate formes of whatever it currently is (base included), so the
+      // picker can switch both ways. Empty for the vast majority of species.
+      const speciesId = pokemon ? pokemon.baseId ?? pokemon.id : e.currentPokemonId;
       return {
         id: e.id,
         player: e.player,
         pokemonId: e.currentPokemonId,
-        pokemonName: pokemon ? pokemonName(pokemon, lang) : `#${e.currentPokemonId}`,
+        pokemonName: pokemon
+          ? displayNameWithForm(pokemon, lang)
+          : `#${e.currentPokemonId}`,
+        formOptions: formsOfSpecies(speciesId, pokemonList, formEntries).map((f) => ({
+          id: f.id,
+          label: formLabel(f, lang),
+          summe: f.stats.Summe,
+        })),
         // Gated here so display components stay settings-agnostic.
         nickname: settings.nicknames ? e.nickname : null,
         types: typesForGeneration(e.currentPokemonId, pokemon?.types ?? [], game.generation),
@@ -126,7 +144,11 @@ export default async function LinksPage({
           (id) => getPokemonById(id)?.stats.Summe ?? 0,
           game.dexLimit,
         ),
-        rang: ranks.get(e.currentPokemonId) ?? 0,
+        // A forme isn't in the ranked pool (that would shift every species'
+        // rank); rank it against the species by its own BST instead.
+        rang:
+          ranks.get(e.currentPokemonId) ??
+          (pokemon ? rankForSumme(pokemonList, pokemon.stats.Summe) : 0),
         status: e.status,
         isStatic: e.isStatic,
         shiny: e.shiny,
@@ -158,9 +180,18 @@ export default async function LinksPage({
     }),
   }));
 
+  // Encounter order = the position in routes.json, NOT the route id. Ids are
+  // frozen forever while the array order is the display order and gets
+  // reshuffled (FireRed's list was reordered), so sorting by id replays
+  // whatever order the pack happened to have when the ids were handed out.
+  // Routes no longer in the pack sort last rather than to the front.
+  const routeOrder = new Map(getRoutes(gameId).map((r, i) => [r.id, i]));
   views.sort((a, b) => {
     if (a.status !== b.status) return a.status === "DEAD" ? 1 : -1;
-    return a.routeId - b.routeId;
+    return (
+      (routeOrder.get(a.routeId) ?? Number.MAX_SAFE_INTEGER) -
+      (routeOrder.get(b.routeId) ?? Number.MAX_SAFE_INTEGER)
+    );
   });
 
   const heading = translations[lang].nav.links;
@@ -171,7 +202,8 @@ export default async function LinksPage({
       <SpriteSetProvider spriteSet={game.spriteSet}>
         <PlayerNamesProvider names={settings.playerNames} lang={lang}>
           <PokemonDetailProvider
-            pokemonList={getPokemonList(game.dexLimit)}
+            pokemonList={pokemonList}
+            forms={getPokemonForms(game.dexLimit)}
             evolutions={getEvolutions(evoOptions)}
             moveData={{ movesets: getMoveset(game.versionGroup), moves: getMoves(lang) }}
             moveTypeHistory={getMoveTypeHistory()}

@@ -607,11 +607,11 @@
   {
     "id": 43,
     "names": {
-      "de": "Eiland Zwei",
-      "en": "Two Island",
-      "fr": "Île 2",
-      "es": "Isla Segunda",
-      "it": "Secondisola"
+      "de": "Schatzgestade",
+      "en": "Treasure Beach",
+      "fr": "Plage Trésor",
+      "es": "Playa Tesoro",
+      "it": "Spiaggia Tesoro"
     },
     "type": "route"
   },
@@ -629,11 +629,11 @@
   {
     "id": 44,
     "names": {
-      "de": "Eiland Drei",
-      "en": "Three Island",
-      "fr": "Île 3",
-      "es": "Isla Tercera",
-      "it": "Terzisola"
+      "de": "Tri-Eiland-Pfad",
+      "en": "Three Isle Path",
+      "fr": "Route Île 3",
+      "es": "Camino Isla Tercera",
+      "it": "Sentiero Terzisola"
     },
     "type": "route"
   },

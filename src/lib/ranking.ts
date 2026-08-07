@@ -17,3 +17,12 @@ export function computePokemonRanks(pokemonList: Pokemon[]): Map<number, number>
   });
   return ranks;
 }
+
+// Where a BST would place in the ranked list WITHOUT joining it - used for
+// alternate formes, which are ranked against the species (a 520-BST Wash
+// Rotom shouldn't read as rank 0, but adding the 15 formes to the pool would
+// shift every species' rank and disagree with the Pokédex tab). Same
+// competition rule: 1 + however many entries beat it.
+export function rankForSumme(pokemonList: Pokemon[], summe: number): number {
+  return pokemonList.filter((p) => p.stats.Summe > summe).length + 1;
+}

@@ -39,6 +39,9 @@ export type SoulLinkView = {
     status: EncounterStatus;
     isStatic: boolean;
     shiny: boolean;
+    // Selectable formes of the current species (base + alternates), or [] for
+    // the vast majority of species that have none. See src/lib/forms.ts.
+    formOptions: { id: number; label: string; summe: number }[];
     evolvesTo: { id: number; name: string; method: string | null; available: boolean }[];
     evolvesFrom: { id: number; name: string } | null;
   }[];

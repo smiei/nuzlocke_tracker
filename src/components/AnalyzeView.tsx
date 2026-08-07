@@ -8,6 +8,7 @@ import type { Learnset } from "@/lib/learnset";
 import type { Player, RunMode } from "@/generated/prisma/client";
 import type { RunSettings } from "@/lib/runSettings";
 import { usePersistentState } from "@/lib/usePersistentState";
+import { baseSpeciesId } from "@/lib/forms";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import { translations } from "@/lib/i18n/dictionary";
 import { pokemonName } from "@/lib/i18n/localize";
@@ -63,7 +64,9 @@ function AnalyzeCard({
   const isLocked = selected ? catchShared.lockedFamilies.has(selected.family_id) : false;
   // Shown regardless of Wild/Trainer sub-view, since it matters for a wild
   // catch too (it can blow up before you land the ball).
-  const explosive = selected ? battleShared.explosiveMap[selected.id] ?? null : null;
+  const explosive = selected
+    ? battleShared.explosiveMap[baseSpeciesId(selected)] ?? null
+    : null;
 
   return (
     <div className="relative rounded-xl border border-zinc-300 p-4 dark:border-zinc-700 sm:p-5">

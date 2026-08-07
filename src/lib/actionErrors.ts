@@ -15,6 +15,7 @@ export type ActionError =
   | { key: "deadCannotEvolve" }
   | { key: "deadCannotRevert" }
   | { key: "invalidEvolutionTarget" }
+  | { key: "invalidFormTarget" }
   | { key: "evolutionFamilyMismatch" }
   | { key: "noPreEvolution" }
   | { key: "unknownLevelCap"; id: number }
@@ -45,6 +46,8 @@ export function formatActionError(error: ActionError, lang: Lang): string {
       return t.deadCannotRevert;
     case "invalidEvolutionTarget":
       return t.invalidEvolutionTarget;
+    case "invalidFormTarget":
+      return t.invalidFormTarget;
     case "evolutionFamilyMismatch":
       return t.evolutionFamilyMismatch;
     case "noPreEvolution":

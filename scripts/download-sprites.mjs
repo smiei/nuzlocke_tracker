@@ -23,7 +23,15 @@ const ballOutDir = path.join(__dirname, "..", "public", "ball-sprites");
 const SPRITE_SETS = {
   "red-blue": { path: "versions/generation-i/red-blue/transparent", maxId: 151 },
   crystal: { path: "versions/generation-ii/crystal/transparent", maxId: 251 },
-  emerald: { path: "versions/generation-iii/emerald", maxId: 386 },
+  // formFallbackPath: same-generation set to source a forme sprite from when
+  // this one lacks it. In Gen 3 a Deoxys forme depended on the cartridge, so
+  // Emerald only ships Speed while FireRed-LeafGreen ships Attack/Defense -
+  // and every Gen 3 pack here renders with the Emerald set.
+  emerald: {
+    path: "versions/generation-iii/emerald",
+    maxId: 386,
+    formFallbackPath: "versions/generation-iii/firered-leafgreen",
+  },
   "firered-leafgreen": { path: "versions/generation-iii/firered-leafgreen", maxId: 386 },
   platinum: { path: "versions/generation-iv/platinum", maxId: 493 },
   "heartgold-soulsilver": { path: "versions/generation-iv/heartgold-soulsilver", maxId: 493 },
@@ -96,9 +104,14 @@ async function main() {
     }
   }
 
-  const maxKnownId = JSON.parse(await readFile(path.join(dataDir, "pokemon.json"), "utf-8"))
+  const allPokemon = JSON.parse(await readFile(path.join(dataDir, "pokemon.json"), "utf-8"));
+  // Species only: forme ids start at 10001 and are fetched separately below,
+  // so they must not stretch the plain 1..maxId range.
+  const maxKnownId = allPokemon
+    .filter((p) => p.baseId === undefined)
     .map((p) => p.id)
     .reduce((a, b) => Math.max(a, b), 0);
+  const formEntries = allPokemon.filter((p) => p.baseId !== undefined);
 
   for (const set of sets) {
     const config = SPRITE_SETS[set];
@@ -130,6 +143,41 @@ async function main() {
       console.log(`${set}: ${Math.min(i + batchSize, ids.length)}/${ids.length}`);
       if (i + batchSize < ids.length) await new Promise((r) => setTimeout(r, 150));
     }
+  }
+
+  // Alternate-forme sprites (ids 10001+, see scripts/generate-forms.mjs).
+  // Coverage is genuinely patchy per set - in the real games a Deoxys forme
+  // depended on the cartridge, so PokeAPI only has Attack/Defense for
+  // FireRed-LeafGreen and Speed for Emerald - and later formes (Rotom,
+  // Giratina Origin, Shaymin Sky) don't exist before Gen 4 at all. A missing
+  // one is therefore expected, not an error: skip it and let PokemonSprite
+  // fall back.
+  for (const set of sets) {
+    const config = SPRITE_SETS[set];
+    if (!config) continue;
+    const outDir = path.join(outRoot, set);
+    const wanted = formEntries.filter(
+      (f) => f.baseId <= config.maxId && !existsSync(path.join(outDir, `${f.id}.png`)),
+    );
+    if (wanted.length === 0) continue;
+    let saved = 0;
+    const paths = [config.path, config.formFallbackPath].filter(Boolean);
+    for (const form of wanted) {
+      for (const spritePath of paths) {
+        try {
+          await download(
+            `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${spritePath}/${form.id}.png`,
+            path.join(outDir, `${form.id}.png`),
+          );
+          saved++;
+          break;
+        } catch {
+          // Not in this set - try the fallback, else leave it missing.
+        }
+      }
+      await new Promise((r) => setTimeout(r, 80));
+    }
+    console.log(`${set}: ${saved}/${wanted.length} forme sprites`);
   }
 
   await mkdir(ballOutDir, { recursive: true });

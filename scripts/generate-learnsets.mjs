@@ -178,10 +178,20 @@ async function main() {
   const machineKindCache = new Map();
   const machineKindBySlug = new Map();
 
+  // Alternate formes get their OWN rows: Deoxys, Wormadam and Shaymin genuinely
+  // learn different moves per forme (Rotom, Castform and Giratina don't, but
+  // fetching them too keeps the rule simple). Their dex gate is the base
+  // species, since a forme id (10001+) is far past every dexLimit.
+  const formeIds = new Map(
+    JSON.parse(await readFile(path.join(dataDir, "pokemon.json"), "utf-8"))
+      .filter((p) => p.baseId !== undefined)
+      .map((p) => [p.id, p.baseId]),
+  );
+  const allIds = [...Array.from({ length: maxId }, (_, i) => i + 1), ...formeIds.keys()];
+
   const batchSize = 4;
-  for (let id = 1; id <= maxId; id += batchSize) {
-    const ids = [];
-    for (let n = id; n < id + batchSize && n <= maxId; n++) ids.push(n);
+  for (let index = 0; index < allIds.length; index += batchSize) {
+    const ids = allIds.slice(index, index + batchSize);
     await Promise.all(
       ids.map(async (pid) => {
         const mon = await fetchJson(`https://pokeapi.co/api/v2/pokemon/${pid}`);
@@ -204,7 +214,7 @@ async function main() {
                 : [rawVg];
             for (const vg of effectiveVgs) {
               if (!movesets.has(vg)) continue;
-              if (pid > (versionGroups.get(vg) ?? 0)) continue;
+              if ((formeIds.get(pid) ?? pid) > (versionGroups.get(vg) ?? 0)) continue;
               const method = v.move_learn_method.name;
               if (method === "level-up") {
                 const lvl = v.level_learned_at || 1;
@@ -279,7 +289,7 @@ async function main() {
         }
       }),
     );
-    console.log(`pokemon ${Math.min(id + batchSize - 1, maxId)}/${maxId}`);
+    console.log(`pokemon ${Math.min(index + batchSize, allIds.length)}/${allIds.length}`);
     await new Promise((r) => setTimeout(r, 120));
   }
 

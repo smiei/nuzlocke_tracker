@@ -7,6 +7,7 @@ import {
   getMoveTypeHistory,
   getMoveset,
   getPokemonList,
+  getPokemonForms,
 } from "@/lib/data";
 import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
@@ -49,6 +50,7 @@ export default async function PokedexPage({
     <SpriteSetProvider spriteSet={game.spriteSet}>
       <PokemonDetailProvider
         pokemonList={pokemon}
+        forms={getPokemonForms(game.dexLimit)}
         evolutions={evolutions}
         moveData={{ movesets: getMoveset(game.versionGroup), moves: getMoves(lang) }}
         moveTypeHistory={getMoveTypeHistory()}

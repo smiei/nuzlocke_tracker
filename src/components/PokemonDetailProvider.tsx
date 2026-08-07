@@ -17,6 +17,7 @@ const Ctx = createContext<DetailContext | null>(null);
 
 export function PokemonDetailProvider({
   pokemonList,
+  forms = [],
   evolutions,
   moveData,
   moveTypeHistory,
@@ -27,6 +28,9 @@ export function PokemonDetailProvider({
   children,
 }: {
   pokemonList: Pokemon[];
+  // Alternate formes whose base species is in this game's dex; omitted on
+  // pages that don't need them, where the card simply shows no forme row.
+  forms?: Pokemon[];
   evolutions: EvolutionEntry[];
   moveData: { movesets: Moveset; moves: MovesTable };
   moveTypeHistory: MoveTypeHistoryEntry[];
@@ -37,7 +41,11 @@ export function PokemonDetailProvider({
   children: React.ReactNode;
 }) {
   const [openId, setOpenId] = useState<number | null>(null);
-  const pokemon = openId != null ? pokemonList.find((p) => p.id === openId) ?? null : null;
+  // openId may be a forme id (10001+), which only lives in `forms`.
+  const pokemon =
+    openId != null
+      ? pokemonList.find((p) => p.id === openId) ?? forms.find((p) => p.id === openId) ?? null
+      : null;
 
   return (
     <Ctx.Provider value={{ open: setOpenId }}>
@@ -46,6 +54,7 @@ export function PokemonDetailProvider({
         <PokemonDetailModal
           pokemon={pokemon}
           allPokemon={pokemonList}
+          forms={forms}
           evolutions={evolutions}
           movesets={moveData.movesets}
           moves={moveData.moves}

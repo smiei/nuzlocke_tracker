@@ -12,7 +12,11 @@ import { usePokemonDetail } from "@/components/PokemonDetailProvider";
 
 export type TeamMember = {
   encounterId: number;
+  // What to show (may be an alternate forme).
   pokemonId: number;
+  // Species to read species-keyed data under (learnsets); a forme inherits
+  // its species' movepool. Equals pokemonId for everything else.
+  speciesId: number;
   name: string;
   types: string[];
 };

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, useTransition } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { Pokemon } from "@/lib/data";
 import type { BallId, StatusId } from "@/lib/catchrate";
@@ -16,6 +16,7 @@ import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import { translations } from "@/lib/i18n/dictionary";
 import { pokemonName } from "@/lib/i18n/localize";
 import { typesForGeneration } from "@/lib/pokemonTypes";
+import { baseSpeciesId } from "@/lib/forms";
 import { usePlayerLabel } from "@/components/PlayerNamesProvider";
 import { usePokemonDetail } from "@/components/PokemonDetailProvider";
 import { PokemonSprite } from "@/components/PokemonSprite";
@@ -274,7 +275,10 @@ export function CatchCardBody({
   const turnInput = useClampedIntInput(turn, 1, 99, 1, (n) => onChange({ turn: n }));
 
   const selected = pokemonList.find((p) => p.id === selectedId) ?? null;
-  const baseRate = selected ? catchRates[selected.id] : undefined;
+  // Catch rate, learnsets and movesets are all keyed by SPECIES: an
+  // alternate forme (id 10001+) has no row of its own and inherits its
+  // species' values.
+  const baseRate = selected ? catchRates[baseSpeciesId(selected)] : undefined;
   const selectedTypes = selected ? typesForGeneration(selected.id, selected.types, generation) : [];
 
   const result =
@@ -487,10 +491,11 @@ export function CatchCardBody({
       {/* Type weaknesses of the selected Pokémon */}
       {selected && weaknessGroups.length > 0 && (
         <div className="mt-3">
-          <div className="flex flex-col gap-1">
+          {/* Same two-column grid as the Pokédex card - see the comment there. */}
+          <div className="grid grid-cols-[max-content_1fr] items-start gap-x-2 gap-y-1.5">
             {weaknessGroups.map((row) => (
-              <div key={row.mult} className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                <span className="w-40 shrink-0 text-xs text-zinc-500 dark:text-zinc-400">
+              <Fragment key={row.mult}>
+                <span className="whitespace-nowrap pt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
                   {row.label}:
                 </span>
                 <div className="flex flex-wrap gap-1">
@@ -498,7 +503,7 @@ export function CatchCardBody({
                     <TypeBadge key={type} type={type} lang={lang} />
                   ))}
                 </div>
-              </div>
+              </Fragment>
             ))}
           </div>
         </div>

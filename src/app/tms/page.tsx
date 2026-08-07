@@ -8,12 +8,13 @@ import {
   getMoveTypeHistory,
   getPokemonById,
   getPokemonList,
+  getPokemonForms,
   getTmCompat,
 } from "@/lib/data";
 import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
 import { getLang } from "@/lib/i18n/getLang";
-import { pokemonName } from "@/lib/i18n/localize";
+import { displayNameWithForm, movepoolId } from "@/lib/forms";
 import { EncounterStatus, LinkStatus, Player, RunMode } from "@/generated/prisma/client";
 import { SpriteSetProvider } from "@/components/SpriteSetProvider";
 import { PlayerNamesProvider } from "@/components/PlayerNamesProvider";
@@ -33,6 +34,10 @@ export default async function TmsPage({
   if (!canonical) redirect(`/tms?run=${runId}`);
   const game = getGameOrDefault(gameId);
   const lang = await getLang();
+
+  // Read before the team loop below, which consults it to decide whether a
+  // forme keeps its own movepool or falls back to its species.
+  const moveset = getMoveset(game.versionGroup);
 
   // All LIVING caught Pokémon (status CAUGHT, link not dead), per player,
   // de-duplicated by current species (learnability is species-based).
@@ -65,7 +70,8 @@ export default async function TmsPage({
     seen.get(e.player)?.add(e.currentPokemonId);
     members?.push({
       pokemonId: e.currentPokemonId,
-      name: pokemonName(pokemon, lang),
+      speciesId: movepoolId(pokemon, (id) => moveset[String(id)] !== undefined),
+      name: displayNameWithForm(pokemon, lang),
       onTeam,
     });
   }
@@ -80,7 +86,6 @@ export default async function TmsPage({
 
   // Selectable moves = the move universe of this game (level-up + machine +
   // tutor moves), localized and sorted by name.
-  const moveset = getMoveset(game.versionGroup);
   const tmCompat = getTmCompat(game.versionGroup);
   const moveTypeHistory = getMoveTypeHistory();
   // With lang, so the move descriptions reach both the selected-move summary
@@ -100,6 +105,7 @@ export default async function TmsPage({
       <PlayerNamesProvider names={settings.playerNames} lang={lang}>
         <PokemonDetailProvider
           pokemonList={getPokemonList(game.dexLimit)}
+          forms={getPokemonForms(game.dexLimit)}
           evolutions={getEvolutions({
             gameId,
             impossible: settings.evolutionOverridesImpossible,

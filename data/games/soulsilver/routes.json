@@ -1,16 +1,5 @@
 [
   {
-    "id": 1,
-    "names": {
-      "de": "Neuborkia",
-      "en": "New Bark Town",
-      "fr": "Bourg Geon",
-      "es": "New Bark Town",
-      "it": "New Bark Town"
-    },
-    "type": "route"
-  },
-  {
     "id": 2,
     "names": {
       "de": "Neuborkia (Starter)",
@@ -20,6 +9,17 @@
       "it": "Starter New Bark Town"
     },
     "type": "static"
+  },
+  {
+    "id": 1,
+    "names": {
+      "de": "Neuborkia",
+      "en": "New Bark Town",
+      "fr": "Bourg Geon",
+      "es": "New Bark Town",
+      "it": "New Bark Town"
+    },
+    "type": "route"
   },
   {
     "id": 3,

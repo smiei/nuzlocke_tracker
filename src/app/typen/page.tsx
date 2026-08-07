@@ -10,6 +10,7 @@ import {
   getMoveset,
   getPokemonById,
   getPokemonList,
+  getPokemonForms,
   getRoutes,
 } from "@/lib/data";
 import { getTypesForGeneration } from "@/lib/effectiveness";
@@ -17,7 +18,8 @@ import { explosiveMove } from "@/lib/learnset";
 import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
 import { getLang } from "@/lib/i18n/getLang";
-import { pokemonName, routeName } from "@/lib/i18n/localize";
+import { routeName } from "@/lib/i18n/localize";
+import { displayNameWithForm, movepoolId } from "@/lib/forms";
 import { typesForGeneration } from "@/lib/pokemonTypes";
 import { LinkStatus, Player, RunMode } from "@/generated/prisma/client";
 import type { TeamMember } from "@/components/TeamWeaknessesView";
@@ -43,7 +45,14 @@ export default async function AnalyzePage({
 
   const lang = await getLang();
   const game = getGameOrDefault(gameId);
+  const learnsetTable = getLearnset(game.versionGroup);
   const pokemonList = getPokemonList(game.dexLimit);
+  // Formes are pickable HERE (unlike in the Pokédex or an encounter): scouting
+  // a Wash Rotom or a Deoxys Attack is exactly what this tab is for. Species-
+  // keyed tables (catch rates, learnsets, explosiveMap) are looked up via
+  // baseSpeciesId, so a forme inherits its species' values.
+  const formEntries = getPokemonForms(game.dexLimit);
+  const pickableList = [...pokemonList, ...formEntries];
   const moveset = getMoveset(game.versionGroup);
   const moves = getMoves(lang);
 
@@ -98,7 +107,8 @@ export default async function AnalyzePage({
       byPlayer.get(e.player)?.push({
         encounterId: e.id,
         pokemonId: e.currentPokemonId,
-        name: pokemonName(pokemon, lang),
+        speciesId: movepoolId(pokemon, (id) => learnsetTable[String(id)] !== undefined),
+        name: displayNameWithForm(pokemon, lang),
         types: typesForGeneration(e.currentPokemonId, pokemon.types, game.generation),
       });
     }
@@ -119,6 +129,7 @@ export default async function AnalyzePage({
       <PlayerNamesProvider names={settings.playerNames} lang={lang}>
         <PokemonDetailProvider
           pokemonList={pokemonList}
+          forms={formEntries}
           evolutions={getEvolutions({
             gameId,
             impossible: settings.evolutionOverridesImpossible,
@@ -134,14 +145,14 @@ export default async function AnalyzePage({
           <AnalyzeView
             runId={runId}
             mode={mode}
-            pokemonList={pokemonList}
+            pokemonList={pickableList}
             generation={game.generation}
             effectiveness={effectiveness}
             attackTypes={attackTypes}
             catchRates={catchRates}
             lockedFamilyIds={lockedFamilyIds}
             openSlots={openSlots}
-            learnset={getLearnset(game.versionGroup)}
+            learnset={learnsetTable}
             teams={teams}
             explosiveMap={explosiveMap}
             settings={settings}

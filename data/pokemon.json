@@ -8929,7 +8929,14 @@
       "Summe": 420
     },
     "legendary": false,
-    "weight": 0.8
+    "weight": 0.8,
+    "formNames": {
+      "de": "Formeo",
+      "en": "Normal",
+      "fr": "Forme de Morphéo",
+      "es": "Forma de Castform",
+      "it": "Forma Castform"
+    }
   },
   {
     "id": 352,
@@ -9817,7 +9824,14 @@
       "Summe": 600
     },
     "legendary": true,
-    "weight": 60.8
+    "weight": 60.8,
+    "formNames": {
+      "de": "Normalform",
+      "en": "Normal Forme",
+      "fr": "Forme Normale",
+      "es": "Forma Normal",
+      "it": "Forma Normale"
+    }
   },
   {
     "id": 387,
@@ -10505,7 +10519,14 @@
       "Summe": 424
     },
     "legendary": false,
-    "weight": 6.5
+    "weight": 6.5,
+    "formNames": {
+      "de": "Pflanzenumhang",
+      "en": "Plant Cloak",
+      "fr": "Cape Plante",
+      "es": "Tronco Planta",
+      "it": "Manto Pianta"
+    }
   },
   {
     "id": 414,
@@ -12191,7 +12212,14 @@
       "Summe": 440
     },
     "legendary": false,
-    "weight": 0.3
+    "weight": 0.3,
+    "formNames": {
+      "de": "Rotom",
+      "en": "Rotom",
+      "fr": "Forme de Motisma",
+      "es": "Forma de Rotom",
+      "it": "Forma Rotom"
+    }
   },
   {
     "id": 480,
@@ -12395,7 +12423,14 @@
       "Summe": 680
     },
     "legendary": true,
-    "weight": 750
+    "weight": 750,
+    "formNames": {
+      "de": "Wandelform",
+      "en": "Altered Forme",
+      "fr": "Forme Alternative",
+      "es": "Forma Modificada",
+      "it": "Forma Alterata"
+    }
   },
   {
     "id": 488,
@@ -12520,7 +12555,14 @@
       "Summe": 600
     },
     "legendary": true,
-    "weight": 2.1
+    "weight": 2.1,
+    "formNames": {
+      "de": "Landform",
+      "en": "Land Forme",
+      "fr": "Forme Terrestre",
+      "es": "Forma Tierra",
+      "it": "Forma Terra"
+    }
   },
   {
     "id": 493,
@@ -12546,5 +12588,509 @@
     },
     "legendary": true,
     "weight": 320
+  },
+  {
+    "id": 10001,
+    "names": {
+      "de": "Deoxys",
+      "en": "Deoxys",
+      "fr": "Deoxys",
+      "es": "Deoxys",
+      "it": "Deoxys"
+    },
+    "types": [
+      "psychic"
+    ],
+    "family_id": 202,
+    "stats": {
+      "KP": 50,
+      "Ang.": 180,
+      "Vert.": 20,
+      "Sp.-A.": 180,
+      "Sp.-V.": 20,
+      "Init.": 150,
+      "Summe": 600
+    },
+    "legendary": true,
+    "weight": 60.8,
+    "baseId": 386,
+    "formNames": {
+      "de": "Angriffsform",
+      "en": "Attack Forme",
+      "fr": "Forme Attaque",
+      "es": "Forma Ataque",
+      "it": "Forma Attacco"
+    }
+  },
+  {
+    "id": 10002,
+    "names": {
+      "de": "Deoxys",
+      "en": "Deoxys",
+      "fr": "Deoxys",
+      "es": "Deoxys",
+      "it": "Deoxys"
+    },
+    "types": [
+      "psychic"
+    ],
+    "family_id": 202,
+    "stats": {
+      "KP": 50,
+      "Ang.": 70,
+      "Vert.": 160,
+      "Sp.-A.": 70,
+      "Sp.-V.": 160,
+      "Init.": 90,
+      "Summe": 600
+    },
+    "legendary": true,
+    "weight": 60.8,
+    "baseId": 386,
+    "formNames": {
+      "de": "Verteidigungsform",
+      "en": "Defense Forme",
+      "fr": "Forme Défense",
+      "es": "Forma Defensa",
+      "it": "Forma Difesa"
+    }
+  },
+  {
+    "id": 10003,
+    "names": {
+      "de": "Deoxys",
+      "en": "Deoxys",
+      "fr": "Deoxys",
+      "es": "Deoxys",
+      "it": "Deoxys"
+    },
+    "types": [
+      "psychic"
+    ],
+    "family_id": 202,
+    "stats": {
+      "KP": 50,
+      "Ang.": 95,
+      "Vert.": 90,
+      "Sp.-A.": 95,
+      "Sp.-V.": 90,
+      "Init.": 180,
+      "Summe": 600
+    },
+    "legendary": true,
+    "weight": 60.8,
+    "baseId": 386,
+    "formNames": {
+      "de": "Initiativeform",
+      "en": "Speed Forme",
+      "fr": "Forme Vitesse",
+      "es": "Forma Velocidad",
+      "it": "Forma Velocità"
+    }
+  },
+  {
+    "id": 10004,
+    "names": {
+      "de": "Burmadame",
+      "en": "Wormadam",
+      "fr": "Cheniselle",
+      "es": "Wormadam",
+      "it": "Wormadam"
+    },
+    "types": [
+      "bug",
+      "ground"
+    ],
+    "family_id": 412,
+    "stats": {
+      "KP": 60,
+      "Ang.": 79,
+      "Vert.": 105,
+      "Sp.-A.": 59,
+      "Sp.-V.": 85,
+      "Init.": 36,
+      "Summe": 424
+    },
+    "legendary": false,
+    "weight": 6.5,
+    "baseId": 413,
+    "formNames": {
+      "de": "Sandumhang",
+      "en": "Sandy Cloak",
+      "fr": "Cape Sable",
+      "es": "Tronco Arena",
+      "it": "Manto Sabbia"
+    }
+  },
+  {
+    "id": 10005,
+    "names": {
+      "de": "Burmadame",
+      "en": "Wormadam",
+      "fr": "Cheniselle",
+      "es": "Wormadam",
+      "it": "Wormadam"
+    },
+    "types": [
+      "bug",
+      "steel"
+    ],
+    "family_id": 412,
+    "stats": {
+      "KP": 60,
+      "Ang.": 69,
+      "Vert.": 95,
+      "Sp.-A.": 69,
+      "Sp.-V.": 95,
+      "Init.": 36,
+      "Summe": 424
+    },
+    "legendary": false,
+    "weight": 6.5,
+    "baseId": 413,
+    "formNames": {
+      "de": "Lumpenumhang",
+      "en": "Trash Cloak",
+      "fr": "Cape Déchet",
+      "es": "Tronco Basura",
+      "it": "Manto Scarti"
+    }
+  },
+  {
+    "id": 10006,
+    "names": {
+      "de": "Shaymin",
+      "en": "Shaymin",
+      "fr": "Shaymin",
+      "es": "Shaymin",
+      "it": "Shaymin"
+    },
+    "types": [
+      "grass",
+      "flying"
+    ],
+    "family_id": 492,
+    "stats": {
+      "KP": 100,
+      "Ang.": 103,
+      "Vert.": 75,
+      "Sp.-A.": 120,
+      "Sp.-V.": 75,
+      "Init.": 127,
+      "Summe": 600
+    },
+    "legendary": true,
+    "weight": 5.2,
+    "baseId": 492,
+    "formNames": {
+      "de": "Zenitform",
+      "en": "Sky Forme",
+      "fr": "Forme Céleste",
+      "es": "Forma Cielo",
+      "it": "Forma Cielo"
+    }
+  },
+  {
+    "id": 10007,
+    "names": {
+      "de": "Giratina",
+      "en": "Giratina",
+      "fr": "Giratina",
+      "es": "Giratina",
+      "it": "Giratina"
+    },
+    "types": [
+      "ghost",
+      "dragon"
+    ],
+    "family_id": 487,
+    "stats": {
+      "KP": 150,
+      "Ang.": 120,
+      "Vert.": 100,
+      "Sp.-A.": 120,
+      "Sp.-V.": 100,
+      "Init.": 90,
+      "Summe": 680
+    },
+    "legendary": true,
+    "weight": 650,
+    "baseId": 487,
+    "formNames": {
+      "de": "Urform",
+      "en": "Origin Forme",
+      "fr": "Forme Originelle",
+      "es": "Forma Origen",
+      "it": "Forma Originale"
+    }
+  },
+  {
+    "id": 10008,
+    "names": {
+      "de": "Rotom",
+      "en": "Rotom",
+      "fr": "Motisma",
+      "es": "Rotom",
+      "it": "Rotom"
+    },
+    "types": [
+      "electric",
+      "fire"
+    ],
+    "family_id": 479,
+    "stats": {
+      "KP": 50,
+      "Ang.": 65,
+      "Vert.": 107,
+      "Sp.-A.": 105,
+      "Sp.-V.": 107,
+      "Init.": 86,
+      "Summe": 520
+    },
+    "legendary": false,
+    "weight": 0.3,
+    "baseId": 479,
+    "formNames": {
+      "de": "Hitze-Rotom",
+      "en": "Heat Rotom",
+      "fr": "Motisma Chaleur",
+      "es": "Rotom Calor",
+      "it": "Rotom Calore"
+    }
+  },
+  {
+    "id": 10009,
+    "names": {
+      "de": "Rotom",
+      "en": "Rotom",
+      "fr": "Motisma",
+      "es": "Rotom",
+      "it": "Rotom"
+    },
+    "types": [
+      "electric",
+      "water"
+    ],
+    "family_id": 479,
+    "stats": {
+      "KP": 50,
+      "Ang.": 65,
+      "Vert.": 107,
+      "Sp.-A.": 105,
+      "Sp.-V.": 107,
+      "Init.": 86,
+      "Summe": 520
+    },
+    "legendary": false,
+    "weight": 0.3,
+    "baseId": 479,
+    "formNames": {
+      "de": "Wasch-Rotom",
+      "en": "Wash Rotom",
+      "fr": "Motisma Lavage",
+      "es": "Rotom Lavado",
+      "it": "Rotom Lavaggio"
+    }
+  },
+  {
+    "id": 10010,
+    "names": {
+      "de": "Rotom",
+      "en": "Rotom",
+      "fr": "Motisma",
+      "es": "Rotom",
+      "it": "Rotom"
+    },
+    "types": [
+      "electric",
+      "ice"
+    ],
+    "family_id": 479,
+    "stats": {
+      "KP": 50,
+      "Ang.": 65,
+      "Vert.": 107,
+      "Sp.-A.": 105,
+      "Sp.-V.": 107,
+      "Init.": 86,
+      "Summe": 520
+    },
+    "legendary": false,
+    "weight": 0.3,
+    "baseId": 479,
+    "formNames": {
+      "de": "Frost-Rotom",
+      "en": "Frost Rotom",
+      "fr": "Motisma Froid",
+      "es": "Rotom Frío",
+      "it": "Rotom Gelo"
+    }
+  },
+  {
+    "id": 10011,
+    "names": {
+      "de": "Rotom",
+      "en": "Rotom",
+      "fr": "Motisma",
+      "es": "Rotom",
+      "it": "Rotom"
+    },
+    "types": [
+      "electric",
+      "flying"
+    ],
+    "family_id": 479,
+    "stats": {
+      "KP": 50,
+      "Ang.": 65,
+      "Vert.": 107,
+      "Sp.-A.": 105,
+      "Sp.-V.": 107,
+      "Init.": 86,
+      "Summe": 520
+    },
+    "legendary": false,
+    "weight": 0.3,
+    "baseId": 479,
+    "formNames": {
+      "de": "Wirbel-Rotom",
+      "en": "Fan Rotom",
+      "fr": "Motisma Hélice",
+      "es": "Rotom Ventilador",
+      "it": "Rotom Vortice"
+    }
+  },
+  {
+    "id": 10012,
+    "names": {
+      "de": "Rotom",
+      "en": "Rotom",
+      "fr": "Motisma",
+      "es": "Rotom",
+      "it": "Rotom"
+    },
+    "types": [
+      "electric",
+      "grass"
+    ],
+    "family_id": 479,
+    "stats": {
+      "KP": 50,
+      "Ang.": 65,
+      "Vert.": 107,
+      "Sp.-A.": 105,
+      "Sp.-V.": 107,
+      "Init.": 86,
+      "Summe": 520
+    },
+    "legendary": false,
+    "weight": 0.3,
+    "baseId": 479,
+    "formNames": {
+      "de": "Schneid-Rotom",
+      "en": "Mow Rotom",
+      "fr": "Motisma Tonte",
+      "es": "Rotom Corte",
+      "it": "Rotom Taglio"
+    }
+  },
+  {
+    "id": 10013,
+    "names": {
+      "de": "Formeo",
+      "en": "Castform",
+      "fr": "Morphéo",
+      "es": "Castform",
+      "it": "Castform"
+    },
+    "types": [
+      "fire"
+    ],
+    "family_id": 179,
+    "stats": {
+      "KP": 70,
+      "Ang.": 70,
+      "Vert.": 70,
+      "Sp.-A.": 70,
+      "Sp.-V.": 70,
+      "Init.": 70,
+      "Summe": 420
+    },
+    "legendary": false,
+    "weight": 0.8,
+    "baseId": 351,
+    "formNames": {
+      "de": "Sonnenform",
+      "en": "Sunny Form",
+      "fr": "Forme Solaire",
+      "es": "Forma Sol",
+      "it": "Forma Sole"
+    }
+  },
+  {
+    "id": 10014,
+    "names": {
+      "de": "Formeo",
+      "en": "Castform",
+      "fr": "Morphéo",
+      "es": "Castform",
+      "it": "Castform"
+    },
+    "types": [
+      "water"
+    ],
+    "family_id": 179,
+    "stats": {
+      "KP": 70,
+      "Ang.": 70,
+      "Vert.": 70,
+      "Sp.-A.": 70,
+      "Sp.-V.": 70,
+      "Init.": 70,
+      "Summe": 420
+    },
+    "legendary": false,
+    "weight": 0.8,
+    "baseId": 351,
+    "formNames": {
+      "de": "Regenform",
+      "en": "Rainy Form",
+      "fr": "Forme Eau de Pluie",
+      "es": "Forma Lluvia",
+      "it": "Forma Pioggia"
+    }
+  },
+  {
+    "id": 10015,
+    "names": {
+      "de": "Formeo",
+      "en": "Castform",
+      "fr": "Morphéo",
+      "es": "Castform",
+      "it": "Castform"
+    },
+    "types": [
+      "ice"
+    ],
+    "family_id": 179,
+    "stats": {
+      "KP": 70,
+      "Ang.": 70,
+      "Vert.": 70,
+      "Sp.-A.": 70,
+      "Sp.-V.": 70,
+      "Init.": 70,
+      "Summe": 420
+    },
+    "legendary": false,
+    "weight": 0.8,
+    "baseId": 351,
+    "formNames": {
+      "de": "Schneeform",
+      "en": "Snowy Form",
+      "fr": "Forme Blizzard",
+      "es": "Forma Nieve",
+      "it": "Forma Nuvola di Neve"
+    }
   }
 ]

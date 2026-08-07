@@ -87,6 +87,14 @@ export type Pokemon = {
   // it's displayed verbatim: a live-edited pokemon.json missing the field
   // should drop the row, not render "undefined kg".
   weight?: number;
+  // Set ONLY on alternate-forme entries (Deoxys Attack, Wash Rotom, ...):
+  // the species this is a forme of. Their ids start at 10001, so
+  // getPokemonList(dexLimit) keeps them out of the Pokédex and the encounter
+  // pickers automatically. See scripts/generate-forms.mjs.
+  baseId?: number;
+  // Localized forme label ("Angriffsform"). Present on formes AND on the base
+  // entry of any species that has them, so a picker can offer the way back.
+  formNames?: LocalizedNames;
 };
 
 export type LevelCap = {
@@ -161,8 +169,20 @@ export function getPokemonList(dexLimit?: number): Pokemon[] {
   return dexLimit ? list.filter((pokemon) => pokemon.id <= dexLimit) : list;
 }
 
+// Deliberately searches the UNFILTERED list, so a currentPokemonId pointing
+// at an alternate forme (id 10001+) still resolves.
 export function getPokemonById(pokemonId: number): Pokemon | undefined {
   return getPokemonList().find((pokemon) => pokemon.id === pokemonId);
+}
+
+// Alternate formes whose base species is within this game's dex. Kept apart
+// from getPokemonList() because a forme is a state a caught Pokémon can be
+// switched INTO, never something the Pokédex lists or an encounter picks.
+export function getPokemonForms(dexLimit?: number): Pokemon[] {
+  return getPokemonList().filter(
+    (pokemon) =>
+      pokemon.baseId !== undefined && (dexLimit === undefined || pokemon.baseId <= dexLimit),
+  );
 }
 
 export function getLevelCaps(gameId: string): LevelCap[] {

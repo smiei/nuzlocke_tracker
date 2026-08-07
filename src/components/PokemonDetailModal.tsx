@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
+import { Fragment, useEffect, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import type { Pokemon, EvolutionEntry } from "@/lib/data";
@@ -9,7 +9,8 @@ import { moveListAtLevel } from "@/lib/learnset";
 import { MoveDetailPanel } from "@/components/MoveDetailPanel";
 import type { EffectivenessTable } from "@/lib/effectiveness";
 import { computeDefenseMultipliers, getTypesForGeneration } from "@/lib/effectiveness";
-import { computePokemonRanks } from "@/lib/ranking";
+import { computePokemonRanks, rankForSumme } from "@/lib/ranking";
+import { baseSpeciesId, formLabel, formsOfSpecies, movepoolId } from "@/lib/forms";
 import type { Lang } from "@/lib/i18n/dictionary";
 import { translations } from "@/lib/i18n/dictionary";
 import { pokemonName } from "@/lib/i18n/localize";
@@ -41,8 +42,8 @@ function statColor(value: number): string {
 // One headline figure above the stat bars (rank / BST / weight).
 function MetaTile({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-md bg-zinc-100 px-2 py-1.5 text-center dark:bg-zinc-800/60">
-      <div className="text-[10px] uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
+    <div className="rounded-md bg-zinc-100 px-1.5 py-1.5 text-center dark:bg-zinc-800/60">
+      <div className="truncate text-[10px] uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
         {label}
       </div>
       <div className="mt-0.5 text-sm font-semibold tabular-nums text-zinc-800 dark:text-zinc-100">
@@ -92,6 +93,7 @@ function MoveRow({ move, lang }: { move: MoveEntry; lang: Lang }) {
 export function PokemonDetailModal({
   pokemon,
   allPokemon,
+  forms = [],
   evolutions,
   movesets,
   moves,
@@ -105,6 +107,7 @@ export function PokemonDetailModal({
 }: {
   pokemon: Pokemon;
   allPokemon: Pokemon[];
+  forms?: Pokemon[];
   evolutions: EvolutionEntry[];
   movesets: Moveset;
   moves: MovesTable;
@@ -141,17 +144,26 @@ export function PokemonDetailModal({
   const analyzeHref = `/typen?${runParam ? `run=${runParam}&` : ""}pokemon=${pokemon.id}`;
 
   const types = typesForGeneration(pokemon.id, pokemon.types, generation);
+  // The evolution tree is keyed by SPECIES, so a forme resolves to its base.
+  // The MOVEPOOL is not: Deoxys/Wormadam/Shaymin learn different moves per
+  // forme, so prefer the forme's own rows and fall back only when it has none.
+  const speciesId = baseSpeciesId(pokemon);
   const moveList = moveListAtLevel(
     movesets,
     moves,
-    pokemon.id,
+    movepoolId(pokemon, (id) => movesets[String(id)] !== undefined),
     100,
     lang,
     generation,
     moveTypeHistory,
   );
   const maxBST = generation >= 4 ? 720 : 680;
-  const rank = computePokemonRanks(allPokemon).get(pokemon.id) ?? 0;
+  // A forme is ranked against the species by its own BST rather than joining
+  // the pool - see rankForSumme.
+  const rank =
+    computePokemonRanks(allPokemon).get(pokemon.id) ??
+    rankForSumme(allPokemon, pokemon.stats.Summe);
+  const formOptions = formsOfSpecies(speciesId, allPokemon, forms);
 
   // Defensive type matchups (gen-corrected types + gen-appropriate chart).
   const defMult = computeDefenseMultipliers(effectiveness, types, getTypesForGeneration(generation));
@@ -165,15 +177,15 @@ export function PokemonDetailModal({
   // Walk up to the family's root, then render the whole tree (Eevee & co.
   // branch, so it's a tree, not a chain). Each node shows how it evolves from
   // its parent. dexLimit keeps stages that don't exist in this game out.
-  let rootId = pokemon.id;
+  let rootId = speciesId;
   for (let guard = 0; guard < 10; guard++) {
     const from = evoById.get(rootId)?.evolvesFrom;
     if (from == null || from > dexLimit) break;
     rootId = from;
   }
   const familyHasEvolution =
-    rootId !== pokemon.id ||
-    (evoById.get(pokemon.id)?.evolvesTo ?? []).some((id) => id <= dexLimit);
+    rootId !== speciesId ||
+    (evoById.get(speciesId)?.evolvesTo ?? []).some((id) => id <= dexLimit);
 
   // Plain recursive render function (not a nested component - that trips the
   // React compiler). A node's method is how IT evolves from its pre-evo.
@@ -181,7 +193,7 @@ export function PokemonDetailModal({
     const e = evoById.get(id);
     const method = depth > 0 && e?.method ? formatEvolutionMethod(e.method, lang) : null;
     const children = (e?.evolvesTo ?? []).filter((c) => c <= dexLimit);
-    const isCurrent = id === pokemon.id;
+    const isCurrent = id === speciesId;
     return (
       <div key={id}>
         <div className="flex items-center gap-1.5 py-0.5" style={{ paddingLeft: depth * 16 }}>
@@ -224,28 +236,26 @@ export function PokemonDetailModal({
         onClick={(e) => e.stopPropagation()}
         className="max-h-[85vh] w-full max-w-md overflow-y-auto rounded-lg border border-zinc-200 bg-white p-5 shadow-xl dark:border-zinc-700 dark:bg-zinc-900"
       >
-        <div className="mb-3 flex items-start gap-3">
+        {/* Name, sprite and types stacked on the centre axis; the dex number
+            moved down into the tiles below. Close button is absolute so it
+            doesn't pull the name off-centre. */}
+        <div className="relative mb-3 flex flex-col items-center text-center">
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label={t.dialog.cancel}
+            className="absolute right-0 top-0 rounded p-1 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
+          >
+            ✕
+          </button>
+          <h2 className="max-w-[calc(100%-3rem)] text-lg font-semibold">
+            {pokemonName(pokemon, lang)}
+          </h2>
           <PokemonSprite pokemonId={pokemon.id} name={pokemonName(pokemon, lang)} size="xl" />
-          <div className="min-w-0 flex-1">
-            <div className="flex items-center justify-between gap-2">
-              <h2 className="text-lg font-semibold">{pokemonName(pokemon, lang)}</h2>
-              <button
-                type="button"
-                onClick={onClose}
-                aria-label={t.dialog.cancel}
-                className="shrink-0 rounded p-1 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
-              >
-                ✕
-              </button>
-            </div>
-            <div className="text-xs text-zinc-400 dark:text-zinc-500">
-              #{String(pokemon.id).padStart(3, "0")}
-            </div>
-            <div className="mt-1.5 flex flex-wrap gap-1">
-              {types.map((type) => (
-                <TypeBadge key={type} type={type} lang={lang} />
-              ))}
-            </div>
+          <div className="mt-1.5 flex flex-wrap justify-center gap-1">
+            {types.map((type) => (
+              <TypeBadge key={type} type={type} lang={lang} />
+            ))}
           </div>
         </div>
 
@@ -253,8 +263,9 @@ export function PokemonDetailModal({
             block above the stat bars reads at a glance instead of as a run
             of loose label: value lines. */}
         <div className="mb-4 space-y-2">
-          <div className="grid grid-cols-3 gap-1.5">
+          <div className="grid grid-cols-4 gap-1.5">
             <MetaTile label={td.rank} value={`#${rank}`} />
+            <MetaTile label={td.dexNo} value={`#${String(pokemon.id).padStart(3, "0")}`} />
             <MetaTile label={t.pokedex.columns.summe} value={String(pokemon.stats.Summe)} />
             <MetaTile
               label={td.weight}
@@ -265,6 +276,30 @@ export function PokemonDetailModal({
               }
             />
           </div>
+          {formOptions.length > 1 && (
+            <div>
+              <div className="mb-1 text-[10px] uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
+                {td.forms}
+              </div>
+              <div className="flex flex-wrap gap-1">
+                {formOptions.map((option) => (
+                  <button
+                    key={option.id}
+                    type="button"
+                    onClick={() => onSelect(option.id)}
+                    aria-pressed={option.id === pokemon.id}
+                    className={`rounded border px-2 py-0.5 text-xs transition-colors ${
+                      option.id === pokemon.id
+                        ? "border-zinc-900 bg-zinc-900 text-white dark:border-zinc-50 dark:bg-zinc-50 dark:text-zinc-900"
+                        : "border-zinc-200 text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                    }`}
+                  >
+                    {formLabel(option, lang)}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
           <Link
             href={analyzeHref}
             onClick={onClose}
@@ -277,10 +312,14 @@ export function PokemonDetailModal({
               <h3 className="mb-1 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
                 {td.weaknesses}
               </h3>
-              <div className="flex flex-col gap-1">
+              {/* Two-column grid, not one wrapping row: the label column is
+                  max-content (so a label never breaks mid-phrase) and the
+                  badges wrap INSIDE their own cell, staying aligned with the
+                  start of the list instead of falling back under the label. */}
+              <div className="grid grid-cols-[max-content_1fr] items-start gap-x-2 gap-y-1.5">
                 {weaknessGroups.map((row) => (
-                  <div key={row.mult} className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                    <span className="w-28 shrink-0 text-xs text-zinc-500 dark:text-zinc-400">
+                  <Fragment key={row.mult}>
+                    <span className="whitespace-nowrap pt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
                       {row.label}:
                     </span>
                     <div className="flex flex-wrap gap-1">
@@ -288,7 +327,7 @@ export function PokemonDetailModal({
                         <TypeBadge key={type} type={type} lang={lang} />
                       ))}
                     </div>
-                  </div>
+                  </Fragment>
                 ))}
               </div>
             </div>

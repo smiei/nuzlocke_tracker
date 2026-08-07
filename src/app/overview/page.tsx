@@ -11,6 +11,7 @@ import {
   getMoveTypeHistory,
   getPokemonById,
   getPokemonList,
+  getPokemonForms,
   getRouteById,
   getRoutes,
 } from "@/lib/data";
@@ -23,6 +24,7 @@ import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
 import { getLang } from "@/lib/i18n/getLang";
 import { pokemonName, routeName } from "@/lib/i18n/localize";
+import { displayNameWithForm, movepoolId } from "@/lib/forms";
 import { EncounterStatus, LinkStatus, Player, RunMode } from "@/generated/prisma/client";
 import { SpriteSetProvider } from "@/components/SpriteSetProvider";
 import { PlayerNamesProvider } from "@/components/PlayerNamesProvider";
@@ -70,13 +72,23 @@ export default async function OverviewPage({
         )
       : new Set<number>();
 
+  // Ordered by the route's position in routes.json, not by route id: ids are
+  // frozen while the array order is the display order and gets reshuffled, so
+  // sorting by id would list the Memorial in a stale order (see the same note
+  // in links/page.tsx). Routes no longer in the pack sort last.
+  const routeOrder = new Map(getRoutes(gameId).map((r, i) => [r.id, i]));
   const soulLinks = (
     await prisma.soulLink.findMany({
       where: { runId },
       include: { encounters: true },
-      orderBy: { routeId: "asc" },
     })
-  ).filter((link) => !failedRouteIds.has(link.routeId));
+  )
+    .filter((link) => !failedRouteIds.has(link.routeId))
+    .sort(
+      (a, b) =>
+        (routeOrder.get(a.routeId) ?? Number.MAX_SAFE_INTEGER) -
+        (routeOrder.get(b.routeId) ?? Number.MAX_SAFE_INTEGER),
+    );
   // Unfiltered (any status, both players) - the route-progress bar counts a
   // route "done" once every player slot has an entry at all, same as the
   // Tracker tab, regardless of whether a pair ever formed.
@@ -88,6 +100,10 @@ export default async function OverviewPage({
     easier: settings.evolutionOverridesEasier,
   };
 
+  // Read before the team loop below: it decides whether a forme keeps its own
+  // movepool or falls back to its species.
+  const learnset = getLearnset(game.versionGroup);
+
   // --- Team (alive + on a slot) per player: defensive + offensive coverage.
   const teamByPlayer = new Map<Player, TeamMember[]>(PLAYERS.map((p) => [p, []]));
   for (const link of soulLinks) {
@@ -98,7 +114,9 @@ export default async function OverviewPage({
       teamByPlayer.get(e.player)?.push({
         encounterId: e.id,
         pokemonId: e.currentPokemonId,
-        name: pokemonName(pokemon, lang),
+        // Formes with their own movepool keep it; the rest fall back.
+        speciesId: movepoolId(pokemon, (id) => learnset[String(id)] !== undefined),
+        name: displayNameWithForm(pokemon, lang),
         types: typesForGeneration(e.currentPokemonId, pokemon.types, game.generation),
       });
     }
@@ -142,12 +160,11 @@ export default async function OverviewPage({
   // (a move only "counts" if the team could actually have it by now).
   const table = getEffectiveness(game.generation);
   const defenderTypes = getTypesForGeneration(game.generation);
-  const learnset = getLearnset(game.versionGroup);
   const coverageLevel = capCurrent ?? FALLBACK_LEVEL;
   const offensiveGaps = teams.map(({ player, members }) => {
     const atkTypes = new Set<string>();
     for (const m of members) {
-      for (const a of attackTypesAtLevel(learnset, m.pokemonId, coverageLevel)) atkTypes.add(a.type);
+      for (const a of attackTypesAtLevel(learnset, m.speciesId, coverageLevel)) atkTypes.add(a.type);
     }
     return { player, gaps: teamOffensiveCoverage(table, [...atkTypes], defenderTypes).gaps };
   });
@@ -246,6 +263,7 @@ export default async function OverviewPage({
       <PlayerNamesProvider names={settings.playerNames} lang={lang}>
         <PokemonDetailProvider
           pokemonList={pokemonList}
+          forms={getPokemonForms(game.dexLimit)}
           evolutions={getEvolutions(evoOptions)}
           moveData={{ movesets: getMoveset(game.versionGroup), moves: getMoves(lang) }}
           moveTypeHistory={getMoveTypeHistory()}
