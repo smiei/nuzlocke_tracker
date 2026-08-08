@@ -243,6 +243,25 @@ export async function quickCatch(
   return { success: true, addedToTeam: link?.teamPosition != null };
 }
 
+// The last Journey milestone defeated in this run, in the game pack's display
+// order - level cap ids are frozen while the array order is what the player
+// walks through, so the file's order decides "last", not the id.
+async function lastDefeatedLevelCapId(runId: number): Promise<number | null> {
+  const run = await prisma.run.findUnique({ where: { id: runId } });
+  if (!run) return null;
+  const defeated = new Set(
+    (
+      await prisma.levelCapProgress.findMany({
+        where: { runId, defeated: true },
+        select: { levelCapId: true },
+      })
+    ).map((row) => row.levelCapId),
+  );
+  if (defeated.size === 0) return null;
+  const caps = getLevelCaps(run.gameId).filter((cap) => defeated.has(cap.id));
+  return caps.at(-1)?.id ?? null;
+}
+
 export type MarkDeadResult = { success: true } | { success: false; error: ActionError };
 
 // deathPlayer (SoulLink only) records whose Pokémon fainted; both die
@@ -263,6 +282,11 @@ export async function markDead(
   // DEAD/ALIVE state lives on the SoulLink alone. A dead link also leaves
   // the team automatically (teamPosition -> null).
   const cause = (deathCause ?? "").trim().slice(0, 80) || null;
+  // Where in the run this happened: the last Journey milestone already
+  // defeated. Null when none is - that still counts as "recorded", which is
+  // what diedAt marks, so the Memorial can tell it apart from the deaths that
+  // predate this being tracked at all.
+  const lastCap = await lastDefeatedLevelCapId(runId);
   await prisma.soulLink.update({
     where: { id: soulLinkId },
     data: {
@@ -270,6 +294,8 @@ export async function markDead(
       teamPosition: null,
       deathPlayer: deathPlayer ?? null,
       deathCause: cause,
+      deathLevelCapId: lastCap,
+      diedAt: new Date(),
     },
   });
 
@@ -304,6 +330,39 @@ export async function clearEncounter(
 
   revalidatePath("/tracker");
   revalidatePath("/links");
+  publishChange(runId);
+  return { success: true };
+}
+
+// Corrects (or clears) WHEN a link died, for the deaths recorded before this
+// was tracked. null = back to "unknown", which parks it at the top of the
+// Memorial; any other value must be a level cap of the run's game pack.
+export async function setDeathPoint(
+  runId: number,
+  soulLinkId: number,
+  levelCapId: number | null,
+): Promise<MarkDeadResult> {
+  const soulLink = await prisma.soulLink.findUnique({ where: { id: soulLinkId } });
+  if (!soulLink || soulLink.runId !== runId) {
+    return { success: false, error: { key: "soulLinkNotFound", id: soulLinkId } };
+  }
+  const run = await prisma.run.findUnique({ where: { id: runId } });
+  if (!run) return { success: false, error: { key: "runNotFound", id: runId } };
+  if (levelCapId !== null && !getLevelCaps(run.gameId).some((cap) => cap.id === levelCapId)) {
+    return { success: false, error: { key: "unknownLevelCap", id: levelCapId } };
+  }
+
+  await prisma.soulLink.update({
+    where: { id: soulLinkId },
+    data: {
+      deathLevelCapId: levelCapId,
+      // Setting a point marks it as recorded; clearing sends it back to the
+      // unknown group.
+      diedAt: levelCapId === null ? null : soulLink.diedAt ?? new Date(),
+    },
+  });
+
+  revalidatePath("/overview");
   publishChange(runId);
   return { success: true };
 }

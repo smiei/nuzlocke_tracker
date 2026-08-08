@@ -248,5 +248,25 @@
       "kind": "level",
       "level": 40
     }
+  },
+  {
+    "from": 133,
+    "to": 196,
+    "comment": "Evoli -> Psiana",
+    "method": {
+      "kind": "item",
+      "item": "sun-stone"
+    },
+    "category": "timeBased"
+  },
+  {
+    "from": 133,
+    "to": 197,
+    "comment": "Evoli -> Nachtara",
+    "method": {
+      "kind": "item",
+      "item": "moon-stone"
+    },
+    "category": "timeBased"
   }
 ]

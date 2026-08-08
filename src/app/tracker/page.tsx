@@ -52,6 +52,7 @@ export default async function TrackerPage({
               gameId,
               impossible: settings.evolutionOverridesImpossible,
               easier: settings.evolutionOverridesEasier,
+              timeBased: settings.evolutionOverridesTimeBased,
             })}
             moveData={{ movesets: getMoveset(game.versionGroup), moves: getMoves(lang) }}
             moveTypeHistory={getMoveTypeHistory()}

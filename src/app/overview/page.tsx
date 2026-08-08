@@ -23,7 +23,7 @@ import { computeLevelCapProgress, computeRouteProgress, eliteFourIndex } from "@
 import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
 import { getLang } from "@/lib/i18n/getLang";
-import { pokemonName, routeName } from "@/lib/i18n/localize";
+import { localizeName, pokemonName, routeName } from "@/lib/i18n/localize";
 import { displayNameWithForm, movepoolId } from "@/lib/forms";
 import { EncounterStatus, LinkStatus, Player, RunMode } from "@/generated/prisma/client";
 import { SpriteSetProvider } from "@/components/SpriteSetProvider";
@@ -98,6 +98,7 @@ export default async function OverviewPage({
     gameId,
     impossible: settings.evolutionOverridesImpossible,
     easier: settings.evolutionOverridesEasier,
+    timeBased: settings.evolutionOverridesTimeBased,
   };
 
   // Read before the team loop below: it decides whether a forme keeps its own
@@ -169,6 +170,10 @@ export default async function OverviewPage({
     return { player, gaps: teamOffensiveCoverage(table, [...atkTypes], defenderTypes).gaps };
   });
 
+  // Display order of the Journey milestones, so the Memorial reads in the
+  // order the run actually happened rather than by level-cap id.
+  const capOrder = new Map(levelCapItems.map((cap, i) => [cap.id, i]));
+
   // --- Counts, team/bank BST, death tally and the memorial in one pass.
   const caught = new Map<Player, number>(PLAYERS.map((p) => [p, 0]));
   const caused = new Map<Player, number>(PLAYERS.map((p) => [p, 0]));
@@ -204,6 +209,25 @@ export default async function OverviewPage({
         }),
         deathPlayer: link.deathPlayer,
         deathCause: link.deathCause,
+        deathLevelCapId: link.deathLevelCapId,
+        deathPointLabel:
+          link.deathLevelCapId !== null
+            ? (() => {
+                const cap = levelCapItems.find((c) => c.id === link.deathLevelCapId);
+                return cap ? `${localizeName(cap.names, lang)} · ${localizeName(cap.location, lang)}` : null;
+              })()
+            : null,
+        // null = predates death-point tracking; those park at the top until
+        // edited. A recorded death with no cap yet has diedAt set and sorts
+        // ahead of every cap instead.
+        recorded: link.diedAt !== null,
+        sortIndex:
+          link.diedAt === null
+            ? -Infinity
+            : link.deathLevelCapId === null
+              ? -1
+              : (capOrder.get(link.deathLevelCapId) ?? Number.MAX_SAFE_INTEGER),
+        diedAt: link.diedAt?.getTime() ?? null,
       });
     }
     if (isDead) continue;
@@ -229,6 +253,13 @@ export default async function OverviewPage({
       }
     }
   }
+
+  // Chronological by Journey progress. Deaths recorded before this was
+  // tracked (sortIndex -Infinity) stay at the top in their existing route
+  // order until edited; equal progress falls back to when it was marked.
+  memorial.sort(
+    (a, b) => a.sortIndex - b.sortIndex || (a.diedAt ?? 0) - (b.diedAt ?? 0),
+  );
 
   const deathTallyTotal = (caused.get(Player.PLAYER1) ?? 0) + (caused.get(Player.PLAYER2) ?? 0) + unattributedDeaths;
   const deathTally: OverviewDeathTally | null =
@@ -283,6 +314,11 @@ export default async function OverviewPage({
             stats={stats}
             deathTally={deathTally}
             memorial={memorial}
+            runId={runId}
+            deathPointOptions={levelCapItems.map((cap) => ({
+              id: cap.id,
+              label: `${localizeName(cap.names, lang)} · ${localizeName(cap.location, lang)}`,
+            }))}
             routeProgress={routeProgress}
             levelCapProgress={levelCapProgress}
             levelCapMarkerAt={levelCapMarkerAt}

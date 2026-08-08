@@ -15,6 +15,7 @@ import { ProgressBar } from "@/components/ProgressBar";
 import { BadgeIcon } from "@/components/BadgeIcon";
 import { usePlayerLabel } from "@/components/PlayerNamesProvider";
 import { usePokemonDetail } from "@/components/PokemonDetailProvider";
+import { DeathPointPicker, type DeathPointOption } from "@/components/DeathPointPicker";
 
 export type OverviewStats = {
   perPlayer: {
@@ -44,6 +45,13 @@ export type OverviewMemorialEntry = {
   pokemon: { id: number; name: string; species: string | null }[];
   deathPlayer: Player | null;
   deathCause: string | null;
+  // Journey milestone the run had reached when this died, plus its label.
+  deathLevelCapId: number | null;
+  deathPointLabel: string | null;
+  // false = predates death-point tracking; those sort first and invite an edit.
+  recorded: boolean;
+  sortIndex: number;
+  diedAt: number | null;
 };
 
 function StatTile({
@@ -87,6 +95,7 @@ function CapValue({ level, emphasize = false }: { level: number | null; emphasiz
 }
 
 export function OverviewView({
+  runId,
   lang,
   mode,
   teams,
@@ -101,7 +110,9 @@ export function OverviewView({
   levelCapProgress,
   levelCapMarkerAt,
   badges,
+  deathPointOptions,
 }: {
+  runId: number;
   lang: Lang;
   mode: RunMode;
   teams: { player: Player; members: TeamMember[] }[];
@@ -116,6 +127,7 @@ export function OverviewView({
   levelCapProgress: ProgressStats;
   levelCapMarkerAt: number | null;
   badges: OverviewBadge[];
+  deathPointOptions: DeathPointOption[];
 }) {
   const t = translations[lang].overview;
   const tLinks = translations[lang].links;
@@ -367,6 +379,16 @@ export function OverviewView({
                     {m.deathCause}
                   </div>
                 )}
+                <div className="mt-1.5">
+                  <DeathPointPicker
+                    runId={runId}
+                    lang={lang}
+                    soulLinkId={m.soulLinkId}
+                    current={m.deathLevelCapId}
+                    recorded={m.recorded}
+                    options={deathPointOptions}
+                  />
+                </div>
               </li>
             ))}
           </ul>

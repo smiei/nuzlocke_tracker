@@ -187,43 +187,50 @@ export function PokemonDetailModal({
     rootId !== speciesId ||
     (evoById.get(speciesId)?.evolvesTo ?? []).some((id) => id <= dexLimit);
 
-  // Plain recursive render function (not a nested component - that trips the
-  // React compiler). A node's method is how IT evolves from its pre-evo.
-  const renderEvoNode = (id: number, depth: number): ReactNode => {
-    const e = evoById.get(id);
-    const method = depth > 0 && e?.method ? formatEvolutionMethod(e.method, lang) : null;
-    const children = (e?.evolvesTo ?? []).filter((c) => c <= dexLimit);
+  // Rendered as generations rather than an indented tree: each stage is one
+  // wrapping row of tiles, so a branching family (Eevee) stays compact
+  // instead of turning into a tall ladder, and the condition gets its own
+  // line under the name rather than eating width beside it.
+  const evoStages: number[][] = [];
+  for (let ids = [rootId], guard = 0; ids.length > 0 && guard < 6; guard++) {
+    evoStages.push(ids);
+    ids = ids.flatMap((id) => (evoById.get(id)?.evolvesTo ?? []).filter((c) => c <= dexLimit));
+  }
+
+  const renderEvoTile = (id: number): ReactNode => {
+    const method = evoById.get(id)?.method;
+    const label = method ? formatEvolutionMethod(method, lang) : null;
     const isCurrent = id === speciesId;
-    return (
-      <div key={id}>
-        <div className="flex items-center gap-1.5 py-0.5" style={{ paddingLeft: depth * 16 }}>
-          {depth > 0 && <span className="text-zinc-300 dark:text-zinc-600">↳</span>}
-          {isCurrent ? (
-            <span className="flex items-center gap-1.5">
-              <PokemonSprite pokemonId={id} name={nameOf(id)} size="sm" />
-              <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
-                {nameOf(id)}
-              </span>
-            </span>
-          ) : (
-            // Clicking another family member reopens the (single) card for it.
-            <button
-              type="button"
-              onClick={() => onSelect(id)}
-              className="flex items-center gap-1.5 rounded px-1 -mx-1 text-left transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-800"
-            >
-              <PokemonSprite pokemonId={id} name={nameOf(id)} size="sm" />
-              <span className="text-sm text-zinc-600 underline-offset-2 hover:underline dark:text-zinc-300">
-                {nameOf(id)}
-              </span>
-            </button>
-          )}
-          {method && (
-            <span className="text-xs text-zinc-500 dark:text-zinc-400">({method})</span>
-          )}
-        </div>
-        {children.map((c) => renderEvoNode(c, depth + 1))}
-      </div>
+    const body = (
+      <>
+        <PokemonSprite pokemonId={id} name={nameOf(id)} size="sm" />
+        <span className="max-w-full truncate text-[11px] leading-tight">{nameOf(id)}</span>
+        {label && (
+          <span className="max-w-full text-[10px] leading-tight text-zinc-400 dark:text-zinc-500">
+            {label}
+          </span>
+        )}
+      </>
+    );
+    const shell =
+      "flex w-[4.5rem] shrink-0 flex-col items-center rounded-md px-1 py-1 text-center";
+    return isCurrent ? (
+      <span
+        key={id}
+        className={`${shell} bg-zinc-100 font-semibold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-50`}
+      >
+        {body}
+      </span>
+    ) : (
+      // Clicking another family member reopens the (single) card for it.
+      <button
+        key={id}
+        type="button"
+        onClick={() => onSelect(id)}
+        className={`${shell} text-zinc-600 transition-colors hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800`}
+      >
+        {body}
+      </button>
     );
   };
 
@@ -260,16 +267,17 @@ export function PokemonDetailModal({
               ))}
             </div>
           </div>
-          {/* Right column: the evolution family. pr-6 keeps it clear of the
-              absolutely positioned close button. */}
-          <div className="min-w-0 flex-1 pr-6">
-            <h3 className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
-              {td.evolution}
-            </h3>
+          {/* Right column: the evolution family, centred against the sprite.
+              pr-6 keeps it clear of the absolutely positioned close button. */}
+          <div className="flex min-w-0 flex-1 self-center flex-col gap-0.5 pr-6">
             {!familyHasEvolution ? (
               <p className="text-xs text-zinc-400 dark:text-zinc-500">{td.noEvolution}</p>
             ) : (
-              <div>{renderEvoNode(rootId, 0)}</div>
+              evoStages.map((ids, stage) => (
+                <div key={stage} className="flex flex-wrap justify-center gap-0.5">
+                  {ids.map(renderEvoTile)}
+                </div>
+              ))
             )}
           </div>
         </div>

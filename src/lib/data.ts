@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { cache } from "react";
 import type { EffectivenessTable } from "@/lib/effectiveness";
 import type { Lang } from "@/lib/i18n/dictionary";
 import type { LocalizedNames } from "@/lib/i18n/localize";
@@ -109,9 +110,22 @@ export type LevelCap = {
   sprite?: string;
 };
 
+// Parsed once per request, not once per call. The files are still re-read on
+// the NEXT request, so the bind-mounted /data stays live-editable exactly as
+// before - this only stops a single page render from parsing the same file
+// over and over. That mattered: getPokemonById() goes through the full list,
+// and pages call it (and getEvolutionById) once per encounter, so rendering
+// the Team tab re-parsed pokemon.json (214 KB) and evolutions.json hundreds
+// of times and took seconds.
+//
+// Safe to share the parsed objects because every consumer treats them as
+// read-only (map/filter/find); nothing mutates them in place.
+const parseFileCached = cache((absolutePath: string): unknown =>
+  JSON.parse(fs.readFileSync(absolutePath, "utf-8")),
+);
+
 function readJson<T>(filename: string): T {
-  const raw = fs.readFileSync(path.join(DATA_DIR, filename), "utf-8");
-  return JSON.parse(raw) as T;
+  return parseFileCached(path.join(DATA_DIR, filename)) as T;
 }
 
 // Reads a file from a game pack, falling back to the default pack when the
@@ -120,7 +134,7 @@ function readJson<T>(filename: string): T {
 function readGameJson<T>(gameId: string, filename: string): T {
   const primary = path.join(GAMES_DIR, gameId, filename);
   if (fs.existsSync(primary)) {
-    return JSON.parse(fs.readFileSync(primary, "utf-8")) as T;
+    return parseFileCached(primary) as T;
   }
   if (gameId !== DEFAULT_GAME_ID) {
     console.warn(`[data] missing ${filename} for game "${gameId}" - falling back to ${DEFAULT_GAME_ID}`);
@@ -196,6 +210,10 @@ export type EvolutionMethod =
   | { kind: "level"; level: number }
   | { kind: "item"; item: string }
   | { kind: "happiness"; time?: string | null }
+  // Level up while holding an item. Only produced by the time-based override
+  // (the randomizer strips the "at night" half of e.g. Sneasel's evolution),
+  // so vanilla data never uses it.
+  | { kind: "levelHeld"; item: string }
   | { kind: "trade"; item?: string | null }
   | { kind: "beauty" }
   | { kind: "other" };
@@ -212,9 +230,11 @@ type EvolutionOverride = {
   to: number;
   method: EvolutionMethod;
   // Mirrors PokeRandoZX: "impossible" = Change Impossible Evolutions (trade
-  // & co. replaced), "easier" = Make Evolutions Easier (lowered levels).
+  // & co. replaced), "easier" = Make Evolutions Easier (lowered levels),
+  // "timeBased" = Remove Time-Based Evolutions (day/night conditions dropped,
+  // Espeon/Umbreon become stone evolutions).
   // Missing = treated as "impossible" (the conservative default).
-  category?: "impossible" | "easier";
+  category?: "impossible" | "easier" | "timeBased";
 };
 
 // Overrides are merged at read time (not baked into evolutions.json), so
@@ -228,25 +248,27 @@ export function getEvolutions(options?: {
   gameId?: string;
   impossible?: boolean;
   easier?: boolean;
+  timeBased?: boolean;
 }): EvolutionEntry[] {
   const entries = readJson<EvolutionEntry[]>("evolutions.json");
   const applyImpossible = options?.impossible ?? true;
   const applyEasier = options?.easier ?? true;
-  if (!applyImpossible && !applyEasier) return entries;
+  const applyTimeBased = options?.timeBased ?? true;
+  if (!applyImpossible && !applyEasier && !applyTimeBased) return entries;
   let overrides: EvolutionOverride[] = [];
   try {
-    overrides = JSON.parse(
-      fs.readFileSync(
-        path.join(GAMES_DIR, options?.gameId ?? DEFAULT_GAME_ID, "evolution-overrides.json"),
-        "utf-8",
-      ),
+    overrides = parseFileCached(
+      path.join(GAMES_DIR, options?.gameId ?? DEFAULT_GAME_ID, "evolution-overrides.json"),
     ) as EvolutionOverride[];
   } catch {
     // No override file for this pack - vanilla methods apply.
   }
-  overrides = overrides.filter((o) =>
-    (o.category ?? "impossible") === "impossible" ? applyImpossible : applyEasier,
-  );
+  const enabled: Record<string, boolean> = {
+    impossible: applyImpossible,
+    easier: applyEasier,
+    timeBased: applyTimeBased,
+  };
+  overrides = overrides.filter((o) => enabled[o.category ?? "impossible"] ?? false);
   if (overrides.length === 0) return entries;
 
   const byKey = new Map(overrides.map((o) => [`${o.from}->${o.to}`, o.method]));
@@ -259,7 +281,7 @@ export function getEvolutions(options?: {
 
 export function getEvolutionById(
   pokemonId: number,
-  options?: { gameId?: string; impossible?: boolean; easier?: boolean },
+  options?: { gameId?: string; impossible?: boolean; easier?: boolean; timeBased?: boolean },
 ): EvolutionEntry | undefined {
   return getEvolutions(options).find((entry) => entry.id === pokemonId);
 }

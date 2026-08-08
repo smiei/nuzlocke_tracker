@@ -47,6 +47,7 @@ export default async function LinksPage({
     gameId,
     impossible: settings.evolutionOverridesImpossible,
     easier: settings.evolutionOverridesEasier,
+    timeBased: settings.evolutionOverridesTimeBased,
   };
 
   const lang = await getLang();

@@ -18,6 +18,7 @@ export type RunSettings = {
   // replaced) vs. "easier" ("Make Evolutions Easier" - lowered levels).
   evolutionOverridesImpossible: boolean;
   evolutionOverridesEasier: boolean;
+  evolutionOverridesTimeBased: boolean;
   // Show static locations (gifts, fossils, legendaries) on the Encounter tab.
   statics: boolean;
   // Statics don't count towards / trigger the Species Clause (today's fixed
@@ -37,6 +38,7 @@ export const DEFAULT_RUN_SETTINGS: RunSettings = {
   nicknames: true,
   evolutionOverridesImpossible: true,
   evolutionOverridesEasier: true,
+  evolutionOverridesTimeBased: true,
   statics: true,
   staticsExemptFromClause: true,
   playerNames: { PLAYER1: "", PLAYER2: "" },

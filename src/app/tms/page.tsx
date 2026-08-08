@@ -110,6 +110,7 @@ export default async function TmsPage({
             gameId,
             impossible: settings.evolutionOverridesImpossible,
             easier: settings.evolutionOverridesEasier,
+            timeBased: settings.evolutionOverridesTimeBased,
           })}
           moveData={{ movesets: moveset, moves: movesTable }}
           moveTypeHistory={moveTypeHistory}

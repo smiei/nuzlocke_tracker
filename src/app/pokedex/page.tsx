@@ -37,6 +37,7 @@ export default async function PokedexPage({
     gameId,
     impossible: settings.evolutionOverridesImpossible,
     easier: settings.evolutionOverridesEasier,
+    timeBased: settings.evolutionOverridesTimeBased,
   });
   // Evolution families already used in this run (Species Clause) - for the
   // Pokédex availability filter.

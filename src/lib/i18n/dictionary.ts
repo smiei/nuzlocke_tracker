@@ -264,6 +264,11 @@ const de = {
         description:
           "Gesenkte Entwicklungslevel aus evolution-overrides.json (z. B. Dragonir → ab Level 40). Aus = Original-Level.",
       },
+      evolutionOverridesTimeBased: {
+        label: "Randomizer: Zeitbasierte Entwicklungen entfernt",
+        description:
+          "Tageszeit-Bedingungen entfernt (Evoli → Psiana/Nachtara per Sonnen-/Mondstein, Glücklichkeits- und Item-Entwicklungen ohne Tag/Nacht). Aus = Original-Bedingungen.",
+      },
       statics: {
         label: "Static-Encounter",
         description:
@@ -395,6 +400,9 @@ const de = {
     offensiveHint: "Typen, die kein Team-Mitglied sehr effektiv trifft.",
     memorial: "Friedhof",
     memorialEmpty: "Noch keine Verluste. Bleib vorsichtig.",
+    deathPoint: "Todeszeitpunkt",
+    deathPointNone: "Kein Zeitpunkt",
+    deathPointUnset: "Zeitpunkt eintragen …",
     totalDeaths: "Tode gesamt",
     teamBst: "Team-BST (jetzt → max)",
     levelCap: "Level-Cap (jetzt → nächstes)",
@@ -689,6 +697,11 @@ const en: Dictionary = {
         description:
           "Lowered evolution levels from evolution-overrides.json (e.g. Dragonair → at level 40). Off = vanilla levels.",
       },
+      evolutionOverridesTimeBased: {
+        label: "Randomizer: time-based evolutions removed",
+        description:
+          "Day/night conditions dropped (Eevee → Espeon/Umbreon via Sun/Moon Stone, happiness and held-item evolutions without a time window). Off = original conditions.",
+      },
       statics: {
         label: "Static encounters",
         description:
@@ -820,6 +833,9 @@ const en: Dictionary = {
     offensiveHint: "Types no team member hits super-effectively.",
     memorial: "Memorial",
     memorialEmpty: "No losses yet. Stay careful.",
+    deathPoint: "Time of death",
+    deathPointNone: "No point recorded",
+    deathPointUnset: "Set when it died …",
     totalDeaths: "Total deaths",
     teamBst: "Team BST (now → max)",
     levelCap: "Level cap (now → next)",
@@ -1115,6 +1131,11 @@ const fr: Dictionary = {
         description:
           "Niveaux d'évolution abaissés selon evolution-overrides.json (p. ex. Draco → au niveau 40). Désactivé = niveaux d'origine.",
       },
+      evolutionOverridesTimeBased: {
+        label: "Randomizer : évolutions temporelles supprimées",
+        description:
+          "Conditions jour/nuit retirées (Évoli → Mentali/Noctali via Pierre Soleil/Lune). Désactivé = conditions d'origine.",
+      },
       statics: {
         label: "Rencontres statiques",
         description:
@@ -1246,6 +1267,9 @@ const fr: Dictionary = {
     offensiveHint: "Types qu'aucun membre ne touche super-efficacement.",
     memorial: "Cimetière",
     memorialEmpty: "Aucune perte pour l'instant. Reste prudent.",
+    deathPoint: "Moment du décès",
+    deathPointNone: "Aucun moment",
+    deathPointUnset: "Indiquer le moment …",
     totalDeaths: "Morts au total",
     teamBst: "BST d'équipe (actuel → max)",
     levelCap: "Plafond de niveau (actuel → suivant)",
@@ -1541,6 +1565,11 @@ const es: Dictionary = {
         description:
           "Niveles de evolución reducidos según evolution-overrides.json (p. ej. Dragonair → al nivel 40). Desactivado = niveles originales.",
       },
+      evolutionOverridesTimeBased: {
+        label: "Randomizer: evoluciones por hora eliminadas",
+        description:
+          "Condiciones de día/noche eliminadas (Eevee → Espeon/Umbreon con Piedra Solar/Lunar). Desactivado = condiciones originales.",
+      },
       statics: {
         label: "Encuentros estáticos",
         description:
@@ -1672,6 +1701,9 @@ const es: Dictionary = {
     offensiveHint: "Tipos que ningún miembro golpea de forma súper eficaz.",
     memorial: "Cementerio",
     memorialEmpty: "Aún sin bajas. Ten cuidado.",
+    deathPoint: "Momento de la muerte",
+    deathPointNone: "Sin momento",
+    deathPointUnset: "Indicar el momento …",
     totalDeaths: "Muertes totales",
     teamBst: "BST del equipo (actual → máx)",
     levelCap: "Tope de nivel (actual → siguiente)",
@@ -1967,6 +1999,11 @@ const it: Dictionary = {
         description:
           "Livelli di evoluzione ridotti secondo evolution-overrides.json (es. Dragonair → al livello 40). Disattivato = livelli originali.",
       },
+      evolutionOverridesTimeBased: {
+        label: "Randomizer: evoluzioni a tempo rimosse",
+        description:
+          "Condizioni giorno/notte rimosse (Eevee → Espeon/Umbreon con Pietrasolare/Pietralunare). Disattivato = condizioni originali.",
+      },
       statics: {
         label: "Incontri statici",
         description:
@@ -2098,6 +2135,9 @@ const it: Dictionary = {
     offensiveHint: "Tipi che nessun membro colpisce in modo super efficace.",
     memorial: "Cimitero",
     memorialEmpty: "Ancora nessuna perdita. Stai attento.",
+    deathPoint: "Momento della morte",
+    deathPointNone: "Nessun momento",
+    deathPointUnset: "Indica il momento …",
     totalDeaths: "Morti totali",
     teamBst: "BST squadra (attuale → max)",
     levelCap: "Tetto di livello (attuale → prossimo)",

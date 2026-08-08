@@ -134,6 +134,7 @@ export default async function AnalyzePage({
             gameId,
             impossible: settings.evolutionOverridesImpossible,
             easier: settings.evolutionOverridesEasier,
+            timeBased: settings.evolutionOverridesTimeBased,
           })}
           moveData={{ movesets: moveset, moves }}
           moveTypeHistory={getMoveTypeHistory()}

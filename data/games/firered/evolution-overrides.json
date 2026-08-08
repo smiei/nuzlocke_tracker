@@ -90,26 +90,6 @@
     "category": "impossible"
   },
   {
-    "from": 133,
-    "to": 196,
-    "comment": "Evoli -> Psiana",
-    "method": {
-      "kind": "item",
-      "item": "sun-stone"
-    },
-    "category": "impossible"
-  },
-  {
-    "from": 133,
-    "to": 197,
-    "comment": "Evoli -> Nachtara",
-    "method": {
-      "kind": "item",
-      "item": "moon-stone"
-    },
-    "category": "impossible"
-  },
-  {
     "from": 137,
     "to": 233,
     "comment": "Porygon -> Porygon2",
@@ -278,5 +258,25 @@
       "level": 40
     },
     "category": "easier"
+  },
+  {
+    "from": 133,
+    "to": 196,
+    "comment": "Evoli -> Psiana",
+    "method": {
+      "kind": "item",
+      "item": "sun-stone"
+    },
+    "category": "timeBased"
+  },
+  {
+    "from": 133,
+    "to": 197,
+    "comment": "Evoli -> Nachtara",
+    "method": {
+      "kind": "item",
+      "item": "moon-stone"
+    },
+    "category": "timeBased"
   }
 ]

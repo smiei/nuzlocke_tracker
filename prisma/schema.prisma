@@ -75,6 +75,16 @@ model SoulLink {
   // Optional free-text cause of death (e.g. the opponent or move that did it),
   // shown in the Memorial. Null = not recorded.
   deathCause   String?
+  // WHERE in the run it died: the last Journey milestone defeated at that
+  // moment (a levelcaps.json id, or null when none was defeated yet). Lets
+  // the Memorial read in the order things actually happened rather than by
+  // route. Not a foreign key - level-cap ids live in the game pack, like
+  // routeId.
+  deathLevelCapId Int?
+  // When it was marked dead. Doubles as "was a death point ever recorded?":
+  // links that died before this was tracked have null here and sort ahead of
+  // everything else in the Memorial until edited.
+  diedAt       DateTime?
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
   run        Run         @relation(fields: [runId], references: [id], onDelete: Cascade)

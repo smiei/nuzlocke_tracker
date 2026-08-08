@@ -328,5 +328,82 @@
       "kind": "level",
       "level": 40
     }
+  },
+  {
+    "from": 133,
+    "to": 196,
+    "comment": "Evoli -> Psiana",
+    "method": {
+      "kind": "item",
+      "item": "sun-stone"
+    },
+    "category": "timeBased"
+  },
+  {
+    "from": 133,
+    "to": 197,
+    "comment": "Evoli -> Nachtara",
+    "method": {
+      "kind": "item",
+      "item": "moon-stone"
+    },
+    "category": "timeBased"
+  },
+  {
+    "from": 207,
+    "to": 472,
+    "comment": "Skorgla -> Skorgro",
+    "method": {
+      "kind": "levelHeld",
+      "item": "razor-fang"
+    },
+    "category": "timeBased"
+  },
+  {
+    "from": 215,
+    "to": 461,
+    "comment": "Sniebel -> Snibunna",
+    "method": {
+      "kind": "levelHeld",
+      "item": "razor-claw"
+    },
+    "category": "timeBased"
+  },
+  {
+    "from": 406,
+    "to": 315,
+    "comment": "Knospi -> Roselia",
+    "method": {
+      "kind": "happiness"
+    },
+    "category": "timeBased"
+  },
+  {
+    "from": 433,
+    "to": 358,
+    "comment": "Klingplim -> Palimpalim",
+    "method": {
+      "kind": "happiness"
+    },
+    "category": "timeBased"
+  },
+  {
+    "from": 440,
+    "to": 113,
+    "comment": "Wonneira -> Chaneira",
+    "method": {
+      "kind": "levelHeld",
+      "item": "oval-stone"
+    },
+    "category": "timeBased"
+  },
+  {
+    "from": 447,
+    "to": 448,
+    "comment": "Riolu -> Lucario",
+    "method": {
+      "kind": "happiness"
+    },
+    "category": "timeBased"
   }
 ]

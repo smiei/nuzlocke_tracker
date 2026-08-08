@@ -64,6 +64,7 @@ const TOGGLE_ORDER: BooleanSettingKey[] = [
   "nicknames",
   "evolutionOverridesImpossible",
   "evolutionOverridesEasier",
+  "evolutionOverridesTimeBased",
   "statics",
 ];
 
