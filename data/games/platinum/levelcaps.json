@@ -50,8 +50,8 @@
       "de": "Mars",
       "en": "Mars",
       "fr": "Mars",
-      "es": "Venus",
-      "it": "Martes"
+      "es": "Mars",
+      "it": "Mars"
     },
     "location": {
       "de": "Windkraftanlage",
@@ -114,8 +114,8 @@
       "de": "Jupiter",
       "en": "Jupiter",
       "fr": "Jupiter",
-      "es": "Ceres",
-      "it": "Giovia"
+      "es": "Jupiter",
+      "it": "Jupiter"
     },
     "location": {
       "de": "Galaktik-Gebäude",
@@ -234,9 +234,9 @@
     "location": {
       "de": "Elyses",
       "en": "Celestic Town",
-      "fr": "Celestia",
-      "es": "Pueblo Caelestis",
-      "it": "Memoride"
+      "fr": "Célestia",
+      "es": "Celestic Town",
+      "it": "Celestic Town"
     },
     "badge": null,
     "max_level": null
@@ -291,9 +291,9 @@
     "names": {
       "de": "Saturn",
       "en": "Saturn",
-      "fr": "Saturne",
-      "es": "Saturno",
-      "it": "Saturno"
+      "fr": "Saturn",
+      "es": "Saturn",
+      "it": "Saturn"
     },
     "location": {
       "de": "Muthsee",
@@ -311,8 +311,8 @@
       "de": "Mars",
       "en": "Mars",
       "fr": "Mars",
-      "es": "Venus",
-      "it": "Martes"
+      "es": "Mars",
+      "it": "Mars"
     },
     "location": {
       "de": "Wahrheitssee",
@@ -361,9 +361,9 @@
     "location": {
       "de": "Galaktik-Hauptquartier",
       "en": "Galactic HQ",
-      "fr": "Bâtiment Galaxie de Voilaroc",
-      "es": "Edificio Galaxia de Ciudad Rocavelo",
-      "it": "Edificio Galassia di Rupepoli"
+      "fr": "QG Galaxie",
+      "es": "Galactic HQ",
+      "it": "Galactic HQ"
     },
     "badge": null,
     "max_level": null
@@ -373,16 +373,16 @@
     "names": {
       "de": "Saturn",
       "en": "Saturn",
-      "fr": "Saturne",
-      "es": "Saturno",
-      "it": "Saturno"
+      "fr": "Saturn",
+      "es": "Saturn",
+      "it": "Saturn"
     },
     "location": {
       "de": "Galaktik-Hauptquartier",
       "en": "Galactic HQ",
-      "fr": "Bâtiment Galaxie de Voilaroc",
-      "es": "Edificio Galaxia de Ciudad Rocavelo",
-      "it": "Edificio Galassia di Rupepoli"
+      "fr": "QG Galaxie",
+      "es": "Galactic HQ",
+      "it": "Galactic HQ"
     },
     "badge": null,
     "max_level": null
@@ -393,15 +393,15 @@
       "de": "Mars & Jupiter",
       "en": "Mars & Jupiter",
       "fr": "Mars & Jupiter",
-      "es": "Venus & Ceres",
-      "it": "Martes & Giovia"
+      "es": "Mars & Jupiter",
+      "it": "Mars & Jupiter"
     },
     "location": {
       "de": "Speersäule",
       "en": "Spear Pillar",
       "fr": "Colonnes Lances",
-      "es": "Columna Lanza",
-      "it": "Vetta Lancia"
+      "es": "Spear Pillar",
+      "it": "Spear Pillar"
     },
     "badge": null,
     "max_level": null

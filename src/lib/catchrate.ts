@@ -29,7 +29,9 @@ export type BallId =
   | "fast"
   | "park"
   | "quick"
-  | "dusk";
+  | "dusk"
+  | "heal"
+  | "dream";
 
 export type StatusId = "none" | "sleep" | "freeze" | "paralysis" | "poison" | "burn";
 
@@ -81,10 +83,31 @@ const BALLS_GEN4: BallId[] = [
   "premier",
 ];
 
+// Unova has no Safari Zone, so no Safari Ball; the Dream Ball arrives with the
+// Dream World and is a guaranteed catch in Gen 5 (it was nerfed to 4x later).
+const BALLS_GEN5: BallId[] = [
+  "poke",
+  "great",
+  "ultra",
+  "master",
+  "net",
+  "nest",
+  "dive",
+  "repeat",
+  "timer",
+  "quick",
+  "dusk",
+  "luxury",
+  "premier",
+  "heal",
+  "dream",
+];
+
 export function getBallIdsForGeneration(generation: number): BallId[] {
   if (generation === 1) return BALLS_GEN1;
   if (generation === 2) return BALLS_GEN2;
-  if (generation >= 4) return BALLS_GEN4;
+  if (generation >= 5) return BALLS_GEN5;
+  if (generation === 4) return BALLS_GEN4;
   return BALLS_GEN3;
 }
 
@@ -118,9 +141,35 @@ const STATUS_MULTIPLIERS: Record<StatusId, number> = {
   burn: 1.5,
 };
 
+// Gen 5 raised the sleep/freeze bonus from 2x to 2.5x; everything else stayed.
+const STATUS_MULTIPLIERS_GEN5: Record<StatusId, number> = {
+  ...STATUS_MULTIPLIERS,
+  sleep: 2.5,
+  freeze: 2.5,
+};
+
 // Gen 3/4 ball multipliers (situational balls assume their condition holds -
 // noted in the UI). Gen 4 additions: Quick ×4 on the first turn, Dusk ×3.5
 // (night/cave assumed).
+// Gen 5 changed two of the Gen 4 numbers and added two balls; everything else
+// carries over, so this only overrides what differs.
+function ballMultiplierGen5(
+  ball: BallId,
+  ctx: { types: string[]; level: number; turn: number },
+): number {
+  switch (ball) {
+    case "quick":
+      return ctx.turn === 1 ? 5 : 1;
+    case "dusk":
+      return 3.5;
+    // heal and premier are cosmetic; dream is handled as a guaranteed catch.
+    case "heal":
+      return 1;
+    default:
+      return ballMultiplierGen34(ball, ctx);
+  }
+}
+
 function ballMultiplierGen34(
   ball: BallId,
   ctx: { types: string[]; level: number; turn: number },
@@ -267,8 +316,42 @@ function computeGen34(input: CatchInput): CatchResult {
   return { guaranteed: false, chance, ballText, statusText };
 }
 
+// Gen 5 keeps Gen 3/4's modified catch rate but changes what happens after:
+// the shake probability uses the exponent 3/16 instead of 1/4, and only THREE
+// shake checks are made instead of four - which together make Gen 5 noticeably
+// more generous at the same catch rate.
+function computeGen5(input: CatchInput): CatchResult {
+  const hpFrac = Math.min(100, Math.max(1, input.hpPercent)) / 100;
+  const conditionOff = ballHasCondition(input.ball) && input.conditionMet === false;
+  const ballBonus = conditionOff
+    ? 1
+    : ballMultiplierGen5(input.ball, {
+        types: input.types,
+        level: input.level,
+        turn: input.turn,
+      });
+  const statusBonus = STATUS_MULTIPLIERS_GEN5[input.status];
+  const ballText = `×${ballBonus}`;
+  const statusText = `×${statusBonus}`;
+
+  // The Dream Ball never fails in Gen 5 (its 4x nerf came later).
+  if (input.ball === "master" || input.ball === "dream") {
+    return { guaranteed: true, chance: 1, ballText: "×1", statusText };
+  }
+
+  const a = Math.max(1, ((3 - 2 * hpFrac) / 3) * input.baseRate * ballBonus * statusBonus);
+  if (a >= 255) {
+    return { guaranteed: true, chance: 1, ballText, statusText };
+  }
+
+  const b = Math.min(65535, Math.floor(65536 / Math.pow(255 / a, 3 / 16)));
+  const chance = Math.pow(b / 65536, 3);
+  return { guaranteed: false, chance, ballText, statusText };
+}
+
 export function computeCatchChance(generation: number, input: CatchInput): CatchResult {
   if (generation === 1) return computeGen1(input);
   if (generation === 2) return computeGen2(input);
+  if (generation >= 5) return computeGen5(input);
   return computeGen34(input);
 }

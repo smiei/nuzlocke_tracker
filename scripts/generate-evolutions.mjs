@@ -56,7 +56,9 @@ function parseMethod(details) {
 
 async function main() {
   const pokemonList = JSON.parse(await readFile(path.join(dataDir, "pokemon.json"), "utf-8"));
-  const idSet = new Set(pokemonList.map((p) => p.id));
+  // Species only: alternate-forme entries (baseId set, ids 10001+) share their
+  // species' data and have no pokemon-species endpoint of their own.
+  const idSet = new Set(pokemonList.filter((p) => p.baseId === undefined).map((p) => p.id));
   const ids = [...idSet].sort((a, b) => a - b);
 
   const evolvesFrom = new Map();

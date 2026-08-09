@@ -320,6 +320,8 @@ const de = {
       park: "Parkball",
       quick: "Flottball",
       dusk: "Finsterball",
+      heal: "Heilball",
+      dream: "Traumball",
     },
     statusOptions: {
       none: "Keine",
@@ -344,6 +346,8 @@ const de = {
       park: "Parkball: ×1,5 beim Käferturnier im Nationalpark.",
       quick: "Flottball: ×4 nur in Runde 1, danach ×1.",
       dusk: "Finsterball: ×3,5 gilt nur nachts oder in Höhlen – hier angenommen.",
+      heal: "Heilball: kein Fangbonus, heilt das gefangene Pokémon vollständig.",
+      dream: "Traumball: fängt in Gen 5 garantiert (nur in der Traumwelt erhältlich).",
     },
   },
   typen: {
@@ -753,6 +757,8 @@ const en: Dictionary = {
       park: "Park Ball",
       quick: "Quick Ball",
       dusk: "Dusk Ball",
+      heal: "Heal Ball",
+      dream: "Dream Ball",
     },
     statusOptions: {
       none: "None",
@@ -777,6 +783,8 @@ const en: Dictionary = {
       park: "Park Ball: ×1.5 during the Bug-Catching Contest.",
       quick: "Quick Ball: ×4 only on turn 1, ×1 afterwards.",
       dusk: "Dusk Ball: ×3.5 only at night or in caves – assumed here.",
+      heal: "Heal Ball: no catch bonus, fully heals the caught Pokémon.",
+      dream: "Dream Ball: a guaranteed catch in Gen 5 (Dream World only).",
     },
   },
   typen: {
@@ -1187,6 +1195,8 @@ const fr: Dictionary = {
       park: "Parc Ball",
       quick: "Rapide Ball",
       dusk: "Sombre Ball",
+      heal: "Ball Soin",
+      dream: "Rêve Ball",
     },
     statusOptions: {
       none: "Aucune",
@@ -1211,6 +1221,8 @@ const fr: Dictionary = {
       park: "Parc Ball : ×1,5 pendant le Concours de Capture.",
       quick: "Rapide Ball : ×4 seulement au tour 1, ×1 ensuite.",
       dusk: "Sombre Ball : ×3,5 seulement la nuit ou dans les grottes – supposé ici.",
+      heal: "Ball Soin : aucun bonus de capture, soigne le Pokémon capturé.",
+      dream: "Rêve Ball : capture garantie en Gen 5 (Monde des Rêves uniquement).",
     },
   },
   typen: {
@@ -1621,6 +1633,8 @@ const es: Dictionary = {
       park: "Parque Ball",
       quick: "Veloz Ball",
       dusk: "Ocaso Ball",
+      heal: "Cura Ball",
+      dream: "Ensueño Ball",
     },
     statusOptions: {
       none: "Ninguno",
@@ -1645,6 +1659,8 @@ const es: Dictionary = {
       park: "Parque Ball: ×1,5 durante el Concurso de Captura.",
       quick: "Veloz Ball: ×4 solo en el turno 1, después ×1.",
       dusk: "Ocaso Ball: ×3,5 solo de noche o en cuevas – se asume aquí.",
+      heal: "Cura Ball: sin bonus de captura, cura por completo al Pokémon capturado.",
+      dream: "Ensueño Ball: captura garantizada en la 5.ª gen (solo Mundo Ensueño).",
     },
   },
   typen: {
@@ -2055,6 +2071,8 @@ const it: Dictionary = {
       park: "Parco Ball",
       quick: "Velox Ball",
       dusk: "Scuro Ball",
+      heal: "Curaball",
+      dream: "Ball Sogno",
     },
     statusOptions: {
       none: "Nessuno",
@@ -2079,6 +2097,8 @@ const it: Dictionary = {
       park: "Parco Ball: ×1,5 durante la Gara di Cattura.",
       quick: "Velox Ball: ×4 solo al turno 1, poi ×1.",
       dusk: "Scuro Ball: ×3,5 solo di notte o nelle grotte – qui dato per assunto.",
+      heal: "Curaball: nessun bonus di cattura, cura completamente il Pokémon catturato.",
+      dream: "Ball Sogno: cattura garantita in 5ª gen (solo Mondo Sogno).",
     },
   },
   typen: {

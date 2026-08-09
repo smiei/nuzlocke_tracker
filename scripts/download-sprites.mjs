@@ -34,6 +34,7 @@ const SPRITE_SETS = {
   },
   "firered-leafgreen": { path: "versions/generation-iii/firered-leafgreen", maxId: 386 },
   platinum: { path: "versions/generation-iv/platinum", maxId: 493 },
+  "black-white": { path: "versions/generation-v/black-white", maxId: 649 },
   "heartgold-soulsilver": { path: "versions/generation-iv/heartgold-soulsilver", maxId: 493 },
 };
 

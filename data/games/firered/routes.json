@@ -610,8 +610,8 @@
       "de": "Schatzgestade",
       "en": "Treasure Beach",
       "fr": "Plage Trésor",
-      "es": "Playa Tesoro",
-      "it": "Spiaggia Tesoro"
+      "es": "Treasure Beach",
+      "it": "Treasure Beach"
     },
     "type": "route"
   },
@@ -632,8 +632,8 @@
       "de": "Tri-Eiland-Pfad",
       "en": "Three Isle Path",
       "fr": "Route Île 3",
-      "es": "Camino Isla Tercera",
-      "it": "Sentiero Terzisola"
+      "es": "Three Isle Path",
+      "it": "Three Isle Path"
     },
     "type": "route"
   },

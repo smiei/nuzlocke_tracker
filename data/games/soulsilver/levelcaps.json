@@ -12,8 +12,8 @@
       "de": "Rosalia City",
       "en": "Cherrygrove City",
       "fr": "Ville Griotte",
-      "es": "Ciudad Cerezo",
-      "it": "Fiorpescopoli"
+      "es": "Cherrygrove City",
+      "it": "Cherrygrove City"
     },
     "badge": null,
     "max_level": null
@@ -24,13 +24,13 @@
       "de": "Weise Li",
       "en": "Elder Li",
       "fr": "Elder Li",
-      "es": "Jehan",
-      "it": "Anselmo"
+      "es": "Elder Li",
+      "it": "Elder Li"
     },
     "location": {
       "de": "Knofensa-Turm",
       "en": "Sprout Tower",
-      "fr": "Tour Chétiflor",
+      "fr": "Tour Chetiflor",
       "es": "Sprout Tower",
       "it": "Sprout Tower"
     },
@@ -42,16 +42,16 @@
     "names": {
       "de": "Falk",
       "en": "Falkner",
-      "fr": "Falkner",
-      "es": "Albert",
-      "it": "Pegaso"
+      "fr": "Albert",
+      "es": "Pegaso",
+      "it": "Falkner"
     },
     "location": {
       "de": "Viola City",
       "en": "Violet City",
       "fr": "Mauville",
-      "es": "Ciudad Malva",
-      "it": "Violapoli"
+      "es": "Violet City",
+      "it": "Violet City"
     },
     "badge": {
       "de": "Zephyrorden",
@@ -68,8 +68,8 @@
       "de": "Vorstand Lanzo",
       "en": "Executive Proton",
       "fr": "Executive Proton",
-      "es": "Lance",
-      "it": "Protón"
+      "es": "Executive Proton",
+      "it": "Executive Proton"
     },
     "location": {
       "de": "Flegmon-Brunnen",
@@ -86,16 +86,16 @@
     "names": {
       "de": "Kai",
       "en": "Bugsy",
-      "fr": "Bugsy",
-      "es": "Hector",
-      "it": "Antón"
+      "fr": "Hector",
+      "es": "Antón",
+      "it": "Bugsy"
     },
     "location": {
       "de": "Azalea City",
       "en": "Azalea Town",
       "fr": "Ecorcia",
-      "es": "Pueblo Azalea",
-      "it": "Azalina"
+      "es": "Azalea Town",
+      "it": "Azalea Town"
     },
     "badge": {
       "de": "Insektenorden",
@@ -118,7 +118,7 @@
     "location": {
       "de": "Eingang Steineichenwald",
       "en": "Exit to Ilex Forest",
-      "fr": "Sortie du Bois aux Chênes",
+      "fr": "Exit to Ilex Forest",
       "es": "Exit to Ilex Forest",
       "it": "Exit to Ilex Forest"
     },
@@ -130,16 +130,16 @@
     "names": {
       "de": "Bianka",
       "en": "Whitney",
-      "fr": "Whitney",
-      "es": "Blanche",
-      "it": "Blanca"
+      "fr": "Blanche",
+      "es": "Blanca",
+      "it": "Whitney"
     },
     "location": {
       "de": "Dukatia City",
       "en": "Goldenrod City",
       "fr": "Doublonville",
-      "es": "Ciudad Trigal",
-      "it": "Fiordoropoli"
+      "es": "Goldenrod City",
+      "it": "Goldenrod City"
     },
     "badge": {
       "de": "Basisorden",
@@ -174,16 +174,16 @@
     "names": {
       "de": "Jens",
       "en": "Morty",
-      "fr": "Morty",
-      "es": "Mortimer",
-      "it": "Morti"
+      "fr": "Mortimer",
+      "es": "Morti",
+      "it": "Morty"
     },
     "location": {
       "de": "Teak City",
       "en": "Ecruteak City",
       "fr": "Rosalia",
-      "es": "Ciudad Iris",
-      "it": "Amarantopoli"
+      "es": "Ecruteak City",
+      "it": "Ecruteak City"
     },
     "badge": {
       "de": "Nebelorden",
@@ -206,9 +206,9 @@
     "location": {
       "de": "Suicune-Begegnung",
       "en": "Suicune Encounter",
-      "fr": "Rencontre Suicune",
-      "es": "Encuentro con Suicune",
-      "it": "Incontro con Suicune"
+      "fr": "Suicune Encounter",
+      "es": "Suicune Encounter",
+      "it": "Suicune Encounter"
     },
     "badge": null,
     "max_level": null
@@ -219,15 +219,15 @@
       "de": "Hartwig",
       "en": "Chuck",
       "fr": "Chuck",
-      "es": "Chuck",
-      "it": "Aníbal"
+      "es": "Aníbal",
+      "it": "Chuck"
     },
     "location": {
       "de": "Anemonia City",
       "en": "Cianwood City",
       "fr": "Irisia",
-      "es": "Ciudad Orquídea",
-      "it": "Fiorlisopoli"
+      "es": "Cianwood City",
+      "it": "Cianwood City"
     },
     "badge": {
       "de": "Sturmorden",
@@ -244,15 +244,15 @@
       "de": "Jasmin",
       "en": "Jasmine",
       "fr": "Jasmine",
-      "es": "Jasmine",
-      "it": "Yasmina"
+      "es": "Yasmina",
+      "it": "Jasmine"
     },
     "location": {
       "de": "Oliviana City",
       "en": "Olivine City",
       "fr": "Oliville",
-      "es": "Ciudad Olivo",
-      "it": "Olivinopoli"
+      "es": "Olivine City",
+      "it": "Olivine City"
     },
     "badge": {
       "de": "Mineralorden",
@@ -269,13 +269,13 @@
       "de": "Vorstand Lamda",
       "en": "Executive Petrel",
       "fr": "Executive Petrel",
-      "es": "Lambda",
-      "it": "Lambda"
+      "es": "Executive Petrel",
+      "it": "Executive Petrel"
     },
     "location": {
       "de": "Team Rocket Versteck",
       "en": "Rocket Hideout",
-      "fr": "Repaire Rocket d'Acajou",
+      "fr": "Rocket Hideout",
       "es": "Rocket Hideout",
       "it": "Rocket Hideout"
     },
@@ -288,13 +288,13 @@
       "de": "Vorstand Athena & Rüpel",
       "en": "Executive Ariana & Grunt",
       "fr": "Executive Ariana & Grunt",
-      "es": "Ariane & Sbire",
-      "it": "Atenea & Recluta"
+      "es": "Executive Ariana & Grunt",
+      "it": "Executive Ariana & Grunt"
     },
     "location": {
       "de": "Team Rocket Versteck",
       "en": "Rocket Hideout",
-      "fr": "Repaire Rocket d'Acajou",
+      "fr": "Rocket Hideout",
       "es": "Rocket Hideout",
       "it": "Rocket Hideout"
     },
@@ -306,16 +306,16 @@
     "names": {
       "de": "Norbert",
       "en": "Pryce",
-      "fr": "Pryce",
-      "es": "Frédo",
-      "it": "Fredo"
+      "fr": "Frédo",
+      "es": "Fredo",
+      "it": "Pryce"
     },
     "location": {
       "de": "Mahagonia City",
       "en": "Mahogany Town",
       "fr": "Acajou",
-      "es": "Pueblo Caoba",
-      "it": "Mogania"
+      "es": "Mahogany Town",
+      "it": "Mahogany Town"
     },
     "badge": {
       "de": "Gletscherorden",
@@ -351,13 +351,13 @@
       "de": "Vorstand Lamda",
       "en": "Executive Petrel",
       "fr": "Executive Petrel",
-      "es": "Lambda",
-      "it": "Lambda"
+      "es": "Executive Petrel",
+      "it": "Executive Petrel"
     },
     "location": {
       "de": "Dukatia Radioturm",
       "en": "Goldenrod Radio Tower",
-      "fr": "Tour Radio de Doublonville",
+      "fr": "Goldenrod Radio Tower",
       "es": "Goldenrod Radio Tower",
       "it": "Goldenrod Radio Tower"
     },
@@ -370,13 +370,13 @@
       "de": "Vorstand Lanzo",
       "en": "Executive Proton",
       "fr": "Executive Proton",
-      "es": "Lance",
-      "it": "Protón"
+      "es": "Executive Proton",
+      "it": "Executive Proton"
     },
     "location": {
       "de": "Dukatia Radioturm",
       "en": "Goldenrod Radio Tower",
-      "fr": "Tour Radio de Doublonville",
+      "fr": "Goldenrod Radio Tower",
       "es": "Goldenrod Radio Tower",
       "it": "Goldenrod Radio Tower"
     },
@@ -389,13 +389,13 @@
       "de": "Vorstand Athena",
       "en": "Executive Ariana",
       "fr": "Executive Ariana",
-      "es": "Ariane",
-      "it": "Atenea"
+      "es": "Executive Ariana",
+      "it": "Executive Ariana"
     },
     "location": {
       "de": "Dukatia Radioturm",
       "en": "Goldenrod Radio Tower",
-      "fr": "Tour Radio de Doublonville",
+      "fr": "Goldenrod Radio Tower",
       "es": "Goldenrod Radio Tower",
       "it": "Goldenrod Radio Tower"
     },
@@ -408,13 +408,13 @@
       "de": "Vorstand Atlas",
       "en": "Executive Archer",
       "fr": "Executive Archer",
-      "es": "Amos",
-      "it": "Atlas"
+      "es": "Executive Archer",
+      "it": "Executive Archer"
     },
     "location": {
       "de": "Dukatia Radioturm",
       "en": "Goldenrod Radio Tower",
-      "fr": "Tour Radio de Doublonville",
+      "fr": "Goldenrod Radio Tower",
       "es": "Goldenrod Radio Tower",
       "it": "Goldenrod Radio Tower"
     },
@@ -426,16 +426,16 @@
     "names": {
       "de": "Sandra",
       "en": "Clair",
-      "fr": "Clair",
-      "es": "Sandra",
-      "it": "Débora"
+      "fr": "Sandra",
+      "es": "Débora",
+      "it": "Clair"
     },
     "location": {
       "de": "Ebenholz City",
       "en": "Blackthorn City",
       "fr": "Ebènelle",
-      "es": "Ciudad Endrino",
-      "it": "Ebanopoli"
+      "es": "Blackthorn City",
+      "it": "Blackthorn City"
     },
     "badge": {
       "de": "Aufstiegsorden",
@@ -452,8 +452,8 @@
       "de": "Kimono-Mädels",
       "en": "Kimono Girls",
       "fr": "Kimono Girls",
-      "es": "Kimono",
-      "it": "Chicas Kimono"
+      "es": "Kimono Girls",
+      "it": "Kimono Girls"
     },
     "location": {
       "de": "Teak City Tanztheater",
@@ -489,9 +489,9 @@
     "names": {
       "de": "Willi",
       "en": "Will",
-      "fr": "Will",
-      "es": "Clément",
-      "it": "Mento"
+      "fr": "Clément",
+      "es": "Mento",
+      "it": "Will"
     },
     "location": {
       "de": "Top 4",
@@ -527,8 +527,8 @@
     "names": {
       "de": "Bruno",
       "en": "Bruno",
-      "fr": "Bruno",
-      "es": "Aldo",
+      "fr": "Aldo",
+      "es": "Bruno",
       "it": "Bruno"
     },
     "location": {
@@ -546,8 +546,8 @@
     "names": {
       "de": "Melanie",
       "en": "Karen",
-      "fr": "Karen",
-      "es": "Marion",
+      "fr": "Marion",
+      "es": "Karen",
       "it": "Karen"
     },
     "location": {
@@ -565,8 +565,8 @@
     "names": {
       "de": "Siegfried",
       "en": "Lance",
-      "fr": "Lance",
-      "es": "Peter",
+      "fr": "Peter",
+      "es": "Lance",
       "it": "Lance"
     },
     "location": {
@@ -584,9 +584,9 @@
     "names": {
       "de": "Major Bob",
       "en": "Lt. Surge",
-      "fr": "Lt. Surge",
-      "es": "Major Bob",
-      "it": "Teniente Surge"
+      "fr": "Major Bob",
+      "es": "Teniente Surge",
+      "it": "Lt. Surge"
     },
     "location": {
       "de": "Orania City",
@@ -609,8 +609,8 @@
     "names": {
       "de": "Sabrina",
       "en": "Sabrina",
-      "fr": "Sabrina",
-      "es": "Morgane",
+      "fr": "Morgane",
+      "es": "Sabrina",
       "it": "Sabrina"
     },
     "location": {
@@ -659,16 +659,16 @@
     "names": {
       "de": "Janina",
       "en": "Janine",
-      "fr": "Janine",
-      "es": "Jeannine",
+      "fr": "Jeannine",
+      "es": "Janine",
       "it": "Janine"
     },
     "location": {
       "de": "Fuchsania City",
       "en": "Fuschia City",
-      "fr": "Parmanie",
-      "es": "Ciudad Fucsia",
-      "it": "Fucsiapoli"
+      "fr": "Fuschia City",
+      "es": "Fuschia City",
+      "it": "Fuschia City"
     },
     "badge": {
       "de": "Seelenorden",
@@ -684,8 +684,8 @@
     "names": {
       "de": "Misty",
       "en": "Misty",
-      "fr": "Misty",
-      "es": "Ondine",
+      "fr": "Ondine",
+      "es": "Misty",
       "it": "Misty"
     },
     "location": {
@@ -709,8 +709,8 @@
     "names": {
       "de": "Rocko",
       "en": "Brock",
-      "fr": "Brock",
-      "es": "Pierre",
+      "fr": "Pierre",
+      "es": "Brock",
       "it": "Brock"
     },
     "location": {
@@ -753,8 +753,8 @@
     "names": {
       "de": "Pyro",
       "en": "Blaine",
-      "fr": "Blaine",
-      "es": "Auguste",
+      "fr": "Auguste",
+      "es": "Blaine",
       "it": "Blaine"
     },
     "location": {
@@ -779,8 +779,8 @@
       "de": "Blau",
       "en": "Blue",
       "fr": "Blue",
-      "es": "Blue",
-      "it": "Azul"
+      "es": "Azul",
+      "it": "Blu"
     },
     "location": {
       "de": "Vertania City",
@@ -804,8 +804,8 @@
       "de": "Rot",
       "en": "Red",
       "fr": "Red",
-      "es": "Red",
-      "it": "Rojo"
+      "es": "Rojo",
+      "it": "Rosso"
     },
     "location": {
       "de": "Silberberg",

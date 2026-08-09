@@ -4,7 +4,7 @@
 // to the forme it actually is and the app shows that forme's stats/types.
 //
 // Two filters decide what counts, and both matter:
-//   1. The forme's own version group must be generation <= 4. Without this
+//   1. The forme's own version group must be generation <= 5. Without this
 //      you also pull in every Mega, Gigantamax and Alolan/Galarian/Hisuian
 //      form - none of which exist in the games this app covers.
 //   2. Its stats or types must actually differ from the default forme.
@@ -41,7 +41,7 @@ const STAT_KEYS = {
   speed: "Init.",
 };
 const ROMAN = { i: 1, ii: 2, iii: 3, iv: 4, v: 5, vi: 6, vii: 7, viii: 8, ix: 9 };
-const MAX_GENERATION = 4;
+const MAX_GENERATION = 5;
 
 async function fetchJson(url) {
   const res = await fetch(url);

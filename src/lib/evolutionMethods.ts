@@ -23,6 +23,7 @@ const ITEM_LABELS: Record<Lang, Record<string, string>> = {
     "dubious-disc": "Dubiosdisc",
     "reaper-cloth": "Düsterumhang",
     "shiny-stone": "Funkelstein",
+    "prism-scale": "Schönschuppe",
     "razor-fang": "Scharfzahn",
     "razor-claw": "Scharfklaue",
     "oval-stone": "Ovaler Stein",
@@ -46,6 +47,7 @@ const ITEM_LABELS: Record<Lang, Record<string, string>> = {
     "dubious-disc": "Dubious Disc",
     "reaper-cloth": "Reaper Cloth",
     "shiny-stone": "Shiny Stone",
+    "prism-scale": "Prism Scale",
     "razor-fang": "Razor Fang",
     "razor-claw": "Razor Claw",
     "oval-stone": "Oval Stone",
@@ -69,6 +71,7 @@ const ITEM_LABELS: Record<Lang, Record<string, string>> = {
     "dubious-disc": "CD Douteux",
     "reaper-cloth": "Tissu Fauche",
     "shiny-stone": "Pierre Éclat",
+    "prism-scale": "Bel’Écaille",
     "razor-fang": "Croc Rasoir",
     "razor-claw": "Griffe Rasoir",
     "oval-stone": "Pierre Ovale",
@@ -92,6 +95,7 @@ const ITEM_LABELS: Record<Lang, Record<string, string>> = {
     "dubious-disc": "Disco Extraño",
     "reaper-cloth": "Telaterrible",
     "shiny-stone": "Piedra Día",
+    "prism-scale": "Escama Bella",
     "razor-fang": "Colmillagudo",
     "razor-claw": "Garra Afilada",
     "oval-stone": "Piedra Oval",
@@ -115,6 +119,7 @@ const ITEM_LABELS: Record<Lang, Record<string, string>> = {
     "dubious-disc": "Dubbiodisco",
     "reaper-cloth": "Terrorpanno",
     "shiny-stone": "Pietrabrillo",
+    "prism-scale": "Bellasquama",
     "razor-fang": "Velenodente",
     "razor-claw": "Affilartiglio",
     "oval-stone": "Pietraovale",
@@ -137,6 +142,7 @@ const TEMPLATES: Record<
     night: string;
     tradeItem: (item: string) => string;
     levelHeld: (item: string) => string;
+    levelWith: (name: string) => string;
     trade: string;
     beauty: string;
   }
@@ -149,6 +155,7 @@ const TEMPLATES: Record<
     night: " (nachts)",
     tradeItem: (item) => `Tausch mit ${item}`,
     levelHeld: (item) => `Level mit ${item}`,
+    levelWith: (name) => `Level mit ${name} im Team`,
     trade: "durch Tausch",
     beauty: "hohe Schönheit",
   },
@@ -160,6 +167,7 @@ const TEMPLATES: Record<
     night: " (night)",
     tradeItem: (item) => `trade holding ${item}`,
     levelHeld: (item) => `level up holding ${item}`,
+    levelWith: (name) => `level up with ${name} in the party`,
     trade: "by trade",
     beauty: "high beauty",
   },
@@ -171,6 +179,7 @@ const TEMPLATES: Record<
     night: " (nuit)",
     tradeItem: (item) => `échange avec ${item}`,
     levelHeld: (item) => `montée de niveau avec ${item}`,
+    levelWith: (name) => `montée de niveau avec ${name} dans l’équipe`,
     trade: "par échange",
     beauty: "grande beauté",
   },
@@ -182,6 +191,7 @@ const TEMPLATES: Record<
     night: " (de noche)",
     tradeItem: (item) => `intercambio con ${item}`,
     levelHeld: (item) => `subir de nivel con ${item}`,
+    levelWith: (name) => `subir de nivel con ${name} en el equipo`,
     trade: "por intercambio",
     beauty: "gran belleza",
   },
@@ -193,6 +203,7 @@ const TEMPLATES: Record<
     night: " (notte)",
     tradeItem: (item) => `scambio con ${item}`,
     levelHeld: (item) => `salire di livello con ${item}`,
+    levelWith: (name) => `salire di livello con ${name} in squadra`,
     trade: "tramite scambio",
     beauty: "alta bellezza",
   },
@@ -214,6 +225,8 @@ export function formatEvolutionMethod(method: EvolutionMethod, lang: Lang): stri
     }
     case "levelHeld":
       return t.levelHeld(itemLabel(method.item, lang));
+    case "levelWith":
+      return t.levelWith(method.name);
     case "trade":
       if (method.item) return t.tradeItem(itemLabel(method.item, lang));
       return t.trade;

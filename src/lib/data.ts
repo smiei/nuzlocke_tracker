@@ -214,6 +214,11 @@ export type EvolutionMethod =
   // (the randomizer strips the "at night" half of e.g. Sneasel's evolution),
   // so vanilla data never uses it.
   | { kind: "levelHeld"; item: string }
+  // Level up with another species in the party (Karrablast/Shelmet trade the
+  // randomizer rewrites into a party condition). The partner's name is stored
+  // rather than an id: it is display-only, and the override file is
+  // hand-written per game pack.
+  | { kind: "levelWith"; name: string }
   | { kind: "trade"; item?: string | null }
   | { kind: "beauty" }
   | { kind: "other" };

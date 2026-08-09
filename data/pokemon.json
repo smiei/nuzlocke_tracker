@@ -12590,6 +12590,4022 @@
     "weight": 320
   },
   {
+    "id": 494,
+    "names": {
+      "de": "Victini",
+      "en": "Victini",
+      "fr": "Victini",
+      "es": "Victini",
+      "it": "Victini"
+    },
+    "types": [
+      "psychic",
+      "fire"
+    ],
+    "family_id": 494,
+    "stats": {
+      "KP": 100,
+      "Ang.": 100,
+      "Vert.": 100,
+      "Sp.-A.": 100,
+      "Sp.-V.": 100,
+      "Init.": 100,
+      "Summe": 600
+    },
+    "legendary": true,
+    "weight": 4
+  },
+  {
+    "id": 495,
+    "names": {
+      "de": "Serpifeu",
+      "en": "Snivy",
+      "fr": "Vipélierre",
+      "es": "Snivy",
+      "it": "Snivy"
+    },
+    "types": [
+      "grass"
+    ],
+    "family_id": 495,
+    "stats": {
+      "KP": 45,
+      "Ang.": 45,
+      "Vert.": 55,
+      "Sp.-A.": 45,
+      "Sp.-V.": 55,
+      "Init.": 63,
+      "Summe": 308
+    },
+    "legendary": false,
+    "weight": 8.1
+  },
+  {
+    "id": 496,
+    "names": {
+      "de": "Efoserp",
+      "en": "Servine",
+      "fr": "Lianaja",
+      "es": "Servine",
+      "it": "Servine"
+    },
+    "types": [
+      "grass"
+    ],
+    "family_id": 495,
+    "stats": {
+      "KP": 60,
+      "Ang.": 60,
+      "Vert.": 75,
+      "Sp.-A.": 60,
+      "Sp.-V.": 75,
+      "Init.": 83,
+      "Summe": 413
+    },
+    "legendary": false,
+    "weight": 16
+  },
+  {
+    "id": 497,
+    "names": {
+      "de": "Serpiroyal",
+      "en": "Serperior",
+      "fr": "Majaspic",
+      "es": "Serperior",
+      "it": "Serperior"
+    },
+    "types": [
+      "grass"
+    ],
+    "family_id": 495,
+    "stats": {
+      "KP": 75,
+      "Ang.": 75,
+      "Vert.": 95,
+      "Sp.-A.": 75,
+      "Sp.-V.": 95,
+      "Init.": 113,
+      "Summe": 528
+    },
+    "legendary": false,
+    "weight": 63
+  },
+  {
+    "id": 498,
+    "names": {
+      "de": "Floink",
+      "en": "Tepig",
+      "fr": "Gruikui",
+      "es": "Tepig",
+      "it": "Tepig"
+    },
+    "types": [
+      "fire"
+    ],
+    "family_id": 498,
+    "stats": {
+      "KP": 65,
+      "Ang.": 63,
+      "Vert.": 45,
+      "Sp.-A.": 45,
+      "Sp.-V.": 45,
+      "Init.": 45,
+      "Summe": 308
+    },
+    "legendary": false,
+    "weight": 9.9
+  },
+  {
+    "id": 499,
+    "names": {
+      "de": "Ferkokel",
+      "en": "Pignite",
+      "fr": "Grotichon",
+      "es": "Pignite",
+      "it": "Pignite"
+    },
+    "types": [
+      "fire",
+      "fighting"
+    ],
+    "family_id": 498,
+    "stats": {
+      "KP": 90,
+      "Ang.": 93,
+      "Vert.": 55,
+      "Sp.-A.": 70,
+      "Sp.-V.": 55,
+      "Init.": 55,
+      "Summe": 418
+    },
+    "legendary": false,
+    "weight": 55.5
+  },
+  {
+    "id": 500,
+    "names": {
+      "de": "Flambirex",
+      "en": "Emboar",
+      "fr": "Roitiflam",
+      "es": "Emboar",
+      "it": "Emboar"
+    },
+    "types": [
+      "fire",
+      "fighting"
+    ],
+    "family_id": 498,
+    "stats": {
+      "KP": 110,
+      "Ang.": 123,
+      "Vert.": 65,
+      "Sp.-A.": 100,
+      "Sp.-V.": 65,
+      "Init.": 65,
+      "Summe": 528
+    },
+    "legendary": false,
+    "weight": 150
+  },
+  {
+    "id": 501,
+    "names": {
+      "de": "Ottaro",
+      "en": "Oshawott",
+      "fr": "Moustillon",
+      "es": "Oshawott",
+      "it": "Oshawott"
+    },
+    "types": [
+      "water"
+    ],
+    "family_id": 501,
+    "stats": {
+      "KP": 55,
+      "Ang.": 55,
+      "Vert.": 45,
+      "Sp.-A.": 63,
+      "Sp.-V.": 45,
+      "Init.": 45,
+      "Summe": 308
+    },
+    "legendary": false,
+    "weight": 5.9
+  },
+  {
+    "id": 502,
+    "names": {
+      "de": "Zwottronin",
+      "en": "Dewott",
+      "fr": "Mateloutre",
+      "es": "Dewott",
+      "it": "Dewott"
+    },
+    "types": [
+      "water"
+    ],
+    "family_id": 501,
+    "stats": {
+      "KP": 75,
+      "Ang.": 75,
+      "Vert.": 60,
+      "Sp.-A.": 83,
+      "Sp.-V.": 60,
+      "Init.": 60,
+      "Summe": 413
+    },
+    "legendary": false,
+    "weight": 24.5
+  },
+  {
+    "id": 503,
+    "names": {
+      "de": "Admurai",
+      "en": "Samurott",
+      "fr": "Clamiral",
+      "es": "Samurott",
+      "it": "Samurott"
+    },
+    "types": [
+      "water"
+    ],
+    "family_id": 501,
+    "stats": {
+      "KP": 95,
+      "Ang.": 100,
+      "Vert.": 85,
+      "Sp.-A.": 108,
+      "Sp.-V.": 70,
+      "Init.": 70,
+      "Summe": 528
+    },
+    "legendary": false,
+    "weight": 94.6
+  },
+  {
+    "id": 504,
+    "names": {
+      "de": "Nagelotz",
+      "en": "Patrat",
+      "fr": "Ratentif",
+      "es": "Patrat",
+      "it": "Patrat"
+    },
+    "types": [
+      "normal"
+    ],
+    "family_id": 504,
+    "stats": {
+      "KP": 45,
+      "Ang.": 55,
+      "Vert.": 39,
+      "Sp.-A.": 35,
+      "Sp.-V.": 39,
+      "Init.": 42,
+      "Summe": 255
+    },
+    "legendary": false,
+    "weight": 11.6
+  },
+  {
+    "id": 505,
+    "names": {
+      "de": "Kukmarda",
+      "en": "Watchog",
+      "fr": "Miradar",
+      "es": "Watchog",
+      "it": "Watchog"
+    },
+    "types": [
+      "normal"
+    ],
+    "family_id": 504,
+    "stats": {
+      "KP": 60,
+      "Ang.": 85,
+      "Vert.": 69,
+      "Sp.-A.": 60,
+      "Sp.-V.": 69,
+      "Init.": 77,
+      "Summe": 420
+    },
+    "legendary": false,
+    "weight": 27
+  },
+  {
+    "id": 506,
+    "names": {
+      "de": "Yorkleff",
+      "en": "Lillipup",
+      "fr": "Ponchiot",
+      "es": "Lillipup",
+      "it": "Lillipup"
+    },
+    "types": [
+      "normal"
+    ],
+    "family_id": 506,
+    "stats": {
+      "KP": 45,
+      "Ang.": 60,
+      "Vert.": 45,
+      "Sp.-A.": 25,
+      "Sp.-V.": 45,
+      "Init.": 55,
+      "Summe": 275
+    },
+    "legendary": false,
+    "weight": 4.1
+  },
+  {
+    "id": 507,
+    "names": {
+      "de": "Terribark",
+      "en": "Herdier",
+      "fr": "Ponchien",
+      "es": "Herdier",
+      "it": "Herdier"
+    },
+    "types": [
+      "normal"
+    ],
+    "family_id": 506,
+    "stats": {
+      "KP": 65,
+      "Ang.": 80,
+      "Vert.": 65,
+      "Sp.-A.": 35,
+      "Sp.-V.": 65,
+      "Init.": 60,
+      "Summe": 370
+    },
+    "legendary": false,
+    "weight": 14.7
+  },
+  {
+    "id": 508,
+    "names": {
+      "de": "Bissbark",
+      "en": "Stoutland",
+      "fr": "Mastouffe",
+      "es": "Stoutland",
+      "it": "Stoutland"
+    },
+    "types": [
+      "normal"
+    ],
+    "family_id": 506,
+    "stats": {
+      "KP": 85,
+      "Ang.": 110,
+      "Vert.": 90,
+      "Sp.-A.": 45,
+      "Sp.-V.": 90,
+      "Init.": 80,
+      "Summe": 500
+    },
+    "legendary": false,
+    "weight": 61
+  },
+  {
+    "id": 509,
+    "names": {
+      "de": "Felilou",
+      "en": "Purrloin",
+      "fr": "Chacripan",
+      "es": "Purrloin",
+      "it": "Purrloin"
+    },
+    "types": [
+      "dark"
+    ],
+    "family_id": 509,
+    "stats": {
+      "KP": 41,
+      "Ang.": 50,
+      "Vert.": 37,
+      "Sp.-A.": 50,
+      "Sp.-V.": 37,
+      "Init.": 66,
+      "Summe": 281
+    },
+    "legendary": false,
+    "weight": 10.1
+  },
+  {
+    "id": 510,
+    "names": {
+      "de": "Kleoparda",
+      "en": "Liepard",
+      "fr": "Léopardus",
+      "es": "Liepard",
+      "it": "Liepard"
+    },
+    "types": [
+      "dark"
+    ],
+    "family_id": 509,
+    "stats": {
+      "KP": 64,
+      "Ang.": 88,
+      "Vert.": 50,
+      "Sp.-A.": 88,
+      "Sp.-V.": 50,
+      "Init.": 106,
+      "Summe": 446
+    },
+    "legendary": false,
+    "weight": 37.5
+  },
+  {
+    "id": 511,
+    "names": {
+      "de": "Vegimak",
+      "en": "Pansage",
+      "fr": "Feuillajou",
+      "es": "Pansage",
+      "it": "Pansage"
+    },
+    "types": [
+      "grass"
+    ],
+    "family_id": 511,
+    "stats": {
+      "KP": 50,
+      "Ang.": 53,
+      "Vert.": 48,
+      "Sp.-A.": 53,
+      "Sp.-V.": 48,
+      "Init.": 64,
+      "Summe": 316
+    },
+    "legendary": false,
+    "weight": 10.5
+  },
+  {
+    "id": 512,
+    "names": {
+      "de": "Vegichita",
+      "en": "Simisage",
+      "fr": "Feuiloutan",
+      "es": "Simisage",
+      "it": "Simisage"
+    },
+    "types": [
+      "grass"
+    ],
+    "family_id": 511,
+    "stats": {
+      "KP": 75,
+      "Ang.": 98,
+      "Vert.": 63,
+      "Sp.-A.": 98,
+      "Sp.-V.": 63,
+      "Init.": 101,
+      "Summe": 498
+    },
+    "legendary": false,
+    "weight": 30.5
+  },
+  {
+    "id": 513,
+    "names": {
+      "de": "Grillmak",
+      "en": "Pansear",
+      "fr": "Flamajou",
+      "es": "Pansear",
+      "it": "Pansear"
+    },
+    "types": [
+      "fire"
+    ],
+    "family_id": 513,
+    "stats": {
+      "KP": 50,
+      "Ang.": 53,
+      "Vert.": 48,
+      "Sp.-A.": 53,
+      "Sp.-V.": 48,
+      "Init.": 64,
+      "Summe": 316
+    },
+    "legendary": false,
+    "weight": 11
+  },
+  {
+    "id": 514,
+    "names": {
+      "de": "Grillchita",
+      "en": "Simisear",
+      "fr": "Flamoutan",
+      "es": "Simisear",
+      "it": "Simisear"
+    },
+    "types": [
+      "fire"
+    ],
+    "family_id": 513,
+    "stats": {
+      "KP": 75,
+      "Ang.": 98,
+      "Vert.": 63,
+      "Sp.-A.": 98,
+      "Sp.-V.": 63,
+      "Init.": 101,
+      "Summe": 498
+    },
+    "legendary": false,
+    "weight": 28
+  },
+  {
+    "id": 515,
+    "names": {
+      "de": "Sodamak",
+      "en": "Panpour",
+      "fr": "Flotajou",
+      "es": "Panpour",
+      "it": "Panpour"
+    },
+    "types": [
+      "water"
+    ],
+    "family_id": 515,
+    "stats": {
+      "KP": 50,
+      "Ang.": 53,
+      "Vert.": 48,
+      "Sp.-A.": 53,
+      "Sp.-V.": 48,
+      "Init.": 64,
+      "Summe": 316
+    },
+    "legendary": false,
+    "weight": 13.5
+  },
+  {
+    "id": 516,
+    "names": {
+      "de": "Sodachita",
+      "en": "Simipour",
+      "fr": "Flotoutan",
+      "es": "Simipour",
+      "it": "Simipour"
+    },
+    "types": [
+      "water"
+    ],
+    "family_id": 515,
+    "stats": {
+      "KP": 75,
+      "Ang.": 98,
+      "Vert.": 63,
+      "Sp.-A.": 98,
+      "Sp.-V.": 63,
+      "Init.": 101,
+      "Summe": 498
+    },
+    "legendary": false,
+    "weight": 29
+  },
+  {
+    "id": 517,
+    "names": {
+      "de": "Somniam",
+      "en": "Munna",
+      "fr": "Munna",
+      "es": "Munna",
+      "it": "Munna"
+    },
+    "types": [
+      "psychic"
+    ],
+    "family_id": 517,
+    "stats": {
+      "KP": 76,
+      "Ang.": 25,
+      "Vert.": 45,
+      "Sp.-A.": 67,
+      "Sp.-V.": 55,
+      "Init.": 24,
+      "Summe": 292
+    },
+    "legendary": false,
+    "weight": 23.3
+  },
+  {
+    "id": 518,
+    "names": {
+      "de": "Somnivora",
+      "en": "Musharna",
+      "fr": "Mushana",
+      "es": "Musharna",
+      "it": "Musharna"
+    },
+    "types": [
+      "psychic"
+    ],
+    "family_id": 517,
+    "stats": {
+      "KP": 116,
+      "Ang.": 55,
+      "Vert.": 85,
+      "Sp.-A.": 107,
+      "Sp.-V.": 95,
+      "Init.": 29,
+      "Summe": 487
+    },
+    "legendary": false,
+    "weight": 60.5
+  },
+  {
+    "id": 519,
+    "names": {
+      "de": "Dusselgurr",
+      "en": "Pidove",
+      "fr": "Poichigeon",
+      "es": "Pidove",
+      "it": "Pidove"
+    },
+    "types": [
+      "normal",
+      "flying"
+    ],
+    "family_id": 519,
+    "stats": {
+      "KP": 50,
+      "Ang.": 55,
+      "Vert.": 50,
+      "Sp.-A.": 36,
+      "Sp.-V.": 30,
+      "Init.": 43,
+      "Summe": 264
+    },
+    "legendary": false,
+    "weight": 2.1
+  },
+  {
+    "id": 520,
+    "names": {
+      "de": "Navitaub",
+      "en": "Tranquill",
+      "fr": "Colombeau",
+      "es": "Tranquill",
+      "it": "Tranquill"
+    },
+    "types": [
+      "normal",
+      "flying"
+    ],
+    "family_id": 519,
+    "stats": {
+      "KP": 62,
+      "Ang.": 77,
+      "Vert.": 62,
+      "Sp.-A.": 50,
+      "Sp.-V.": 42,
+      "Init.": 65,
+      "Summe": 358
+    },
+    "legendary": false,
+    "weight": 15
+  },
+  {
+    "id": 521,
+    "names": {
+      "de": "Fasasnob",
+      "en": "Unfezant",
+      "fr": "Déflaisan",
+      "es": "Unfezant",
+      "it": "Unfezant"
+    },
+    "types": [
+      "normal",
+      "flying"
+    ],
+    "family_id": 519,
+    "stats": {
+      "KP": 80,
+      "Ang.": 115,
+      "Vert.": 80,
+      "Sp.-A.": 65,
+      "Sp.-V.": 55,
+      "Init.": 93,
+      "Summe": 488
+    },
+    "legendary": false,
+    "weight": 29
+  },
+  {
+    "id": 522,
+    "names": {
+      "de": "Elezeba",
+      "en": "Blitzle",
+      "fr": "Zébibron",
+      "es": "Blitzle",
+      "it": "Blitzle"
+    },
+    "types": [
+      "electric"
+    ],
+    "family_id": 522,
+    "stats": {
+      "KP": 45,
+      "Ang.": 60,
+      "Vert.": 32,
+      "Sp.-A.": 50,
+      "Sp.-V.": 32,
+      "Init.": 76,
+      "Summe": 295
+    },
+    "legendary": false,
+    "weight": 29.8
+  },
+  {
+    "id": 523,
+    "names": {
+      "de": "Zebritz",
+      "en": "Zebstrika",
+      "fr": "Zéblitz",
+      "es": "Zebstrika",
+      "it": "Zebstrika"
+    },
+    "types": [
+      "electric"
+    ],
+    "family_id": 522,
+    "stats": {
+      "KP": 75,
+      "Ang.": 100,
+      "Vert.": 63,
+      "Sp.-A.": 80,
+      "Sp.-V.": 63,
+      "Init.": 116,
+      "Summe": 497
+    },
+    "legendary": false,
+    "weight": 79.5
+  },
+  {
+    "id": 524,
+    "names": {
+      "de": "Kiesling",
+      "en": "Roggenrola",
+      "fr": "Nodulithe",
+      "es": "Roggenrola",
+      "it": "Roggenrola"
+    },
+    "types": [
+      "rock"
+    ],
+    "family_id": 524,
+    "stats": {
+      "KP": 55,
+      "Ang.": 75,
+      "Vert.": 85,
+      "Sp.-A.": 25,
+      "Sp.-V.": 25,
+      "Init.": 15,
+      "Summe": 280
+    },
+    "legendary": false,
+    "weight": 18
+  },
+  {
+    "id": 525,
+    "names": {
+      "de": "Sedimantur",
+      "en": "Boldore",
+      "fr": "Géolithe",
+      "es": "Boldore",
+      "it": "Boldore"
+    },
+    "types": [
+      "rock"
+    ],
+    "family_id": 524,
+    "stats": {
+      "KP": 70,
+      "Ang.": 105,
+      "Vert.": 105,
+      "Sp.-A.": 50,
+      "Sp.-V.": 40,
+      "Init.": 20,
+      "Summe": 390
+    },
+    "legendary": false,
+    "weight": 102
+  },
+  {
+    "id": 526,
+    "names": {
+      "de": "Brockoloss",
+      "en": "Gigalith",
+      "fr": "Gigalithe",
+      "es": "Gigalith",
+      "it": "Gigalith"
+    },
+    "types": [
+      "rock"
+    ],
+    "family_id": 524,
+    "stats": {
+      "KP": 85,
+      "Ang.": 135,
+      "Vert.": 130,
+      "Sp.-A.": 60,
+      "Sp.-V.": 80,
+      "Init.": 25,
+      "Summe": 515
+    },
+    "legendary": false,
+    "weight": 260
+  },
+  {
+    "id": 527,
+    "names": {
+      "de": "Fleknoil",
+      "en": "Woobat",
+      "fr": "Chovsourir",
+      "es": "Woobat",
+      "it": "Woobat"
+    },
+    "types": [
+      "psychic",
+      "flying"
+    ],
+    "family_id": 527,
+    "stats": {
+      "KP": 65,
+      "Ang.": 45,
+      "Vert.": 43,
+      "Sp.-A.": 55,
+      "Sp.-V.": 43,
+      "Init.": 72,
+      "Summe": 323
+    },
+    "legendary": false,
+    "weight": 2.1
+  },
+  {
+    "id": 528,
+    "names": {
+      "de": "Fletiamo",
+      "en": "Swoobat",
+      "fr": "Rhinolove",
+      "es": "Swoobat",
+      "it": "Swoobat"
+    },
+    "types": [
+      "psychic",
+      "flying"
+    ],
+    "family_id": 527,
+    "stats": {
+      "KP": 67,
+      "Ang.": 57,
+      "Vert.": 55,
+      "Sp.-A.": 77,
+      "Sp.-V.": 55,
+      "Init.": 114,
+      "Summe": 425
+    },
+    "legendary": false,
+    "weight": 10.5
+  },
+  {
+    "id": 529,
+    "names": {
+      "de": "Rotomurf",
+      "en": "Drilbur",
+      "fr": "Rototaupe",
+      "es": "Drilbur",
+      "it": "Drilbur"
+    },
+    "types": [
+      "ground"
+    ],
+    "family_id": 529,
+    "stats": {
+      "KP": 60,
+      "Ang.": 85,
+      "Vert.": 40,
+      "Sp.-A.": 30,
+      "Sp.-V.": 45,
+      "Init.": 68,
+      "Summe": 328
+    },
+    "legendary": false,
+    "weight": 8.5
+  },
+  {
+    "id": 530,
+    "names": {
+      "de": "Stalobor",
+      "en": "Excadrill",
+      "fr": "Minotaupe",
+      "es": "Excadrill",
+      "it": "Excadrill"
+    },
+    "types": [
+      "ground",
+      "steel"
+    ],
+    "family_id": 529,
+    "stats": {
+      "KP": 110,
+      "Ang.": 135,
+      "Vert.": 60,
+      "Sp.-A.": 50,
+      "Sp.-V.": 65,
+      "Init.": 88,
+      "Summe": 508
+    },
+    "legendary": false,
+    "weight": 40.4
+  },
+  {
+    "id": 531,
+    "names": {
+      "de": "Ohrdoch",
+      "en": "Audino",
+      "fr": "Nanméouïe",
+      "es": "Audino",
+      "it": "Audino"
+    },
+    "types": [
+      "normal"
+    ],
+    "family_id": 531,
+    "stats": {
+      "KP": 103,
+      "Ang.": 60,
+      "Vert.": 86,
+      "Sp.-A.": 60,
+      "Sp.-V.": 86,
+      "Init.": 50,
+      "Summe": 445
+    },
+    "legendary": false,
+    "weight": 31
+  },
+  {
+    "id": 532,
+    "names": {
+      "de": "Praktibalk",
+      "en": "Timburr",
+      "fr": "Charpenti",
+      "es": "Timburr",
+      "it": "Timburr"
+    },
+    "types": [
+      "fighting"
+    ],
+    "family_id": 532,
+    "stats": {
+      "KP": 75,
+      "Ang.": 80,
+      "Vert.": 55,
+      "Sp.-A.": 25,
+      "Sp.-V.": 35,
+      "Init.": 35,
+      "Summe": 305
+    },
+    "legendary": false,
+    "weight": 12.5
+  },
+  {
+    "id": 533,
+    "names": {
+      "de": "Strepoli",
+      "en": "Gurdurr",
+      "fr": "Ouvrifier",
+      "es": "Gurdurr",
+      "it": "Gurdurr"
+    },
+    "types": [
+      "fighting"
+    ],
+    "family_id": 532,
+    "stats": {
+      "KP": 85,
+      "Ang.": 105,
+      "Vert.": 85,
+      "Sp.-A.": 40,
+      "Sp.-V.": 50,
+      "Init.": 40,
+      "Summe": 405
+    },
+    "legendary": false,
+    "weight": 40
+  },
+  {
+    "id": 534,
+    "names": {
+      "de": "Meistagrif",
+      "en": "Conkeldurr",
+      "fr": "Bétochef",
+      "es": "Conkeldurr",
+      "it": "Conkeldurr"
+    },
+    "types": [
+      "fighting"
+    ],
+    "family_id": 532,
+    "stats": {
+      "KP": 105,
+      "Ang.": 140,
+      "Vert.": 95,
+      "Sp.-A.": 55,
+      "Sp.-V.": 65,
+      "Init.": 45,
+      "Summe": 505
+    },
+    "legendary": false,
+    "weight": 87
+  },
+  {
+    "id": 535,
+    "names": {
+      "de": "Schallquap",
+      "en": "Tympole",
+      "fr": "Tritonde",
+      "es": "Tympole",
+      "it": "Tympole"
+    },
+    "types": [
+      "water"
+    ],
+    "family_id": 535,
+    "stats": {
+      "KP": 50,
+      "Ang.": 50,
+      "Vert.": 40,
+      "Sp.-A.": 50,
+      "Sp.-V.": 40,
+      "Init.": 64,
+      "Summe": 294
+    },
+    "legendary": false,
+    "weight": 4.5
+  },
+  {
+    "id": 536,
+    "names": {
+      "de": "Mebrana",
+      "en": "Palpitoad",
+      "fr": "Batracné",
+      "es": "Palpitoad",
+      "it": "Palpitoad"
+    },
+    "types": [
+      "water",
+      "ground"
+    ],
+    "family_id": 535,
+    "stats": {
+      "KP": 75,
+      "Ang.": 65,
+      "Vert.": 55,
+      "Sp.-A.": 65,
+      "Sp.-V.": 55,
+      "Init.": 69,
+      "Summe": 384
+    },
+    "legendary": false,
+    "weight": 17
+  },
+  {
+    "id": 537,
+    "names": {
+      "de": "Branawarz",
+      "en": "Seismitoad",
+      "fr": "Crapustule",
+      "es": "Seismitoad",
+      "it": "Seismitoad"
+    },
+    "types": [
+      "water",
+      "ground"
+    ],
+    "family_id": 535,
+    "stats": {
+      "KP": 105,
+      "Ang.": 95,
+      "Vert.": 75,
+      "Sp.-A.": 85,
+      "Sp.-V.": 75,
+      "Init.": 74,
+      "Summe": 509
+    },
+    "legendary": false,
+    "weight": 62
+  },
+  {
+    "id": 538,
+    "names": {
+      "de": "Jiutesto",
+      "en": "Throh",
+      "fr": "Judokrak",
+      "es": "Throh",
+      "it": "Throh"
+    },
+    "types": [
+      "fighting"
+    ],
+    "family_id": 538,
+    "stats": {
+      "KP": 120,
+      "Ang.": 100,
+      "Vert.": 85,
+      "Sp.-A.": 30,
+      "Sp.-V.": 85,
+      "Init.": 45,
+      "Summe": 465
+    },
+    "legendary": false,
+    "weight": 55.5
+  },
+  {
+    "id": 539,
+    "names": {
+      "de": "Karadonis",
+      "en": "Sawk",
+      "fr": "Karaclée",
+      "es": "Sawk",
+      "it": "Sawk"
+    },
+    "types": [
+      "fighting"
+    ],
+    "family_id": 539,
+    "stats": {
+      "KP": 75,
+      "Ang.": 125,
+      "Vert.": 75,
+      "Sp.-A.": 30,
+      "Sp.-V.": 75,
+      "Init.": 85,
+      "Summe": 465
+    },
+    "legendary": false,
+    "weight": 51
+  },
+  {
+    "id": 540,
+    "names": {
+      "de": "Strawickl",
+      "en": "Sewaddle",
+      "fr": "Larveyette",
+      "es": "Sewaddle",
+      "it": "Sewaddle"
+    },
+    "types": [
+      "bug",
+      "grass"
+    ],
+    "family_id": 540,
+    "stats": {
+      "KP": 45,
+      "Ang.": 53,
+      "Vert.": 70,
+      "Sp.-A.": 40,
+      "Sp.-V.": 60,
+      "Init.": 42,
+      "Summe": 310
+    },
+    "legendary": false,
+    "weight": 2.5
+  },
+  {
+    "id": 541,
+    "names": {
+      "de": "Folikon",
+      "en": "Swadloon",
+      "fr": "Couverdure",
+      "es": "Swadloon",
+      "it": "Swadloon"
+    },
+    "types": [
+      "bug",
+      "grass"
+    ],
+    "family_id": 540,
+    "stats": {
+      "KP": 55,
+      "Ang.": 63,
+      "Vert.": 90,
+      "Sp.-A.": 50,
+      "Sp.-V.": 80,
+      "Init.": 42,
+      "Summe": 380
+    },
+    "legendary": false,
+    "weight": 7.3
+  },
+  {
+    "id": 542,
+    "names": {
+      "de": "Matrifol",
+      "en": "Leavanny",
+      "fr": "Manternel",
+      "es": "Leavanny",
+      "it": "Leavanny"
+    },
+    "types": [
+      "bug",
+      "grass"
+    ],
+    "family_id": 540,
+    "stats": {
+      "KP": 75,
+      "Ang.": 103,
+      "Vert.": 80,
+      "Sp.-A.": 70,
+      "Sp.-V.": 80,
+      "Init.": 92,
+      "Summe": 500
+    },
+    "legendary": false,
+    "weight": 20.5
+  },
+  {
+    "id": 543,
+    "names": {
+      "de": "Toxiped",
+      "en": "Venipede",
+      "fr": "Venipatte",
+      "es": "Venipede",
+      "it": "Venipede"
+    },
+    "types": [
+      "bug",
+      "poison"
+    ],
+    "family_id": 543,
+    "stats": {
+      "KP": 30,
+      "Ang.": 45,
+      "Vert.": 59,
+      "Sp.-A.": 30,
+      "Sp.-V.": 39,
+      "Init.": 57,
+      "Summe": 260
+    },
+    "legendary": false,
+    "weight": 5.3
+  },
+  {
+    "id": 544,
+    "names": {
+      "de": "Rollum",
+      "en": "Whirlipede",
+      "fr": "Scobolide",
+      "es": "Whirlipede",
+      "it": "Whirlipede"
+    },
+    "types": [
+      "bug",
+      "poison"
+    ],
+    "family_id": 543,
+    "stats": {
+      "KP": 40,
+      "Ang.": 55,
+      "Vert.": 99,
+      "Sp.-A.": 40,
+      "Sp.-V.": 79,
+      "Init.": 47,
+      "Summe": 360
+    },
+    "legendary": false,
+    "weight": 58.5
+  },
+  {
+    "id": 545,
+    "names": {
+      "de": "Cerapendra",
+      "en": "Scolipede",
+      "fr": "Brutapode",
+      "es": "Scolipede",
+      "it": "Scolipede"
+    },
+    "types": [
+      "bug",
+      "poison"
+    ],
+    "family_id": 543,
+    "stats": {
+      "KP": 60,
+      "Ang.": 100,
+      "Vert.": 89,
+      "Sp.-A.": 55,
+      "Sp.-V.": 69,
+      "Init.": 112,
+      "Summe": 485
+    },
+    "legendary": false,
+    "weight": 200.5
+  },
+  {
+    "id": 546,
+    "names": {
+      "de": "Waumboll",
+      "en": "Cottonee",
+      "fr": "Doudouvet",
+      "es": "Cottonee",
+      "it": "Cottonee"
+    },
+    "types": [
+      "grass",
+      "fairy"
+    ],
+    "family_id": 546,
+    "stats": {
+      "KP": 40,
+      "Ang.": 27,
+      "Vert.": 60,
+      "Sp.-A.": 37,
+      "Sp.-V.": 50,
+      "Init.": 66,
+      "Summe": 280
+    },
+    "legendary": false,
+    "weight": 0.6
+  },
+  {
+    "id": 547,
+    "names": {
+      "de": "Elfun",
+      "en": "Whimsicott",
+      "fr": "Farfaduvet",
+      "es": "Whimsicott",
+      "it": "Whimsicott"
+    },
+    "types": [
+      "grass",
+      "fairy"
+    ],
+    "family_id": 546,
+    "stats": {
+      "KP": 60,
+      "Ang.": 67,
+      "Vert.": 85,
+      "Sp.-A.": 77,
+      "Sp.-V.": 75,
+      "Init.": 116,
+      "Summe": 480
+    },
+    "legendary": false,
+    "weight": 6.6
+  },
+  {
+    "id": 548,
+    "names": {
+      "de": "Lilminip",
+      "en": "Petilil",
+      "fr": "Chlorobule",
+      "es": "Petilil",
+      "it": "Petilil"
+    },
+    "types": [
+      "grass"
+    ],
+    "family_id": 548,
+    "stats": {
+      "KP": 45,
+      "Ang.": 35,
+      "Vert.": 50,
+      "Sp.-A.": 70,
+      "Sp.-V.": 50,
+      "Init.": 30,
+      "Summe": 280
+    },
+    "legendary": false,
+    "weight": 6.6
+  },
+  {
+    "id": 549,
+    "names": {
+      "de": "Dressella",
+      "en": "Lilligant",
+      "fr": "Fragilady",
+      "es": "Lilligant",
+      "it": "Lilligant"
+    },
+    "types": [
+      "grass"
+    ],
+    "family_id": 548,
+    "stats": {
+      "KP": 70,
+      "Ang.": 60,
+      "Vert.": 75,
+      "Sp.-A.": 110,
+      "Sp.-V.": 75,
+      "Init.": 90,
+      "Summe": 480
+    },
+    "legendary": false,
+    "weight": 16.3
+  },
+  {
+    "id": 550,
+    "names": {
+      "de": "Barschuft",
+      "en": "Basculin",
+      "fr": "Bargantua",
+      "es": "Basculin",
+      "it": "Basculin"
+    },
+    "types": [
+      "water"
+    ],
+    "family_id": 550,
+    "stats": {
+      "KP": 70,
+      "Ang.": 92,
+      "Vert.": 65,
+      "Sp.-A.": 80,
+      "Sp.-V.": 55,
+      "Init.": 98,
+      "Summe": 460
+    },
+    "legendary": false,
+    "weight": 18
+  },
+  {
+    "id": 551,
+    "names": {
+      "de": "Ganovil",
+      "en": "Sandile",
+      "fr": "Mascaïman",
+      "es": "Sandile",
+      "it": "Sandile"
+    },
+    "types": [
+      "ground",
+      "dark"
+    ],
+    "family_id": 551,
+    "stats": {
+      "KP": 50,
+      "Ang.": 72,
+      "Vert.": 35,
+      "Sp.-A.": 35,
+      "Sp.-V.": 35,
+      "Init.": 65,
+      "Summe": 292
+    },
+    "legendary": false,
+    "weight": 15.2
+  },
+  {
+    "id": 552,
+    "names": {
+      "de": "Rokkaiman",
+      "en": "Krokorok",
+      "fr": "Escroco",
+      "es": "Krokorok",
+      "it": "Krokorok"
+    },
+    "types": [
+      "ground",
+      "dark"
+    ],
+    "family_id": 551,
+    "stats": {
+      "KP": 60,
+      "Ang.": 82,
+      "Vert.": 45,
+      "Sp.-A.": 45,
+      "Sp.-V.": 45,
+      "Init.": 74,
+      "Summe": 351
+    },
+    "legendary": false,
+    "weight": 33.4
+  },
+  {
+    "id": 553,
+    "names": {
+      "de": "Rabigator",
+      "en": "Krookodile",
+      "fr": "Crocorible",
+      "es": "Krookodile",
+      "it": "Krookodile"
+    },
+    "types": [
+      "ground",
+      "dark"
+    ],
+    "family_id": 551,
+    "stats": {
+      "KP": 95,
+      "Ang.": 117,
+      "Vert.": 80,
+      "Sp.-A.": 65,
+      "Sp.-V.": 70,
+      "Init.": 92,
+      "Summe": 519
+    },
+    "legendary": false,
+    "weight": 96.3
+  },
+  {
+    "id": 554,
+    "names": {
+      "de": "Flampion",
+      "en": "Darumaka",
+      "fr": "Darumarond",
+      "es": "Darumaka",
+      "it": "Darumaka"
+    },
+    "types": [
+      "fire"
+    ],
+    "family_id": 554,
+    "stats": {
+      "KP": 70,
+      "Ang.": 90,
+      "Vert.": 45,
+      "Sp.-A.": 15,
+      "Sp.-V.": 45,
+      "Init.": 50,
+      "Summe": 315
+    },
+    "legendary": false,
+    "weight": 37.5
+  },
+  {
+    "id": 555,
+    "names": {
+      "de": "Flampivian",
+      "en": "Darmanitan",
+      "fr": "Darumacho",
+      "es": "Darmanitan",
+      "it": "Darmanitan"
+    },
+    "types": [
+      "fire"
+    ],
+    "family_id": 554,
+    "stats": {
+      "KP": 105,
+      "Ang.": 140,
+      "Vert.": 55,
+      "Sp.-A.": 30,
+      "Sp.-V.": 55,
+      "Init.": 95,
+      "Summe": 480
+    },
+    "legendary": false,
+    "weight": 92.9,
+    "formNames": {
+      "de": "Normalmodus",
+      "en": "Standard Mode",
+      "fr": "Mode Normal",
+      "es": "Modo Normal",
+      "it": "Stato Normale"
+    }
+  },
+  {
+    "id": 556,
+    "names": {
+      "de": "Maracamba",
+      "en": "Maractus",
+      "fr": "Maracachi",
+      "es": "Maractus",
+      "it": "Maractus"
+    },
+    "types": [
+      "grass"
+    ],
+    "family_id": 556,
+    "stats": {
+      "KP": 75,
+      "Ang.": 86,
+      "Vert.": 67,
+      "Sp.-A.": 106,
+      "Sp.-V.": 67,
+      "Init.": 60,
+      "Summe": 461
+    },
+    "legendary": false,
+    "weight": 28
+  },
+  {
+    "id": 557,
+    "names": {
+      "de": "Lithomith",
+      "en": "Dwebble",
+      "fr": "Crabicoque",
+      "es": "Dwebble",
+      "it": "Dwebble"
+    },
+    "types": [
+      "bug",
+      "rock"
+    ],
+    "family_id": 557,
+    "stats": {
+      "KP": 50,
+      "Ang.": 65,
+      "Vert.": 85,
+      "Sp.-A.": 35,
+      "Sp.-V.": 35,
+      "Init.": 55,
+      "Summe": 325
+    },
+    "legendary": false,
+    "weight": 14.5
+  },
+  {
+    "id": 558,
+    "names": {
+      "de": "Castellith",
+      "en": "Crustle",
+      "fr": "Crabaraque",
+      "es": "Crustle",
+      "it": "Crustle"
+    },
+    "types": [
+      "bug",
+      "rock"
+    ],
+    "family_id": 557,
+    "stats": {
+      "KP": 70,
+      "Ang.": 105,
+      "Vert.": 125,
+      "Sp.-A.": 65,
+      "Sp.-V.": 75,
+      "Init.": 45,
+      "Summe": 485
+    },
+    "legendary": false,
+    "weight": 200
+  },
+  {
+    "id": 559,
+    "names": {
+      "de": "Zurrokex",
+      "en": "Scraggy",
+      "fr": "Baggiguane",
+      "es": "Scraggy",
+      "it": "Scraggy"
+    },
+    "types": [
+      "dark",
+      "fighting"
+    ],
+    "family_id": 559,
+    "stats": {
+      "KP": 50,
+      "Ang.": 75,
+      "Vert.": 70,
+      "Sp.-A.": 35,
+      "Sp.-V.": 70,
+      "Init.": 48,
+      "Summe": 348
+    },
+    "legendary": false,
+    "weight": 11.8
+  },
+  {
+    "id": 560,
+    "names": {
+      "de": "Irokex",
+      "en": "Scrafty",
+      "fr": "Baggaïd",
+      "es": "Scrafty",
+      "it": "Scrafty"
+    },
+    "types": [
+      "dark",
+      "fighting"
+    ],
+    "family_id": 559,
+    "stats": {
+      "KP": 65,
+      "Ang.": 90,
+      "Vert.": 115,
+      "Sp.-A.": 45,
+      "Sp.-V.": 115,
+      "Init.": 58,
+      "Summe": 488
+    },
+    "legendary": false,
+    "weight": 30
+  },
+  {
+    "id": 561,
+    "names": {
+      "de": "Symvolara",
+      "en": "Sigilyph",
+      "fr": "Cryptéro",
+      "es": "Sigilyph",
+      "it": "Sigilyph"
+    },
+    "types": [
+      "psychic",
+      "flying"
+    ],
+    "family_id": 561,
+    "stats": {
+      "KP": 72,
+      "Ang.": 58,
+      "Vert.": 80,
+      "Sp.-A.": 103,
+      "Sp.-V.": 80,
+      "Init.": 97,
+      "Summe": 490
+    },
+    "legendary": false,
+    "weight": 14
+  },
+  {
+    "id": 562,
+    "names": {
+      "de": "Makabaja",
+      "en": "Yamask",
+      "fr": "Tutafeh",
+      "es": "Yamask",
+      "it": "Yamask"
+    },
+    "types": [
+      "ghost"
+    ],
+    "family_id": 562,
+    "stats": {
+      "KP": 38,
+      "Ang.": 30,
+      "Vert.": 85,
+      "Sp.-A.": 55,
+      "Sp.-V.": 65,
+      "Init.": 30,
+      "Summe": 303
+    },
+    "legendary": false,
+    "weight": 1.5
+  },
+  {
+    "id": 563,
+    "names": {
+      "de": "Echnatoll",
+      "en": "Cofagrigus",
+      "fr": "Tutankafer",
+      "es": "Cofagrigus",
+      "it": "Cofagrigus"
+    },
+    "types": [
+      "ghost"
+    ],
+    "family_id": 562,
+    "stats": {
+      "KP": 58,
+      "Ang.": 50,
+      "Vert.": 145,
+      "Sp.-A.": 95,
+      "Sp.-V.": 105,
+      "Init.": 30,
+      "Summe": 483
+    },
+    "legendary": false,
+    "weight": 76.5
+  },
+  {
+    "id": 564,
+    "names": {
+      "de": "Galapaflos",
+      "en": "Tirtouga",
+      "fr": "Carapagos",
+      "es": "Tirtouga",
+      "it": "Tirtouga"
+    },
+    "types": [
+      "water",
+      "rock"
+    ],
+    "family_id": 564,
+    "stats": {
+      "KP": 54,
+      "Ang.": 78,
+      "Vert.": 103,
+      "Sp.-A.": 53,
+      "Sp.-V.": 45,
+      "Init.": 22,
+      "Summe": 355
+    },
+    "legendary": false,
+    "weight": 16.5
+  },
+  {
+    "id": 565,
+    "names": {
+      "de": "Karippas",
+      "en": "Carracosta",
+      "fr": "Mégapagos",
+      "es": "Carracosta",
+      "it": "Carracosta"
+    },
+    "types": [
+      "water",
+      "rock"
+    ],
+    "family_id": 564,
+    "stats": {
+      "KP": 74,
+      "Ang.": 108,
+      "Vert.": 133,
+      "Sp.-A.": 83,
+      "Sp.-V.": 65,
+      "Init.": 32,
+      "Summe": 495
+    },
+    "legendary": false,
+    "weight": 81
+  },
+  {
+    "id": 566,
+    "names": {
+      "de": "Flapteryx",
+      "en": "Archen",
+      "fr": "Arkéapti",
+      "es": "Archen",
+      "it": "Archen"
+    },
+    "types": [
+      "rock",
+      "flying"
+    ],
+    "family_id": 566,
+    "stats": {
+      "KP": 55,
+      "Ang.": 112,
+      "Vert.": 45,
+      "Sp.-A.": 74,
+      "Sp.-V.": 45,
+      "Init.": 70,
+      "Summe": 401
+    },
+    "legendary": false,
+    "weight": 9.5
+  },
+  {
+    "id": 567,
+    "names": {
+      "de": "Aeropteryx",
+      "en": "Archeops",
+      "fr": "Aéroptéryx",
+      "es": "Archeops",
+      "it": "Archeops"
+    },
+    "types": [
+      "rock",
+      "flying"
+    ],
+    "family_id": 566,
+    "stats": {
+      "KP": 75,
+      "Ang.": 140,
+      "Vert.": 65,
+      "Sp.-A.": 112,
+      "Sp.-V.": 65,
+      "Init.": 110,
+      "Summe": 567
+    },
+    "legendary": false,
+    "weight": 32
+  },
+  {
+    "id": 568,
+    "names": {
+      "de": "Unratütox",
+      "en": "Trubbish",
+      "fr": "Miamiasme",
+      "es": "Trubbish",
+      "it": "Trubbish"
+    },
+    "types": [
+      "poison"
+    ],
+    "family_id": 568,
+    "stats": {
+      "KP": 50,
+      "Ang.": 50,
+      "Vert.": 62,
+      "Sp.-A.": 40,
+      "Sp.-V.": 62,
+      "Init.": 65,
+      "Summe": 329
+    },
+    "legendary": false,
+    "weight": 31
+  },
+  {
+    "id": 569,
+    "names": {
+      "de": "Deponitox",
+      "en": "Garbodor",
+      "fr": "Miasmax",
+      "es": "Garbodor",
+      "it": "Garbodor"
+    },
+    "types": [
+      "poison"
+    ],
+    "family_id": 568,
+    "stats": {
+      "KP": 80,
+      "Ang.": 95,
+      "Vert.": 82,
+      "Sp.-A.": 60,
+      "Sp.-V.": 82,
+      "Init.": 75,
+      "Summe": 474
+    },
+    "legendary": false,
+    "weight": 107.3
+  },
+  {
+    "id": 570,
+    "names": {
+      "de": "Zorua",
+      "en": "Zorua",
+      "fr": "Zorua",
+      "es": "Zorua",
+      "it": "Zorua"
+    },
+    "types": [
+      "dark"
+    ],
+    "family_id": 570,
+    "stats": {
+      "KP": 40,
+      "Ang.": 65,
+      "Vert.": 40,
+      "Sp.-A.": 80,
+      "Sp.-V.": 40,
+      "Init.": 65,
+      "Summe": 330
+    },
+    "legendary": false,
+    "weight": 12.5
+  },
+  {
+    "id": 571,
+    "names": {
+      "de": "Zoroark",
+      "en": "Zoroark",
+      "fr": "Zoroark",
+      "es": "Zoroark",
+      "it": "Zoroark"
+    },
+    "types": [
+      "dark"
+    ],
+    "family_id": 570,
+    "stats": {
+      "KP": 60,
+      "Ang.": 105,
+      "Vert.": 60,
+      "Sp.-A.": 120,
+      "Sp.-V.": 60,
+      "Init.": 105,
+      "Summe": 510
+    },
+    "legendary": false,
+    "weight": 81.1
+  },
+  {
+    "id": 572,
+    "names": {
+      "de": "Picochilla",
+      "en": "Minccino",
+      "fr": "Chinchidou",
+      "es": "Minccino",
+      "it": "Minccino"
+    },
+    "types": [
+      "normal"
+    ],
+    "family_id": 572,
+    "stats": {
+      "KP": 55,
+      "Ang.": 50,
+      "Vert.": 40,
+      "Sp.-A.": 40,
+      "Sp.-V.": 40,
+      "Init.": 75,
+      "Summe": 300
+    },
+    "legendary": false,
+    "weight": 5.8
+  },
+  {
+    "id": 573,
+    "names": {
+      "de": "Chillabell",
+      "en": "Cinccino",
+      "fr": "Pashmilla",
+      "es": "Cinccino",
+      "it": "Cinccino"
+    },
+    "types": [
+      "normal"
+    ],
+    "family_id": 572,
+    "stats": {
+      "KP": 75,
+      "Ang.": 95,
+      "Vert.": 60,
+      "Sp.-A.": 65,
+      "Sp.-V.": 60,
+      "Init.": 115,
+      "Summe": 470
+    },
+    "legendary": false,
+    "weight": 7.5
+  },
+  {
+    "id": 574,
+    "names": {
+      "de": "Mollimorba",
+      "en": "Gothita",
+      "fr": "Scrutella",
+      "es": "Gothita",
+      "it": "Gothita"
+    },
+    "types": [
+      "psychic"
+    ],
+    "family_id": 574,
+    "stats": {
+      "KP": 45,
+      "Ang.": 30,
+      "Vert.": 50,
+      "Sp.-A.": 55,
+      "Sp.-V.": 65,
+      "Init.": 45,
+      "Summe": 290
+    },
+    "legendary": false,
+    "weight": 5.8
+  },
+  {
+    "id": 575,
+    "names": {
+      "de": "Hypnomorba",
+      "en": "Gothorita",
+      "fr": "Mesmérella",
+      "es": "Gothorita",
+      "it": "Gothorita"
+    },
+    "types": [
+      "psychic"
+    ],
+    "family_id": 574,
+    "stats": {
+      "KP": 60,
+      "Ang.": 45,
+      "Vert.": 70,
+      "Sp.-A.": 75,
+      "Sp.-V.": 85,
+      "Init.": 55,
+      "Summe": 390
+    },
+    "legendary": false,
+    "weight": 18
+  },
+  {
+    "id": 576,
+    "names": {
+      "de": "Morbitesse",
+      "en": "Gothitelle",
+      "fr": "Sidérella",
+      "es": "Gothitelle",
+      "it": "Gothitelle"
+    },
+    "types": [
+      "psychic"
+    ],
+    "family_id": 574,
+    "stats": {
+      "KP": 70,
+      "Ang.": 55,
+      "Vert.": 95,
+      "Sp.-A.": 95,
+      "Sp.-V.": 110,
+      "Init.": 65,
+      "Summe": 490
+    },
+    "legendary": false,
+    "weight": 44
+  },
+  {
+    "id": 577,
+    "names": {
+      "de": "Monozyto",
+      "en": "Solosis",
+      "fr": "Nucléos",
+      "es": "Solosis",
+      "it": "Solosis"
+    },
+    "types": [
+      "psychic"
+    ],
+    "family_id": 577,
+    "stats": {
+      "KP": 45,
+      "Ang.": 30,
+      "Vert.": 40,
+      "Sp.-A.": 105,
+      "Sp.-V.": 50,
+      "Init.": 20,
+      "Summe": 290
+    },
+    "legendary": false,
+    "weight": 1
+  },
+  {
+    "id": 578,
+    "names": {
+      "de": "Mitodos",
+      "en": "Duosion",
+      "fr": "Méios",
+      "es": "Duosion",
+      "it": "Duosion"
+    },
+    "types": [
+      "psychic"
+    ],
+    "family_id": 577,
+    "stats": {
+      "KP": 65,
+      "Ang.": 40,
+      "Vert.": 50,
+      "Sp.-A.": 125,
+      "Sp.-V.": 60,
+      "Init.": 30,
+      "Summe": 370
+    },
+    "legendary": false,
+    "weight": 8
+  },
+  {
+    "id": 579,
+    "names": {
+      "de": "Zytomega",
+      "en": "Reuniclus",
+      "fr": "Symbios",
+      "es": "Reuniclus",
+      "it": "Reuniclus"
+    },
+    "types": [
+      "psychic"
+    ],
+    "family_id": 577,
+    "stats": {
+      "KP": 110,
+      "Ang.": 65,
+      "Vert.": 75,
+      "Sp.-A.": 125,
+      "Sp.-V.": 85,
+      "Init.": 30,
+      "Summe": 490
+    },
+    "legendary": false,
+    "weight": 20.1
+  },
+  {
+    "id": 580,
+    "names": {
+      "de": "Piccolente",
+      "en": "Ducklett",
+      "fr": "Couaneton",
+      "es": "Ducklett",
+      "it": "Ducklett"
+    },
+    "types": [
+      "water",
+      "flying"
+    ],
+    "family_id": 580,
+    "stats": {
+      "KP": 62,
+      "Ang.": 44,
+      "Vert.": 50,
+      "Sp.-A.": 44,
+      "Sp.-V.": 50,
+      "Init.": 55,
+      "Summe": 305
+    },
+    "legendary": false,
+    "weight": 5.5
+  },
+  {
+    "id": 581,
+    "names": {
+      "de": "Swaroness",
+      "en": "Swanna",
+      "fr": "Lakmécygne",
+      "es": "Swanna",
+      "it": "Swanna"
+    },
+    "types": [
+      "water",
+      "flying"
+    ],
+    "family_id": 580,
+    "stats": {
+      "KP": 75,
+      "Ang.": 87,
+      "Vert.": 63,
+      "Sp.-A.": 87,
+      "Sp.-V.": 63,
+      "Init.": 98,
+      "Summe": 473
+    },
+    "legendary": false,
+    "weight": 24.2
+  },
+  {
+    "id": 582,
+    "names": {
+      "de": "Gelatini",
+      "en": "Vanillite",
+      "fr": "Sorbébé",
+      "es": "Vanillite",
+      "it": "Vanillite"
+    },
+    "types": [
+      "ice"
+    ],
+    "family_id": 582,
+    "stats": {
+      "KP": 36,
+      "Ang.": 50,
+      "Vert.": 50,
+      "Sp.-A.": 65,
+      "Sp.-V.": 60,
+      "Init.": 44,
+      "Summe": 305
+    },
+    "legendary": false,
+    "weight": 5.7
+  },
+  {
+    "id": 583,
+    "names": {
+      "de": "Gelatroppo",
+      "en": "Vanillish",
+      "fr": "Sorboul",
+      "es": "Vanillish",
+      "it": "Vanillish"
+    },
+    "types": [
+      "ice"
+    ],
+    "family_id": 582,
+    "stats": {
+      "KP": 51,
+      "Ang.": 65,
+      "Vert.": 65,
+      "Sp.-A.": 80,
+      "Sp.-V.": 75,
+      "Init.": 59,
+      "Summe": 395
+    },
+    "legendary": false,
+    "weight": 41
+  },
+  {
+    "id": 584,
+    "names": {
+      "de": "Gelatwino",
+      "en": "Vanilluxe",
+      "fr": "Sorbouboul",
+      "es": "Vanilluxe",
+      "it": "Vanilluxe"
+    },
+    "types": [
+      "ice"
+    ],
+    "family_id": 582,
+    "stats": {
+      "KP": 71,
+      "Ang.": 95,
+      "Vert.": 85,
+      "Sp.-A.": 110,
+      "Sp.-V.": 95,
+      "Init.": 79,
+      "Summe": 535
+    },
+    "legendary": false,
+    "weight": 57.5
+  },
+  {
+    "id": 585,
+    "names": {
+      "de": "Sesokitz",
+      "en": "Deerling",
+      "fr": "Vivaldaim",
+      "es": "Deerling",
+      "it": "Deerling"
+    },
+    "types": [
+      "normal",
+      "grass"
+    ],
+    "family_id": 585,
+    "stats": {
+      "KP": 60,
+      "Ang.": 60,
+      "Vert.": 50,
+      "Sp.-A.": 40,
+      "Sp.-V.": 50,
+      "Init.": 75,
+      "Summe": 335
+    },
+    "legendary": false,
+    "weight": 19.5
+  },
+  {
+    "id": 586,
+    "names": {
+      "de": "Kronjuwild",
+      "en": "Sawsbuck",
+      "fr": "Haydaim",
+      "es": "Sawsbuck",
+      "it": "Sawsbuck"
+    },
+    "types": [
+      "normal",
+      "grass"
+    ],
+    "family_id": 585,
+    "stats": {
+      "KP": 80,
+      "Ang.": 100,
+      "Vert.": 70,
+      "Sp.-A.": 60,
+      "Sp.-V.": 70,
+      "Init.": 95,
+      "Summe": 475
+    },
+    "legendary": false,
+    "weight": 92.5
+  },
+  {
+    "id": 587,
+    "names": {
+      "de": "Emolga",
+      "en": "Emolga",
+      "fr": "Emolga",
+      "es": "Emolga",
+      "it": "Emolga"
+    },
+    "types": [
+      "electric",
+      "flying"
+    ],
+    "family_id": 587,
+    "stats": {
+      "KP": 55,
+      "Ang.": 75,
+      "Vert.": 60,
+      "Sp.-A.": 75,
+      "Sp.-V.": 60,
+      "Init.": 103,
+      "Summe": 428
+    },
+    "legendary": false,
+    "weight": 5
+  },
+  {
+    "id": 588,
+    "names": {
+      "de": "Laukaps",
+      "en": "Karrablast",
+      "fr": "Carabing",
+      "es": "Karrablast",
+      "it": "Karrablast"
+    },
+    "types": [
+      "bug"
+    ],
+    "family_id": 588,
+    "stats": {
+      "KP": 50,
+      "Ang.": 75,
+      "Vert.": 45,
+      "Sp.-A.": 40,
+      "Sp.-V.": 45,
+      "Init.": 60,
+      "Summe": 315
+    },
+    "legendary": false,
+    "weight": 5.9
+  },
+  {
+    "id": 589,
+    "names": {
+      "de": "Cavalanzas",
+      "en": "Escavalier",
+      "fr": "Lançargot",
+      "es": "Escavalier",
+      "it": "Escavalier"
+    },
+    "types": [
+      "bug",
+      "steel"
+    ],
+    "family_id": 588,
+    "stats": {
+      "KP": 70,
+      "Ang.": 135,
+      "Vert.": 105,
+      "Sp.-A.": 60,
+      "Sp.-V.": 105,
+      "Init.": 20,
+      "Summe": 495
+    },
+    "legendary": false,
+    "weight": 33
+  },
+  {
+    "id": 590,
+    "names": {
+      "de": "Tarnpignon",
+      "en": "Foongus",
+      "fr": "Trompignon",
+      "es": "Foongus",
+      "it": "Foongus"
+    },
+    "types": [
+      "grass",
+      "poison"
+    ],
+    "family_id": 590,
+    "stats": {
+      "KP": 69,
+      "Ang.": 55,
+      "Vert.": 45,
+      "Sp.-A.": 55,
+      "Sp.-V.": 55,
+      "Init.": 15,
+      "Summe": 294
+    },
+    "legendary": false,
+    "weight": 1
+  },
+  {
+    "id": 591,
+    "names": {
+      "de": "Hutsassa",
+      "en": "Amoonguss",
+      "fr": "Gaulet",
+      "es": "Amoonguss",
+      "it": "Amoonguss"
+    },
+    "types": [
+      "grass",
+      "poison"
+    ],
+    "family_id": 590,
+    "stats": {
+      "KP": 114,
+      "Ang.": 85,
+      "Vert.": 70,
+      "Sp.-A.": 85,
+      "Sp.-V.": 80,
+      "Init.": 30,
+      "Summe": 464
+    },
+    "legendary": false,
+    "weight": 10.5
+  },
+  {
+    "id": 592,
+    "names": {
+      "de": "Quabbel",
+      "en": "Frillish",
+      "fr": "Viskuse",
+      "es": "Frillish",
+      "it": "Frillish"
+    },
+    "types": [
+      "water",
+      "ghost"
+    ],
+    "family_id": 592,
+    "stats": {
+      "KP": 55,
+      "Ang.": 40,
+      "Vert.": 50,
+      "Sp.-A.": 65,
+      "Sp.-V.": 85,
+      "Init.": 40,
+      "Summe": 335
+    },
+    "legendary": false,
+    "weight": 33
+  },
+  {
+    "id": 593,
+    "names": {
+      "de": "Apoquallyp",
+      "en": "Jellicent",
+      "fr": "Moyade",
+      "es": "Jellicent",
+      "it": "Jellicent"
+    },
+    "types": [
+      "water",
+      "ghost"
+    ],
+    "family_id": 592,
+    "stats": {
+      "KP": 100,
+      "Ang.": 60,
+      "Vert.": 70,
+      "Sp.-A.": 85,
+      "Sp.-V.": 105,
+      "Init.": 60,
+      "Summe": 480
+    },
+    "legendary": false,
+    "weight": 135
+  },
+  {
+    "id": 594,
+    "names": {
+      "de": "Mamolida",
+      "en": "Alomomola",
+      "fr": "Mamanbo",
+      "es": "Alomomola",
+      "it": "Alomomola"
+    },
+    "types": [
+      "water"
+    ],
+    "family_id": 594,
+    "stats": {
+      "KP": 165,
+      "Ang.": 75,
+      "Vert.": 80,
+      "Sp.-A.": 40,
+      "Sp.-V.": 45,
+      "Init.": 65,
+      "Summe": 470
+    },
+    "legendary": false,
+    "weight": 31.6
+  },
+  {
+    "id": 595,
+    "names": {
+      "de": "Wattzapf",
+      "en": "Joltik",
+      "fr": "Statitik",
+      "es": "Joltik",
+      "it": "Joltik"
+    },
+    "types": [
+      "bug",
+      "electric"
+    ],
+    "family_id": 595,
+    "stats": {
+      "KP": 50,
+      "Ang.": 47,
+      "Vert.": 50,
+      "Sp.-A.": 57,
+      "Sp.-V.": 50,
+      "Init.": 65,
+      "Summe": 319
+    },
+    "legendary": false,
+    "weight": 0.6
+  },
+  {
+    "id": 596,
+    "names": {
+      "de": "Voltula",
+      "en": "Galvantula",
+      "fr": "Mygavolt",
+      "es": "Galvantula",
+      "it": "Galvantula"
+    },
+    "types": [
+      "bug",
+      "electric"
+    ],
+    "family_id": 595,
+    "stats": {
+      "KP": 70,
+      "Ang.": 77,
+      "Vert.": 60,
+      "Sp.-A.": 97,
+      "Sp.-V.": 60,
+      "Init.": 108,
+      "Summe": 472
+    },
+    "legendary": false,
+    "weight": 14.3
+  },
+  {
+    "id": 597,
+    "names": {
+      "de": "Kastadur",
+      "en": "Ferroseed",
+      "fr": "Grindur",
+      "es": "Ferroseed",
+      "it": "Ferroseed"
+    },
+    "types": [
+      "grass",
+      "steel"
+    ],
+    "family_id": 597,
+    "stats": {
+      "KP": 44,
+      "Ang.": 50,
+      "Vert.": 91,
+      "Sp.-A.": 24,
+      "Sp.-V.": 86,
+      "Init.": 10,
+      "Summe": 305
+    },
+    "legendary": false,
+    "weight": 18.8
+  },
+  {
+    "id": 598,
+    "names": {
+      "de": "Tentantel",
+      "en": "Ferrothorn",
+      "fr": "Noacier",
+      "es": "Ferrothorn",
+      "it": "Ferrothorn"
+    },
+    "types": [
+      "grass",
+      "steel"
+    ],
+    "family_id": 597,
+    "stats": {
+      "KP": 74,
+      "Ang.": 94,
+      "Vert.": 131,
+      "Sp.-A.": 54,
+      "Sp.-V.": 116,
+      "Init.": 20,
+      "Summe": 489
+    },
+    "legendary": false,
+    "weight": 110
+  },
+  {
+    "id": 599,
+    "names": {
+      "de": "Klikk",
+      "en": "Klink",
+      "fr": "Tic",
+      "es": "Klink",
+      "it": "Klink"
+    },
+    "types": [
+      "steel"
+    ],
+    "family_id": 599,
+    "stats": {
+      "KP": 40,
+      "Ang.": 55,
+      "Vert.": 70,
+      "Sp.-A.": 45,
+      "Sp.-V.": 60,
+      "Init.": 30,
+      "Summe": 300
+    },
+    "legendary": false,
+    "weight": 21
+  },
+  {
+    "id": 600,
+    "names": {
+      "de": "Kliklak",
+      "en": "Klang",
+      "fr": "Clic",
+      "es": "Klang",
+      "it": "Klang"
+    },
+    "types": [
+      "steel"
+    ],
+    "family_id": 599,
+    "stats": {
+      "KP": 60,
+      "Ang.": 80,
+      "Vert.": 95,
+      "Sp.-A.": 70,
+      "Sp.-V.": 85,
+      "Init.": 50,
+      "Summe": 440
+    },
+    "legendary": false,
+    "weight": 51
+  },
+  {
+    "id": 601,
+    "names": {
+      "de": "Klikdiklak",
+      "en": "Klinklang",
+      "fr": "Cliticlic",
+      "es": "Klinklang",
+      "it": "Klinklang"
+    },
+    "types": [
+      "steel"
+    ],
+    "family_id": 599,
+    "stats": {
+      "KP": 60,
+      "Ang.": 100,
+      "Vert.": 115,
+      "Sp.-A.": 70,
+      "Sp.-V.": 85,
+      "Init.": 90,
+      "Summe": 520
+    },
+    "legendary": false,
+    "weight": 81
+  },
+  {
+    "id": 602,
+    "names": {
+      "de": "Zapplardin",
+      "en": "Tynamo",
+      "fr": "Anchwatt",
+      "es": "Tynamo",
+      "it": "Tynamo"
+    },
+    "types": [
+      "electric"
+    ],
+    "family_id": 602,
+    "stats": {
+      "KP": 35,
+      "Ang.": 55,
+      "Vert.": 40,
+      "Sp.-A.": 45,
+      "Sp.-V.": 40,
+      "Init.": 60,
+      "Summe": 275
+    },
+    "legendary": false,
+    "weight": 0.3
+  },
+  {
+    "id": 603,
+    "names": {
+      "de": "Zapplalek",
+      "en": "Eelektrik",
+      "fr": "Lampéroie",
+      "es": "Eelektrik",
+      "it": "Eelektrik"
+    },
+    "types": [
+      "electric"
+    ],
+    "family_id": 602,
+    "stats": {
+      "KP": 65,
+      "Ang.": 85,
+      "Vert.": 70,
+      "Sp.-A.": 75,
+      "Sp.-V.": 70,
+      "Init.": 40,
+      "Summe": 405
+    },
+    "legendary": false,
+    "weight": 22
+  },
+  {
+    "id": 604,
+    "names": {
+      "de": "Zapplarang",
+      "en": "Eelektross",
+      "fr": "Ohmassacre",
+      "es": "Eelektross",
+      "it": "Eelektross"
+    },
+    "types": [
+      "electric"
+    ],
+    "family_id": 602,
+    "stats": {
+      "KP": 85,
+      "Ang.": 115,
+      "Vert.": 80,
+      "Sp.-A.": 105,
+      "Sp.-V.": 80,
+      "Init.": 50,
+      "Summe": 515
+    },
+    "legendary": false,
+    "weight": 80.5
+  },
+  {
+    "id": 605,
+    "names": {
+      "de": "Pygraulon",
+      "en": "Elgyem",
+      "fr": "Lewsor",
+      "es": "Elgyem",
+      "it": "Elgyem"
+    },
+    "types": [
+      "psychic"
+    ],
+    "family_id": 605,
+    "stats": {
+      "KP": 55,
+      "Ang.": 55,
+      "Vert.": 55,
+      "Sp.-A.": 85,
+      "Sp.-V.": 55,
+      "Init.": 30,
+      "Summe": 335
+    },
+    "legendary": false,
+    "weight": 9
+  },
+  {
+    "id": 606,
+    "names": {
+      "de": "Megalon",
+      "en": "Beheeyem",
+      "fr": "Neitram",
+      "es": "Beheeyem",
+      "it": "Beheeyem"
+    },
+    "types": [
+      "psychic"
+    ],
+    "family_id": 605,
+    "stats": {
+      "KP": 75,
+      "Ang.": 75,
+      "Vert.": 75,
+      "Sp.-A.": 125,
+      "Sp.-V.": 95,
+      "Init.": 40,
+      "Summe": 485
+    },
+    "legendary": false,
+    "weight": 34.5
+  },
+  {
+    "id": 607,
+    "names": {
+      "de": "Lichtel",
+      "en": "Litwick",
+      "fr": "Funécire",
+      "es": "Litwick",
+      "it": "Litwick"
+    },
+    "types": [
+      "ghost",
+      "fire"
+    ],
+    "family_id": 607,
+    "stats": {
+      "KP": 50,
+      "Ang.": 30,
+      "Vert.": 55,
+      "Sp.-A.": 65,
+      "Sp.-V.": 55,
+      "Init.": 20,
+      "Summe": 275
+    },
+    "legendary": false,
+    "weight": 3.1
+  },
+  {
+    "id": 608,
+    "names": {
+      "de": "Laternecto",
+      "en": "Lampent",
+      "fr": "Mélancolux",
+      "es": "Lampent",
+      "it": "Lampent"
+    },
+    "types": [
+      "ghost",
+      "fire"
+    ],
+    "family_id": 607,
+    "stats": {
+      "KP": 60,
+      "Ang.": 40,
+      "Vert.": 60,
+      "Sp.-A.": 95,
+      "Sp.-V.": 60,
+      "Init.": 55,
+      "Summe": 370
+    },
+    "legendary": false,
+    "weight": 13
+  },
+  {
+    "id": 609,
+    "names": {
+      "de": "Skelabra",
+      "en": "Chandelure",
+      "fr": "Lugulabre",
+      "es": "Chandelure",
+      "it": "Chandelure"
+    },
+    "types": [
+      "ghost",
+      "fire"
+    ],
+    "family_id": 607,
+    "stats": {
+      "KP": 60,
+      "Ang.": 55,
+      "Vert.": 90,
+      "Sp.-A.": 145,
+      "Sp.-V.": 90,
+      "Init.": 80,
+      "Summe": 520
+    },
+    "legendary": false,
+    "weight": 34.3
+  },
+  {
+    "id": 610,
+    "names": {
+      "de": "Milza",
+      "en": "Axew",
+      "fr": "Coupenotte",
+      "es": "Axew",
+      "it": "Axew"
+    },
+    "types": [
+      "dragon"
+    ],
+    "family_id": 610,
+    "stats": {
+      "KP": 46,
+      "Ang.": 87,
+      "Vert.": 60,
+      "Sp.-A.": 30,
+      "Sp.-V.": 40,
+      "Init.": 57,
+      "Summe": 320
+    },
+    "legendary": false,
+    "weight": 18
+  },
+  {
+    "id": 611,
+    "names": {
+      "de": "Sharfax",
+      "en": "Fraxure",
+      "fr": "Incisache",
+      "es": "Fraxure",
+      "it": "Fraxure"
+    },
+    "types": [
+      "dragon"
+    ],
+    "family_id": 610,
+    "stats": {
+      "KP": 66,
+      "Ang.": 117,
+      "Vert.": 70,
+      "Sp.-A.": 40,
+      "Sp.-V.": 50,
+      "Init.": 67,
+      "Summe": 410
+    },
+    "legendary": false,
+    "weight": 36
+  },
+  {
+    "id": 612,
+    "names": {
+      "de": "Maxax",
+      "en": "Haxorus",
+      "fr": "Tranchodon",
+      "es": "Haxorus",
+      "it": "Haxorus"
+    },
+    "types": [
+      "dragon"
+    ],
+    "family_id": 610,
+    "stats": {
+      "KP": 76,
+      "Ang.": 147,
+      "Vert.": 90,
+      "Sp.-A.": 60,
+      "Sp.-V.": 70,
+      "Init.": 97,
+      "Summe": 540
+    },
+    "legendary": false,
+    "weight": 105.5
+  },
+  {
+    "id": 613,
+    "names": {
+      "de": "Petznief",
+      "en": "Cubchoo",
+      "fr": "Polarhume",
+      "es": "Cubchoo",
+      "it": "Cubchoo"
+    },
+    "types": [
+      "ice"
+    ],
+    "family_id": 613,
+    "stats": {
+      "KP": 55,
+      "Ang.": 70,
+      "Vert.": 40,
+      "Sp.-A.": 60,
+      "Sp.-V.": 40,
+      "Init.": 40,
+      "Summe": 305
+    },
+    "legendary": false,
+    "weight": 8.5
+  },
+  {
+    "id": 614,
+    "names": {
+      "de": "Siberio",
+      "en": "Beartic",
+      "fr": "Polagriffe",
+      "es": "Beartic",
+      "it": "Beartic"
+    },
+    "types": [
+      "ice"
+    ],
+    "family_id": 613,
+    "stats": {
+      "KP": 95,
+      "Ang.": 130,
+      "Vert.": 80,
+      "Sp.-A.": 70,
+      "Sp.-V.": 80,
+      "Init.": 50,
+      "Summe": 505
+    },
+    "legendary": false,
+    "weight": 260
+  },
+  {
+    "id": 615,
+    "names": {
+      "de": "Frigometri",
+      "en": "Cryogonal",
+      "fr": "Hexagel",
+      "es": "Cryogonal",
+      "it": "Cryogonal"
+    },
+    "types": [
+      "ice"
+    ],
+    "family_id": 615,
+    "stats": {
+      "KP": 80,
+      "Ang.": 50,
+      "Vert.": 50,
+      "Sp.-A.": 95,
+      "Sp.-V.": 135,
+      "Init.": 105,
+      "Summe": 515
+    },
+    "legendary": false,
+    "weight": 148
+  },
+  {
+    "id": 616,
+    "names": {
+      "de": "Schnuthelm",
+      "en": "Shelmet",
+      "fr": "Escargaume",
+      "es": "Shelmet",
+      "it": "Shelmet"
+    },
+    "types": [
+      "bug"
+    ],
+    "family_id": 616,
+    "stats": {
+      "KP": 50,
+      "Ang.": 40,
+      "Vert.": 85,
+      "Sp.-A.": 40,
+      "Sp.-V.": 65,
+      "Init.": 25,
+      "Summe": 305
+    },
+    "legendary": false,
+    "weight": 7.7
+  },
+  {
+    "id": 617,
+    "names": {
+      "de": "Hydragil",
+      "en": "Accelgor",
+      "fr": "Limaspeed",
+      "es": "Accelgor",
+      "it": "Accelgor"
+    },
+    "types": [
+      "bug"
+    ],
+    "family_id": 616,
+    "stats": {
+      "KP": 80,
+      "Ang.": 70,
+      "Vert.": 40,
+      "Sp.-A.": 100,
+      "Sp.-V.": 60,
+      "Init.": 145,
+      "Summe": 495
+    },
+    "legendary": false,
+    "weight": 25.3
+  },
+  {
+    "id": 618,
+    "names": {
+      "de": "Flunschlik",
+      "en": "Stunfisk",
+      "fr": "Limonde",
+      "es": "Stunfisk",
+      "it": "Stunfisk"
+    },
+    "types": [
+      "ground",
+      "electric"
+    ],
+    "family_id": 618,
+    "stats": {
+      "KP": 109,
+      "Ang.": 66,
+      "Vert.": 84,
+      "Sp.-A.": 81,
+      "Sp.-V.": 99,
+      "Init.": 32,
+      "Summe": 471
+    },
+    "legendary": false,
+    "weight": 11
+  },
+  {
+    "id": 619,
+    "names": {
+      "de": "Lin-Fu",
+      "en": "Mienfoo",
+      "fr": "Kungfouine",
+      "es": "Mienfoo",
+      "it": "Mienfoo"
+    },
+    "types": [
+      "fighting"
+    ],
+    "family_id": 619,
+    "stats": {
+      "KP": 45,
+      "Ang.": 85,
+      "Vert.": 50,
+      "Sp.-A.": 55,
+      "Sp.-V.": 50,
+      "Init.": 65,
+      "Summe": 350
+    },
+    "legendary": false,
+    "weight": 20
+  },
+  {
+    "id": 620,
+    "names": {
+      "de": "Wie-Shu",
+      "en": "Mienshao",
+      "fr": "Shaofouine",
+      "es": "Mienshao",
+      "it": "Mienshao"
+    },
+    "types": [
+      "fighting"
+    ],
+    "family_id": 619,
+    "stats": {
+      "KP": 65,
+      "Ang.": 125,
+      "Vert.": 60,
+      "Sp.-A.": 95,
+      "Sp.-V.": 60,
+      "Init.": 105,
+      "Summe": 510
+    },
+    "legendary": false,
+    "weight": 35.5
+  },
+  {
+    "id": 621,
+    "names": {
+      "de": "Shardrago",
+      "en": "Druddigon",
+      "fr": "Drakkarmin",
+      "es": "Druddigon",
+      "it": "Druddigon"
+    },
+    "types": [
+      "dragon"
+    ],
+    "family_id": 621,
+    "stats": {
+      "KP": 77,
+      "Ang.": 120,
+      "Vert.": 90,
+      "Sp.-A.": 60,
+      "Sp.-V.": 90,
+      "Init.": 48,
+      "Summe": 485
+    },
+    "legendary": false,
+    "weight": 139
+  },
+  {
+    "id": 622,
+    "names": {
+      "de": "Golbit",
+      "en": "Golett",
+      "fr": "Gringolem",
+      "es": "Golett",
+      "it": "Golett"
+    },
+    "types": [
+      "ground",
+      "ghost"
+    ],
+    "family_id": 622,
+    "stats": {
+      "KP": 59,
+      "Ang.": 74,
+      "Vert.": 50,
+      "Sp.-A.": 35,
+      "Sp.-V.": 50,
+      "Init.": 35,
+      "Summe": 303
+    },
+    "legendary": false,
+    "weight": 92
+  },
+  {
+    "id": 623,
+    "names": {
+      "de": "Golgantes",
+      "en": "Golurk",
+      "fr": "Golemastoc",
+      "es": "Golurk",
+      "it": "Golurk"
+    },
+    "types": [
+      "ground",
+      "ghost"
+    ],
+    "family_id": 622,
+    "stats": {
+      "KP": 89,
+      "Ang.": 124,
+      "Vert.": 80,
+      "Sp.-A.": 55,
+      "Sp.-V.": 80,
+      "Init.": 55,
+      "Summe": 483
+    },
+    "legendary": false,
+    "weight": 330
+  },
+  {
+    "id": 624,
+    "names": {
+      "de": "Gladiantri",
+      "en": "Pawniard",
+      "fr": "Scalpion",
+      "es": "Pawniard",
+      "it": "Pawniard"
+    },
+    "types": [
+      "dark",
+      "steel"
+    ],
+    "family_id": 624,
+    "stats": {
+      "KP": 45,
+      "Ang.": 85,
+      "Vert.": 70,
+      "Sp.-A.": 40,
+      "Sp.-V.": 40,
+      "Init.": 60,
+      "Summe": 340
+    },
+    "legendary": false,
+    "weight": 10.2
+  },
+  {
+    "id": 625,
+    "names": {
+      "de": "Caesurio",
+      "en": "Bisharp",
+      "fr": "Scalproie",
+      "es": "Bisharp",
+      "it": "Bisharp"
+    },
+    "types": [
+      "dark",
+      "steel"
+    ],
+    "family_id": 624,
+    "stats": {
+      "KP": 65,
+      "Ang.": 125,
+      "Vert.": 100,
+      "Sp.-A.": 60,
+      "Sp.-V.": 70,
+      "Init.": 70,
+      "Summe": 490
+    },
+    "legendary": false,
+    "weight": 70
+  },
+  {
+    "id": 626,
+    "names": {
+      "de": "Bisofank",
+      "en": "Bouffalant",
+      "fr": "Frison",
+      "es": "Bouffalant",
+      "it": "Bouffalant"
+    },
+    "types": [
+      "normal"
+    ],
+    "family_id": 626,
+    "stats": {
+      "KP": 95,
+      "Ang.": 110,
+      "Vert.": 95,
+      "Sp.-A.": 40,
+      "Sp.-V.": 95,
+      "Init.": 55,
+      "Summe": 490
+    },
+    "legendary": false,
+    "weight": 94.6
+  },
+  {
+    "id": 627,
+    "names": {
+      "de": "Geronimatz",
+      "en": "Rufflet",
+      "fr": "Furaiglon",
+      "es": "Rufflet",
+      "it": "Rufflet"
+    },
+    "types": [
+      "normal",
+      "flying"
+    ],
+    "family_id": 627,
+    "stats": {
+      "KP": 70,
+      "Ang.": 83,
+      "Vert.": 50,
+      "Sp.-A.": 37,
+      "Sp.-V.": 50,
+      "Init.": 60,
+      "Summe": 350
+    },
+    "legendary": false,
+    "weight": 10.5
+  },
+  {
+    "id": 628,
+    "names": {
+      "de": "Washakwil",
+      "en": "Braviary",
+      "fr": "Gueriaigle",
+      "es": "Braviary",
+      "it": "Braviary"
+    },
+    "types": [
+      "normal",
+      "flying"
+    ],
+    "family_id": 627,
+    "stats": {
+      "KP": 100,
+      "Ang.": 123,
+      "Vert.": 75,
+      "Sp.-A.": 57,
+      "Sp.-V.": 75,
+      "Init.": 80,
+      "Summe": 510
+    },
+    "legendary": false,
+    "weight": 41
+  },
+  {
+    "id": 629,
+    "names": {
+      "de": "Skallyk",
+      "en": "Vullaby",
+      "fr": "Vostourno",
+      "es": "Vullaby",
+      "it": "Vullaby"
+    },
+    "types": [
+      "dark",
+      "flying"
+    ],
+    "family_id": 629,
+    "stats": {
+      "KP": 70,
+      "Ang.": 55,
+      "Vert.": 75,
+      "Sp.-A.": 45,
+      "Sp.-V.": 65,
+      "Init.": 60,
+      "Summe": 370
+    },
+    "legendary": false,
+    "weight": 9
+  },
+  {
+    "id": 630,
+    "names": {
+      "de": "Grypheldis",
+      "en": "Mandibuzz",
+      "fr": "Vaututrice",
+      "es": "Mandibuzz",
+      "it": "Mandibuzz"
+    },
+    "types": [
+      "dark",
+      "flying"
+    ],
+    "family_id": 629,
+    "stats": {
+      "KP": 110,
+      "Ang.": 65,
+      "Vert.": 105,
+      "Sp.-A.": 55,
+      "Sp.-V.": 95,
+      "Init.": 80,
+      "Summe": 510
+    },
+    "legendary": false,
+    "weight": 39.5
+  },
+  {
+    "id": 631,
+    "names": {
+      "de": "Furnifraß",
+      "en": "Heatmor",
+      "fr": "Aflamanoir",
+      "es": "Heatmor",
+      "it": "Heatmor"
+    },
+    "types": [
+      "fire"
+    ],
+    "family_id": 631,
+    "stats": {
+      "KP": 85,
+      "Ang.": 97,
+      "Vert.": 66,
+      "Sp.-A.": 105,
+      "Sp.-V.": 66,
+      "Init.": 65,
+      "Summe": 484
+    },
+    "legendary": false,
+    "weight": 58
+  },
+  {
+    "id": 632,
+    "names": {
+      "de": "Fermicula",
+      "en": "Durant",
+      "fr": "Fermite",
+      "es": "Durant",
+      "it": "Durant"
+    },
+    "types": [
+      "bug",
+      "steel"
+    ],
+    "family_id": 632,
+    "stats": {
+      "KP": 58,
+      "Ang.": 109,
+      "Vert.": 112,
+      "Sp.-A.": 48,
+      "Sp.-V.": 48,
+      "Init.": 109,
+      "Summe": 484
+    },
+    "legendary": false,
+    "weight": 33
+  },
+  {
+    "id": 633,
+    "names": {
+      "de": "Kapuno",
+      "en": "Deino",
+      "fr": "Solochi",
+      "es": "Deino",
+      "it": "Deino"
+    },
+    "types": [
+      "dark",
+      "dragon"
+    ],
+    "family_id": 633,
+    "stats": {
+      "KP": 52,
+      "Ang.": 65,
+      "Vert.": 50,
+      "Sp.-A.": 45,
+      "Sp.-V.": 50,
+      "Init.": 38,
+      "Summe": 300
+    },
+    "legendary": false,
+    "weight": 17.3
+  },
+  {
+    "id": 634,
+    "names": {
+      "de": "Duodino",
+      "en": "Zweilous",
+      "fr": "Diamat",
+      "es": "Zweilous",
+      "it": "Zweilous"
+    },
+    "types": [
+      "dark",
+      "dragon"
+    ],
+    "family_id": 633,
+    "stats": {
+      "KP": 72,
+      "Ang.": 85,
+      "Vert.": 70,
+      "Sp.-A.": 65,
+      "Sp.-V.": 70,
+      "Init.": 58,
+      "Summe": 420
+    },
+    "legendary": false,
+    "weight": 50
+  },
+  {
+    "id": 635,
+    "names": {
+      "de": "Trikephalo",
+      "en": "Hydreigon",
+      "fr": "Trioxhydre",
+      "es": "Hydreigon",
+      "it": "Hydreigon"
+    },
+    "types": [
+      "dark",
+      "dragon"
+    ],
+    "family_id": 633,
+    "stats": {
+      "KP": 92,
+      "Ang.": 105,
+      "Vert.": 90,
+      "Sp.-A.": 125,
+      "Sp.-V.": 90,
+      "Init.": 98,
+      "Summe": 600
+    },
+    "legendary": false,
+    "weight": 160
+  },
+  {
+    "id": 636,
+    "names": {
+      "de": "Ignivor",
+      "en": "Larvesta",
+      "fr": "Pyronille",
+      "es": "Larvesta",
+      "it": "Larvesta"
+    },
+    "types": [
+      "bug",
+      "fire"
+    ],
+    "family_id": 636,
+    "stats": {
+      "KP": 55,
+      "Ang.": 85,
+      "Vert.": 55,
+      "Sp.-A.": 50,
+      "Sp.-V.": 55,
+      "Init.": 60,
+      "Summe": 360
+    },
+    "legendary": false,
+    "weight": 28.8
+  },
+  {
+    "id": 637,
+    "names": {
+      "de": "Ramoth",
+      "en": "Volcarona",
+      "fr": "Pyrax",
+      "es": "Volcarona",
+      "it": "Volcarona"
+    },
+    "types": [
+      "bug",
+      "fire"
+    ],
+    "family_id": 636,
+    "stats": {
+      "KP": 85,
+      "Ang.": 60,
+      "Vert.": 65,
+      "Sp.-A.": 135,
+      "Sp.-V.": 105,
+      "Init.": 100,
+      "Summe": 550
+    },
+    "legendary": false,
+    "weight": 46
+  },
+  {
+    "id": 638,
+    "names": {
+      "de": "Kobalium",
+      "en": "Cobalion",
+      "fr": "Cobaltium",
+      "es": "Cobalion",
+      "it": "Cobalion"
+    },
+    "types": [
+      "steel",
+      "fighting"
+    ],
+    "family_id": 638,
+    "stats": {
+      "KP": 91,
+      "Ang.": 90,
+      "Vert.": 129,
+      "Sp.-A.": 90,
+      "Sp.-V.": 72,
+      "Init.": 108,
+      "Summe": 580
+    },
+    "legendary": true,
+    "weight": 250
+  },
+  {
+    "id": 639,
+    "names": {
+      "de": "Terrakium",
+      "en": "Terrakion",
+      "fr": "Terrakium",
+      "es": "Terrakion",
+      "it": "Terrakion"
+    },
+    "types": [
+      "rock",
+      "fighting"
+    ],
+    "family_id": 639,
+    "stats": {
+      "KP": 91,
+      "Ang.": 129,
+      "Vert.": 90,
+      "Sp.-A.": 72,
+      "Sp.-V.": 90,
+      "Init.": 108,
+      "Summe": 580
+    },
+    "legendary": true,
+    "weight": 260
+  },
+  {
+    "id": 640,
+    "names": {
+      "de": "Viridium",
+      "en": "Virizion",
+      "fr": "Viridium",
+      "es": "Virizion",
+      "it": "Virizion"
+    },
+    "types": [
+      "grass",
+      "fighting"
+    ],
+    "family_id": 640,
+    "stats": {
+      "KP": 91,
+      "Ang.": 90,
+      "Vert.": 72,
+      "Sp.-A.": 90,
+      "Sp.-V.": 129,
+      "Init.": 108,
+      "Summe": 580
+    },
+    "legendary": true,
+    "weight": 200
+  },
+  {
+    "id": 641,
+    "names": {
+      "de": "Boreos",
+      "en": "Tornadus",
+      "fr": "Boréas",
+      "es": "Tornadus",
+      "it": "Tornadus"
+    },
+    "types": [
+      "flying"
+    ],
+    "family_id": 641,
+    "stats": {
+      "KP": 79,
+      "Ang.": 115,
+      "Vert.": 70,
+      "Sp.-A.": 125,
+      "Sp.-V.": 80,
+      "Init.": 111,
+      "Summe": 580
+    },
+    "legendary": true,
+    "weight": 63,
+    "formNames": {
+      "de": "Inkarnationsform",
+      "en": "Incarnate Forme",
+      "fr": "Forme Avatar",
+      "es": "Forma Avatar",
+      "it": "Forma Incarnazione"
+    }
+  },
+  {
+    "id": 642,
+    "names": {
+      "de": "Voltolos",
+      "en": "Thundurus",
+      "fr": "Fulguris",
+      "es": "Thundurus",
+      "it": "Thundurus"
+    },
+    "types": [
+      "electric",
+      "flying"
+    ],
+    "family_id": 642,
+    "stats": {
+      "KP": 79,
+      "Ang.": 115,
+      "Vert.": 70,
+      "Sp.-A.": 125,
+      "Sp.-V.": 80,
+      "Init.": 111,
+      "Summe": 580
+    },
+    "legendary": true,
+    "weight": 61,
+    "formNames": {
+      "de": "Inkarnationsform",
+      "en": "Incarnate Forme",
+      "fr": "Forme Avatar",
+      "es": "Forma Avatar",
+      "it": "Forma Incarnazione"
+    }
+  },
+  {
+    "id": 643,
+    "names": {
+      "de": "Reshiram",
+      "en": "Reshiram",
+      "fr": "Reshiram",
+      "es": "Reshiram",
+      "it": "Reshiram"
+    },
+    "types": [
+      "dragon",
+      "fire"
+    ],
+    "family_id": 643,
+    "stats": {
+      "KP": 100,
+      "Ang.": 120,
+      "Vert.": 100,
+      "Sp.-A.": 150,
+      "Sp.-V.": 120,
+      "Init.": 90,
+      "Summe": 680
+    },
+    "legendary": true,
+    "weight": 330
+  },
+  {
+    "id": 644,
+    "names": {
+      "de": "Zekrom",
+      "en": "Zekrom",
+      "fr": "Zekrom",
+      "es": "Zekrom",
+      "it": "Zekrom"
+    },
+    "types": [
+      "dragon",
+      "electric"
+    ],
+    "family_id": 644,
+    "stats": {
+      "KP": 100,
+      "Ang.": 150,
+      "Vert.": 120,
+      "Sp.-A.": 120,
+      "Sp.-V.": 100,
+      "Init.": 90,
+      "Summe": 680
+    },
+    "legendary": true,
+    "weight": 345
+  },
+  {
+    "id": 645,
+    "names": {
+      "de": "Demeteros",
+      "en": "Landorus",
+      "fr": "Démétéros",
+      "es": "Landorus",
+      "it": "Landorus"
+    },
+    "types": [
+      "ground",
+      "flying"
+    ],
+    "family_id": 645,
+    "stats": {
+      "KP": 89,
+      "Ang.": 125,
+      "Vert.": 90,
+      "Sp.-A.": 115,
+      "Sp.-V.": 80,
+      "Init.": 101,
+      "Summe": 600
+    },
+    "legendary": true,
+    "weight": 68,
+    "formNames": {
+      "de": "Inkarnationsform",
+      "en": "Incarnate Forme",
+      "fr": "Forme Avatar",
+      "es": "Forma Avatar",
+      "it": "Forma Incarnazione"
+    }
+  },
+  {
+    "id": 646,
+    "names": {
+      "de": "Kyurem",
+      "en": "Kyurem",
+      "fr": "Kyurem",
+      "es": "Kyurem",
+      "it": "Kyurem"
+    },
+    "types": [
+      "dragon",
+      "ice"
+    ],
+    "family_id": 646,
+    "stats": {
+      "KP": 125,
+      "Ang.": 130,
+      "Vert.": 90,
+      "Sp.-A.": 130,
+      "Sp.-V.": 90,
+      "Init.": 95,
+      "Summe": 660
+    },
+    "legendary": true,
+    "weight": 325,
+    "formNames": {
+      "de": "Kyurem",
+      "en": "Kyurem",
+      "fr": "Forme de Kyurem",
+      "es": "Forma de Kyurem",
+      "it": "Forma di Kyurem"
+    }
+  },
+  {
+    "id": 647,
+    "names": {
+      "de": "Keldeo",
+      "en": "Keldeo",
+      "fr": "Keldeo",
+      "es": "Keldeo",
+      "it": "Keldeo"
+    },
+    "types": [
+      "water",
+      "fighting"
+    ],
+    "family_id": 647,
+    "stats": {
+      "KP": 91,
+      "Ang.": 72,
+      "Vert.": 90,
+      "Sp.-A.": 129,
+      "Sp.-V.": 90,
+      "Init.": 108,
+      "Summe": 580
+    },
+    "legendary": true,
+    "weight": 48.5
+  },
+  {
+    "id": 648,
+    "names": {
+      "de": "Meloetta",
+      "en": "Meloetta",
+      "fr": "Meloetta",
+      "es": "Meloetta",
+      "it": "Meloetta"
+    },
+    "types": [
+      "normal",
+      "psychic"
+    ],
+    "family_id": 648,
+    "stats": {
+      "KP": 100,
+      "Ang.": 77,
+      "Vert.": 77,
+      "Sp.-A.": 128,
+      "Sp.-V.": 128,
+      "Init.": 90,
+      "Summe": 600
+    },
+    "legendary": true,
+    "weight": 6.5,
+    "formNames": {
+      "de": "Gesangsform",
+      "en": "Aria Forme",
+      "fr": "Forme Chant",
+      "es": "Forma Lírica",
+      "it": "Forma Canto"
+    }
+  },
+  {
+    "id": 649,
+    "names": {
+      "de": "Genesect",
+      "en": "Genesect",
+      "fr": "Genesect",
+      "es": "Genesect",
+      "it": "Genesect"
+    },
+    "types": [
+      "bug",
+      "steel"
+    ],
+    "family_id": 649,
+    "stats": {
+      "KP": 71,
+      "Ang.": 120,
+      "Vert.": 95,
+      "Sp.-A.": 120,
+      "Sp.-V.": 95,
+      "Init.": 99,
+      "Summe": 600
+    },
+    "legendary": true,
+    "weight": 82.5
+  },
+  {
     "id": 10001,
     "names": {
       "de": "Deoxys",
@@ -13091,6 +17107,243 @@
       "fr": "Forme Blizzard",
       "es": "Forma Nieve",
       "it": "Forma Nuvola di Neve"
+    }
+  },
+  {
+    "id": 10017,
+    "names": {
+      "de": "Flampivian",
+      "en": "Darmanitan",
+      "fr": "Darumacho",
+      "es": "Darmanitan",
+      "it": "Darmanitan"
+    },
+    "types": [
+      "fire",
+      "psychic"
+    ],
+    "family_id": 554,
+    "stats": {
+      "KP": 105,
+      "Ang.": 30,
+      "Vert.": 105,
+      "Sp.-A.": 140,
+      "Sp.-V.": 105,
+      "Init.": 55,
+      "Summe": 540
+    },
+    "legendary": false,
+    "weight": 92.9,
+    "baseId": 555,
+    "formNames": {
+      "de": "Trance-Modus",
+      "en": "Zen Mode",
+      "fr": "Mode Transe",
+      "es": "Modo Daruma",
+      "it": "Stato Zen"
+    }
+  },
+  {
+    "id": 10018,
+    "names": {
+      "de": "Meloetta",
+      "en": "Meloetta",
+      "fr": "Meloetta",
+      "es": "Meloetta",
+      "it": "Meloetta"
+    },
+    "types": [
+      "normal",
+      "fighting"
+    ],
+    "family_id": 648,
+    "stats": {
+      "KP": 100,
+      "Ang.": 128,
+      "Vert.": 90,
+      "Sp.-A.": 77,
+      "Sp.-V.": 77,
+      "Init.": 128,
+      "Summe": 600
+    },
+    "legendary": true,
+    "weight": 6.5,
+    "baseId": 648,
+    "formNames": {
+      "de": "Tanzform",
+      "en": "Pirouette Forme",
+      "fr": "Forme Danse",
+      "es": "Forma Danza",
+      "it": "Forma Danza"
+    }
+  },
+  {
+    "id": 10019,
+    "names": {
+      "de": "Boreos",
+      "en": "Tornadus",
+      "fr": "Boréas",
+      "es": "Tornadus",
+      "it": "Tornadus"
+    },
+    "types": [
+      "flying"
+    ],
+    "family_id": 641,
+    "stats": {
+      "KP": 79,
+      "Ang.": 100,
+      "Vert.": 80,
+      "Sp.-A.": 110,
+      "Sp.-V.": 90,
+      "Init.": 121,
+      "Summe": 580
+    },
+    "legendary": true,
+    "weight": 63,
+    "baseId": 641,
+    "formNames": {
+      "de": "Tiergeistform",
+      "en": "Therian Forme",
+      "fr": "Forme Totémique",
+      "es": "Forma Tótem",
+      "it": "Forma Totem"
+    }
+  },
+  {
+    "id": 10020,
+    "names": {
+      "de": "Voltolos",
+      "en": "Thundurus",
+      "fr": "Fulguris",
+      "es": "Thundurus",
+      "it": "Thundurus"
+    },
+    "types": [
+      "electric",
+      "flying"
+    ],
+    "family_id": 642,
+    "stats": {
+      "KP": 79,
+      "Ang.": 105,
+      "Vert.": 70,
+      "Sp.-A.": 145,
+      "Sp.-V.": 80,
+      "Init.": 101,
+      "Summe": 580
+    },
+    "legendary": true,
+    "weight": 61,
+    "baseId": 642,
+    "formNames": {
+      "de": "Tiergeistform",
+      "en": "Therian Forme",
+      "fr": "Forme Totémique",
+      "es": "Forma Tótem",
+      "it": "Forma Totem"
+    }
+  },
+  {
+    "id": 10021,
+    "names": {
+      "de": "Demeteros",
+      "en": "Landorus",
+      "fr": "Démétéros",
+      "es": "Landorus",
+      "it": "Landorus"
+    },
+    "types": [
+      "ground",
+      "flying"
+    ],
+    "family_id": 645,
+    "stats": {
+      "KP": 89,
+      "Ang.": 145,
+      "Vert.": 90,
+      "Sp.-A.": 105,
+      "Sp.-V.": 80,
+      "Init.": 91,
+      "Summe": 600
+    },
+    "legendary": true,
+    "weight": 68,
+    "baseId": 645,
+    "formNames": {
+      "de": "Tiergeistform",
+      "en": "Therian Forme",
+      "fr": "Forme Totémique",
+      "es": "Forma Tótem",
+      "it": "Forma Totem"
+    }
+  },
+  {
+    "id": 10022,
+    "names": {
+      "de": "Kyurem",
+      "en": "Kyurem",
+      "fr": "Kyurem",
+      "es": "Kyurem",
+      "it": "Kyurem"
+    },
+    "types": [
+      "dragon",
+      "ice"
+    ],
+    "family_id": 646,
+    "stats": {
+      "KP": 125,
+      "Ang.": 170,
+      "Vert.": 100,
+      "Sp.-A.": 120,
+      "Sp.-V.": 90,
+      "Init.": 95,
+      "Summe": 700
+    },
+    "legendary": true,
+    "weight": 325,
+    "baseId": 646,
+    "formNames": {
+      "de": "Schwarzes Kyurem",
+      "en": "Black Kyurem",
+      "fr": "Kyurem Noir",
+      "es": "Kyurem Negro",
+      "it": "Kyurem Nero"
+    }
+  },
+  {
+    "id": 10023,
+    "names": {
+      "de": "Kyurem",
+      "en": "Kyurem",
+      "fr": "Kyurem",
+      "es": "Kyurem",
+      "it": "Kyurem"
+    },
+    "types": [
+      "dragon",
+      "ice"
+    ],
+    "family_id": 646,
+    "stats": {
+      "KP": 125,
+      "Ang.": 120,
+      "Vert.": 90,
+      "Sp.-A.": 170,
+      "Sp.-V.": 100,
+      "Init.": 95,
+      "Summe": 700
+    },
+    "legendary": true,
+    "weight": 325,
+    "baseId": 646,
+    "formNames": {
+      "de": "Weißes Kyurem",
+      "en": "White Kyurem",
+      "fr": "Kyurem Blanc",
+      "es": "Kyurem Blanco",
+      "it": "Kyurem Bianco"
     }
   }
 ]

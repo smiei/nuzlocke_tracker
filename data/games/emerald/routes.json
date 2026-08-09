@@ -103,7 +103,7 @@
     "names": {
       "de": "Fossil Metarost City",
       "en": "Fossil Rustboro City",
-      "fr": "Fossile Mérouville",
+      "fr": "Fossil Rustboro City",
       "es": "Fossil Rustboro City",
       "it": "Fossil Rustboro City"
     },
@@ -125,9 +125,9 @@
     "names": {
       "de": "Regice Inselhöhle",
       "en": "Regice Island Cave",
-      "fr": "Regice Grotte de l’Îlot",
-      "es": "Regice Cueva Insular",
-      "it": "Regice Grotta Insulare"
+      "fr": "Regice Island Cave",
+      "es": "Regice Island Cave",
+      "it": "Regice Island Cave"
     },
     "type": "static"
   },
@@ -202,9 +202,9 @@
     "names": {
       "de": "Regirock Wüstenruine",
       "en": "Regirock Desert Ruins",
-      "fr": "Regirock Ruines Désert",
-      "es": "Regirock Ruinas del Desierto",
-      "it": "Regirock Rovine Sabbiose"
+      "fr": "Regirock Desert Ruins",
+      "es": "Regirock Desert Ruins",
+      "it": "Regirock Desert Ruins"
     },
     "type": "static"
   },
@@ -235,9 +235,9 @@
     "names": {
       "de": "Route 114",
       "en": "Route 114",
-      "fr": "Route 114",
-      "es": "Ruta 114",
-      "it": "Percorso 114"
+      "fr": "Fossile Tour Mirage",
+      "es": "Route 114",
+      "it": "Route 114"
     },
     "type": "route"
   },
@@ -301,8 +301,8 @@
     "names": {
       "de": "Formeo Klima-Institut",
       "en": "Castform Weather Institute",
-      "fr": "Morphéo Institut Météo",
-      "es": "Castform Instituto Meteorológico",
+      "fr": "Castform Weather Institute",
+      "es": "Castform Weather Institute",
       "it": "Castform Weather Institute"
     },
     "type": "static"
@@ -313,8 +313,8 @@
       "de": "Kecleon Route 119",
       "en": "Kecleon Route 119",
       "fr": "Kecleon Route 119",
-      "es": "Kecleon Ruta 119",
-      "it": "Kecleon Percorso 119"
+      "es": "Kecleon Route 119",
+      "it": "Kecleon Route 119"
     },
     "type": "static"
   },
@@ -323,9 +323,9 @@
     "names": {
       "de": "Route 120",
       "en": "Route 120",
-      "fr": "Route 120",
-      "es": "Ruta 120",
-      "it": "Percorso 120"
+      "fr": "Œuf d'Okéoké Vermilava",
+      "es": "Huevo de Wynaut Pueblo Lavacalda",
+      "it": "Uovo di Wynaut Cuordilava"
     },
     "type": "route"
   },
@@ -335,8 +335,8 @@
       "de": "Kecleon Route 120",
       "en": "Kecleon Route 120",
       "fr": "Kecleon Route 120",
-      "es": "Kecleon Ruta 120",
-      "it": "Kecleon Percorso 120"
+      "es": "Kecleon Route 120",
+      "it": "Kecleon Route 120"
     },
     "type": "static"
   },
@@ -345,9 +345,9 @@
     "names": {
       "de": "Registeel Grabmal",
       "en": "Registeel Ancient Tomb",
-      "fr": "Registeel Tombeau Antique",
-      "es": "Registeel Tumba Antigua",
-      "it": "Registeel Tomba Antica"
+      "fr": "Registeel Ancient Tomb",
+      "es": "Registeel Ancient Tomb",
+      "it": "Registeel Ancient Tomb"
     },
     "type": "static"
   },
@@ -356,9 +356,9 @@
     "names": {
       "de": "Route 121",
       "en": "Route 121",
-      "fr": "Route 121",
-      "es": "Ruta 121",
-      "it": "Percorso 121"
+      "fr": "Morphéo Institut Météo",
+      "es": "Castform Instituto Meteorológico",
+      "it": "Route 121"
     },
     "type": "route"
   },
@@ -378,9 +378,9 @@
     "names": {
       "de": "Route 123",
       "en": "Route 123",
-      "fr": "Route 123",
-      "es": "Ruta 123",
-      "it": "Percorso 123"
+      "fr": "Kecleon Route 120",
+      "es": "Kecleon Ruta 120",
+      "it": "Kecleon Percorso 120"
     },
     "type": "route"
   },
@@ -455,9 +455,9 @@
     "names": {
       "de": "Route 130",
       "en": "Route 130",
-      "fr": "Chenal 130",
-      "es": "Ruta 130",
-      "it": "Percorso 130"
+      "fr": "Électrode Repaire Aqua",
+      "es": "Electrode Guarida Aqua",
+      "it": "Electrode Covo Aqua"
     },
     "type": "route"
   },
@@ -599,9 +599,9 @@
     "names": {
       "de": "Isso-Ei Bad Lavastadt",
       "en": "Wynaut Egg Lavaridge Town",
-      "fr": "Œuf d'Okéoké Vermilava",
-      "es": "Huevo de Wynaut Pueblo Lavacalda",
-      "it": "Uovo di Wynaut Cuordilava"
+      "fr": "Wynaut Egg Lavaridge Town",
+      "es": "Wynaut Egg Lavaridge Town",
+      "it": "Wynaut Egg Lavaridge Town"
     },
     "type": "static"
   },
@@ -632,7 +632,7 @@
     "names": {
       "de": "Fossil Wunderturm",
       "en": "Fossil Mirage Tower",
-      "fr": "Fossile Tour Mirage",
+      "fr": "Fossil Mirage Tower",
       "es": "Fossil Mirage Tower",
       "it": "Fossil Mirage Tower"
     },
@@ -654,9 +654,9 @@
     "names": {
       "de": "Voltobal/Lektrobal Neu Malvenfroh",
       "en": "Voltorb/Electrode New Mauville",
-      "fr": "Voltorbe/Électrode New Lavandia",
-      "es": "Voltorb/Electrode Malvalanova",
-      "it": "Voltorb/Electrode Ciclanova"
+      "fr": "Voltorbe New Lavandia",
+      "es": "Voltorb Malvalanova",
+      "it": "Voltorb Ciclanova"
     },
     "type": "static"
   },
@@ -687,9 +687,9 @@
     "names": {
       "de": "Pyroberg",
       "en": "Mt. Pyre",
-      "fr": "Mont Mémoria",
-      "es": "Monte Pírico",
-      "it": "Monte Pira"
+      "fr": "Rayquaza Pilier Céleste",
+      "es": "Rayquaza Pilar Celeste",
+      "it": "Rayquaza Torre dei Cieli"
     },
     "type": "route"
   },
@@ -709,9 +709,9 @@
     "names": {
       "de": "Aqua-Versteck",
       "en": "Aqua Hideout",
-      "fr": "Repaire Aqua",
-      "es": "Guarida Aqua",
-      "it": "Covo Aqua"
+      "fr": "Regirock Ruines Désert",
+      "es": "Regirock Ruinas del Desierto",
+      "it": "Regirock Rovine Sabbiose"
     },
     "type": "route"
   },
@@ -720,9 +720,9 @@
     "names": {
       "de": "Lektrobal Aqua-Versteck",
       "en": "Electrode Aqua Hideout",
-      "fr": "Électrode Repaire Aqua",
-      "es": "Electrode Guarida Aqua",
-      "it": "Electrode Covo Aqua"
+      "fr": "Regice Grotte de l’Îlot",
+      "es": "Regice Cueva Insular",
+      "it": "Regice Grotta Insulare"
     },
     "type": "static"
   },
@@ -731,9 +731,9 @@
     "names": {
       "de": "Seegrasulb City",
       "en": "Lilycove City",
-      "fr": "Nénucrique",
-      "es": "Ciudad Calagua",
-      "it": "Porto Alghepoli"
+      "fr": "Registeel Tombeau Antique",
+      "es": "Registeel Tumba Antigua",
+      "it": "Registeel Tomba Antica"
     },
     "type": "route"
   },
@@ -742,9 +742,9 @@
     "names": {
       "de": "Moosbach City",
       "en": "Mossdeep City",
-      "fr": "Algatia",
-      "es": "Ciudad Algaria",
-      "it": "Verdeazzupoli"
+      "fr": "Terhal Algatia",
+      "es": "Beldum Ciudad Algaria",
+      "it": "Beldum Verdeazzupoli"
     },
     "type": "route"
   },
@@ -753,9 +753,9 @@
     "names": {
       "de": "Tanhel Moosbach City",
       "en": "Beldum Mossdeep City",
-      "fr": "Terhal Algatia",
-      "es": "Beldum Ciudad Algaria",
-      "it": "Beldum Verdeazzupoli"
+      "fr": "Latias/Latios (itinérant)",
+      "es": "Latias/Latios (errante)",
+      "it": "Latias/Latios (vagante)"
     },
     "type": "static",
     "postgame": true
@@ -765,9 +765,9 @@
     "names": {
       "de": "Küstenhöhle",
       "en": "Shoal Cave",
-      "fr": "Grotte Tréfonds",
-      "es": "Cueva Cardumen",
-      "it": "Grotta Ondosa"
+      "fr": "Kyogre Grotte Marine",
+      "es": "Shoal Cave",
+      "it": "Shoal Cave"
     },
     "type": "route"
   },
@@ -776,9 +776,9 @@
     "names": {
       "de": "Tiefseehöhle",
       "en": "Seafloor Cavern",
-      "fr": "Caverne Fondmer",
-      "es": "Caverna Abisal",
-      "it": "Antro Abissale"
+      "fr": "Groudon Grotte Terra",
+      "es": "Seafloor Cavern",
+      "it": "Seafloor Cavern"
     },
     "type": "route"
   },
@@ -820,9 +820,9 @@
     "names": {
       "de": "Rayquaza Himmelturm",
       "en": "Rayquaza Sky Pillar",
-      "fr": "Rayquaza Pilier Céleste",
-      "es": "Rayquaza Pilar Celeste",
-      "it": "Rayquaza Torre dei Cieli"
+      "fr": "Simularbre Zone de Combat",
+      "es": "Sudowoodo Frente de Batalla",
+      "it": "Sudowoodo Parco Lotta"
     },
     "type": "static"
   },
@@ -843,7 +843,7 @@
       "de": "Wundereiland",
       "en": "Mirage Island",
       "fr": "Mirage Island",
-      "es": "Isla espejismo",
+      "es": "Mirage Island",
       "it": "Mirage Island"
     },
     "type": "route"
@@ -886,9 +886,9 @@
     "names": {
       "de": "MS Tide",
       "en": "S.S. Tidal",
-      "fr": "Le Marina",
-      "es": "S.S. Marea",
-      "it": "M/N Marea"
+      "fr": "S.S. Tidal",
+      "es": "S.S. Tidal",
+      "it": "S.S. Tidal"
     },
     "type": "route",
     "postgame": true
@@ -910,9 +910,9 @@
     "names": {
       "de": "Mogelbaum Kampfzone",
       "en": "Sudowoodo Battle Frontier",
-      "fr": "Simularbre Zone de Combat",
-      "es": "Sudowoodo Frente de Batalla",
-      "it": "Sudowoodo Parco Lotta"
+      "fr": "Sudowoodo Battle Frontier",
+      "es": "Sudowoodo Battle Frontier",
+      "it": "Sudowoodo Battle Frontier"
     },
     "type": "static",
     "postgame": true
@@ -946,7 +946,7 @@
     "names": {
       "de": "Groudon Terrahöhle",
       "en": "Groudon Terra Cave",
-      "fr": "Groudon Grotte Terra",
+      "fr": "Groudon Terra Cave",
       "es": "Groudon Terra Cave",
       "it": "Groudon Terra Cave"
     },
@@ -958,7 +958,7 @@
     "names": {
       "de": "Kyogre Ozeanhöhle",
       "en": "Kyogre Marine Cave",
-      "fr": "Kyogre Grotte Marine",
+      "fr": "Kyogre Marine Cave",
       "es": "Kyogre Marine Cave",
       "it": "Kyogre Marine Cave"
     },
@@ -970,9 +970,9 @@
     "names": {
       "de": "Latias/Latios (Roaming)",
       "en": "Latias/Latios (Roaming)",
-      "fr": "Latias/Latios (itinérant)",
-      "es": "Latias/Latios (errante)",
-      "it": "Latias/Latios (vagante)"
+      "fr": "Latias/Latios (Roaming)",
+      "es": "Latias/Latios (Roaming)",
+      "it": "Latias/Latios (Roaming)"
     },
     "type": "static",
     "postgame": true

@@ -1,0 +1,16 @@
+{
+  "id": "white",
+  "sort": 9,
+  "generation": 5,
+  "dexLimit": 649,
+  "spriteSet": "black-white",
+  "versionGroup": "black-white",
+  "trainerSet": "black-white",
+  "names": {
+    "de": "Weiß",
+    "en": "White",
+    "fr": "Blanche",
+    "es": "Blanca",
+    "it": "Bianca"
+  }
+}

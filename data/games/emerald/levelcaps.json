@@ -158,9 +158,9 @@
     "names": {
       "de": "Kalle",
       "en": "Tabitha",
-      "fr": "Kelvin",
-      "es": "Tatiano",
-      "it": "Ottavio"
+      "fr": "Tabitha",
+      "es": "Tabitha",
+      "it": "Tabitha"
     },
     "location": {
       "de": "Schlackenberg",
@@ -227,9 +227,9 @@
     "names": {
       "de": "Kordula",
       "en": "Shelly",
-      "fr": "Sarah",
-      "es": "Silvina",
-      "it": "Ada"
+      "fr": "Shelly",
+      "es": "Shelly",
+      "it": "Shelly"
     },
     "location": {
       "de": "Klima-Institut",
@@ -291,9 +291,9 @@
     "names": {
       "de": "Kalle",
       "en": "Tabitha",
-      "fr": "Kelvin",
-      "es": "Tatiano",
-      "it": "Ottavio"
+      "fr": "Tabitha",
+      "es": "Tabitha",
+      "it": "Tabitha"
     },
     "location": {
       "de": "Magma-Versteck",
@@ -349,9 +349,9 @@
     "names": {
       "de": "Wolfgang",
       "en": "Matt",
-      "fr": "Matthieu",
-      "es": "Matías",
-      "it": "Alan"
+      "fr": "Matt",
+      "es": "Matt",
+      "it": "Matt"
     },
     "location": {
       "de": "Aqua-Versteck",
@@ -393,16 +393,16 @@
     "names": {
       "de": "Maxie & Kalle",
       "en": "Maxie & Tabitha",
-      "fr": "Max & Kelvin",
-      "es": "Magno & Tatiano",
-      "it": "Maxie & Ottavio"
+      "fr": "Maxie & Tabitha",
+      "es": "Maxie & Tabitha",
+      "it": "Maxie & Tabitha"
     },
     "location": {
       "de": "Raumfahrtzentrum von Moosbach",
       "en": "Mossdeep Space Center",
       "fr": "Centre Spatial d'Algatia",
-      "es": "Centro Espacial de Algaria",
-      "it": "Centro Spaziale di Verdeazzupoli"
+      "es": "Mossdeep Space Center",
+      "it": "Mossdeep Space Center"
     },
     "badge": null,
     "max_level": null
@@ -412,9 +412,9 @@
     "names": {
       "de": "Kordula",
       "en": "Shelly",
-      "fr": "Sarah",
-      "es": "Silvina",
-      "it": "Ada"
+      "fr": "Shelly",
+      "es": "Shelly",
+      "it": "Shelly"
     },
     "location": {
       "de": "Tiefseehöhle",
@@ -589,9 +589,9 @@
     "names": {
       "de": "Troy Trumm",
       "en": "Steven",
-      "fr": "Pierre Rochard",
-      "es": "Máximo Peñas",
-      "it": "Rocco Petri"
+      "fr": "Steven",
+      "es": "Steven",
+      "it": "Steven"
     },
     "location": {
       "de": "Meteorfälle",

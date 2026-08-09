@@ -1,0 +1,16 @@
+{
+  "id": "black",
+  "sort": 8,
+  "generation": 5,
+  "dexLimit": 649,
+  "spriteSet": "black-white",
+  "versionGroup": "black-white",
+  "trainerSet": "black-white",
+  "names": {
+    "de": "Schwarz",
+    "en": "Black",
+    "fr": "Noire",
+    "es": "Negra",
+    "it": "Nera"
+  }
+}

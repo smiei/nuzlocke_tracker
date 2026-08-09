@@ -1,0 +1,730 @@
+[
+  {
+    "id": 1,
+    "names": {
+      "de": "Starter",
+      "en": "Starter",
+      "fr": "Starter",
+      "es": "Starter",
+      "it": "Starter"
+    },
+    "type": "static"
+  },
+  {
+    "id": 2,
+    "names": {
+      "de": "Route 1",
+      "en": "Route 1",
+      "fr": "Route 1",
+      "es": "Ruta 1",
+      "it": "Percorso 1"
+    },
+    "type": "route"
+  },
+  {
+    "id": 3,
+    "names": {
+      "de": "Avenitia",
+      "en": "Nuvema Town",
+      "fr": "Renouet",
+      "es": "Nuvema Town",
+      "it": "Nuvema Town"
+    },
+    "type": "route"
+  },
+  {
+    "id": 4,
+    "names": {
+      "de": "Route 2",
+      "en": "Route 2",
+      "fr": "Route 2",
+      "es": "Ruta 2",
+      "it": "Percorso 2"
+    },
+    "type": "route"
+  },
+  {
+    "id": 5,
+    "names": {
+      "de": "Traumbrache",
+      "en": "Dreamyard",
+      "fr": "Vestiges du Rêve",
+      "es": "Dreamyard",
+      "it": "Dreamyard"
+    },
+    "type": "route"
+  },
+  {
+    "id": 6,
+    "names": {
+      "de": "Affen-Geschenk, Traumbrache",
+      "en": "Monkey Gift, Dreamyard",
+      "fr": "Monkey Gift, Dreamyard",
+      "es": "Monkey Gift, Dreamyard",
+      "it": "Monkey Gift, Dreamyard"
+    },
+    "type": "static"
+  },
+  {
+    "id": 7,
+    "names": {
+      "de": "Orion City",
+      "en": "Striaton City",
+      "fr": "Ogoesse",
+      "es": "Striaton City",
+      "it": "Striaton City"
+    },
+    "type": "route"
+  },
+  {
+    "id": 8,
+    "names": {
+      "de": "Route 3",
+      "en": "Route 3",
+      "fr": "Route 3",
+      "es": "Ruta 3",
+      "it": "Percorso 3"
+    },
+    "type": "route"
+  },
+  {
+    "id": 9,
+    "names": {
+      "de": "Grundwassersenke",
+      "en": "Wellspring Cave",
+      "fr": "Veine Souterraine",
+      "es": "Wellspring Cave",
+      "it": "Wellspring Cave"
+    },
+    "type": "route"
+  },
+  {
+    "id": 10,
+    "names": {
+      "de": "Septerna City",
+      "en": "Nacrene City",
+      "fr": "Maillard",
+      "es": "Nacrene City",
+      "it": "Nacrene City"
+    },
+    "type": "route"
+  },
+  {
+    "id": 11,
+    "names": {
+      "de": "Fossil, Septerna City",
+      "en": "Fossil, Nacrene City",
+      "fr": "Fossil, Nacrene City",
+      "es": "Fossil, Nacrene City",
+      "it": "Fossil, Nacrene City"
+    },
+    "type": "static"
+  },
+  {
+    "id": 12,
+    "names": {
+      "de": "Ewigenwald",
+      "en": "Pinwheel Forest",
+      "fr": "Forêt d'Empoigne",
+      "es": "Pinwheel Forest",
+      "it": "Pinwheel Forest"
+    },
+    "type": "route"
+  },
+  {
+    "id": 13,
+    "names": {
+      "de": "Viridium, Ewigenwald",
+      "en": "Virizion, Pinwheel Forest",
+      "fr": "Virizion, Pinwheel Forest",
+      "es": "Virizion, Pinwheel Forest",
+      "it": "Virizion, Pinwheel Forest"
+    },
+    "type": "static"
+  },
+  {
+    "id": 14,
+    "names": {
+      "de": "Stratos City",
+      "en": "Castelia City",
+      "fr": "Volucité",
+      "es": "Castelia City",
+      "it": "Castelia City"
+    },
+    "type": "route"
+  },
+  {
+    "id": 15,
+    "names": {
+      "de": "Route 4",
+      "en": "Route 4",
+      "fr": "Route 4",
+      "es": "Ruta 4",
+      "it": "Percorso 4"
+    },
+    "type": "route"
+  },
+  {
+    "id": 16,
+    "names": {
+      "de": "Wüstenresort",
+      "en": "Desert Resort",
+      "fr": "Désert Délassant",
+      "es": "Desert Resort",
+      "it": "Desert Resort"
+    },
+    "type": "route"
+  },
+  {
+    "id": 17,
+    "names": {
+      "de": "Alter Palast",
+      "en": "Relic Castle",
+      "fr": "Château Enfoui",
+      "es": "Relic Castle",
+      "it": "Relic Castle"
+    },
+    "type": "route"
+  },
+  {
+    "id": 18,
+    "names": {
+      "de": "Route 16",
+      "en": "Route 16",
+      "fr": "Route 16",
+      "es": "Ruta 16",
+      "it": "Percorso 16"
+    },
+    "type": "route"
+  },
+  {
+    "id": 19,
+    "names": {
+      "de": "Hain der Täuschung",
+      "en": "Lostlorn Forest",
+      "fr": "Bois des Illusions",
+      "es": "Lostlorn Forest",
+      "it": "Lostlorn Forest"
+    },
+    "type": "route"
+  },
+  {
+    "id": 20,
+    "names": {
+      "de": "Route 5",
+      "en": "Route 5",
+      "fr": "Route 5",
+      "es": "Ruta 5",
+      "it": "Percorso 5"
+    },
+    "type": "route"
+  },
+  {
+    "id": 21,
+    "names": {
+      "de": "Marea-Zugbrücke",
+      "en": "Driftveil Drawbridge",
+      "fr": "Pont Yoneuve",
+      "es": "Driftveil Drawbridge",
+      "it": "Driftveil Drawbridge"
+    },
+    "type": "route"
+  },
+  {
+    "id": 22,
+    "names": {
+      "de": "Marea City",
+      "en": "Driftveil City",
+      "fr": "Port Yoneuve",
+      "es": "Driftveil City",
+      "it": "Driftveil City"
+    },
+    "type": "route"
+  },
+  {
+    "id": 23,
+    "names": {
+      "de": "Tiefkühlcontainer",
+      "en": "Cold Storage",
+      "fr": "Hangar Frigorifique",
+      "es": "Cold Storage",
+      "it": "Cold Storage"
+    },
+    "type": "route"
+  },
+  {
+    "id": 24,
+    "names": {
+      "de": "Route 6",
+      "en": "Route 6",
+      "fr": "Route 6",
+      "es": "Ruta 6",
+      "it": "Percorso 6"
+    },
+    "type": "route"
+  },
+  {
+    "id": 25,
+    "names": {
+      "de": "Elektrolithhöhle",
+      "en": "Chargestone Cave",
+      "fr": "Grotte Électrolithe",
+      "es": "Chargestone Cave",
+      "it": "Chargestone Cave"
+    },
+    "type": "route"
+  },
+  {
+    "id": 26,
+    "names": {
+      "de": "Panaero-Höhle",
+      "en": "Mistralton Cave",
+      "fr": "Grotte Parsemille",
+      "es": "Mistralton Cave",
+      "it": "Mistralton Cave"
+    },
+    "type": "route"
+  },
+  {
+    "id": 27,
+    "names": {
+      "de": "Kobalium, Panaero-Höhle",
+      "en": "Cobalion, Mistralton Cave",
+      "fr": "Cobalion, Mistralton Cave",
+      "es": "Cobalion, Mistralton Cave",
+      "it": "Cobalion, Mistralton Cave"
+    },
+    "type": "static"
+  },
+  {
+    "id": 28,
+    "names": {
+      "de": "Route 7",
+      "en": "Route 7",
+      "fr": "Route 7",
+      "es": "Ruta 7",
+      "it": "Percorso 7"
+    },
+    "type": "route"
+  },
+  {
+    "id": 29,
+    "names": {
+      "de": "Turm des Himmels",
+      "en": "Celestial Tower",
+      "fr": "Tour des Cieux",
+      "es": "Celestial Tower",
+      "it": "Celestial Tower"
+    },
+    "type": "route"
+  },
+  {
+    "id": 30,
+    "names": {
+      "de": "Wendelberg",
+      "en": "Twist Mountain",
+      "fr": "Mont Foré",
+      "es": "Twist Mountain",
+      "it": "Twist Mountain"
+    },
+    "type": "route"
+  },
+  {
+    "id": 31,
+    "names": {
+      "de": "Nevaio City",
+      "en": "Icirrus City",
+      "fr": "Flocombe",
+      "es": "Icirrus City",
+      "it": "Icirrus City"
+    },
+    "type": "route"
+  },
+  {
+    "id": 32,
+    "names": {
+      "de": "Drachenstiege",
+      "en": "Dragonspiral Tower",
+      "fr": "Tour Dragospire",
+      "es": "Dragonspiral Tower",
+      "it": "Dragonspiral Tower"
+    },
+    "type": "route"
+  },
+  {
+    "id": 33,
+    "names": {
+      "de": "Moor von Nevaio",
+      "en": "Moor of Icirrus",
+      "fr": "Tourbière Flocombe",
+      "es": "Moor of Icirrus",
+      "it": "Moor of Icirrus"
+    },
+    "type": "route"
+  },
+  {
+    "id": 34,
+    "names": {
+      "de": "Route 8",
+      "en": "Route 8",
+      "fr": "Route 8",
+      "es": "Ruta 8",
+      "it": "Percorso 8"
+    },
+    "type": "route"
+  },
+  {
+    "id": 35,
+    "names": {
+      "de": "Route 9",
+      "en": "Route 9",
+      "fr": "Route 9",
+      "es": "Ruta 9",
+      "it": "Percorso 9"
+    },
+    "type": "route"
+  },
+  {
+    "id": 36,
+    "names": {
+      "de": "Route 10",
+      "en": "Route 10",
+      "fr": "Route 10",
+      "es": "Ruta 10",
+      "it": "Percorso 10"
+    },
+    "type": "route"
+  },
+  {
+    "id": 37,
+    "names": {
+      "de": "Siegesstraße",
+      "en": "Victory Road",
+      "fr": "Route Victoire",
+      "es": "Calle Victoria",
+      "it": "Via Vittoria"
+    },
+    "type": "route"
+  },
+  {
+    "id": 38,
+    "names": {
+      "de": "Terrakium, Siegesstraße",
+      "en": "Terrakion, Victory Road",
+      "fr": "Terrakion, Victory Road",
+      "es": "Terrakion, Victory Road",
+      "it": "Terrakion, Victory Road"
+    },
+    "type": "static"
+  },
+  {
+    "id": 39,
+    "names": {
+      "de": "Schloss von N",
+      "en": "N's Castle",
+      "fr": "Palais de N",
+      "es": "N's Castle",
+      "it": "N's Castle"
+    },
+    "type": "route"
+  },
+  {
+    "id": 40,
+    "names": {
+      "de": "Reshiram, Schloss von N",
+      "en": "Reshiram, N's Castle",
+      "fr": "Reshiram, N's Castle",
+      "es": "Reshiram, N's Castle",
+      "it": "Reshiram, N's Castle"
+    },
+    "type": "static"
+  },
+  {
+    "id": 41,
+    "names": {
+      "de": "Route 11",
+      "en": "Route 11",
+      "fr": "Route 11",
+      "es": "Ruta 11",
+      "it": "Percorso 11"
+    },
+    "type": "route",
+    "postgame": true
+  },
+  {
+    "id": 42,
+    "names": {
+      "de": "Dorfbrücke",
+      "en": "Village Bridge",
+      "fr": "Pont du Hameau",
+      "es": "Village Bridge",
+      "it": "Village Bridge"
+    },
+    "type": "route",
+    "postgame": true
+  },
+  {
+    "id": 43,
+    "names": {
+      "de": "Route 12",
+      "en": "Route 12",
+      "fr": "Route 12",
+      "es": "Ruta 12",
+      "it": "Percorso 12"
+    },
+    "type": "route",
+    "postgame": true
+  },
+  {
+    "id": 44,
+    "names": {
+      "de": "Ondula",
+      "en": "Undella Town",
+      "fr": "Vaguelone",
+      "es": "Undella Town",
+      "it": "Undella Town"
+    },
+    "type": "route",
+    "postgame": true
+  },
+  {
+    "id": 45,
+    "names": {
+      "de": "Bucht von Ondula",
+      "en": "Undella Bay",
+      "fr": "Baie Vaguelone",
+      "es": "Undella Bay",
+      "it": "Undella Bay"
+    },
+    "type": "route",
+    "postgame": true
+  },
+  {
+    "id": 46,
+    "names": {
+      "de": "Route 13",
+      "en": "Route 13",
+      "fr": "Route 13",
+      "es": "Ruta 13",
+      "it": "Percorso 13"
+    },
+    "type": "route",
+    "postgame": true
+  },
+  {
+    "id": 47,
+    "names": {
+      "de": "Riesengrotte",
+      "en": "Giant Chasm",
+      "fr": "Grotte Cyclopéenne",
+      "es": "Giant Chasm",
+      "it": "Giant Chasm"
+    },
+    "type": "route",
+    "postgame": true
+  },
+  {
+    "id": 48,
+    "names": {
+      "de": "Kyurem, Riesengrotte",
+      "en": "Kyurem, Giant Chasm",
+      "fr": "Kyurem, Giant Chasm",
+      "es": "Kyurem, Giant Chasm",
+      "it": "Kyurem, Giant Chasm"
+    },
+    "type": "static",
+    "postgame": true
+  },
+  {
+    "id": 49,
+    "names": {
+      "de": "Route 14",
+      "en": "Route 14",
+      "fr": "Route 14",
+      "es": "Ruta 14",
+      "it": "Percorso 14"
+    },
+    "type": "route",
+    "postgame": true
+  },
+  {
+    "id": 50,
+    "names": {
+      "de": "Wunderbrücke",
+      "en": "Marvelous Bridge",
+      "fr": "Pont de l'Inconnu",
+      "es": "Marvelous Bridge",
+      "it": "Marvelous Bridge"
+    },
+    "type": "route",
+    "postgame": true
+  },
+  {
+    "id": 51,
+    "names": {
+      "de": "Route 15",
+      "en": "Route 15",
+      "fr": "Route 15",
+      "es": "Ruta 15",
+      "it": "Percorso 15"
+    },
+    "type": "route",
+    "postgame": true
+  },
+  {
+    "id": 52,
+    "names": {
+      "de": "Schrein der Ernte",
+      "en": "Abundant Shrine",
+      "fr": "Autel Abondance",
+      "es": "Abundant Shrine",
+      "it": "Abundant Shrine"
+    },
+    "type": "route",
+    "postgame": true
+  },
+  {
+    "id": 53,
+    "names": {
+      "de": "Demeteros, Schrein der Ernte",
+      "en": "Landorus, Abundant Shrine",
+      "fr": "Landorus, Abundant Shrine",
+      "es": "Landorus, Abundant Shrine",
+      "it": "Landorus, Abundant Shrine"
+    },
+    "type": "static",
+    "postgame": true
+  },
+  {
+    "id": 54,
+    "names": {
+      "de": "Route 18",
+      "en": "Route 18",
+      "fr": "Route 18",
+      "es": "Ruta 18",
+      "it": "Percorso 18"
+    },
+    "type": "route",
+    "postgame": true
+  },
+  {
+    "id": 55,
+    "names": {
+      "de": "Ignivor-Ei, Route 18",
+      "en": "Larvesta Egg, Route 18",
+      "fr": "Larvesta Egg, Route 18",
+      "es": "Larvesta Egg, Route 18",
+      "it": "Larvesta Egg, Route 18"
+    },
+    "type": "static",
+    "postgame": true
+  },
+  {
+    "id": 56,
+    "names": {
+      "de": "P2-Labor",
+      "en": "P2 Laboratory",
+      "fr": "Labo P2",
+      "es": "P2 Laboratory",
+      "it": "P2 Laboratory"
+    },
+    "type": "route",
+    "postgame": true
+  },
+  {
+    "id": 57,
+    "names": {
+      "de": "Route 17",
+      "en": "Route 17",
+      "fr": "Route 17",
+      "es": "Ruta 17",
+      "it": "Percorso 17"
+    },
+    "type": "route",
+    "postgame": true
+  },
+  {
+    "id": 58,
+    "names": {
+      "de": "Höhle der Schulung",
+      "en": "Challenger's Cave",
+      "fr": "Antre d'Entraînement",
+      "es": "Challenger's Cave",
+      "it": "Challenger's Cave"
+    },
+    "type": "route",
+    "postgame": true
+  },
+  {
+    "id": 59,
+    "names": {
+      "de": "Kammer der Weisung",
+      "en": "Guidance Chamber",
+      "fr": "Espace Guide",
+      "es": "Guidance Chamber",
+      "it": "Guidance Chamber"
+    },
+    "type": "route",
+    "postgame": true
+  },
+  {
+    "id": 60,
+    "names": {
+      "de": "Kammer der Prüfung",
+      "en": "Trial Chamber",
+      "fr": "Salle Épreuve",
+      "es": "Trial Chamber",
+      "it": "Trial Chamber"
+    },
+    "type": "route",
+    "postgame": true
+  },
+  {
+    "id": 61,
+    "names": {
+      "de": "Ramoth, Alter Palast",
+      "en": "Volcarona, Relic Castle",
+      "fr": "Volcarona, Relic Castle",
+      "es": "Volcarona, Relic Castle",
+      "it": "Volcarona, Relic Castle"
+    },
+    "type": "static",
+    "postgame": true
+  },
+  {
+    "id": 62,
+    "names": {
+      "de": "Boreos (wandernd)",
+      "en": "Tornadus (roaming)",
+      "fr": "Tornadus (roaming)",
+      "es": "Tornadus (roaming)",
+      "it": "Tornadus (roaming)"
+    },
+    "type": "static",
+    "postgame": true
+  },
+  {
+    "id": 63,
+    "names": {
+      "de": "Freiheitsgarten",
+      "en": "Liberty Garden",
+      "fr": "Île Liberté",
+      "es": "Liberty Garden",
+      "it": "Liberty Garden"
+    },
+    "type": "route",
+    "postgame": true
+  },
+  {
+    "id": 64,
+    "names": {
+      "de": "Victini, Freiheitsgarten",
+      "en": "Victini, Liberty Garden",
+      "fr": "Victini, Liberty Garden",
+      "es": "Victini, Liberty Garden",
+      "it": "Victini, Liberty Garden"
+    },
+    "type": "static",
+    "postgame": true
+  }
+]

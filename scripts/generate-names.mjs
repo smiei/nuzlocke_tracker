@@ -453,6 +453,9 @@ async function main() {
     const batch = pokemon.slice(i, i + batchSize);
     await Promise.all(
       batch.map(async (p) => {
+        // Alternate formes (baseId set, ids 10001+) have no pokemon-species
+        // endpoint - they carry their species' names, filled in below.
+        if (p.baseId !== undefined) return;
         const data = await fetchJson(`https://pokeapi.co/api/v2/pokemon-species/${p.id}`);
         if (!data) throw new Error(`species ${p.id} not found`);
         speciesNames.set(p.id, pickLangs(data.names));
@@ -462,15 +465,13 @@ async function main() {
     await new Promise((r) => setTimeout(r, 100));
   }
 
+  // Spread the existing entry rather than rebuilding a fixed shape: fields
+  // added since this script was written (legendary, weight, baseId,
+  // formNames) must survive a name refresh.
   const newPokemon = pokemon.map((p) => {
     const base = baseNames(p, "name_de", "name_en");
-    return {
-      id: p.id,
-      names: buildNames(base, speciesNames.get(p.id)),
-      types: p.types,
-      family_id: p.family_id,
-      stats: p.stats,
-    };
+    const generated = speciesNames.get(p.baseId ?? p.id);
+    return { ...p, names: buildNames(base, generated) };
   });
   await writeData("pokemon.json", newPokemon);
   console.log(`pokemon.json: ${newPokemon.length} entries`);

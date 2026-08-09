@@ -1,0 +1,669 @@
+[
+  {
+    "from": 61,
+    "to": 186,
+    "comment": "Quaputzi -> Quaxo",
+    "method": {
+      "kind": "levelHeld",
+      "item": "kings-rock"
+    },
+    "category": "impossible"
+  },
+  {
+    "from": 64,
+    "to": 65,
+    "comment": "Kadabra -> Simsala",
+    "method": {
+      "kind": "level",
+      "level": 37
+    },
+    "category": "impossible"
+  },
+  {
+    "from": 67,
+    "to": 68,
+    "comment": "Maschock -> Machomei",
+    "method": {
+      "kind": "level",
+      "level": 37
+    },
+    "category": "impossible"
+  },
+  {
+    "from": 75,
+    "to": 76,
+    "comment": "Georok -> Geowaz",
+    "method": {
+      "kind": "level",
+      "level": 37
+    },
+    "category": "impossible"
+  },
+  {
+    "from": 79,
+    "to": 199,
+    "comment": "Flegmon -> Laschoking",
+    "method": {
+      "kind": "item",
+      "item": "water-stone"
+    },
+    "category": "impossible"
+  },
+  {
+    "from": 93,
+    "to": 94,
+    "comment": "Alpollo -> Gengar",
+    "method": {
+      "kind": "level",
+      "level": 37
+    },
+    "category": "impossible"
+  },
+  {
+    "from": 95,
+    "to": 208,
+    "comment": "Onix -> Stahlos",
+    "method": {
+      "kind": "levelHeld",
+      "item": "metal-coat"
+    },
+    "category": "impossible"
+  },
+  {
+    "from": 112,
+    "to": 464,
+    "comment": "Rizeros -> Rihornior",
+    "method": {
+      "kind": "levelHeld",
+      "item": "protector"
+    },
+    "category": "impossible"
+  },
+  {
+    "from": 117,
+    "to": 230,
+    "comment": "Seemon -> Seedraking",
+    "method": {
+      "kind": "levelHeld",
+      "item": "dragon-scale"
+    },
+    "category": "impossible"
+  },
+  {
+    "from": 123,
+    "to": 212,
+    "comment": "Sichlor -> Scherox",
+    "method": {
+      "kind": "levelHeld",
+      "item": "metal-coat"
+    },
+    "category": "impossible"
+  },
+  {
+    "from": 125,
+    "to": 466,
+    "comment": "Elektek -> Elevoltek",
+    "method": {
+      "kind": "levelHeld",
+      "item": "electirizer"
+    },
+    "category": "impossible"
+  },
+  {
+    "from": 126,
+    "to": 467,
+    "comment": "Magmar -> Magbrant",
+    "method": {
+      "kind": "levelHeld",
+      "item": "magmarizer"
+    },
+    "category": "impossible"
+  },
+  {
+    "from": 137,
+    "to": 233,
+    "comment": "Porygon -> Porygon2",
+    "method": {
+      "kind": "levelHeld",
+      "item": "up-grade"
+    },
+    "category": "impossible"
+  },
+  {
+    "from": 233,
+    "to": 474,
+    "comment": "Porygon2 -> Porygon-Z",
+    "method": {
+      "kind": "levelHeld",
+      "item": "dubious-disc"
+    },
+    "category": "impossible"
+  },
+  {
+    "from": 349,
+    "to": 350,
+    "comment": "Barschwa -> Milotic",
+    "method": {
+      "kind": "levelHeld",
+      "item": "prism-scale"
+    },
+    "category": "impossible"
+  },
+  {
+    "from": 356,
+    "to": 477,
+    "comment": "Zwirrklop -> Zwirrfinst",
+    "method": {
+      "kind": "levelHeld",
+      "item": "reaper-cloth"
+    },
+    "category": "impossible"
+  },
+  {
+    "from": 366,
+    "to": 367,
+    "comment": "Perlu -> Aalabyss",
+    "method": {
+      "kind": "levelHeld",
+      "item": "deep-sea-tooth"
+    },
+    "category": "impossible"
+  },
+  {
+    "from": 366,
+    "to": 368,
+    "comment": "Perlu -> Saganabyss",
+    "method": {
+      "kind": "levelHeld",
+      "item": "deep-sea-scale"
+    },
+    "category": "impossible"
+  },
+  {
+    "from": 525,
+    "to": 526,
+    "comment": "Sedimantur -> Brockoloss",
+    "method": {
+      "kind": "level",
+      "level": 37
+    },
+    "category": "impossible"
+  },
+  {
+    "from": 533,
+    "to": 534,
+    "comment": "Strepoli -> Meistagrif",
+    "method": {
+      "kind": "level",
+      "level": 37
+    },
+    "category": "impossible"
+  },
+  {
+    "from": 588,
+    "to": 589,
+    "comment": "Laukaps -> Cavalanzas",
+    "method": {
+      "kind": "levelWith",
+      "name": "Schnuthelm"
+    },
+    "category": "impossible"
+  },
+  {
+    "from": 616,
+    "to": 617,
+    "comment": "Schnuthelm -> Hydragil",
+    "method": {
+      "kind": "levelWith",
+      "name": "Laukaps"
+    },
+    "category": "impossible"
+  },
+  {
+    "from": 111,
+    "to": 112,
+    "comment": "Rihorn -> Rizeros",
+    "method": {
+      "kind": "level",
+      "level": 30
+    },
+    "category": "easier"
+  },
+  {
+    "from": 116,
+    "to": 117,
+    "comment": "Seeper -> Seemon",
+    "method": {
+      "kind": "level",
+      "level": 30
+    },
+    "category": "easier"
+  },
+  {
+    "from": 148,
+    "to": 149,
+    "comment": "Dragonir -> Dragoran",
+    "method": {
+      "kind": "level",
+      "level": 40
+    },
+    "category": "easier"
+  },
+  {
+    "from": 220,
+    "to": 221,
+    "comment": "Quiekel -> Keifel",
+    "method": {
+      "kind": "level",
+      "level": 30
+    },
+    "category": "easier"
+  },
+  {
+    "from": 247,
+    "to": 248,
+    "comment": "Pupitar -> Despotar",
+    "method": {
+      "kind": "level",
+      "level": 40
+    },
+    "category": "easier"
+  },
+  {
+    "from": 304,
+    "to": 305,
+    "comment": "Stollunior -> Stollrak",
+    "method": {
+      "kind": "level",
+      "level": 30
+    },
+    "category": "easier"
+  },
+  {
+    "from": 305,
+    "to": 306,
+    "comment": "Stollrak -> Stolloss",
+    "method": {
+      "kind": "level",
+      "level": 40
+    },
+    "category": "easier"
+  },
+  {
+    "from": 328,
+    "to": 329,
+    "comment": "Knacklion -> Vibrava",
+    "method": {
+      "kind": "level",
+      "level": 30
+    },
+    "category": "easier"
+  },
+  {
+    "from": 329,
+    "to": 330,
+    "comment": "Vibrava -> Libelldra",
+    "method": {
+      "kind": "level",
+      "level": 40
+    },
+    "category": "easier"
+  },
+  {
+    "from": 355,
+    "to": 356,
+    "comment": "Zwirrlicht -> Zwirrklop",
+    "method": {
+      "kind": "level",
+      "level": 30
+    },
+    "category": "easier"
+  },
+  {
+    "from": 361,
+    "to": 362,
+    "comment": "Schneppke -> Firnontor",
+    "method": {
+      "kind": "level",
+      "level": 40
+    },
+    "category": "easier"
+  },
+  {
+    "from": 363,
+    "to": 364,
+    "comment": "Seemops -> Seejong",
+    "method": {
+      "kind": "level",
+      "level": 30
+    },
+    "category": "easier"
+  },
+  {
+    "from": 364,
+    "to": 365,
+    "comment": "Seejong -> Walraisa",
+    "method": {
+      "kind": "level",
+      "level": 40
+    },
+    "category": "easier"
+  },
+  {
+    "from": 372,
+    "to": 373,
+    "comment": "Draschel -> Brutalanda",
+    "method": {
+      "kind": "level",
+      "level": 40
+    },
+    "category": "easier"
+  },
+  {
+    "from": 375,
+    "to": 376,
+    "comment": "Metang -> Metagross",
+    "method": {
+      "kind": "level",
+      "level": 40
+    },
+    "category": "easier"
+  },
+  {
+    "from": 444,
+    "to": 445,
+    "comment": "Knarksel -> Knakrack",
+    "method": {
+      "kind": "level",
+      "level": 40
+    },
+    "category": "easier"
+  },
+  {
+    "from": 574,
+    "to": 575,
+    "comment": "Mollimorba -> Hypnomorba",
+    "method": {
+      "kind": "level",
+      "level": 30
+    },
+    "category": "easier"
+  },
+  {
+    "from": 575,
+    "to": 576,
+    "comment": "Hypnomorba -> Morbitesse",
+    "method": {
+      "kind": "level",
+      "level": 40
+    },
+    "category": "easier"
+  },
+  {
+    "from": 577,
+    "to": 578,
+    "comment": "Monozyto -> Mitodos",
+    "method": {
+      "kind": "level",
+      "level": 30
+    },
+    "category": "easier"
+  },
+  {
+    "from": 578,
+    "to": 579,
+    "comment": "Mitodos -> Zytomega",
+    "method": {
+      "kind": "level",
+      "level": 40
+    },
+    "category": "easier"
+  },
+  {
+    "from": 582,
+    "to": 583,
+    "comment": "Gelatini -> Gelatroppo",
+    "method": {
+      "kind": "level",
+      "level": 30
+    },
+    "category": "easier"
+  },
+  {
+    "from": 583,
+    "to": 584,
+    "comment": "Gelatroppo -> Gelatwino",
+    "method": {
+      "kind": "level",
+      "level": 40
+    },
+    "category": "easier"
+  },
+  {
+    "from": 599,
+    "to": 600,
+    "comment": "Klikk -> Kliklak",
+    "method": {
+      "kind": "level",
+      "level": 30
+    },
+    "category": "easier"
+  },
+  {
+    "from": 600,
+    "to": 601,
+    "comment": "Kliklak -> Klikdiklak",
+    "method": {
+      "kind": "level",
+      "level": 40
+    },
+    "category": "easier"
+  },
+  {
+    "from": 602,
+    "to": 603,
+    "comment": "Zapplardin -> Zapplalek",
+    "method": {
+      "kind": "level",
+      "level": 30
+    },
+    "category": "easier"
+  },
+  {
+    "from": 605,
+    "to": 606,
+    "comment": "Pygraulon -> Megalon",
+    "method": {
+      "kind": "level",
+      "level": 40
+    },
+    "category": "easier"
+  },
+  {
+    "from": 607,
+    "to": 608,
+    "comment": "Lichtel -> Laternecto",
+    "method": {
+      "kind": "level",
+      "level": 30
+    },
+    "category": "easier"
+  },
+  {
+    "from": 610,
+    "to": 611,
+    "comment": "Milza -> Sharfax",
+    "method": {
+      "kind": "level",
+      "level": 30
+    },
+    "category": "easier"
+  },
+  {
+    "from": 611,
+    "to": 612,
+    "comment": "Sharfax -> Maxax",
+    "method": {
+      "kind": "level",
+      "level": 40
+    },
+    "category": "easier"
+  },
+  {
+    "from": 619,
+    "to": 620,
+    "comment": "Lin-Fu -> Wie-Shu",
+    "method": {
+      "kind": "level",
+      "level": 40
+    },
+    "category": "easier"
+  },
+  {
+    "from": 622,
+    "to": 623,
+    "comment": "Golbit -> Golgantes",
+    "method": {
+      "kind": "level",
+      "level": 40
+    },
+    "category": "easier"
+  },
+  {
+    "from": 624,
+    "to": 625,
+    "comment": "Gladiantri -> Caesurio",
+    "method": {
+      "kind": "level",
+      "level": 40
+    },
+    "category": "easier"
+  },
+  {
+    "from": 627,
+    "to": 628,
+    "comment": "Geronimatz -> Washakwil",
+    "method": {
+      "kind": "level",
+      "level": 40
+    },
+    "category": "easier"
+  },
+  {
+    "from": 629,
+    "to": 630,
+    "comment": "Skallyk -> Grypheldis",
+    "method": {
+      "kind": "level",
+      "level": 40
+    },
+    "category": "easier"
+  },
+  {
+    "from": 633,
+    "to": 634,
+    "comment": "Kapuno -> Duodino",
+    "method": {
+      "kind": "level",
+      "level": 30
+    },
+    "category": "easier"
+  },
+  {
+    "from": 634,
+    "to": 635,
+    "comment": "Duodino -> Trikephalo",
+    "method": {
+      "kind": "level",
+      "level": 40
+    },
+    "category": "easier"
+  },
+  {
+    "from": 636,
+    "to": 637,
+    "comment": "Ignivor -> Ramoth",
+    "method": {
+      "kind": "level",
+      "level": 40
+    },
+    "category": "easier"
+  },
+  {
+    "from": 133,
+    "to": 196,
+    "comment": "Evoli -> Psiana",
+    "method": {
+      "kind": "item",
+      "item": "sun-stone"
+    },
+    "category": "timeBased"
+  },
+  {
+    "from": 133,
+    "to": 197,
+    "comment": "Evoli -> Nachtara",
+    "method": {
+      "kind": "item",
+      "item": "moon-stone"
+    },
+    "category": "timeBased"
+  },
+  {
+    "from": 207,
+    "to": 472,
+    "comment": "Skorgla -> Skorgro",
+    "method": {
+      "kind": "levelHeld",
+      "item": "razor-fang"
+    },
+    "category": "timeBased"
+  },
+  {
+    "from": 215,
+    "to": 461,
+    "comment": "Sniebel -> Snibunna",
+    "method": {
+      "kind": "levelHeld",
+      "item": "razor-claw"
+    },
+    "category": "timeBased"
+  },
+  {
+    "from": 406,
+    "to": 315,
+    "comment": "Knospi -> Roselia",
+    "method": {
+      "kind": "happiness"
+    },
+    "category": "timeBased"
+  },
+  {
+    "from": 433,
+    "to": 358,
+    "comment": "Klingplim -> Palimpalim",
+    "method": {
+      "kind": "happiness"
+    },
+    "category": "timeBased"
+  },
+  {
+    "from": 440,
+    "to": 113,
+    "comment": "Wonneira -> Chaneira",
+    "method": {
+      "kind": "levelHeld",
+      "item": "oval-stone"
+    },
+    "category": "timeBased"
+  },
+  {
+    "from": 447,
+    "to": 448,
+    "comment": "Riolu -> Lucario",
+    "method": {
+      "kind": "happiness"
+    },
+    "category": "timeBased"
+  }
+]
