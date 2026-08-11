@@ -89,7 +89,7 @@
     "types": [
       "fire"
     ],
-    "family_id": 2,
+    "family_id": 4,
     "stats": {
       "KP": 39,
       "Ang.": 52,
@@ -114,7 +114,7 @@
     "types": [
       "fire"
     ],
-    "family_id": 2,
+    "family_id": 4,
     "stats": {
       "KP": 58,
       "Ang.": 64,
@@ -140,7 +140,7 @@
       "fire",
       "flying"
     ],
-    "family_id": 2,
+    "family_id": 4,
     "stats": {
       "KP": 78,
       "Ang.": 84,
@@ -165,7 +165,7 @@
     "types": [
       "water"
     ],
-    "family_id": 3,
+    "family_id": 7,
     "stats": {
       "KP": 44,
       "Ang.": 48,
@@ -190,7 +190,7 @@
     "types": [
       "water"
     ],
-    "family_id": 3,
+    "family_id": 7,
     "stats": {
       "KP": 59,
       "Ang.": 63,
@@ -215,7 +215,7 @@
     "types": [
       "water"
     ],
-    "family_id": 3,
+    "family_id": 7,
     "stats": {
       "KP": 79,
       "Ang.": 83,
@@ -240,7 +240,7 @@
     "types": [
       "bug"
     ],
-    "family_id": 4,
+    "family_id": 10,
     "stats": {
       "KP": 45,
       "Ang.": 30,
@@ -265,7 +265,7 @@
     "types": [
       "bug"
     ],
-    "family_id": 4,
+    "family_id": 10,
     "stats": {
       "KP": 50,
       "Ang.": 20,
@@ -291,7 +291,7 @@
       "bug",
       "flying"
     ],
-    "family_id": 4,
+    "family_id": 10,
     "stats": {
       "KP": 60,
       "Ang.": 45,
@@ -317,7 +317,7 @@
       "bug",
       "poison"
     ],
-    "family_id": 5,
+    "family_id": 13,
     "stats": {
       "KP": 40,
       "Ang.": 35,
@@ -343,7 +343,7 @@
       "bug",
       "poison"
     ],
-    "family_id": 5,
+    "family_id": 13,
     "stats": {
       "KP": 45,
       "Ang.": 25,
@@ -369,7 +369,7 @@
       "bug",
       "poison"
     ],
-    "family_id": 5,
+    "family_id": 13,
     "stats": {
       "KP": 65,
       "Ang.": 90,
@@ -395,7 +395,7 @@
       "normal",
       "flying"
     ],
-    "family_id": 6,
+    "family_id": 16,
     "stats": {
       "KP": 40,
       "Ang.": 45,
@@ -421,7 +421,7 @@
       "normal",
       "flying"
     ],
-    "family_id": 6,
+    "family_id": 16,
     "stats": {
       "KP": 63,
       "Ang.": 60,
@@ -447,7 +447,7 @@
       "normal",
       "flying"
     ],
-    "family_id": 6,
+    "family_id": 16,
     "stats": {
       "KP": 83,
       "Ang.": 80,
@@ -472,7 +472,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 7,
+    "family_id": 19,
     "stats": {
       "KP": 30,
       "Ang.": 56,
@@ -497,7 +497,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 7,
+    "family_id": 19,
     "stats": {
       "KP": 55,
       "Ang.": 81,
@@ -523,7 +523,7 @@
       "normal",
       "flying"
     ],
-    "family_id": 8,
+    "family_id": 21,
     "stats": {
       "KP": 40,
       "Ang.": 60,
@@ -549,7 +549,7 @@
       "normal",
       "flying"
     ],
-    "family_id": 8,
+    "family_id": 21,
     "stats": {
       "KP": 65,
       "Ang.": 90,
@@ -574,7 +574,7 @@
     "types": [
       "poison"
     ],
-    "family_id": 9,
+    "family_id": 23,
     "stats": {
       "KP": 35,
       "Ang.": 60,
@@ -599,7 +599,7 @@
     "types": [
       "poison"
     ],
-    "family_id": 9,
+    "family_id": 23,
     "stats": {
       "KP": 60,
       "Ang.": 95,
@@ -624,7 +624,7 @@
     "types": [
       "electric"
     ],
-    "family_id": 10,
+    "family_id": 172,
     "stats": {
       "KP": 35,
       "Ang.": 55,
@@ -649,7 +649,7 @@
     "types": [
       "electric"
     ],
-    "family_id": 10,
+    "family_id": 172,
     "stats": {
       "KP": 60,
       "Ang.": 90,
@@ -674,7 +674,7 @@
     "types": [
       "ground"
     ],
-    "family_id": 11,
+    "family_id": 27,
     "stats": {
       "KP": 50,
       "Ang.": 75,
@@ -699,7 +699,7 @@
     "types": [
       "ground"
     ],
-    "family_id": 11,
+    "family_id": 27,
     "stats": {
       "KP": 75,
       "Ang.": 100,
@@ -724,7 +724,7 @@
     "types": [
       "poison"
     ],
-    "family_id": 12,
+    "family_id": 29,
     "stats": {
       "KP": 55,
       "Ang.": 47,
@@ -749,7 +749,7 @@
     "types": [
       "poison"
     ],
-    "family_id": 12,
+    "family_id": 29,
     "stats": {
       "KP": 70,
       "Ang.": 62,
@@ -775,7 +775,7 @@
       "poison",
       "ground"
     ],
-    "family_id": 12,
+    "family_id": 29,
     "stats": {
       "KP": 90,
       "Ang.": 92,
@@ -800,7 +800,7 @@
     "types": [
       "poison"
     ],
-    "family_id": 13,
+    "family_id": 32,
     "stats": {
       "KP": 46,
       "Ang.": 57,
@@ -825,7 +825,7 @@
     "types": [
       "poison"
     ],
-    "family_id": 13,
+    "family_id": 32,
     "stats": {
       "KP": 61,
       "Ang.": 72,
@@ -851,7 +851,7 @@
       "poison",
       "ground"
     ],
-    "family_id": 13,
+    "family_id": 32,
     "stats": {
       "KP": 81,
       "Ang.": 102,
@@ -876,7 +876,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 14,
+    "family_id": 173,
     "stats": {
       "KP": 70,
       "Ang.": 45,
@@ -901,7 +901,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 14,
+    "family_id": 173,
     "stats": {
       "KP": 95,
       "Ang.": 70,
@@ -926,7 +926,7 @@
     "types": [
       "fire"
     ],
-    "family_id": 15,
+    "family_id": 37,
     "stats": {
       "KP": 38,
       "Ang.": 41,
@@ -951,7 +951,7 @@
     "types": [
       "fire"
     ],
-    "family_id": 15,
+    "family_id": 37,
     "stats": {
       "KP": 73,
       "Ang.": 76,
@@ -976,7 +976,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 16,
+    "family_id": 174,
     "stats": {
       "KP": 115,
       "Ang.": 45,
@@ -1001,7 +1001,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 16,
+    "family_id": 174,
     "stats": {
       "KP": 140,
       "Ang.": 70,
@@ -1027,7 +1027,7 @@
       "poison",
       "flying"
     ],
-    "family_id": 17,
+    "family_id": 41,
     "stats": {
       "KP": 40,
       "Ang.": 45,
@@ -1053,7 +1053,7 @@
       "poison",
       "flying"
     ],
-    "family_id": 17,
+    "family_id": 41,
     "stats": {
       "KP": 75,
       "Ang.": 80,
@@ -1079,7 +1079,7 @@
       "grass",
       "poison"
     ],
-    "family_id": 18,
+    "family_id": 43,
     "stats": {
       "KP": 45,
       "Ang.": 50,
@@ -1105,7 +1105,7 @@
       "grass",
       "poison"
     ],
-    "family_id": 18,
+    "family_id": 43,
     "stats": {
       "KP": 60,
       "Ang.": 65,
@@ -1131,7 +1131,7 @@
       "grass",
       "poison"
     ],
-    "family_id": 18,
+    "family_id": 43,
     "stats": {
       "KP": 75,
       "Ang.": 80,
@@ -1157,7 +1157,7 @@
       "bug",
       "grass"
     ],
-    "family_id": 19,
+    "family_id": 46,
     "stats": {
       "KP": 35,
       "Ang.": 70,
@@ -1183,7 +1183,7 @@
       "bug",
       "grass"
     ],
-    "family_id": 19,
+    "family_id": 46,
     "stats": {
       "KP": 60,
       "Ang.": 95,
@@ -1209,7 +1209,7 @@
       "bug",
       "poison"
     ],
-    "family_id": 20,
+    "family_id": 48,
     "stats": {
       "KP": 60,
       "Ang.": 55,
@@ -1235,7 +1235,7 @@
       "bug",
       "poison"
     ],
-    "family_id": 20,
+    "family_id": 48,
     "stats": {
       "KP": 70,
       "Ang.": 65,
@@ -1260,7 +1260,7 @@
     "types": [
       "ground"
     ],
-    "family_id": 21,
+    "family_id": 50,
     "stats": {
       "KP": 10,
       "Ang.": 55,
@@ -1285,7 +1285,7 @@
     "types": [
       "ground"
     ],
-    "family_id": 21,
+    "family_id": 50,
     "stats": {
       "KP": 35,
       "Ang.": 100,
@@ -1310,7 +1310,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 22,
+    "family_id": 52,
     "stats": {
       "KP": 40,
       "Ang.": 45,
@@ -1335,7 +1335,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 22,
+    "family_id": 52,
     "stats": {
       "KP": 65,
       "Ang.": 70,
@@ -1360,7 +1360,7 @@
     "types": [
       "water"
     ],
-    "family_id": 23,
+    "family_id": 54,
     "stats": {
       "KP": 50,
       "Ang.": 52,
@@ -1385,7 +1385,7 @@
     "types": [
       "water"
     ],
-    "family_id": 23,
+    "family_id": 54,
     "stats": {
       "KP": 80,
       "Ang.": 82,
@@ -1410,7 +1410,7 @@
     "types": [
       "fighting"
     ],
-    "family_id": 24,
+    "family_id": 56,
     "stats": {
       "KP": 40,
       "Ang.": 80,
@@ -1435,7 +1435,7 @@
     "types": [
       "fighting"
     ],
-    "family_id": 24,
+    "family_id": 56,
     "stats": {
       "KP": 65,
       "Ang.": 105,
@@ -1460,7 +1460,7 @@
     "types": [
       "fire"
     ],
-    "family_id": 25,
+    "family_id": 58,
     "stats": {
       "KP": 55,
       "Ang.": 70,
@@ -1485,7 +1485,7 @@
     "types": [
       "fire"
     ],
-    "family_id": 25,
+    "family_id": 58,
     "stats": {
       "KP": 90,
       "Ang.": 110,
@@ -1510,7 +1510,7 @@
     "types": [
       "water"
     ],
-    "family_id": 26,
+    "family_id": 60,
     "stats": {
       "KP": 40,
       "Ang.": 50,
@@ -1535,7 +1535,7 @@
     "types": [
       "water"
     ],
-    "family_id": 26,
+    "family_id": 60,
     "stats": {
       "KP": 65,
       "Ang.": 65,
@@ -1561,7 +1561,7 @@
       "water",
       "fighting"
     ],
-    "family_id": 26,
+    "family_id": 60,
     "stats": {
       "KP": 90,
       "Ang.": 95,
@@ -1586,7 +1586,7 @@
     "types": [
       "psychic"
     ],
-    "family_id": 27,
+    "family_id": 63,
     "stats": {
       "KP": 25,
       "Ang.": 20,
@@ -1611,7 +1611,7 @@
     "types": [
       "psychic"
     ],
-    "family_id": 27,
+    "family_id": 63,
     "stats": {
       "KP": 40,
       "Ang.": 35,
@@ -1636,7 +1636,7 @@
     "types": [
       "psychic"
     ],
-    "family_id": 27,
+    "family_id": 63,
     "stats": {
       "KP": 55,
       "Ang.": 50,
@@ -1661,7 +1661,7 @@
     "types": [
       "fighting"
     ],
-    "family_id": 28,
+    "family_id": 66,
     "stats": {
       "KP": 70,
       "Ang.": 80,
@@ -1686,7 +1686,7 @@
     "types": [
       "fighting"
     ],
-    "family_id": 28,
+    "family_id": 66,
     "stats": {
       "KP": 80,
       "Ang.": 100,
@@ -1711,7 +1711,7 @@
     "types": [
       "fighting"
     ],
-    "family_id": 28,
+    "family_id": 66,
     "stats": {
       "KP": 90,
       "Ang.": 130,
@@ -1737,7 +1737,7 @@
       "grass",
       "poison"
     ],
-    "family_id": 29,
+    "family_id": 69,
     "stats": {
       "KP": 50,
       "Ang.": 75,
@@ -1763,7 +1763,7 @@
       "grass",
       "poison"
     ],
-    "family_id": 29,
+    "family_id": 69,
     "stats": {
       "KP": 65,
       "Ang.": 90,
@@ -1789,7 +1789,7 @@
       "grass",
       "poison"
     ],
-    "family_id": 29,
+    "family_id": 69,
     "stats": {
       "KP": 80,
       "Ang.": 105,
@@ -1815,7 +1815,7 @@
       "water",
       "poison"
     ],
-    "family_id": 30,
+    "family_id": 72,
     "stats": {
       "KP": 40,
       "Ang.": 40,
@@ -1841,7 +1841,7 @@
       "water",
       "poison"
     ],
-    "family_id": 30,
+    "family_id": 72,
     "stats": {
       "KP": 80,
       "Ang.": 70,
@@ -1867,7 +1867,7 @@
       "rock",
       "ground"
     ],
-    "family_id": 31,
+    "family_id": 74,
     "stats": {
       "KP": 40,
       "Ang.": 80,
@@ -1893,7 +1893,7 @@
       "rock",
       "ground"
     ],
-    "family_id": 31,
+    "family_id": 74,
     "stats": {
       "KP": 55,
       "Ang.": 95,
@@ -1919,7 +1919,7 @@
       "rock",
       "ground"
     ],
-    "family_id": 31,
+    "family_id": 74,
     "stats": {
       "KP": 80,
       "Ang.": 120,
@@ -1944,7 +1944,7 @@
     "types": [
       "fire"
     ],
-    "family_id": 32,
+    "family_id": 77,
     "stats": {
       "KP": 50,
       "Ang.": 85,
@@ -1969,7 +1969,7 @@
     "types": [
       "fire"
     ],
-    "family_id": 32,
+    "family_id": 77,
     "stats": {
       "KP": 65,
       "Ang.": 100,
@@ -1995,7 +1995,7 @@
       "water",
       "psychic"
     ],
-    "family_id": 33,
+    "family_id": 79,
     "stats": {
       "KP": 90,
       "Ang.": 65,
@@ -2021,7 +2021,7 @@
       "water",
       "psychic"
     ],
-    "family_id": 33,
+    "family_id": 79,
     "stats": {
       "KP": 95,
       "Ang.": 75,
@@ -2047,7 +2047,7 @@
       "electric",
       "steel"
     ],
-    "family_id": 34,
+    "family_id": 81,
     "stats": {
       "KP": 25,
       "Ang.": 35,
@@ -2073,7 +2073,7 @@
       "electric",
       "steel"
     ],
-    "family_id": 34,
+    "family_id": 81,
     "stats": {
       "KP": 50,
       "Ang.": 60,
@@ -2099,7 +2099,7 @@
       "normal",
       "flying"
     ],
-    "family_id": 35,
+    "family_id": 83,
     "stats": {
       "KP": 52,
       "Ang.": 90,
@@ -2125,7 +2125,7 @@
       "normal",
       "flying"
     ],
-    "family_id": 36,
+    "family_id": 84,
     "stats": {
       "KP": 35,
       "Ang.": 85,
@@ -2151,7 +2151,7 @@
       "normal",
       "flying"
     ],
-    "family_id": 36,
+    "family_id": 84,
     "stats": {
       "KP": 60,
       "Ang.": 110,
@@ -2176,7 +2176,7 @@
     "types": [
       "water"
     ],
-    "family_id": 37,
+    "family_id": 86,
     "stats": {
       "KP": 65,
       "Ang.": 45,
@@ -2202,7 +2202,7 @@
       "water",
       "ice"
     ],
-    "family_id": 37,
+    "family_id": 86,
     "stats": {
       "KP": 90,
       "Ang.": 70,
@@ -2227,7 +2227,7 @@
     "types": [
       "poison"
     ],
-    "family_id": 38,
+    "family_id": 88,
     "stats": {
       "KP": 80,
       "Ang.": 80,
@@ -2252,7 +2252,7 @@
     "types": [
       "poison"
     ],
-    "family_id": 38,
+    "family_id": 88,
     "stats": {
       "KP": 105,
       "Ang.": 105,
@@ -2277,7 +2277,7 @@
     "types": [
       "water"
     ],
-    "family_id": 39,
+    "family_id": 90,
     "stats": {
       "KP": 30,
       "Ang.": 65,
@@ -2303,7 +2303,7 @@
       "water",
       "ice"
     ],
-    "family_id": 39,
+    "family_id": 90,
     "stats": {
       "KP": 50,
       "Ang.": 95,
@@ -2329,7 +2329,7 @@
       "ghost",
       "poison"
     ],
-    "family_id": 40,
+    "family_id": 92,
     "stats": {
       "KP": 30,
       "Ang.": 35,
@@ -2355,7 +2355,7 @@
       "ghost",
       "poison"
     ],
-    "family_id": 40,
+    "family_id": 92,
     "stats": {
       "KP": 45,
       "Ang.": 50,
@@ -2381,7 +2381,7 @@
       "ghost",
       "poison"
     ],
-    "family_id": 40,
+    "family_id": 92,
     "stats": {
       "KP": 60,
       "Ang.": 65,
@@ -2407,7 +2407,7 @@
       "rock",
       "ground"
     ],
-    "family_id": 41,
+    "family_id": 95,
     "stats": {
       "KP": 35,
       "Ang.": 45,
@@ -2432,7 +2432,7 @@
     "types": [
       "psychic"
     ],
-    "family_id": 42,
+    "family_id": 96,
     "stats": {
       "KP": 60,
       "Ang.": 48,
@@ -2457,7 +2457,7 @@
     "types": [
       "psychic"
     ],
-    "family_id": 42,
+    "family_id": 96,
     "stats": {
       "KP": 85,
       "Ang.": 73,
@@ -2482,7 +2482,7 @@
     "types": [
       "water"
     ],
-    "family_id": 43,
+    "family_id": 98,
     "stats": {
       "KP": 30,
       "Ang.": 105,
@@ -2507,7 +2507,7 @@
     "types": [
       "water"
     ],
-    "family_id": 43,
+    "family_id": 98,
     "stats": {
       "KP": 55,
       "Ang.": 130,
@@ -2532,7 +2532,7 @@
     "types": [
       "electric"
     ],
-    "family_id": 44,
+    "family_id": 100,
     "stats": {
       "KP": 40,
       "Ang.": 30,
@@ -2557,7 +2557,7 @@
     "types": [
       "electric"
     ],
-    "family_id": 44,
+    "family_id": 100,
     "stats": {
       "KP": 60,
       "Ang.": 50,
@@ -2583,7 +2583,7 @@
       "grass",
       "psychic"
     ],
-    "family_id": 45,
+    "family_id": 102,
     "stats": {
       "KP": 60,
       "Ang.": 40,
@@ -2609,7 +2609,7 @@
       "grass",
       "psychic"
     ],
-    "family_id": 45,
+    "family_id": 102,
     "stats": {
       "KP": 95,
       "Ang.": 95,
@@ -2634,7 +2634,7 @@
     "types": [
       "ground"
     ],
-    "family_id": 46,
+    "family_id": 104,
     "stats": {
       "KP": 50,
       "Ang.": 50,
@@ -2659,7 +2659,7 @@
     "types": [
       "ground"
     ],
-    "family_id": 46,
+    "family_id": 104,
     "stats": {
       "KP": 60,
       "Ang.": 80,
@@ -2684,7 +2684,7 @@
     "types": [
       "fighting"
     ],
-    "family_id": 47,
+    "family_id": 236,
     "stats": {
       "KP": 50,
       "Ang.": 120,
@@ -2709,7 +2709,7 @@
     "types": [
       "fighting"
     ],
-    "family_id": 47,
+    "family_id": 236,
     "stats": {
       "KP": 50,
       "Ang.": 105,
@@ -2734,7 +2734,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 48,
+    "family_id": 108,
     "stats": {
       "KP": 90,
       "Ang.": 55,
@@ -2759,7 +2759,7 @@
     "types": [
       "poison"
     ],
-    "family_id": 49,
+    "family_id": 109,
     "stats": {
       "KP": 40,
       "Ang.": 65,
@@ -2784,7 +2784,7 @@
     "types": [
       "poison"
     ],
-    "family_id": 49,
+    "family_id": 109,
     "stats": {
       "KP": 65,
       "Ang.": 90,
@@ -2810,7 +2810,7 @@
       "ground",
       "rock"
     ],
-    "family_id": 50,
+    "family_id": 111,
     "stats": {
       "KP": 80,
       "Ang.": 85,
@@ -2836,7 +2836,7 @@
       "ground",
       "rock"
     ],
-    "family_id": 50,
+    "family_id": 111,
     "stats": {
       "KP": 105,
       "Ang.": 130,
@@ -2861,7 +2861,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 51,
+    "family_id": 440,
     "stats": {
       "KP": 250,
       "Ang.": 5,
@@ -2886,7 +2886,7 @@
     "types": [
       "grass"
     ],
-    "family_id": 52,
+    "family_id": 114,
     "stats": {
       "KP": 65,
       "Ang.": 55,
@@ -2911,7 +2911,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 53,
+    "family_id": 115,
     "stats": {
       "KP": 105,
       "Ang.": 95,
@@ -2936,7 +2936,7 @@
     "types": [
       "water"
     ],
-    "family_id": 54,
+    "family_id": 116,
     "stats": {
       "KP": 30,
       "Ang.": 40,
@@ -2961,7 +2961,7 @@
     "types": [
       "water"
     ],
-    "family_id": 54,
+    "family_id": 116,
     "stats": {
       "KP": 55,
       "Ang.": 65,
@@ -2986,7 +2986,7 @@
     "types": [
       "water"
     ],
-    "family_id": 55,
+    "family_id": 118,
     "stats": {
       "KP": 45,
       "Ang.": 67,
@@ -3011,7 +3011,7 @@
     "types": [
       "water"
     ],
-    "family_id": 55,
+    "family_id": 118,
     "stats": {
       "KP": 80,
       "Ang.": 92,
@@ -3036,7 +3036,7 @@
     "types": [
       "water"
     ],
-    "family_id": 56,
+    "family_id": 120,
     "stats": {
       "KP": 30,
       "Ang.": 45,
@@ -3062,7 +3062,7 @@
       "water",
       "psychic"
     ],
-    "family_id": 56,
+    "family_id": 120,
     "stats": {
       "KP": 60,
       "Ang.": 75,
@@ -3087,7 +3087,7 @@
     "types": [
       "psychic"
     ],
-    "family_id": 57,
+    "family_id": 439,
     "stats": {
       "KP": 40,
       "Ang.": 45,
@@ -3113,7 +3113,7 @@
       "bug",
       "flying"
     ],
-    "family_id": 58,
+    "family_id": 123,
     "stats": {
       "KP": 70,
       "Ang.": 110,
@@ -3139,7 +3139,7 @@
       "ice",
       "psychic"
     ],
-    "family_id": 59,
+    "family_id": 238,
     "stats": {
       "KP": 65,
       "Ang.": 50,
@@ -3164,7 +3164,7 @@
     "types": [
       "electric"
     ],
-    "family_id": 60,
+    "family_id": 239,
     "stats": {
       "KP": 65,
       "Ang.": 83,
@@ -3189,7 +3189,7 @@
     "types": [
       "fire"
     ],
-    "family_id": 61,
+    "family_id": 240,
     "stats": {
       "KP": 65,
       "Ang.": 95,
@@ -3214,7 +3214,7 @@
     "types": [
       "bug"
     ],
-    "family_id": 62,
+    "family_id": 127,
     "stats": {
       "KP": 65,
       "Ang.": 125,
@@ -3239,7 +3239,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 63,
+    "family_id": 128,
     "stats": {
       "KP": 75,
       "Ang.": 100,
@@ -3264,7 +3264,7 @@
     "types": [
       "water"
     ],
-    "family_id": 64,
+    "family_id": 129,
     "stats": {
       "KP": 20,
       "Ang.": 10,
@@ -3290,7 +3290,7 @@
       "water",
       "flying"
     ],
-    "family_id": 64,
+    "family_id": 129,
     "stats": {
       "KP": 95,
       "Ang.": 125,
@@ -3316,7 +3316,7 @@
       "water",
       "ice"
     ],
-    "family_id": 65,
+    "family_id": 131,
     "stats": {
       "KP": 130,
       "Ang.": 85,
@@ -3341,7 +3341,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 66,
+    "family_id": 132,
     "stats": {
       "KP": 48,
       "Ang.": 48,
@@ -3366,7 +3366,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 67,
+    "family_id": 133,
     "stats": {
       "KP": 55,
       "Ang.": 55,
@@ -3391,7 +3391,7 @@
     "types": [
       "water"
     ],
-    "family_id": 67,
+    "family_id": 133,
     "stats": {
       "KP": 130,
       "Ang.": 65,
@@ -3416,7 +3416,7 @@
     "types": [
       "electric"
     ],
-    "family_id": 67,
+    "family_id": 133,
     "stats": {
       "KP": 65,
       "Ang.": 65,
@@ -3441,7 +3441,7 @@
     "types": [
       "fire"
     ],
-    "family_id": 67,
+    "family_id": 133,
     "stats": {
       "KP": 65,
       "Ang.": 130,
@@ -3466,7 +3466,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 68,
+    "family_id": 137,
     "stats": {
       "KP": 65,
       "Ang.": 60,
@@ -3492,7 +3492,7 @@
       "rock",
       "water"
     ],
-    "family_id": 69,
+    "family_id": 138,
     "stats": {
       "KP": 35,
       "Ang.": 40,
@@ -3518,7 +3518,7 @@
       "rock",
       "water"
     ],
-    "family_id": 69,
+    "family_id": 138,
     "stats": {
       "KP": 70,
       "Ang.": 60,
@@ -3544,7 +3544,7 @@
       "rock",
       "water"
     ],
-    "family_id": 70,
+    "family_id": 140,
     "stats": {
       "KP": 30,
       "Ang.": 80,
@@ -3570,7 +3570,7 @@
       "rock",
       "water"
     ],
-    "family_id": 70,
+    "family_id": 140,
     "stats": {
       "KP": 60,
       "Ang.": 115,
@@ -3596,7 +3596,7 @@
       "rock",
       "flying"
     ],
-    "family_id": 71,
+    "family_id": 142,
     "stats": {
       "KP": 80,
       "Ang.": 105,
@@ -3621,7 +3621,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 72,
+    "family_id": 446,
     "stats": {
       "KP": 160,
       "Ang.": 110,
@@ -3647,7 +3647,7 @@
       "ice",
       "flying"
     ],
-    "family_id": 73,
+    "family_id": 144,
     "stats": {
       "KP": 90,
       "Ang.": 85,
@@ -3673,7 +3673,7 @@
       "electric",
       "flying"
     ],
-    "family_id": 74,
+    "family_id": 145,
     "stats": {
       "KP": 90,
       "Ang.": 90,
@@ -3699,7 +3699,7 @@
       "fire",
       "flying"
     ],
-    "family_id": 75,
+    "family_id": 146,
     "stats": {
       "KP": 90,
       "Ang.": 100,
@@ -3724,7 +3724,7 @@
     "types": [
       "dragon"
     ],
-    "family_id": 76,
+    "family_id": 147,
     "stats": {
       "KP": 41,
       "Ang.": 64,
@@ -3749,7 +3749,7 @@
     "types": [
       "dragon"
     ],
-    "family_id": 76,
+    "family_id": 147,
     "stats": {
       "KP": 61,
       "Ang.": 84,
@@ -3775,7 +3775,7 @@
       "dragon",
       "flying"
     ],
-    "family_id": 76,
+    "family_id": 147,
     "stats": {
       "KP": 91,
       "Ang.": 134,
@@ -3800,7 +3800,7 @@
     "types": [
       "psychic"
     ],
-    "family_id": 77,
+    "family_id": 150,
     "stats": {
       "KP": 106,
       "Ang.": 110,
@@ -3825,7 +3825,7 @@
     "types": [
       "psychic"
     ],
-    "family_id": 78,
+    "family_id": 151,
     "stats": {
       "KP": 100,
       "Ang.": 100,
@@ -3850,7 +3850,7 @@
     "types": [
       "grass"
     ],
-    "family_id": 79,
+    "family_id": 152,
     "stats": {
       "KP": 45,
       "Ang.": 49,
@@ -3875,7 +3875,7 @@
     "types": [
       "grass"
     ],
-    "family_id": 79,
+    "family_id": 152,
     "stats": {
       "KP": 60,
       "Ang.": 62,
@@ -3900,7 +3900,7 @@
     "types": [
       "grass"
     ],
-    "family_id": 79,
+    "family_id": 152,
     "stats": {
       "KP": 80,
       "Ang.": 82,
@@ -3925,7 +3925,7 @@
     "types": [
       "fire"
     ],
-    "family_id": 80,
+    "family_id": 155,
     "stats": {
       "KP": 39,
       "Ang.": 52,
@@ -3950,7 +3950,7 @@
     "types": [
       "fire"
     ],
-    "family_id": 80,
+    "family_id": 155,
     "stats": {
       "KP": 58,
       "Ang.": 64,
@@ -3975,7 +3975,7 @@
     "types": [
       "fire"
     ],
-    "family_id": 80,
+    "family_id": 155,
     "stats": {
       "KP": 78,
       "Ang.": 84,
@@ -4000,7 +4000,7 @@
     "types": [
       "water"
     ],
-    "family_id": 81,
+    "family_id": 158,
     "stats": {
       "KP": 50,
       "Ang.": 65,
@@ -4025,7 +4025,7 @@
     "types": [
       "water"
     ],
-    "family_id": 81,
+    "family_id": 158,
     "stats": {
       "KP": 65,
       "Ang.": 80,
@@ -4050,7 +4050,7 @@
     "types": [
       "water"
     ],
-    "family_id": 81,
+    "family_id": 158,
     "stats": {
       "KP": 85,
       "Ang.": 105,
@@ -4075,7 +4075,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 82,
+    "family_id": 161,
     "stats": {
       "KP": 35,
       "Ang.": 46,
@@ -4100,7 +4100,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 82,
+    "family_id": 161,
     "stats": {
       "KP": 85,
       "Ang.": 76,
@@ -4126,7 +4126,7 @@
       "normal",
       "flying"
     ],
-    "family_id": 83,
+    "family_id": 163,
     "stats": {
       "KP": 60,
       "Ang.": 30,
@@ -4152,7 +4152,7 @@
       "normal",
       "flying"
     ],
-    "family_id": 83,
+    "family_id": 163,
     "stats": {
       "KP": 100,
       "Ang.": 50,
@@ -4178,7 +4178,7 @@
       "bug",
       "flying"
     ],
-    "family_id": 84,
+    "family_id": 165,
     "stats": {
       "KP": 40,
       "Ang.": 20,
@@ -4204,7 +4204,7 @@
       "bug",
       "flying"
     ],
-    "family_id": 84,
+    "family_id": 165,
     "stats": {
       "KP": 55,
       "Ang.": 35,
@@ -4230,7 +4230,7 @@
       "bug",
       "poison"
     ],
-    "family_id": 85,
+    "family_id": 167,
     "stats": {
       "KP": 40,
       "Ang.": 60,
@@ -4256,7 +4256,7 @@
       "bug",
       "poison"
     ],
-    "family_id": 85,
+    "family_id": 167,
     "stats": {
       "KP": 70,
       "Ang.": 90,
@@ -4282,7 +4282,7 @@
       "poison",
       "flying"
     ],
-    "family_id": 17,
+    "family_id": 41,
     "stats": {
       "KP": 85,
       "Ang.": 90,
@@ -4308,7 +4308,7 @@
       "water",
       "electric"
     ],
-    "family_id": 86,
+    "family_id": 170,
     "stats": {
       "KP": 75,
       "Ang.": 38,
@@ -4334,7 +4334,7 @@
       "water",
       "electric"
     ],
-    "family_id": 86,
+    "family_id": 170,
     "stats": {
       "KP": 125,
       "Ang.": 58,
@@ -4359,7 +4359,7 @@
     "types": [
       "electric"
     ],
-    "family_id": 10,
+    "family_id": 172,
     "stats": {
       "KP": 20,
       "Ang.": 40,
@@ -4384,7 +4384,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 14,
+    "family_id": 173,
     "stats": {
       "KP": 50,
       "Ang.": 25,
@@ -4409,7 +4409,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 16,
+    "family_id": 174,
     "stats": {
       "KP": 90,
       "Ang.": 30,
@@ -4434,7 +4434,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 87,
+    "family_id": 175,
     "stats": {
       "KP": 35,
       "Ang.": 20,
@@ -4459,7 +4459,7 @@
     "types": [
       "flying"
     ],
-    "family_id": 87,
+    "family_id": 175,
     "stats": {
       "KP": 55,
       "Ang.": 40,
@@ -4485,7 +4485,7 @@
       "psychic",
       "flying"
     ],
-    "family_id": 88,
+    "family_id": 177,
     "stats": {
       "KP": 40,
       "Ang.": 50,
@@ -4511,7 +4511,7 @@
       "psychic",
       "flying"
     ],
-    "family_id": 88,
+    "family_id": 177,
     "stats": {
       "KP": 65,
       "Ang.": 75,
@@ -4536,7 +4536,7 @@
     "types": [
       "electric"
     ],
-    "family_id": 89,
+    "family_id": 179,
     "stats": {
       "KP": 55,
       "Ang.": 40,
@@ -4561,7 +4561,7 @@
     "types": [
       "electric"
     ],
-    "family_id": 89,
+    "family_id": 179,
     "stats": {
       "KP": 70,
       "Ang.": 55,
@@ -4586,7 +4586,7 @@
     "types": [
       "electric"
     ],
-    "family_id": 89,
+    "family_id": 179,
     "stats": {
       "KP": 90,
       "Ang.": 75,
@@ -4611,7 +4611,7 @@
     "types": [
       "grass"
     ],
-    "family_id": 18,
+    "family_id": 43,
     "stats": {
       "KP": 75,
       "Ang.": 80,
@@ -4636,7 +4636,7 @@
     "types": [
       "water"
     ],
-    "family_id": 90,
+    "family_id": 298,
     "stats": {
       "KP": 70,
       "Ang.": 20,
@@ -4661,7 +4661,7 @@
     "types": [
       "water"
     ],
-    "family_id": 90,
+    "family_id": 298,
     "stats": {
       "KP": 100,
       "Ang.": 50,
@@ -4686,7 +4686,7 @@
     "types": [
       "rock"
     ],
-    "family_id": 91,
+    "family_id": 438,
     "stats": {
       "KP": 70,
       "Ang.": 100,
@@ -4711,7 +4711,7 @@
     "types": [
       "water"
     ],
-    "family_id": 26,
+    "family_id": 60,
     "stats": {
       "KP": 90,
       "Ang.": 75,
@@ -4737,7 +4737,7 @@
       "grass",
       "flying"
     ],
-    "family_id": 92,
+    "family_id": 187,
     "stats": {
       "KP": 35,
       "Ang.": 35,
@@ -4763,7 +4763,7 @@
       "grass",
       "flying"
     ],
-    "family_id": 92,
+    "family_id": 187,
     "stats": {
       "KP": 55,
       "Ang.": 45,
@@ -4789,7 +4789,7 @@
       "grass",
       "flying"
     ],
-    "family_id": 92,
+    "family_id": 187,
     "stats": {
       "KP": 75,
       "Ang.": 55,
@@ -4814,7 +4814,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 93,
+    "family_id": 190,
     "stats": {
       "KP": 55,
       "Ang.": 70,
@@ -4839,7 +4839,7 @@
     "types": [
       "grass"
     ],
-    "family_id": 94,
+    "family_id": 191,
     "stats": {
       "KP": 30,
       "Ang.": 30,
@@ -4864,7 +4864,7 @@
     "types": [
       "grass"
     ],
-    "family_id": 94,
+    "family_id": 191,
     "stats": {
       "KP": 75,
       "Ang.": 75,
@@ -4890,7 +4890,7 @@
       "bug",
       "flying"
     ],
-    "family_id": 95,
+    "family_id": 193,
     "stats": {
       "KP": 65,
       "Ang.": 65,
@@ -4916,7 +4916,7 @@
       "water",
       "ground"
     ],
-    "family_id": 96,
+    "family_id": 194,
     "stats": {
       "KP": 55,
       "Ang.": 45,
@@ -4942,7 +4942,7 @@
       "water",
       "ground"
     ],
-    "family_id": 96,
+    "family_id": 194,
     "stats": {
       "KP": 95,
       "Ang.": 85,
@@ -4967,7 +4967,7 @@
     "types": [
       "psychic"
     ],
-    "family_id": 67,
+    "family_id": 133,
     "stats": {
       "KP": 65,
       "Ang.": 65,
@@ -4992,7 +4992,7 @@
     "types": [
       "dark"
     ],
-    "family_id": 67,
+    "family_id": 133,
     "stats": {
       "KP": 95,
       "Ang.": 65,
@@ -5018,7 +5018,7 @@
       "dark",
       "flying"
     ],
-    "family_id": 97,
+    "family_id": 198,
     "stats": {
       "KP": 60,
       "Ang.": 85,
@@ -5044,7 +5044,7 @@
       "water",
       "psychic"
     ],
-    "family_id": 33,
+    "family_id": 79,
     "stats": {
       "KP": 95,
       "Ang.": 75,
@@ -5069,7 +5069,7 @@
     "types": [
       "ghost"
     ],
-    "family_id": 98,
+    "family_id": 200,
     "stats": {
       "KP": 60,
       "Ang.": 60,
@@ -5094,7 +5094,7 @@
     "types": [
       "psychic"
     ],
-    "family_id": 99,
+    "family_id": 201,
     "stats": {
       "KP": 48,
       "Ang.": 72,
@@ -5119,7 +5119,7 @@
     "types": [
       "psychic"
     ],
-    "family_id": 100,
+    "family_id": 360,
     "stats": {
       "KP": 190,
       "Ang.": 33,
@@ -5145,7 +5145,7 @@
       "normal",
       "psychic"
     ],
-    "family_id": 101,
+    "family_id": 203,
     "stats": {
       "KP": 70,
       "Ang.": 80,
@@ -5170,7 +5170,7 @@
     "types": [
       "bug"
     ],
-    "family_id": 102,
+    "family_id": 204,
     "stats": {
       "KP": 50,
       "Ang.": 65,
@@ -5196,7 +5196,7 @@
       "bug",
       "steel"
     ],
-    "family_id": 102,
+    "family_id": 204,
     "stats": {
       "KP": 75,
       "Ang.": 90,
@@ -5221,7 +5221,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 103,
+    "family_id": 206,
     "stats": {
       "KP": 100,
       "Ang.": 70,
@@ -5247,7 +5247,7 @@
       "ground",
       "flying"
     ],
-    "family_id": 104,
+    "family_id": 207,
     "stats": {
       "KP": 65,
       "Ang.": 75,
@@ -5273,7 +5273,7 @@
       "steel",
       "ground"
     ],
-    "family_id": 41,
+    "family_id": 95,
     "stats": {
       "KP": 75,
       "Ang.": 85,
@@ -5298,7 +5298,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 105,
+    "family_id": 209,
     "stats": {
       "KP": 60,
       "Ang.": 80,
@@ -5323,7 +5323,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 105,
+    "family_id": 209,
     "stats": {
       "KP": 90,
       "Ang.": 120,
@@ -5349,7 +5349,7 @@
       "water",
       "poison"
     ],
-    "family_id": 106,
+    "family_id": 211,
     "stats": {
       "KP": 65,
       "Ang.": 95,
@@ -5375,7 +5375,7 @@
       "bug",
       "steel"
     ],
-    "family_id": 58,
+    "family_id": 123,
     "stats": {
       "KP": 70,
       "Ang.": 130,
@@ -5401,7 +5401,7 @@
       "bug",
       "rock"
     ],
-    "family_id": 107,
+    "family_id": 213,
     "stats": {
       "KP": 20,
       "Ang.": 10,
@@ -5427,7 +5427,7 @@
       "bug",
       "fighting"
     ],
-    "family_id": 108,
+    "family_id": 214,
     "stats": {
       "KP": 80,
       "Ang.": 125,
@@ -5453,7 +5453,7 @@
       "dark",
       "ice"
     ],
-    "family_id": 109,
+    "family_id": 215,
     "stats": {
       "KP": 55,
       "Ang.": 95,
@@ -5478,7 +5478,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 110,
+    "family_id": 216,
     "stats": {
       "KP": 60,
       "Ang.": 80,
@@ -5503,7 +5503,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 110,
+    "family_id": 216,
     "stats": {
       "KP": 90,
       "Ang.": 130,
@@ -5528,7 +5528,7 @@
     "types": [
       "fire"
     ],
-    "family_id": 111,
+    "family_id": 218,
     "stats": {
       "KP": 40,
       "Ang.": 40,
@@ -5554,7 +5554,7 @@
       "fire",
       "rock"
     ],
-    "family_id": 111,
+    "family_id": 218,
     "stats": {
       "KP": 60,
       "Ang.": 50,
@@ -5580,7 +5580,7 @@
       "ice",
       "ground"
     ],
-    "family_id": 112,
+    "family_id": 220,
     "stats": {
       "KP": 50,
       "Ang.": 50,
@@ -5606,7 +5606,7 @@
       "ice",
       "ground"
     ],
-    "family_id": 112,
+    "family_id": 220,
     "stats": {
       "KP": 100,
       "Ang.": 100,
@@ -5632,7 +5632,7 @@
       "water",
       "rock"
     ],
-    "family_id": 113,
+    "family_id": 222,
     "stats": {
       "KP": 65,
       "Ang.": 55,
@@ -5657,7 +5657,7 @@
     "types": [
       "water"
     ],
-    "family_id": 114,
+    "family_id": 223,
     "stats": {
       "KP": 35,
       "Ang.": 65,
@@ -5682,7 +5682,7 @@
     "types": [
       "water"
     ],
-    "family_id": 114,
+    "family_id": 223,
     "stats": {
       "KP": 75,
       "Ang.": 105,
@@ -5708,7 +5708,7 @@
       "ice",
       "flying"
     ],
-    "family_id": 115,
+    "family_id": 225,
     "stats": {
       "KP": 45,
       "Ang.": 55,
@@ -5734,7 +5734,7 @@
       "water",
       "flying"
     ],
-    "family_id": 116,
+    "family_id": 458,
     "stats": {
       "KP": 85,
       "Ang.": 40,
@@ -5760,7 +5760,7 @@
       "steel",
       "flying"
     ],
-    "family_id": 117,
+    "family_id": 227,
     "stats": {
       "KP": 65,
       "Ang.": 80,
@@ -5786,7 +5786,7 @@
       "dark",
       "fire"
     ],
-    "family_id": 118,
+    "family_id": 228,
     "stats": {
       "KP": 45,
       "Ang.": 60,
@@ -5812,7 +5812,7 @@
       "dark",
       "fire"
     ],
-    "family_id": 118,
+    "family_id": 228,
     "stats": {
       "KP": 75,
       "Ang.": 90,
@@ -5838,7 +5838,7 @@
       "water",
       "dragon"
     ],
-    "family_id": 54,
+    "family_id": 116,
     "stats": {
       "KP": 75,
       "Ang.": 95,
@@ -5863,7 +5863,7 @@
     "types": [
       "ground"
     ],
-    "family_id": 119,
+    "family_id": 231,
     "stats": {
       "KP": 90,
       "Ang.": 60,
@@ -5888,7 +5888,7 @@
     "types": [
       "ground"
     ],
-    "family_id": 119,
+    "family_id": 231,
     "stats": {
       "KP": 90,
       "Ang.": 120,
@@ -5913,7 +5913,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 68,
+    "family_id": 137,
     "stats": {
       "KP": 85,
       "Ang.": 80,
@@ -5938,7 +5938,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 120,
+    "family_id": 234,
     "stats": {
       "KP": 73,
       "Ang.": 95,
@@ -5963,7 +5963,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 121,
+    "family_id": 235,
     "stats": {
       "KP": 55,
       "Ang.": 20,
@@ -5988,7 +5988,7 @@
     "types": [
       "fighting"
     ],
-    "family_id": 47,
+    "family_id": 236,
     "stats": {
       "KP": 35,
       "Ang.": 35,
@@ -6013,7 +6013,7 @@
     "types": [
       "fighting"
     ],
-    "family_id": 47,
+    "family_id": 236,
     "stats": {
       "KP": 50,
       "Ang.": 95,
@@ -6039,7 +6039,7 @@
       "ice",
       "psychic"
     ],
-    "family_id": 59,
+    "family_id": 238,
     "stats": {
       "KP": 45,
       "Ang.": 30,
@@ -6064,7 +6064,7 @@
     "types": [
       "electric"
     ],
-    "family_id": 60,
+    "family_id": 239,
     "stats": {
       "KP": 45,
       "Ang.": 63,
@@ -6089,7 +6089,7 @@
     "types": [
       "fire"
     ],
-    "family_id": 61,
+    "family_id": 240,
     "stats": {
       "KP": 45,
       "Ang.": 75,
@@ -6114,7 +6114,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 122,
+    "family_id": 241,
     "stats": {
       "KP": 95,
       "Ang.": 80,
@@ -6139,7 +6139,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 51,
+    "family_id": 440,
     "stats": {
       "KP": 255,
       "Ang.": 10,
@@ -6164,7 +6164,7 @@
     "types": [
       "electric"
     ],
-    "family_id": 123,
+    "family_id": 243,
     "stats": {
       "KP": 90,
       "Ang.": 85,
@@ -6189,7 +6189,7 @@
     "types": [
       "fire"
     ],
-    "family_id": 124,
+    "family_id": 244,
     "stats": {
       "KP": 115,
       "Ang.": 115,
@@ -6214,7 +6214,7 @@
     "types": [
       "water"
     ],
-    "family_id": 125,
+    "family_id": 245,
     "stats": {
       "KP": 100,
       "Ang.": 75,
@@ -6240,7 +6240,7 @@
       "rock",
       "ground"
     ],
-    "family_id": 126,
+    "family_id": 246,
     "stats": {
       "KP": 50,
       "Ang.": 64,
@@ -6266,7 +6266,7 @@
       "rock",
       "ground"
     ],
-    "family_id": 126,
+    "family_id": 246,
     "stats": {
       "KP": 70,
       "Ang.": 84,
@@ -6292,7 +6292,7 @@
       "rock",
       "dark"
     ],
-    "family_id": 126,
+    "family_id": 246,
     "stats": {
       "KP": 100,
       "Ang.": 134,
@@ -6318,7 +6318,7 @@
       "psychic",
       "flying"
     ],
-    "family_id": 127,
+    "family_id": 249,
     "stats": {
       "KP": 106,
       "Ang.": 90,
@@ -6344,7 +6344,7 @@
       "fire",
       "flying"
     ],
-    "family_id": 128,
+    "family_id": 250,
     "stats": {
       "KP": 106,
       "Ang.": 130,
@@ -6370,7 +6370,7 @@
       "psychic",
       "grass"
     ],
-    "family_id": 129,
+    "family_id": 251,
     "stats": {
       "KP": 100,
       "Ang.": 100,
@@ -6395,7 +6395,7 @@
     "types": [
       "grass"
     ],
-    "family_id": 130,
+    "family_id": 252,
     "stats": {
       "KP": 40,
       "Ang.": 45,
@@ -6420,7 +6420,7 @@
     "types": [
       "grass"
     ],
-    "family_id": 130,
+    "family_id": 252,
     "stats": {
       "KP": 50,
       "Ang.": 65,
@@ -6445,7 +6445,7 @@
     "types": [
       "grass"
     ],
-    "family_id": 130,
+    "family_id": 252,
     "stats": {
       "KP": 70,
       "Ang.": 85,
@@ -6470,7 +6470,7 @@
     "types": [
       "fire"
     ],
-    "family_id": 131,
+    "family_id": 255,
     "stats": {
       "KP": 45,
       "Ang.": 60,
@@ -6496,7 +6496,7 @@
       "fire",
       "fighting"
     ],
-    "family_id": 131,
+    "family_id": 255,
     "stats": {
       "KP": 60,
       "Ang.": 85,
@@ -6522,7 +6522,7 @@
       "fire",
       "fighting"
     ],
-    "family_id": 131,
+    "family_id": 255,
     "stats": {
       "KP": 80,
       "Ang.": 120,
@@ -6547,7 +6547,7 @@
     "types": [
       "water"
     ],
-    "family_id": 132,
+    "family_id": 258,
     "stats": {
       "KP": 50,
       "Ang.": 70,
@@ -6573,7 +6573,7 @@
       "water",
       "ground"
     ],
-    "family_id": 132,
+    "family_id": 258,
     "stats": {
       "KP": 70,
       "Ang.": 85,
@@ -6599,7 +6599,7 @@
       "water",
       "ground"
     ],
-    "family_id": 132,
+    "family_id": 258,
     "stats": {
       "KP": 100,
       "Ang.": 110,
@@ -6624,7 +6624,7 @@
     "types": [
       "dark"
     ],
-    "family_id": 133,
+    "family_id": 261,
     "stats": {
       "KP": 35,
       "Ang.": 55,
@@ -6649,7 +6649,7 @@
     "types": [
       "dark"
     ],
-    "family_id": 133,
+    "family_id": 261,
     "stats": {
       "KP": 70,
       "Ang.": 90,
@@ -6674,7 +6674,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 134,
+    "family_id": 263,
     "stats": {
       "KP": 38,
       "Ang.": 30,
@@ -6699,7 +6699,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 134,
+    "family_id": 263,
     "stats": {
       "KP": 78,
       "Ang.": 70,
@@ -6724,7 +6724,7 @@
     "types": [
       "bug"
     ],
-    "family_id": 135,
+    "family_id": 265,
     "stats": {
       "KP": 45,
       "Ang.": 45,
@@ -6749,7 +6749,7 @@
     "types": [
       "bug"
     ],
-    "family_id": 135,
+    "family_id": 265,
     "stats": {
       "KP": 50,
       "Ang.": 35,
@@ -6775,7 +6775,7 @@
       "bug",
       "flying"
     ],
-    "family_id": 135,
+    "family_id": 265,
     "stats": {
       "KP": 60,
       "Ang.": 70,
@@ -6800,7 +6800,7 @@
     "types": [
       "bug"
     ],
-    "family_id": 135,
+    "family_id": 265,
     "stats": {
       "KP": 50,
       "Ang.": 35,
@@ -6826,7 +6826,7 @@
       "bug",
       "poison"
     ],
-    "family_id": 135,
+    "family_id": 265,
     "stats": {
       "KP": 60,
       "Ang.": 50,
@@ -6852,7 +6852,7 @@
       "water",
       "grass"
     ],
-    "family_id": 136,
+    "family_id": 270,
     "stats": {
       "KP": 40,
       "Ang.": 30,
@@ -6878,7 +6878,7 @@
       "water",
       "grass"
     ],
-    "family_id": 136,
+    "family_id": 270,
     "stats": {
       "KP": 60,
       "Ang.": 50,
@@ -6904,7 +6904,7 @@
       "water",
       "grass"
     ],
-    "family_id": 136,
+    "family_id": 270,
     "stats": {
       "KP": 80,
       "Ang.": 70,
@@ -6929,7 +6929,7 @@
     "types": [
       "grass"
     ],
-    "family_id": 137,
+    "family_id": 273,
     "stats": {
       "KP": 40,
       "Ang.": 40,
@@ -6955,7 +6955,7 @@
       "grass",
       "dark"
     ],
-    "family_id": 137,
+    "family_id": 273,
     "stats": {
       "KP": 70,
       "Ang.": 70,
@@ -6981,7 +6981,7 @@
       "grass",
       "dark"
     ],
-    "family_id": 137,
+    "family_id": 273,
     "stats": {
       "KP": 90,
       "Ang.": 100,
@@ -7007,7 +7007,7 @@
       "normal",
       "flying"
     ],
-    "family_id": 138,
+    "family_id": 276,
     "stats": {
       "KP": 40,
       "Ang.": 55,
@@ -7033,7 +7033,7 @@
       "normal",
       "flying"
     ],
-    "family_id": 138,
+    "family_id": 276,
     "stats": {
       "KP": 60,
       "Ang.": 85,
@@ -7059,7 +7059,7 @@
       "water",
       "flying"
     ],
-    "family_id": 139,
+    "family_id": 278,
     "stats": {
       "KP": 40,
       "Ang.": 30,
@@ -7085,7 +7085,7 @@
       "water",
       "flying"
     ],
-    "family_id": 139,
+    "family_id": 278,
     "stats": {
       "KP": 60,
       "Ang.": 50,
@@ -7110,7 +7110,7 @@
     "types": [
       "psychic"
     ],
-    "family_id": 140,
+    "family_id": 280,
     "stats": {
       "KP": 28,
       "Ang.": 25,
@@ -7135,7 +7135,7 @@
     "types": [
       "psychic"
     ],
-    "family_id": 140,
+    "family_id": 280,
     "stats": {
       "KP": 38,
       "Ang.": 35,
@@ -7160,7 +7160,7 @@
     "types": [
       "psychic"
     ],
-    "family_id": 140,
+    "family_id": 280,
     "stats": {
       "KP": 68,
       "Ang.": 65,
@@ -7186,7 +7186,7 @@
       "bug",
       "water"
     ],
-    "family_id": 141,
+    "family_id": 283,
     "stats": {
       "KP": 40,
       "Ang.": 30,
@@ -7212,7 +7212,7 @@
       "bug",
       "flying"
     ],
-    "family_id": 141,
+    "family_id": 283,
     "stats": {
       "KP": 70,
       "Ang.": 60,
@@ -7237,7 +7237,7 @@
     "types": [
       "grass"
     ],
-    "family_id": 142,
+    "family_id": 285,
     "stats": {
       "KP": 60,
       "Ang.": 40,
@@ -7263,7 +7263,7 @@
       "grass",
       "fighting"
     ],
-    "family_id": 142,
+    "family_id": 285,
     "stats": {
       "KP": 60,
       "Ang.": 130,
@@ -7288,7 +7288,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 143,
+    "family_id": 287,
     "stats": {
       "KP": 60,
       "Ang.": 60,
@@ -7313,7 +7313,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 143,
+    "family_id": 287,
     "stats": {
       "KP": 80,
       "Ang.": 80,
@@ -7338,7 +7338,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 143,
+    "family_id": 287,
     "stats": {
       "KP": 150,
       "Ang.": 160,
@@ -7364,7 +7364,7 @@
       "bug",
       "ground"
     ],
-    "family_id": 144,
+    "family_id": 290,
     "stats": {
       "KP": 31,
       "Ang.": 45,
@@ -7390,7 +7390,7 @@
       "bug",
       "flying"
     ],
-    "family_id": 144,
+    "family_id": 290,
     "stats": {
       "KP": 61,
       "Ang.": 90,
@@ -7416,7 +7416,7 @@
       "bug",
       "ghost"
     ],
-    "family_id": 144,
+    "family_id": 290,
     "stats": {
       "KP": 1,
       "Ang.": 90,
@@ -7441,7 +7441,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 145,
+    "family_id": 293,
     "stats": {
       "KP": 64,
       "Ang.": 51,
@@ -7466,7 +7466,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 145,
+    "family_id": 293,
     "stats": {
       "KP": 84,
       "Ang.": 71,
@@ -7491,7 +7491,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 145,
+    "family_id": 293,
     "stats": {
       "KP": 104,
       "Ang.": 91,
@@ -7516,7 +7516,7 @@
     "types": [
       "fighting"
     ],
-    "family_id": 146,
+    "family_id": 296,
     "stats": {
       "KP": 72,
       "Ang.": 60,
@@ -7541,7 +7541,7 @@
     "types": [
       "fighting"
     ],
-    "family_id": 146,
+    "family_id": 296,
     "stats": {
       "KP": 144,
       "Ang.": 120,
@@ -7566,7 +7566,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 90,
+    "family_id": 298,
     "stats": {
       "KP": 50,
       "Ang.": 20,
@@ -7591,7 +7591,7 @@
     "types": [
       "rock"
     ],
-    "family_id": 147,
+    "family_id": 299,
     "stats": {
       "KP": 30,
       "Ang.": 45,
@@ -7616,7 +7616,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 148,
+    "family_id": 300,
     "stats": {
       "KP": 50,
       "Ang.": 45,
@@ -7641,7 +7641,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 148,
+    "family_id": 300,
     "stats": {
       "KP": 70,
       "Ang.": 65,
@@ -7667,7 +7667,7 @@
       "dark",
       "ghost"
     ],
-    "family_id": 149,
+    "family_id": 302,
     "stats": {
       "KP": 50,
       "Ang.": 75,
@@ -7692,7 +7692,7 @@
     "types": [
       "steel"
     ],
-    "family_id": 150,
+    "family_id": 303,
     "stats": {
       "KP": 50,
       "Ang.": 85,
@@ -7718,7 +7718,7 @@
       "steel",
       "rock"
     ],
-    "family_id": 151,
+    "family_id": 304,
     "stats": {
       "KP": 50,
       "Ang.": 70,
@@ -7744,7 +7744,7 @@
       "steel",
       "rock"
     ],
-    "family_id": 151,
+    "family_id": 304,
     "stats": {
       "KP": 60,
       "Ang.": 90,
@@ -7770,7 +7770,7 @@
       "steel",
       "rock"
     ],
-    "family_id": 151,
+    "family_id": 304,
     "stats": {
       "KP": 70,
       "Ang.": 110,
@@ -7796,7 +7796,7 @@
       "fighting",
       "psychic"
     ],
-    "family_id": 152,
+    "family_id": 307,
     "stats": {
       "KP": 30,
       "Ang.": 40,
@@ -7822,7 +7822,7 @@
       "fighting",
       "psychic"
     ],
-    "family_id": 152,
+    "family_id": 307,
     "stats": {
       "KP": 60,
       "Ang.": 60,
@@ -7847,7 +7847,7 @@
     "types": [
       "electric"
     ],
-    "family_id": 153,
+    "family_id": 309,
     "stats": {
       "KP": 40,
       "Ang.": 45,
@@ -7872,7 +7872,7 @@
     "types": [
       "electric"
     ],
-    "family_id": 153,
+    "family_id": 309,
     "stats": {
       "KP": 70,
       "Ang.": 75,
@@ -7897,7 +7897,7 @@
     "types": [
       "electric"
     ],
-    "family_id": 154,
+    "family_id": 311,
     "stats": {
       "KP": 60,
       "Ang.": 50,
@@ -7922,7 +7922,7 @@
     "types": [
       "electric"
     ],
-    "family_id": 155,
+    "family_id": 312,
     "stats": {
       "KP": 60,
       "Ang.": 40,
@@ -7947,7 +7947,7 @@
     "types": [
       "bug"
     ],
-    "family_id": 156,
+    "family_id": 313,
     "stats": {
       "KP": 65,
       "Ang.": 73,
@@ -7972,7 +7972,7 @@
     "types": [
       "bug"
     ],
-    "family_id": 157,
+    "family_id": 314,
     "stats": {
       "KP": 65,
       "Ang.": 47,
@@ -7998,7 +7998,7 @@
       "grass",
       "poison"
     ],
-    "family_id": 158,
+    "family_id": 406,
     "stats": {
       "KP": 50,
       "Ang.": 60,
@@ -8023,7 +8023,7 @@
     "types": [
       "poison"
     ],
-    "family_id": 159,
+    "family_id": 316,
     "stats": {
       "KP": 70,
       "Ang.": 43,
@@ -8048,7 +8048,7 @@
     "types": [
       "poison"
     ],
-    "family_id": 159,
+    "family_id": 316,
     "stats": {
       "KP": 100,
       "Ang.": 73,
@@ -8074,7 +8074,7 @@
       "water",
       "dark"
     ],
-    "family_id": 160,
+    "family_id": 318,
     "stats": {
       "KP": 45,
       "Ang.": 90,
@@ -8100,7 +8100,7 @@
       "water",
       "dark"
     ],
-    "family_id": 160,
+    "family_id": 318,
     "stats": {
       "KP": 70,
       "Ang.": 120,
@@ -8125,7 +8125,7 @@
     "types": [
       "water"
     ],
-    "family_id": 161,
+    "family_id": 320,
     "stats": {
       "KP": 130,
       "Ang.": 70,
@@ -8150,7 +8150,7 @@
     "types": [
       "water"
     ],
-    "family_id": 161,
+    "family_id": 320,
     "stats": {
       "KP": 170,
       "Ang.": 90,
@@ -8176,7 +8176,7 @@
       "fire",
       "ground"
     ],
-    "family_id": 162,
+    "family_id": 322,
     "stats": {
       "KP": 60,
       "Ang.": 60,
@@ -8202,7 +8202,7 @@
       "fire",
       "ground"
     ],
-    "family_id": 162,
+    "family_id": 322,
     "stats": {
       "KP": 70,
       "Ang.": 100,
@@ -8227,7 +8227,7 @@
     "types": [
       "fire"
     ],
-    "family_id": 163,
+    "family_id": 324,
     "stats": {
       "KP": 70,
       "Ang.": 85,
@@ -8252,7 +8252,7 @@
     "types": [
       "psychic"
     ],
-    "family_id": 164,
+    "family_id": 325,
     "stats": {
       "KP": 60,
       "Ang.": 25,
@@ -8277,7 +8277,7 @@
     "types": [
       "psychic"
     ],
-    "family_id": 164,
+    "family_id": 325,
     "stats": {
       "KP": 80,
       "Ang.": 45,
@@ -8302,7 +8302,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 165,
+    "family_id": 327,
     "stats": {
       "KP": 60,
       "Ang.": 60,
@@ -8327,7 +8327,7 @@
     "types": [
       "ground"
     ],
-    "family_id": 166,
+    "family_id": 328,
     "stats": {
       "KP": 45,
       "Ang.": 100,
@@ -8353,7 +8353,7 @@
       "ground",
       "dragon"
     ],
-    "family_id": 166,
+    "family_id": 328,
     "stats": {
       "KP": 50,
       "Ang.": 70,
@@ -8379,7 +8379,7 @@
       "ground",
       "dragon"
     ],
-    "family_id": 166,
+    "family_id": 328,
     "stats": {
       "KP": 80,
       "Ang.": 100,
@@ -8404,7 +8404,7 @@
     "types": [
       "grass"
     ],
-    "family_id": 167,
+    "family_id": 331,
     "stats": {
       "KP": 50,
       "Ang.": 85,
@@ -8430,7 +8430,7 @@
       "grass",
       "dark"
     ],
-    "family_id": 167,
+    "family_id": 331,
     "stats": {
       "KP": 70,
       "Ang.": 115,
@@ -8456,7 +8456,7 @@
       "normal",
       "flying"
     ],
-    "family_id": 168,
+    "family_id": 333,
     "stats": {
       "KP": 45,
       "Ang.": 40,
@@ -8482,7 +8482,7 @@
       "dragon",
       "flying"
     ],
-    "family_id": 168,
+    "family_id": 333,
     "stats": {
       "KP": 75,
       "Ang.": 70,
@@ -8507,7 +8507,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 169,
+    "family_id": 335,
     "stats": {
       "KP": 73,
       "Ang.": 115,
@@ -8532,7 +8532,7 @@
     "types": [
       "poison"
     ],
-    "family_id": 170,
+    "family_id": 336,
     "stats": {
       "KP": 73,
       "Ang.": 100,
@@ -8558,7 +8558,7 @@
       "rock",
       "psychic"
     ],
-    "family_id": 171,
+    "family_id": 337,
     "stats": {
       "KP": 90,
       "Ang.": 55,
@@ -8584,7 +8584,7 @@
       "rock",
       "psychic"
     ],
-    "family_id": 172,
+    "family_id": 338,
     "stats": {
       "KP": 90,
       "Ang.": 95,
@@ -8610,7 +8610,7 @@
       "water",
       "ground"
     ],
-    "family_id": 173,
+    "family_id": 339,
     "stats": {
       "KP": 50,
       "Ang.": 48,
@@ -8636,7 +8636,7 @@
       "water",
       "ground"
     ],
-    "family_id": 173,
+    "family_id": 339,
     "stats": {
       "KP": 110,
       "Ang.": 78,
@@ -8661,7 +8661,7 @@
     "types": [
       "water"
     ],
-    "family_id": 174,
+    "family_id": 341,
     "stats": {
       "KP": 43,
       "Ang.": 80,
@@ -8687,7 +8687,7 @@
       "water",
       "dark"
     ],
-    "family_id": 174,
+    "family_id": 341,
     "stats": {
       "KP": 63,
       "Ang.": 120,
@@ -8713,7 +8713,7 @@
       "ground",
       "psychic"
     ],
-    "family_id": 175,
+    "family_id": 343,
     "stats": {
       "KP": 40,
       "Ang.": 40,
@@ -8739,7 +8739,7 @@
       "ground",
       "psychic"
     ],
-    "family_id": 175,
+    "family_id": 343,
     "stats": {
       "KP": 60,
       "Ang.": 70,
@@ -8765,7 +8765,7 @@
       "rock",
       "grass"
     ],
-    "family_id": 176,
+    "family_id": 345,
     "stats": {
       "KP": 66,
       "Ang.": 41,
@@ -8791,7 +8791,7 @@
       "rock",
       "grass"
     ],
-    "family_id": 176,
+    "family_id": 345,
     "stats": {
       "KP": 86,
       "Ang.": 81,
@@ -8817,7 +8817,7 @@
       "rock",
       "bug"
     ],
-    "family_id": 177,
+    "family_id": 347,
     "stats": {
       "KP": 45,
       "Ang.": 95,
@@ -8843,7 +8843,7 @@
       "rock",
       "bug"
     ],
-    "family_id": 177,
+    "family_id": 347,
     "stats": {
       "KP": 75,
       "Ang.": 125,
@@ -8868,7 +8868,7 @@
     "types": [
       "water"
     ],
-    "family_id": 178,
+    "family_id": 349,
     "stats": {
       "KP": 20,
       "Ang.": 15,
@@ -8893,7 +8893,7 @@
     "types": [
       "water"
     ],
-    "family_id": 178,
+    "family_id": 349,
     "stats": {
       "KP": 95,
       "Ang.": 60,
@@ -8918,7 +8918,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 179,
+    "family_id": 351,
     "stats": {
       "KP": 70,
       "Ang.": 70,
@@ -8950,7 +8950,7 @@
     "types": [
       "normal"
     ],
-    "family_id": 180,
+    "family_id": 352,
     "stats": {
       "KP": 60,
       "Ang.": 90,
@@ -8975,7 +8975,7 @@
     "types": [
       "ghost"
     ],
-    "family_id": 181,
+    "family_id": 353,
     "stats": {
       "KP": 44,
       "Ang.": 75,
@@ -9000,7 +9000,7 @@
     "types": [
       "ghost"
     ],
-    "family_id": 181,
+    "family_id": 353,
     "stats": {
       "KP": 64,
       "Ang.": 115,
@@ -9025,7 +9025,7 @@
     "types": [
       "ghost"
     ],
-    "family_id": 182,
+    "family_id": 355,
     "stats": {
       "KP": 20,
       "Ang.": 40,
@@ -9050,7 +9050,7 @@
     "types": [
       "ghost"
     ],
-    "family_id": 182,
+    "family_id": 355,
     "stats": {
       "KP": 40,
       "Ang.": 70,
@@ -9076,7 +9076,7 @@
       "grass",
       "flying"
     ],
-    "family_id": 183,
+    "family_id": 357,
     "stats": {
       "KP": 99,
       "Ang.": 68,
@@ -9101,7 +9101,7 @@
     "types": [
       "psychic"
     ],
-    "family_id": 184,
+    "family_id": 433,
     "stats": {
       "KP": 75,
       "Ang.": 50,
@@ -9126,7 +9126,7 @@
     "types": [
       "dark"
     ],
-    "family_id": 185,
+    "family_id": 359,
     "stats": {
       "KP": 65,
       "Ang.": 130,
@@ -9151,7 +9151,7 @@
     "types": [
       "psychic"
     ],
-    "family_id": 100,
+    "family_id": 360,
     "stats": {
       "KP": 95,
       "Ang.": 23,
@@ -9176,7 +9176,7 @@
     "types": [
       "ice"
     ],
-    "family_id": 186,
+    "family_id": 361,
     "stats": {
       "KP": 50,
       "Ang.": 50,
@@ -9201,7 +9201,7 @@
     "types": [
       "ice"
     ],
-    "family_id": 186,
+    "family_id": 361,
     "stats": {
       "KP": 80,
       "Ang.": 80,
@@ -9227,7 +9227,7 @@
       "ice",
       "water"
     ],
-    "family_id": 187,
+    "family_id": 363,
     "stats": {
       "KP": 70,
       "Ang.": 40,
@@ -9253,7 +9253,7 @@
       "ice",
       "water"
     ],
-    "family_id": 187,
+    "family_id": 363,
     "stats": {
       "KP": 90,
       "Ang.": 60,
@@ -9279,7 +9279,7 @@
       "ice",
       "water"
     ],
-    "family_id": 187,
+    "family_id": 363,
     "stats": {
       "KP": 110,
       "Ang.": 80,
@@ -9304,7 +9304,7 @@
     "types": [
       "water"
     ],
-    "family_id": 188,
+    "family_id": 366,
     "stats": {
       "KP": 35,
       "Ang.": 64,
@@ -9329,7 +9329,7 @@
     "types": [
       "water"
     ],
-    "family_id": 188,
+    "family_id": 366,
     "stats": {
       "KP": 55,
       "Ang.": 104,
@@ -9354,7 +9354,7 @@
     "types": [
       "water"
     ],
-    "family_id": 188,
+    "family_id": 366,
     "stats": {
       "KP": 55,
       "Ang.": 84,
@@ -9380,7 +9380,7 @@
       "water",
       "rock"
     ],
-    "family_id": 189,
+    "family_id": 369,
     "stats": {
       "KP": 100,
       "Ang.": 90,
@@ -9405,7 +9405,7 @@
     "types": [
       "water"
     ],
-    "family_id": 190,
+    "family_id": 370,
     "stats": {
       "KP": 43,
       "Ang.": 30,
@@ -9430,7 +9430,7 @@
     "types": [
       "dragon"
     ],
-    "family_id": 191,
+    "family_id": 371,
     "stats": {
       "KP": 45,
       "Ang.": 75,
@@ -9455,7 +9455,7 @@
     "types": [
       "dragon"
     ],
-    "family_id": 191,
+    "family_id": 371,
     "stats": {
       "KP": 65,
       "Ang.": 95,
@@ -9481,7 +9481,7 @@
       "dragon",
       "flying"
     ],
-    "family_id": 191,
+    "family_id": 371,
     "stats": {
       "KP": 95,
       "Ang.": 135,
@@ -9507,7 +9507,7 @@
       "steel",
       "psychic"
     ],
-    "family_id": 192,
+    "family_id": 374,
     "stats": {
       "KP": 40,
       "Ang.": 55,
@@ -9533,7 +9533,7 @@
       "steel",
       "psychic"
     ],
-    "family_id": 192,
+    "family_id": 374,
     "stats": {
       "KP": 60,
       "Ang.": 75,
@@ -9559,7 +9559,7 @@
       "steel",
       "psychic"
     ],
-    "family_id": 192,
+    "family_id": 374,
     "stats": {
       "KP": 80,
       "Ang.": 135,
@@ -9584,7 +9584,7 @@
     "types": [
       "rock"
     ],
-    "family_id": 193,
+    "family_id": 377,
     "stats": {
       "KP": 80,
       "Ang.": 100,
@@ -9609,7 +9609,7 @@
     "types": [
       "ice"
     ],
-    "family_id": 194,
+    "family_id": 378,
     "stats": {
       "KP": 80,
       "Ang.": 50,
@@ -9634,7 +9634,7 @@
     "types": [
       "steel"
     ],
-    "family_id": 195,
+    "family_id": 379,
     "stats": {
       "KP": 80,
       "Ang.": 75,
@@ -9660,7 +9660,7 @@
       "dragon",
       "psychic"
     ],
-    "family_id": 196,
+    "family_id": 380,
     "stats": {
       "KP": 80,
       "Ang.": 80,
@@ -9686,7 +9686,7 @@
       "dragon",
       "psychic"
     ],
-    "family_id": 197,
+    "family_id": 381,
     "stats": {
       "KP": 80,
       "Ang.": 90,
@@ -9711,7 +9711,7 @@
     "types": [
       "water"
     ],
-    "family_id": 198,
+    "family_id": 382,
     "stats": {
       "KP": 100,
       "Ang.": 100,
@@ -9736,7 +9736,7 @@
     "types": [
       "ground"
     ],
-    "family_id": 199,
+    "family_id": 383,
     "stats": {
       "KP": 100,
       "Ang.": 150,
@@ -9762,7 +9762,7 @@
       "dragon",
       "flying"
     ],
-    "family_id": 200,
+    "family_id": 384,
     "stats": {
       "KP": 105,
       "Ang.": 150,
@@ -9788,7 +9788,7 @@
       "steel",
       "psychic"
     ],
-    "family_id": 201,
+    "family_id": 385,
     "stats": {
       "KP": 100,
       "Ang.": 100,
@@ -9813,7 +9813,7 @@
     "types": [
       "psychic"
     ],
-    "family_id": 202,
+    "family_id": 386,
     "stats": {
       "KP": 50,
       "Ang.": 150,
@@ -12494,7 +12494,7 @@
     "types": [
       "water"
     ],
-    "family_id": 489,
+    "family_id": 490,
     "stats": {
       "KP": 100,
       "Ang.": 100,
@@ -16617,7 +16617,7 @@
     "types": [
       "psychic"
     ],
-    "family_id": 202,
+    "family_id": 386,
     "stats": {
       "KP": 50,
       "Ang.": 180,
@@ -16650,7 +16650,7 @@
     "types": [
       "psychic"
     ],
-    "family_id": 202,
+    "family_id": 386,
     "stats": {
       "KP": 50,
       "Ang.": 70,
@@ -16683,7 +16683,7 @@
     "types": [
       "psychic"
     ],
-    "family_id": 202,
+    "family_id": 386,
     "stats": {
       "KP": 50,
       "Ang.": 95,
@@ -17022,7 +17022,7 @@
     "types": [
       "fire"
     ],
-    "family_id": 179,
+    "family_id": 351,
     "stats": {
       "KP": 70,
       "Ang.": 70,
@@ -17055,7 +17055,7 @@
     "types": [
       "water"
     ],
-    "family_id": 179,
+    "family_id": 351,
     "stats": {
       "KP": 70,
       "Ang.": 70,
@@ -17088,7 +17088,7 @@
     "types": [
       "ice"
     ],
-    "family_id": 179,
+    "family_id": 351,
     "stats": {
       "KP": 70,
       "Ang.": 70,

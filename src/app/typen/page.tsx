@@ -21,7 +21,7 @@ import { getLang } from "@/lib/i18n/getLang";
 import { routeName } from "@/lib/i18n/localize";
 import { displayNameWithForm, movepoolId } from "@/lib/forms";
 import { typesForGeneration } from "@/lib/pokemonTypes";
-import { LinkStatus, Player, RunMode } from "@/generated/prisma/client";
+import { EncounterStatus, LinkStatus, Player, RunMode } from "@/generated/prisma/client";
 import type { TeamMember } from "@/components/TeamWeaknessesView";
 import type { OpenSlot } from "@/components/CatchRateView";
 import { AnalyzeView } from "@/components/AnalyzeView";
@@ -91,11 +91,30 @@ export default async function AnalyzePage({
   }
 
   // Current team per player for the battle matchup.
-  const teamLinks = await prisma.soulLink.findMany({
-    where: { runId, teamPosition: { not: null }, status: LinkStatus.ALIVE },
-    include: { encounters: true },
-    orderBy: { teamPosition: "asc" },
-  });
+  // A pair only forms when BOTH players catch: a route with a Fled/Killed
+  // encounter never produced a link, so its surviving catch is boxed and must
+  // not show up as a team member here either (the Team tab hides it too).
+  const failedRouteIds =
+    mode === RunMode.SOULLINK
+      ? new Set(
+          (
+            await prisma.encounter.findMany({
+              where: {
+                runId,
+                status: { in: [EncounterStatus.FLED, EncounterStatus.KILLED] },
+              },
+              select: { routeId: true },
+            })
+          ).map((e) => e.routeId),
+        )
+      : new Set<number>();
+  const teamLinks = (
+    await prisma.soulLink.findMany({
+      where: { runId, teamPosition: { not: null }, status: LinkStatus.ALIVE },
+      include: { encounters: true },
+      orderBy: { teamPosition: "asc" },
+    })
+  ).filter((link) => !failedRouteIds.has(link.routeId));
   const byPlayer = new Map<Player, TeamMember[]>([
     [Player.PLAYER1, []],
     [Player.PLAYER2, []],

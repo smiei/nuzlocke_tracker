@@ -35,6 +35,23 @@ export type SaveEncounterInput = {
 
 export type SaveEncounterResult = { success: true } | { success: false; error: ActionError };
 
+// A SoulLink pair only forms when BOTH players catch. If either slot on the
+// route ended Fled/Killed, the surviving catch is boxed - it must never hold
+// a team slot, and the Team tab hides the link entirely. Classic runs have no
+// partner, so nothing is ever broken there.
+async function pairNeverFormed(runId: number, routeId: number): Promise<boolean> {
+  const run = await prisma.run.findUnique({ where: { id: runId } });
+  if (!run || run.mode !== RunMode.SOULLINK) return false;
+  const failed = await prisma.encounter.count({
+    where: {
+      runId,
+      routeId,
+      status: { in: [EncounterStatus.FLED, EncounterStatus.KILLED] },
+    },
+  });
+  return failed > 0;
+}
+
 // Auto-team: drop a route's link into the lowest free team slot (0-5) unless it
 // already sits on the team. A full team is a no-op. Returns whether the link
 // ended up on a slot. Shared by saveEncounter (a new catch auto-joins the team
@@ -45,6 +62,7 @@ async function autoAssignTeamSlot(runId: number, routeId: number): Promise<boole
     where: { runId_routeId: { runId, routeId } },
   });
   if (!link) return false;
+  if (await pairNeverFormed(runId, routeId)) return false;
   if (link.teamPosition !== null) return true;
 
   const occupied = new Set(
@@ -167,6 +185,15 @@ export async function saveEncounter(
   // caught encounters qualify; a full team is silently left as-is.
   if (status === EncounterStatus.CAUGHT) {
     await autoAssignTeamSlot(runId, routeId);
+  } else if (await pairNeverFormed(runId, routeId)) {
+    // This save just broke the pair (Fled/Killed). The partner's catch may
+    // already sit on a team slot from when the route still looked complete -
+    // release it, otherwise it lingers as a team member the Team tab doesn't
+    // even show.
+    await prisma.soulLink.updateMany({
+      where: { runId, routeId, teamPosition: { not: null } },
+      data: { teamPosition: null },
+    });
   }
 
   // The row is now a real Encounter - any pre-confirm draft for this slot is

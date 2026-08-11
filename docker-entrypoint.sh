@@ -24,6 +24,12 @@ node scripts/download-badges.mjs || echo "WARNING: badge download failed; badges
 # Run migrations (as root - may CREATE the db file on a fresh volume)
 npx prisma migrate deploy
 
+# familyId is denormalized onto every Encounter, so a correction to a
+# species' family in data/pokemon.json never reaches rows already saved.
+# Re-sync them here (idempotent: only mismatching rows are touched).
+echo "Re-syncing Encounter.familyId with pokemon.json..."
+node scripts/backfill-encounter-families.mjs || echo "WARNING: familyId backfill failed; Species Clause warnings may be stale."
+
 # Hand the db over to the app user only AFTER migrate deploy: on a fresh
 # volume the migration creates nuzlocke.db as root, and chowning earlier
 # would leave the app with a file it can read but not write
