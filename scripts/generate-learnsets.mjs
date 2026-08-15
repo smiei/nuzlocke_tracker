@@ -122,17 +122,35 @@ function buildPastValues(move, vgGenerations) {
   return out.sort((a, b) => a.maxGeneration - b.maxGeneration);
 }
 
-// Localized in-game description: the most recent wording available per
-// language (German only goes back to Gen 6, so there is nothing older to
-// prefer). Newlines are soft-wrap artifacts of the games' text boxes.
+// A move dropped from a later game still HAS an entry there, but its text is
+// a placeholder ("This move can't be used. It's recommended that this move is
+// forgotten."). Taking the newest entry blindly therefore replaces the real
+// description with that placeholder - it hit 75 of 554 moves, every one of
+// them cut in Sword/Shield (Dragon Rage, Hidden Power, Karate Chop, ...).
+const CUT_MOVE_PLACEHOLDER = /can.?t be used/i;
+
+// Localized in-game description: the most recent REAL wording per language
+// (German only goes back to Gen 6, so there is nothing older to prefer).
+// Newlines are soft-wrap artifacts of the games' text boxes.
 function buildFlavor(move, vgGenerations) {
+  const entries = move.flavor_text_entries ?? [];
+  // Version groups where the move no longer exists, detected on the ENGLISH
+  // text so the same skip applies to every language.
+  const cutVersionGroups = new Set(
+    entries
+      .filter((e) => e.language?.name === "en" && CUT_MOVE_PLACEHOLDER.test(e.flavor_text ?? ""))
+      .map((e) => e.version_group?.name),
+  );
+
   const flavor = {};
   for (const lang of LANGS) {
-    const entries = (move.flavor_text_entries ?? []).filter((e) => e.language?.name === lang);
-    if (entries.length === 0) continue;
-    let best = entries[entries.length - 1];
+    const usable = entries.filter(
+      (e) => e.language?.name === lang && !cutVersionGroups.has(e.version_group?.name),
+    );
+    if (usable.length === 0) continue;
+    let best = usable[usable.length - 1];
     let bestGen = -1;
-    for (const e of entries) {
+    for (const e of usable) {
       const gen = vgGenerations.get(e.version_group?.name) ?? -1;
       if (gen >= bestGen) {
         bestGen = gen;
