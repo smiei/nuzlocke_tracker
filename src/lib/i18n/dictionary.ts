@@ -322,6 +322,8 @@ const de = {
       dusk: "Finsterball",
       heal: "Heilball",
       dream: "Traumball",
+      heavy: "Schwerball",
+      sport: "Turnierball",
     },
     statusOptions: {
       none: "Keine",
@@ -348,6 +350,8 @@ const de = {
       dusk: "Finsterball: ×3,5 gilt nur nachts oder in Höhlen – hier angenommen.",
       heal: "Heilball: kein Fangbonus, heilt das gefangene Pokémon vollständig.",
       dream: "Traumball: fängt in Gen 5 garantiert (nur in der Traumwelt erhältlich).",
+      heavy: "Schwerball: verschiebt die Fangrate je nach Gewicht (−20 unter 102 kg, bis +40 ab 410 kg) statt sie zu vervielfachen.",
+      sport: "Turnierball: kein Fangbonus, nur beim Käferturnier erhältlich.",
     },
   },
   typen: {
@@ -759,6 +763,8 @@ const en: Dictionary = {
       dusk: "Dusk Ball",
       heal: "Heal Ball",
       dream: "Dream Ball",
+      heavy: "Heavy Ball",
+      sport: "Sport Ball",
     },
     statusOptions: {
       none: "None",
@@ -785,6 +791,8 @@ const en: Dictionary = {
       dusk: "Dusk Ball: ×3.5 only at night or in caves – assumed here.",
       heal: "Heal Ball: no catch bonus, fully heals the caught Pokémon.",
       dream: "Dream Ball: a guaranteed catch in Gen 5 (Dream World only).",
+      heavy: "Heavy Ball: shifts the catch rate by the target's weight (−20 below 102 kg, up to +40 from 410 kg) instead of multiplying it.",
+      sport: "Sport Ball: no catch bonus, only available during the Bug-Catching Contest.",
     },
   },
   typen: {
@@ -1197,6 +1205,8 @@ const fr: Dictionary = {
       dusk: "Sombre Ball",
       heal: "Ball Soin",
       dream: "Rêve Ball",
+      heavy: "Masse Ball",
+      sport: "Compét’Ball",
     },
     statusOptions: {
       none: "Aucune",
@@ -1223,6 +1233,8 @@ const fr: Dictionary = {
       dusk: "Sombre Ball : ×3,5 seulement la nuit ou dans les grottes – supposé ici.",
       heal: "Ball Soin : aucun bonus de capture, soigne le Pokémon capturé.",
       dream: "Rêve Ball : capture garantie en Gen 5 (Monde des Rêves uniquement).",
+      heavy: "Masse Ball : décale le taux de capture selon le poids (−20 sous 102 kg, jusqu’à +40 dès 410 kg) au lieu de le multiplier.",
+      sport: "Compét’Ball : aucun bonus de capture, uniquement pendant le Concours Attrap’Insecte.",
     },
   },
   typen: {
@@ -1635,6 +1647,8 @@ const es: Dictionary = {
       dusk: "Ocaso Ball",
       heal: "Cura Ball",
       dream: "Ensueño Ball",
+      heavy: "Peso Ball",
+      sport: "Competi Ball",
     },
     statusOptions: {
       none: "Ninguno",
@@ -1661,6 +1675,8 @@ const es: Dictionary = {
       dusk: "Ocaso Ball: ×3,5 solo de noche o en cuevas – se asume aquí.",
       heal: "Cura Ball: sin bonus de captura, cura por completo al Pokémon capturado.",
       dream: "Ensueño Ball: captura garantizada en la 5.ª gen (solo Mundo Ensueño).",
+      heavy: "Peso Ball: desplaza la tasa de captura según el peso (−20 por debajo de 102 kg, hasta +40 desde 410 kg) en vez de multiplicarla.",
+      sport: "Competi Ball: sin bonus de captura, solo durante el Concurso de Captura.",
     },
   },
   typen: {
@@ -2073,6 +2089,8 @@ const it: Dictionary = {
       dusk: "Scuro Ball",
       heal: "Curaball",
       dream: "Ball Sogno",
+      heavy: "Peso Ball",
+      sport: "Gara Ball",
     },
     statusOptions: {
       none: "Nessuno",
@@ -2099,6 +2117,8 @@ const it: Dictionary = {
       dusk: "Scuro Ball: ×3,5 solo di notte o nelle grotte – qui dato per assunto.",
       heal: "Curaball: nessun bonus di cattura, cura completamente il Pokémon catturato.",
       dream: "Ball Sogno: cattura garantita in 5ª gen (solo Mondo Sogno).",
+      heavy: "Peso Ball: sposta il tasso di cattura in base al peso (−20 sotto 102 kg, fino a +40 da 410 kg) invece di moltiplicarlo.",
+      sport: "Gara Ball: nessun bonus di cattura, solo durante la Gara Acchiappainsetti.",
     },
   },
   typen: {

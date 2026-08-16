@@ -89,6 +89,42 @@ export function historicalMoveType(
   return entry?.type ?? currentType;
 }
 
+// Same problem one level up: PokeAPI's `moves.json` names are a move's CURRENT
+// names only, but a dozen German move names were re-translated later on -
+// "Pfund" became "Klaps" and "Giftblick" became "Schlangenblick" in Gen 8,
+// "Fauna-Statue" became "Flora-Statue" in Gen 7 - so a Gen 1-5 game would show
+// a name that never appeared on those cartridges (the player searches the move
+// list for "Pfund" and doesn't find it). Hand-curated in
+// data/move-name-history.json from PokéWiki's "Liste der Attackennamen in
+// anderen Sprachen", using the same maxGeneration convention as
+// MoveTypeHistoryEntry. `minGeneration` exists for the single move that was
+// renamed and later renamed BACK: Transform was "Verwandler" in Gen 2 only,
+// "Wandler" before and after. Only languages that actually changed are listed;
+// the rest fall through to moves.json.
+export type MoveNameHistoryEntry = {
+  slug: string;
+  names: Partial<Record<Lang, string>>;
+  maxGeneration: number;
+  minGeneration?: number;
+};
+
+// The names a move actually had in the given generation, merged over its
+// current ones so untouched languages pass through unchanged.
+export function historicalMoveNames(
+  history: MoveNameHistoryEntry[],
+  slug: string,
+  generation: number,
+  currentNames: Record<string, string>,
+): Record<string, string> {
+  const entry = history.find(
+    (h) =>
+      h.slug === slug &&
+      generation <= h.maxGeneration &&
+      generation >= (h.minGeneration ?? 0),
+  );
+  return entry ? { ...currentNames, ...entry.names } : currentNames;
+}
+
 // Before the Gen 4 physical/special split, a damaging move's category came
 // from its TYPE, not from the move itself - so PokeAPI's damage_class (the
 // Gen-4+ view) is simply wrong for Gen 1-3 games: Bite and Crunch were

@@ -126,6 +126,8 @@ export type CatchSharedProps = {
   catchRates: Record<number, number>;
   lockedFamilies: Set<number>;
   generation: number;
+  // Which Gen 4 game: only HeartGold/SoulSilver sell the Apricorn balls.
+  versionGroup: string;
   openSlots: OpenSlot[];
   effectiveness: EffectivenessTable;
   attackTypes: string[];
@@ -258,7 +260,7 @@ export function CatchCardBody({
   state: CatchBodyState;
   onChange: (patch: Partial<CatchBodyState>) => void;
 }) {
-  const { runId, mode, pokemonList, catchRates, generation, openSlots, effectiveness, attackTypes, settings } =
+  const { runId, mode, pokemonList, catchRates, generation, versionGroup, openSlots, effectiveness, attackTypes, settings } =
     shared;
   const router = useRouter();
   const { lang } = useLanguage();
@@ -266,7 +268,7 @@ export function CatchCardBody({
   const tTypen = translations[lang].typen;
   const playerLabel = usePlayerLabel();
   const detail = usePokemonDetail();
-  const ballIds = getBallIdsForGeneration(generation);
+  const ballIds = getBallIdsForGeneration(generation, versionGroup);
 
   const { ball, hpPercent, level, status, turn, conditionMet } = state;
   const [caughtMsg, setCaughtMsg] = useState<string | null>(null);
@@ -285,6 +287,8 @@ export function CatchCardBody({
     selected && baseRate !== undefined
       ? computeCatchChance(generation, {
           baseRate,
+          // Only the Heavy Ball uses it, but it must reach the formula.
+          weight: selected?.weight,
           hpPercent,
           level,
           ball,

@@ -54,7 +54,10 @@ export default async function TrackerPage({
               easier: settings.evolutionOverridesEasier,
               timeBased: settings.evolutionOverridesTimeBased,
             })}
-            moveData={{ movesets: getMoveset(game.versionGroup), moves: getMoves(lang) }}
+            moveData={{
+              movesets: getMoveset(game.versionGroup),
+              moves: getMoves(lang, game.generation),
+            }}
             moveTypeHistory={getMoveTypeHistory()}
             effectiveness={getEffectiveness(game.generation)}
             generation={game.generation}

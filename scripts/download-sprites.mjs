@@ -61,6 +61,10 @@ const BALLS = [
   "park",
   "quick",
   "dusk",
+  "heal",
+  "dream",
+  "heavy",
+  "sport",
 ];
 
 async function download(url, target) {

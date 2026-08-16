@@ -961,7 +961,9 @@
       242
     ],
     "method": {
-      "kind": "other"
+      "kind": "levelHeld",
+      "item": "oval-stone",
+      "time": "day"
     }
   },
   {
@@ -1031,7 +1033,9 @@
     "evolvesFrom": 439,
     "evolvesTo": [],
     "method": {
-      "kind": "other"
+      "kind": "levelMove",
+      "move": "mimic",
+      "time": null
     }
   },
   {
@@ -1539,7 +1543,9 @@
     "evolvesFrom": 438,
     "evolvesTo": [],
     "method": {
-      "kind": "other"
+      "kind": "levelMove",
+      "move": "mimic",
+      "time": null
     }
   },
   {
@@ -1849,7 +1855,8 @@
     "evolvesFrom": 458,
     "evolvesTo": [],
     "method": {
-      "kind": "other"
+      "kind": "levelParty",
+      "species": "remoraid"
     }
   },
   {
@@ -2385,7 +2392,7 @@
     "evolvesFrom": 290,
     "evolvesTo": [],
     "method": {
-      "kind": "other"
+      "kind": "shed"
     }
   },
   {
@@ -3394,7 +3401,9 @@
     "evolvesFrom": 190,
     "evolvesTo": [],
     "method": {
-      "kind": "other"
+      "kind": "levelMove",
+      "move": "double-hit",
+      "time": null
     }
   },
   {
@@ -3680,7 +3689,9 @@
     "evolvesFrom": 215,
     "evolvesTo": [],
     "method": {
-      "kind": "other"
+      "kind": "levelHeld",
+      "item": "razor-claw",
+      "time": "night"
     }
   },
   {
@@ -3688,7 +3699,8 @@
     "evolvesFrom": 82,
     "evolvesTo": [],
     "method": {
-      "kind": "other"
+      "kind": "levelLocation",
+      "location": "mt-coronet"
     }
   },
   {
@@ -3696,7 +3708,9 @@
     "evolvesFrom": 108,
     "evolvesTo": [],
     "method": {
-      "kind": "other"
+      "kind": "levelMove",
+      "move": "rollout",
+      "time": null
     }
   },
   {
@@ -3713,7 +3727,9 @@
     "evolvesFrom": 114,
     "evolvesTo": [],
     "method": {
-      "kind": "other"
+      "kind": "levelMove",
+      "move": "ancient-power",
+      "time": null
     }
   },
   {
@@ -3748,7 +3764,9 @@
     "evolvesFrom": 193,
     "evolvesTo": [],
     "method": {
-      "kind": "other"
+      "kind": "levelMove",
+      "move": "ancient-power",
+      "time": null
     }
   },
   {
@@ -3756,7 +3774,8 @@
     "evolvesFrom": 133,
     "evolvesTo": [],
     "method": {
-      "kind": "other"
+      "kind": "levelLocation",
+      "location": "eterna-forest"
     }
   },
   {
@@ -3764,7 +3783,8 @@
     "evolvesFrom": 133,
     "evolvesTo": [],
     "method": {
-      "kind": "other"
+      "kind": "levelLocation",
+      "location": "sinnoh-route-217"
     }
   },
   {
@@ -3772,7 +3792,9 @@
     "evolvesFrom": 207,
     "evolvesTo": [],
     "method": {
-      "kind": "other"
+      "kind": "levelHeld",
+      "item": "razor-fang",
+      "time": "night"
     }
   },
   {
@@ -3780,7 +3802,9 @@
     "evolvesFrom": 221,
     "evolvesTo": [],
     "method": {
-      "kind": "other"
+      "kind": "levelMove",
+      "move": "ancient-power",
+      "time": null
     }
   },
   {
@@ -3806,7 +3830,8 @@
     "evolvesFrom": 299,
     "evolvesTo": [],
     "method": {
-      "kind": "other"
+      "kind": "levelLocation",
+      "location": "mt-coronet"
     }
   },
   {

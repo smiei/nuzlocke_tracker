@@ -31,7 +31,9 @@ export type BallId =
   | "quick"
   | "dusk"
   | "heal"
-  | "dream";
+  | "dream"
+  | "heavy"
+  | "sport";
 
 export type StatusId = "none" | "sleep" | "freeze" | "paralysis" | "poison" | "burn";
 
@@ -50,6 +52,7 @@ const BALLS_GEN2: BallId[] = [
   "friend",
   "love",
   "fast",
+  "heavy",
   "park",
 ];
 const BALLS_GEN3: BallId[] = [
@@ -103,11 +106,32 @@ const BALLS_GEN5: BallId[] = [
   "dream",
 ];
 
-export function getBallIdsForGeneration(generation: number): BallId[] {
+// HeartGold/SoulSilver are the only Gen 4 games with Apricorn balls (Kurt) and
+// the Sport Ball, so the Gen 4 list alone is not enough - the caller passes the
+// game's version group.
+const BALLS_GEN4_HGSS: BallId[] = [
+  ...BALLS_GEN4,
+  "heal",
+  "park",
+  "level",
+  "lure",
+  "moon",
+  "friend",
+  "love",
+  "fast",
+  "heavy",
+  "sport",
+];
+
+export function getBallIdsForGeneration(generation: number, versionGroup?: string): BallId[] {
   if (generation === 1) return BALLS_GEN1;
   if (generation === 2) return BALLS_GEN2;
   if (generation >= 5) return BALLS_GEN5;
-  if (generation === 4) return BALLS_GEN4;
+  if (generation === 4) {
+    return versionGroup === "heartgold-soulsilver"
+      ? BALLS_GEN4_HGSS
+      : [...BALLS_GEN4, "heal", "park"];
+  }
   return BALLS_GEN3;
 }
 
@@ -194,7 +218,8 @@ function ballMultiplierGen34(
       return ctx.turn === 1 ? 4 : 1;
     case "dusk":
       return 3.5;
-    // poke, master (handled as guaranteed), luxury, premier
+    // heavy shifts the catch rate itself (see effectiveBaseRate), sport is a
+    // plain ball; poke, master (guaranteed), luxury, premier, heal likewise.
     default:
       return 1;
   }
@@ -222,8 +247,27 @@ function ballMultiplierGen2(ball: BallId): number {
   }
 }
 
+// The Heavy Ball is the one ball that does not multiply: it ADDS to the catch
+// rate by the target's weight, then the result is clamped to 1..255.
+// Thresholds are identical in Gen 2 and Gen 4 (HeartGold/SoulSilver).
+export function heavyBallModifier(weightKg: number | undefined): number {
+  if (weightKg === undefined) return 0;
+  if (weightKg <= 102.3) return -20;
+  if (weightKg <= 204.7) return 0;
+  if (weightKg <= 307.1) return 20;
+  if (weightKg <= 409.5) return 30;
+  return 40;
+}
+
+export function effectiveBaseRate(input: CatchInput): number {
+  if (input.ball !== "heavy") return input.baseRate;
+  return Math.min(255, Math.max(1, input.baseRate + heavyBallModifier(input.weight)));
+}
+
 export type CatchInput = {
   baseRate: number;
+  // Kilograms - only the Heavy Ball uses it.
+  weight?: number;
   hpPercent: number; // 1-100
   level: number; // 1-100
   ball: BallId;
@@ -278,7 +322,7 @@ function computeGen2(input: CatchInput): CatchResult {
   const bonus = input.status === "sleep" || input.status === "freeze" ? 10 : 0;
   const value = Math.min(
     255,
-    Math.max(1, Math.floor(((3 - 2 * hpFrac) / 3) * input.baseRate * mult)) + bonus,
+    Math.max(1, Math.floor(((3 - 2 * hpFrac) / 3) * effectiveBaseRate(input) * mult)) + bonus,
   );
   return {
     guaranteed: false,
@@ -306,7 +350,7 @@ function computeGen34(input: CatchInput): CatchResult {
     return { guaranteed: true, chance: 1, ballText: "×1", statusText };
   }
 
-  const a = Math.max(1, ((3 - 2 * hpFrac) / 3) * input.baseRate * ballBonus * statusBonus);
+  const a = Math.max(1, ((3 - 2 * hpFrac) / 3) * effectiveBaseRate(input) * ballBonus * statusBonus);
   if (a >= 255) {
     return { guaranteed: true, chance: 1, ballText, statusText };
   }
@@ -339,7 +383,7 @@ function computeGen5(input: CatchInput): CatchResult {
     return { guaranteed: true, chance: 1, ballText: "×1", statusText };
   }
 
-  const a = Math.max(1, ((3 - 2 * hpFrac) / 3) * input.baseRate * ballBonus * statusBonus);
+  const a = Math.max(1, ((3 - 2 * hpFrac) / 3) * effectiveBaseRate(input) * ballBonus * statusBonus);
   if (a >= 255) {
     return { guaranteed: true, chance: 1, ballText, statusText };
   }

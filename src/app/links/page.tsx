@@ -206,7 +206,10 @@ export default async function LinksPage({
             pokemonList={pokemonList}
             forms={getPokemonForms(game.dexLimit)}
             evolutions={getEvolutions(evoOptions)}
-            moveData={{ movesets: getMoveset(game.versionGroup), moves: getMoves(lang) }}
+            moveData={{
+              movesets: getMoveset(game.versionGroup),
+              moves: getMoves(lang, game.generation),
+            }}
             moveTypeHistory={getMoveTypeHistory()}
             effectiveness={getEffectiveness(game.generation)}
             generation={game.generation}

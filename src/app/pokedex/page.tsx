@@ -53,7 +53,10 @@ export default async function PokedexPage({
         pokemonList={pokemon}
         forms={getPokemonForms(game.dexLimit)}
         evolutions={evolutions}
-        moveData={{ movesets: getMoveset(game.versionGroup), moves: getMoves(lang) }}
+        moveData={{
+          movesets: getMoveset(game.versionGroup),
+          moves: getMoves(lang, game.generation),
+        }}
         moveTypeHistory={getMoveTypeHistory()}
         effectiveness={getEffectiveness(game.generation)}
         generation={game.generation}

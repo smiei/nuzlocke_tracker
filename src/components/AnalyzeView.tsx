@@ -165,6 +165,7 @@ export function AnalyzeView({
   mode,
   pokemonList,
   generation,
+  versionGroup,
   effectiveness,
   attackTypes,
   catchRates,
@@ -179,6 +180,7 @@ export function AnalyzeView({
   mode: RunMode;
   pokemonList: Pokemon[];
   generation: number;
+  versionGroup: string;
   effectiveness: EffectivenessTable;
   attackTypes: string[];
   catchRates: Record<number, number>;
@@ -200,6 +202,7 @@ export function AnalyzeView({
     catchRates,
     lockedFamilies,
     generation,
+    versionGroup,
     openSlots,
     effectiveness,
     attackTypes,

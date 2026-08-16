@@ -1,0 +1,18 @@
+[
+  { "slug": "pound", "maxGeneration": 7, "names": { "de": "Pfund" } },
+  { "slug": "peck", "maxGeneration": 7, "names": { "de": "Schnabel" } },
+  { "slug": "confuse-ray", "maxGeneration": 7, "names": { "de": "Konfustrahl" } },
+  { "slug": "glare", "maxGeneration": 7, "names": { "de": "Giftblick" } },
+  { "slug": "foresight", "maxGeneration": 7, "names": { "de": "Gesichte" } },
+  { "slug": "role-play", "maxGeneration": 7, "names": { "de": "Rollentausch" } },
+  { "slug": "skill-swap", "maxGeneration": 7, "names": { "de": "Wertewechsel" } },
+  { "slug": "baton-pass", "maxGeneration": 6, "names": { "de": "Staffette" } },
+  { "slug": "frenzy-plant", "maxGeneration": 6, "names": { "de": "Fauna-Statue" } },
+  { "slug": "grass-pledge", "maxGeneration": 6, "names": { "de": "Pflanzsäulen" } },
+  {
+    "slug": "transform",
+    "minGeneration": 2,
+    "maxGeneration": 2,
+    "names": { "de": "Verwandler" }
+  }
+]

@@ -54,10 +54,10 @@ export default async function AnalyzePage({
   const formEntries = getPokemonForms(game.dexLimit);
   const pickableList = [...pokemonList, ...formEntries];
   const moveset = getMoveset(game.versionGroup);
-  const moves = getMoves(lang);
+  const moves = getMoves(lang, game.generation);
 
   const catchRates = Object.fromEntries(
-    getCatchRates().map((entry) => [entry.id, entry.catch_rate]),
+    getCatchRates(game.generation).map((entry) => [entry.id, entry.catch_rate]),
   );
 
   const encounters = await prisma.encounter.findMany({ where: { runId } });
@@ -167,6 +167,7 @@ export default async function AnalyzePage({
             mode={mode}
             pokemonList={pickableList}
             generation={game.generation}
+            versionGroup={game.versionGroup}
             effectiveness={effectiveness}
             attackTypes={attackTypes}
             catchRates={catchRates}

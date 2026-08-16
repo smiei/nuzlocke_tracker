@@ -1,0 +1,44 @@
+[
+  {
+    "id": 382,
+    "comment": "Kyogre - lowered to 3 in Omega Ruby/Alpha Sapphire",
+    "catchRate": 5,
+    "maxGeneration": 5
+  },
+  {
+    "id": 383,
+    "comment": "Groudon - lowered to 3 in Omega Ruby/Alpha Sapphire",
+    "catchRate": 5,
+    "maxGeneration": 5
+  },
+  {
+    "id": 384,
+    "comment": "Rayquaza - raised to 45 in Omega Ruby/Alpha Sapphire as a mandatory story catch",
+    "catchRate": 3,
+    "maxGeneration": 5
+  },
+  {
+    "id": 483,
+    "comment": "Dialga - lowered to 3 in Omega Ruby/Alpha Sapphire",
+    "catchRate": 30,
+    "maxGeneration": 5
+  },
+  {
+    "id": 484,
+    "comment": "Palkia - lowered to 3 in Omega Ruby/Alpha Sapphire",
+    "catchRate": 30,
+    "maxGeneration": 5
+  },
+  {
+    "id": 643,
+    "comment": "Reshiram - lowered to 3 in Omega Ruby/Alpha Sapphire",
+    "catchRate": 45,
+    "maxGeneration": 5
+  },
+  {
+    "id": 644,
+    "comment": "Zekrom - lowered to 3 in Omega Ruby/Alpha Sapphire",
+    "catchRate": 45,
+    "maxGeneration": 5
+  }
+]

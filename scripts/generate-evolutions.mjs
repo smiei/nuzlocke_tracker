@@ -50,7 +50,17 @@ function parseMethod(details) {
     if (d.min_level) return { kind: "level", level: d.min_level };
     if (d.min_happiness) return { kind: "happiness", time: d.time_of_day || null };
     if (d.min_beauty) return { kind: "beauty" };
+    // Everything below used to collapse into "other", which renders as no
+    // condition at all - 16 evolutions showed a blank line (Piloswine ->
+    // Mamoswine, Magneton -> Magnezone, Eevee -> Leafeon/Glaceon, ...).
+    const time = d.time_of_day || null;
+    if (d.known_move) return { kind: "levelMove", move: d.known_move.name, time };
+    if (d.held_item) return { kind: "levelHeld", item: d.held_item.name, time };
+    if (d.party_species) return { kind: "levelParty", species: d.party_species.name };
+    if (d.location) return { kind: "levelLocation", location: d.location.name };
   }
+  // Shedinja: it simply appears in a free party slot when Nincada evolves.
+  if (trigger === "shed") return { kind: "shed" };
   return { kind: "other" };
 }
 

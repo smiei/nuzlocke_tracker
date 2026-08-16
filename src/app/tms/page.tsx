@@ -90,7 +90,7 @@ export default async function TmsPage({
   const moveTypeHistory = getMoveTypeHistory();
   // With lang, so the move descriptions reach both the selected-move summary
   // and the Pokédex card opened from a team row.
-  const movesTable = getMoves(lang);
+  const movesTable = getMoves(lang, game.generation);
   const slugs = new Set<string>(Object.keys(tmCompat));
   for (const list of Object.values(moveset)) for (const [, slug] of list) slugs.add(slug);
   const moves: MoveOption[] = [...slugs]

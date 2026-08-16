@@ -22,7 +22,9 @@ const ITEM_LABELS: Record<Lang, Record<string, string>> = {
     magmarizer: "Magmaisierer",
     "dubious-disc": "Dubiosdisc",
     "reaper-cloth": "Düsterumhang",
-    "shiny-stone": "Funkelstein",
+    "shiny-stone": "Leuchtstein",
+    "dusk-stone": "Finsterstein",
+    "dawn-stone": "Funkelstein",
     "prism-scale": "Schönschuppe",
     "razor-fang": "Scharfzahn",
     "razor-claw": "Scharfklaue",
@@ -47,6 +49,8 @@ const ITEM_LABELS: Record<Lang, Record<string, string>> = {
     "dubious-disc": "Dubious Disc",
     "reaper-cloth": "Reaper Cloth",
     "shiny-stone": "Shiny Stone",
+    "dusk-stone": "Dusk Stone",
+    "dawn-stone": "Dawn Stone",
     "prism-scale": "Prism Scale",
     "razor-fang": "Razor Fang",
     "razor-claw": "Razor Claw",
@@ -71,6 +75,8 @@ const ITEM_LABELS: Record<Lang, Record<string, string>> = {
     "dubious-disc": "CD Douteux",
     "reaper-cloth": "Tissu Fauche",
     "shiny-stone": "Pierre Éclat",
+    "dusk-stone": "Pierre Nuit",
+    "dawn-stone": "Pierre Aube",
     "prism-scale": "Bel’Écaille",
     "razor-fang": "Croc Rasoir",
     "razor-claw": "Griffe Rasoir",
@@ -95,6 +101,8 @@ const ITEM_LABELS: Record<Lang, Record<string, string>> = {
     "dubious-disc": "Disco Extraño",
     "reaper-cloth": "Telaterrible",
     "shiny-stone": "Piedra Día",
+    "dusk-stone": "Piedra Noche",
+    "dawn-stone": "Piedra Alba",
     "prism-scale": "Escama Bella",
     "razor-fang": "Colmillagudo",
     "razor-claw": "Garra Afilada",
@@ -119,10 +127,97 @@ const ITEM_LABELS: Record<Lang, Record<string, string>> = {
     "dubious-disc": "Dubbiodisco",
     "reaper-cloth": "Terrorpanno",
     "shiny-stone": "Pietrabrillo",
+    "dusk-stone": "Neropietra",
+    "dawn-stone": "Pietralbore",
     "prism-scale": "Bellasquama",
     "razor-fang": "Velenodente",
     "razor-claw": "Affilartiglio",
     "oval-stone": "Pietraovale",
+  },
+};
+
+// Moves that gate an evolution (level up while knowing it). Only a handful
+// exist, so they are curated here next to ITEM_LABELS rather than pulled
+// from moves.json, which the client would otherwise have to ship.
+const MOVE_LABELS: Record<Lang, Record<string, string>> = {
+  de: {
+    "mimic": "Mimikry",
+    "double-hit": "Doppelschlag",
+    "rollout": "Walzer",
+    "ancient-power": "Antik-Kraft",
+  },
+  en: {
+    "mimic": "Mimic",
+    "double-hit": "Double Hit",
+    "rollout": "Rollout",
+    "ancient-power": "Ancient Power",
+  },
+  fr: {
+    "mimic": "Copie",
+    "double-hit": "Coup Double",
+    "rollout": "Roulade",
+    "ancient-power": "Pouvoir Antique",
+  },
+  es: {
+    "mimic": "Mimético",
+    "double-hit": "Doble Golpe",
+    "rollout": "Rodar",
+    "ancient-power": "Poder Pasado",
+  },
+  it: {
+    "mimic": "Mimica",
+    "double-hit": "Doppiosmash",
+    "rollout": "Rotolamento",
+    "ancient-power": "Forzantica",
+  },
+};
+
+// Locations that gate an evolution (Magneton at a magnetic field, Eevee at
+// the Moss/Ice Rock).
+const LOCATION_LABELS: Record<Lang, Record<string, string>> = {
+  de: {
+    "mt-coronet": "Kraterberg",
+    "eterna-forest": "Ewigwald",
+    "sinnoh-route-217": "Route 217",
+  },
+  en: {
+    "mt-coronet": "Mt. Coronet",
+    "eterna-forest": "Eterna Forest",
+    "sinnoh-route-217": "Route 217",
+  },
+  fr: {
+    "mt-coronet": "Mont Couronné",
+    "eterna-forest": "Forêt Vestigion",
+    "sinnoh-route-217": "Route 217",
+  },
+  es: {
+    "mt-coronet": "Monte Corona",
+    "eterna-forest": "Bosque Vetusto",
+    "sinnoh-route-217": "Ruta 217",
+  },
+  it: {
+    "mt-coronet": "Monte Corona",
+    "eterna-forest": "Bosco Evopoli",
+    "sinnoh-route-217": "Percorso 217",
+  },
+};
+
+// Species that must be in the party for an evolution (Mantyke -> Mantine).
+const PARTY_SPECIES_LABELS: Record<Lang, Record<string, string>> = {
+  de: {
+    "remoraid": "Remoraid",
+  },
+  en: {
+    "remoraid": "Remoraid",
+  },
+  fr: {
+    "remoraid": "Rémoraid",
+  },
+  es: {
+    "remoraid": "Remoraid",
+  },
+  it: {
+    "remoraid": "Remoraid",
   },
 };
 
@@ -143,6 +238,9 @@ const TEMPLATES: Record<
     tradeItem: (item: string) => string;
     levelHeld: (item: string) => string;
     levelWith: (name: string) => string;
+    levelMove: (move: string) => string;
+    levelLocation: (place: string) => string;
+    shed: string;
     trade: string;
     beauty: string;
   }
@@ -156,6 +254,9 @@ const TEMPLATES: Record<
     tradeItem: (item) => `Tausch mit ${item}`,
     levelHeld: (item) => `Level mit ${item}`,
     levelWith: (name) => `Level mit ${name} im Team`,
+    levelMove: (move) => `Level mit ${move}`,
+    levelLocation: (place) => `Level bei ${place}`,
+    shed: "erscheint bei freiem Team-Platz",
     trade: "durch Tausch",
     beauty: "hohe Schönheit",
   },
@@ -168,6 +269,9 @@ const TEMPLATES: Record<
     tradeItem: (item) => `trade holding ${item}`,
     levelHeld: (item) => `level up holding ${item}`,
     levelWith: (name) => `level up with ${name} in the party`,
+    levelMove: (move) => `level up knowing ${move}`,
+    levelLocation: (place) => `level up at ${place}`,
+    shed: "appears in a free party slot",
     trade: "by trade",
     beauty: "high beauty",
   },
@@ -180,6 +284,9 @@ const TEMPLATES: Record<
     tradeItem: (item) => `échange avec ${item}`,
     levelHeld: (item) => `montée de niveau avec ${item}`,
     levelWith: (name) => `montée de niveau avec ${name} dans l’équipe`,
+    levelMove: (move) => `montée de niveau en connaissant ${move}`,
+    levelLocation: (place) => `montée de niveau à ${place}`,
+    shed: "apparaît dans un emplacement libre",
     trade: "par échange",
     beauty: "grande beauté",
   },
@@ -192,6 +299,9 @@ const TEMPLATES: Record<
     tradeItem: (item) => `intercambio con ${item}`,
     levelHeld: (item) => `subir de nivel con ${item}`,
     levelWith: (name) => `subir de nivel con ${name} en el equipo`,
+    levelMove: (move) => `subir de nivel sabiendo ${move}`,
+    levelLocation: (place) => `subir de nivel en ${place}`,
+    shed: "aparece en un hueco libre del equipo",
     trade: "por intercambio",
     beauty: "gran belleza",
   },
@@ -204,6 +314,9 @@ const TEMPLATES: Record<
     tradeItem: (item) => `scambio con ${item}`,
     levelHeld: (item) => `salire di livello con ${item}`,
     levelWith: (name) => `salire di livello con ${name} in squadra`,
+    levelMove: (move) => `salire di livello conoscendo ${move}`,
+    levelLocation: (place) => `salire di livello a ${place}`,
+    shed: "compare in un posto libero in squadra",
     trade: "tramite scambio",
     beauty: "alta bellezza",
   },
@@ -227,6 +340,14 @@ export function formatEvolutionMethod(method: EvolutionMethod, lang: Lang): stri
       return t.levelHeld(itemLabel(method.item, lang));
     case "levelWith":
       return t.levelWith(method.name);
+    case "levelMove":
+      return t.levelMove(MOVE_LABELS[lang][method.move] ?? method.move);
+    case "levelParty":
+      return t.levelWith(PARTY_SPECIES_LABELS[lang][method.species] ?? method.species);
+    case "levelLocation":
+      return t.levelLocation(LOCATION_LABELS[lang][method.location] ?? method.location);
+    case "shed":
+      return t.shed;
     case "trade":
       if (method.item) return t.tradeItem(itemLabel(method.item, lang));
       return t.trade;
