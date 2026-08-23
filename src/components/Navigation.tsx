@@ -29,10 +29,7 @@ export function Navigation() {
           <Link
             key={item.href}
             href={href}
-            // The active marker sits on whichever edge faces the content:
-            // above the label in the bottom bar on phones, below it when the
-            // strip is back in the header from md up.
-            className={`whitespace-nowrap border-t-2 px-3 py-3 text-sm font-medium transition-colors md:border-t-0 md:border-b-2 ${
+            className={`whitespace-nowrap border-b-2 px-3 py-3 text-sm font-medium transition-colors ${
               isActive
                 ? "border-zinc-900 text-zinc-900 dark:border-zinc-50 dark:text-zinc-50"
                 : "border-transparent text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
