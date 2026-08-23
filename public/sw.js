@@ -14,16 +14,21 @@
 // cache-versioning hazard class - a new worker deleting the chunks a live page
 // is still lazily loading gives you ChunkLoadError.
 //
-// Bump CACHE only when isCacheableAsset() changes, so entries written under
-// weaker guards get discarded. Not per deploy: the paths held here are stable.
+// Bump CACHE when isCacheableAsset() changes, or when a path moves between the
+// two strategy lists, so entries written under the old rules are discarded.
+// Not per deploy: the paths held here are otherwise stable.
+// v2: /icons/ moved from cache-first to stale-while-revalidate.
 
-const CACHE = "nuzlocke-assets-v1";
+const CACHE = "nuzlocke-assets-v2";
 
 // Cache-first - addressed by dex/ball id, the bytes behind a path never change.
-const IMMUTABLE = ["/pokemon-sprites/", "/ball-sprites/", "/icons/"];
-// Stale-while-revalidate - badges are re-cropped on every container start and
-// /app/public/trainers is a writable bind mount, so both can legitimately change.
-const REVALIDATE = ["/badges/", "/trainers/"];
+const IMMUTABLE = ["/pokemon-sprites/", "/ball-sprites/"];
+// Stale-while-revalidate - these CAN change under a stable path: badges are
+// re-cropped on every container start, /app/public/trainers is a writable bind
+// mount, and /icons/ is regenerated at startup whenever a private branding
+// override is mounted. Caching those cache-first would pin the old artwork in
+// the browser forever, with no way to invalidate it.
+const REVALIDATE = ["/badges/", "/trainers/", "/icons/"];
 
 // The one function this whole file hinges on.
 //

@@ -22,6 +22,22 @@ echo "Checking badge icons (downloads only what's missing)..."
 node scripts/download-badges.mjs || echo "WARNING: badge download failed; badges will be missing until the next container start."
 
 # Run migrations (as root - may CREATE the db file on a fresh volume)
+# Private branding override. The image ships the repo's own icon (two rings);
+# mounting a folder onto /app/branding that contains an icon.png (or .svg/.jpg/
+# .webp) replaces every file in public/icons at startup. This exists so a
+# personal logo never has to enter the repo or the published image - same
+# policy as the trainer sprites.
+#
+# Only the DIRECTORY is tested here, never a specific filename: the generator
+# already resolves icon.svg -> icon.png -> icon.jpg -> icon.webp against
+# /app/branding on its own, and hardcoding one name here is exactly how a
+# dropped-in icon.png ended up being ignored in silence. An empty or absent
+# mount leaves the icons baked in at build time untouched.
+if [ -d /app/branding ]; then
+  echo "Checking branding override in /app/branding..."
+  node scripts/generate-icons.mjs --force || echo "WARNING: icon generation failed; defaults kept."
+fi
+
 npx prisma migrate deploy
 
 # familyId is denormalized onto every Encounter, so a correction to a

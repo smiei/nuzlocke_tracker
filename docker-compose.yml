@@ -17,6 +17,10 @@ services:
       - ./public/ball-sprites:/app/public/ball-sprites
       - ./public/badges:/app/public/badges
       - ./public/trainers:/app/public/trainers:ro
+      # Optional: drop an icon.svg in here to replace the app icon on your own
+      # instance. Gitignored and dockerignored, so it never reaches the repo
+      # or the published image.
+      - ./branding-local:/app/branding:ro
     environment:
       - DATABASE_URL=file:/app/db/nuzlocke.db
     restart: unless-stopped

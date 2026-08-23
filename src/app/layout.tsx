@@ -92,6 +92,13 @@ export default async function RootLayout({
           }}
         />
         <link rel="manifest" href="/manifest.webmanifest" crossOrigin="use-credentials" />
+        {/* All icon links point into /icons/, which is what makes a private
+            branding override possible: mounting a folder with an icon.svg onto
+            /app/branding makes docker-entrypoint.sh regenerate every file here
+            at container start, without any of it touching the repo or the
+            public image. The master would have auto-injected its own,
+            unoverridable <link> if it still lived at src/app/icon.svg. */}
+        <link rel="icon" type="image/svg+xml" href="/icons/icon.svg" />
         <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png" />
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>

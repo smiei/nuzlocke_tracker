@@ -70,6 +70,11 @@ next-env.d.ts
 # while still working in a local Docker build - broken only on a clean clone.
 /public/icons/
 
+# Private branding override (see docker-entrypoint.sh): a personal icon.svg
+# mounted into the container at runtime. Must never reach the repo or the
+# published image - branding/icon.svg is the tracked default.
+/branding-local/
+
 # Claude Code local settings (machine-specific, never committed)
 .claude/
 CLAUDE.md

@@ -78,6 +78,22 @@ describe("public/manifest.webmanifest", () => {
   });
 });
 
+describe("icon source", () => {
+  it("keeps the tracked default outside app/, so Next injects no icon link", () => {
+    // As src/app/icon.svg it would be a file-convention route with its own
+    // auto-injected <link rel="icon"> that we could neither replace nor point
+    // at the runtime-overridable copy in /icons/.
+    expect(existsSync(path.join(root, "branding/icon.svg"))).toBe(true);
+    expect(existsSync(path.join(root, "src/app/icon.svg"))).toBe(false);
+  });
+
+  it("links every icon from the overridable /icons/ path", () => {
+    const layout = read("src/app/layout.tsx");
+    expect(layout).toContain('href="/icons/icon.svg"');
+    expect(layout).toContain('href="/icons/apple-touch-icon.png"');
+  });
+});
+
 describe("service worker", () => {
   const sw = read("public/sw.js");
 
