@@ -41,6 +41,17 @@ const de = {
     label: "Menü",
     language: "Sprache",
   },
+  install: {
+    menuLabel: "App installieren",
+    iosTitle: "App installieren",
+    iosHint:
+      "Tippe in Safari unten auf „Teilen“ und dann auf „Zum Home-Bildschirm“. " +
+      "Hinweis: Die installierte App hat unter iOS einen eigenen Speicher – Design, " +
+      "Tab-Reihenfolge und Sprache starten dort einmalig auf den Standardwerten.",
+    manualHint:
+      "Dein Browser bietet keine direkte Installation an. Öffne das Browsermenü und " +
+      "wähle „Zum Startbildschirm hinzufügen“ bzw. „Installieren“.",
+  },
   tabOrder: {
     label: "Tabs anordnen",
     title: "Tabs anordnen",
@@ -484,6 +495,17 @@ const en: Dictionary = {
     label: "Menu",
     language: "Language",
   },
+  install: {
+    menuLabel: "Install app",
+    iosTitle: "Install app",
+    iosHint:
+      "In Safari, tap “Share” at the bottom, then “Add to Home Screen”. " +
+      "Note: on iOS the installed app gets its own storage – theme, tab order and " +
+      "language start out at their defaults once.",
+    manualHint:
+      "Your browser has no direct install option. Open the browser menu and choose " +
+      "“Add to Home screen” or “Install”.",
+  },
   tabOrder: {
     label: "Arrange tabs",
     title: "Arrange tabs",
@@ -922,6 +944,17 @@ const fr: Dictionary = {
   menu: {
     label: "Menu",
     language: "Langue",
+  },
+  install: {
+    menuLabel: "Installer l'application",
+    iosTitle: "Installer l'application",
+    iosHint:
+      "Dans Safari, appuyez sur « Partager » en bas, puis sur « Sur l'écran d'accueil ». " +
+      "Remarque : sous iOS, l'application installée dispose de son propre stockage – le thème, " +
+      "l'ordre des onglets et la langue reviennent une fois aux valeurs par défaut.",
+    manualHint:
+      "Votre navigateur ne propose pas d'installation directe. Ouvrez son menu et choisissez " +
+      "« Ajouter à l'écran d'accueil » ou « Installer ».",
   },
   tabOrder: {
     label: "Organiser les onglets",
@@ -1366,6 +1399,17 @@ const es: Dictionary = {
     label: "Menú",
     language: "Idioma",
   },
+  install: {
+    menuLabel: "Instalar aplicación",
+    iosTitle: "Instalar aplicación",
+    iosHint:
+      "En Safari, pulsa «Compartir» abajo y luego «Añadir a pantalla de inicio». " +
+      "Nota: en iOS la aplicación instalada tiene su propio almacenamiento; el tema, el orden " +
+      "de las pestañas y el idioma empiezan una vez con los valores predeterminados.",
+    manualHint:
+      "Tu navegador no ofrece instalación directa. Abre el menú del navegador y elige " +
+      "«Añadir a pantalla de inicio» o «Instalar».",
+  },
   tabOrder: {
     label: "Ordenar pestañas",
     title: "Ordenar pestañas",
@@ -1807,6 +1851,17 @@ const it: Dictionary = {
   menu: {
     label: "Menu",
     language: "Lingua",
+  },
+  install: {
+    menuLabel: "Installa l'app",
+    iosTitle: "Installa l'app",
+    iosHint:
+      "In Safari tocca «Condividi» in basso e poi «Aggiungi a Home». " +
+      "Nota: su iOS l'app installata ha un archivio proprio: tema, ordine delle schede e " +
+      "lingua partono una volta dai valori predefiniti.",
+    manualHint:
+      "Il tuo browser non offre un'installazione diretta. Apri il menu del browser e scegli " +
+      "«Aggiungi a Home» o «Installa».",
   },
   tabOrder: {
     label: "Disponi schede",

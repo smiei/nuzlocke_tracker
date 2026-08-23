@@ -63,6 +63,13 @@ next-env.d.ts
 /public/trainers/*.png
 /public/trainers/**/*.png
 
+# PWA app icons - OUR artwork, but still a build artefact: generated from
+# src/app/icon.svg by scripts/generate-icons.mjs via npm's prebuild/predev
+# hook. The global `*.png` rule above would already swallow these; this entry
+# states the intent, because a committed icon here would be invisible to git
+# while still working in a local Docker build - broken only on a clean clone.
+/public/icons/
+
 # Claude Code local settings (machine-specific, never committed)
 .claude/
 CLAUDE.md

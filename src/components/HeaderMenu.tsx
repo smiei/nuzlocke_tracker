@@ -8,6 +8,7 @@ import { formatActionError } from "@/lib/actionErrors";
 import { BACKUP_FORMAT, BACKUP_VERSION, parseBackup, type BackupFile } from "@/lib/backupParse";
 import { useDialog } from "@/components/DialogProvider";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
+import { useInstallPrompt } from "@/lib/useInstallPrompt";
 import { LANGS, translations } from "@/lib/i18n/dictionary";
 import type { RunSummary } from "@/lib/types";
 import { RenameRunDialog } from "@/components/RenameRunDialog";
@@ -69,6 +70,7 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
   const [pending, startTransition] = useTransition();
   const containerRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { canPrompt, isStandalone, isIos, mounted, promptInstall } = useInstallPrompt();
   const t = translations[lang];
 
   const activeId = Number(searchParams.get("run")) || runs[0]?.id;
@@ -206,6 +208,20 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
     });
   }
 
+  // Chromium hands us a real prompt; Safari and Firefox never will, so they
+  // get written instructions instead of a button that does nothing.
+  async function handleInstall() {
+    setOpen(false);
+    if (canPrompt) {
+      await promptInstall();
+      return;
+    }
+    await alert({
+      title: t.install.iosTitle,
+      message: isIos ? t.install.iosHint : t.install.manualHint,
+    });
+  }
+
   return (
     <div ref={containerRef} className="relative">
       <button
@@ -227,6 +243,14 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
       />
       {open && (
         <div className="absolute right-0 z-20 mt-1 w-60 overflow-hidden rounded-md border border-zinc-200 bg-white py-1 shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
+          {mounted && !isStandalone && (
+            <>
+              <button type="button" onClick={handleInstall} className={itemClass}>
+                {t.install.menuLabel}
+              </button>
+              <div className="my-1 border-t border-zinc-200 dark:border-zinc-700" />
+            </>
+          )}
           <button type="button" onClick={handleBackupRun} className={itemClass}>
             {t.backup.backupRun}
           </button>

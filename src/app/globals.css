@@ -4,9 +4,14 @@
    follow that class instead of the OS-level prefers-color-scheme media query. */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Kept in step with what <body>'s Tailwind utilities actually paint
+   (bg-white / dark:bg-zinc-950, text-zinc-900 / dark:text-zinc-50) - those win
+   over the `body` rule below, so a different value here would be a silent lie.
+   The same two background values appear in public/manifest.webmanifest and in
+   ThemeColorSync; change all three together. */
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #18181b;
 }
 
 @theme inline {
@@ -17,8 +22,8 @@
 }
 
 .dark {
-  --background: #0a0a0a;
-  --foreground: #ededed;
+  --background: #09090b;
+  --foreground: #fafafa;
 }
 
 body {
