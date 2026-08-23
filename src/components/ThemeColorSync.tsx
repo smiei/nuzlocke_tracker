@@ -18,9 +18,31 @@ export function ThemeColorSync() {
   const { resolvedTheme } = useTheme();
 
   useEffect(() => {
-    const meta = document.querySelector('meta[name="theme-color"]');
-    if (!meta) return;
-    meta.setAttribute("content", resolvedTheme === "dark" ? THEME_COLORS.dark : THEME_COLORS.light);
+    const wanted = resolvedTheme === "dark" ? THEME_COLORS.dark : THEME_COLORS.light;
+
+    const apply = () => {
+      const meta = document.querySelector('meta[name="theme-color"]');
+      if (meta && meta.getAttribute("content") !== wanted) meta.setAttribute("content", wanted);
+    };
+
+    apply();
+
+    // Setting it once is not enough. Next re-emits the tags from the `viewport`
+    // export on every client-side navigation, which puts the static default
+    // back - that is why switching tabs in dark mode turned the status bar
+    // white and left it white: this effect had no reason to run again, since
+    // the theme itself never changed. Watching <head> re-applies the value
+    // whenever Next rewrites or replaces the tag, covering route changes and
+    // run switches alike. The equality guard in apply() is what stops the
+    // observer from reacting to its own write.
+    const observer = new MutationObserver(apply);
+    observer.observe(document.head, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ["content"],
+    });
+    return () => observer.disconnect();
   }, [resolvedTheme]);
 
   return null;

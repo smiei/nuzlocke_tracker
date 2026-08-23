@@ -124,13 +124,24 @@ export default async function RootLayout({
                     <ThemeToggle />
                   </div>
                 </div>
-                <div className="mx-auto max-w-6xl">
-                  <Suspense fallback={<div className="h-11" />}>
-                    <Navigation />
-                  </Suspense>
+                {/* Mobile-first: the tab strip is pinned to the bottom edge,
+                    where a thumb actually reaches. From md up it falls back
+                    into the header exactly as before - a bottom bar buys
+                    nothing on the tablet in landscape or on the desktop.
+                    pb-[env(...)] is 0 today (without viewport-fit: cover iOS
+                    already keeps the viewport clear of the home indicator) and
+                    becomes correct on its own should that ever change. */}
+                <div className="fixed inset-x-0 bottom-0 z-30 border-t border-zinc-200 bg-white pb-[env(safe-area-inset-bottom)] dark:border-zinc-800 dark:bg-zinc-950 md:static md:border-t-0 md:bg-transparent md:pb-0 md:dark:bg-transparent">
+                  <div className="mx-auto max-w-6xl">
+                    <Suspense fallback={<div className="h-11" />}>
+                      <Navigation />
+                    </Suspense>
+                  </div>
                 </div>
               </header>
-              <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-6">{children}</main>
+              <main className="mx-auto w-full max-w-6xl flex-1 px-4 pt-6 pb-[calc(5rem+env(safe-area-inset-bottom))] sm:px-6 md:pb-6">
+                {children}
+              </main>
               <LiveRefresh />
               <ThemeColorSync />
               <ServiceWorkerRegistrar />
