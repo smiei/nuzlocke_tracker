@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import type { Pokemon, EvolutionEntry } from "@/lib/data";
@@ -8,7 +8,7 @@ import type { MoveEntry, Moveset, MovesTable, MoveTypeHistoryEntry } from "@/lib
 import { moveListAtLevel } from "@/lib/learnset";
 import { MoveDetailPanel } from "@/components/MoveDetailPanel";
 import type { EffectivenessTable } from "@/lib/effectiveness";
-import { computeDefenseMultipliers, getTypesForGeneration } from "@/lib/effectiveness";
+import { getTypesForGeneration } from "@/lib/effectiveness";
 import { computePokemonRanks, rankForSumme } from "@/lib/ranking";
 import { baseSpeciesId, formLabel, formsOfSpecies, movepoolId } from "@/lib/forms";
 import type { Lang } from "@/lib/i18n/dictionary";
@@ -16,9 +16,8 @@ import { translations } from "@/lib/i18n/dictionary";
 import { pokemonName } from "@/lib/i18n/localize";
 import { formatEvolutionMethod } from "@/lib/evolutionMethods";
 import { TypeBadge } from "@/components/TypeBadge";
+import { TypeEffectiveness } from "@/components/ui/TypeEffectiveness";
 import { PokemonSprite } from "@/components/PokemonSprite";
-
-const WEAKNESS_GROUPS = [4, 2, 0.5, 0.25, 0] as const;
 
 // Order + label keys for the base stats (matching pokedex.columns).
 type StatRow = {
@@ -181,12 +180,6 @@ export function PokemonDetailModal({
   const formOptions = formsOfSpecies(speciesId, allPokemon, forms);
 
   // Defensive type matchups (gen-corrected types + gen-appropriate chart).
-  const defMult = computeDefenseMultipliers(effectiveness, types, getTypesForGeneration(generation));
-  const weaknessGroups = WEAKNESS_GROUPS.map((g) => ({
-    mult: g,
-    label: { 4: t.typen.weak4, 2: t.typen.weak2, 0.5: t.typen.resist2, 0.25: t.typen.resist4, 0: t.typen.immune }[g],
-    types: getTypesForGeneration(generation).filter((ty) => defMult[ty] === g),
-  })).filter((row) => row.types.length > 0);
 
   const evoById = new Map(evolutions.map((e) => [e.id, e]));
   // Walk up to the family's root, then render the whole tree (Eevee & co.
@@ -345,29 +338,17 @@ export function PokemonDetailModal({
           >
             {td.openInAnalyze} <span aria-hidden>→</span>
           </Link>
-          {weaknessGroups.length > 0 && (
+          {types.length > 0 && (
             <div className="pt-1">
               <h3 className="mb-1 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
                 {td.weaknesses}
               </h3>
-              {/* Two-column grid, not one wrapping row: the label column is
-                  max-content (so a label never breaks mid-phrase) and the
-                  badges wrap INSIDE their own cell, staying aligned with the
-                  start of the list instead of falling back under the label. */}
-              <div className="grid grid-cols-[max-content_1fr] items-start gap-x-2 gap-y-1.5">
-                {weaknessGroups.map((row) => (
-                  <Fragment key={row.mult}>
-                    <span className="whitespace-nowrap pt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
-                      {row.label}:
-                    </span>
-                    <div className="flex flex-wrap gap-1">
-                      {row.types.map((type) => (
-                        <TypeBadge key={type} type={type} lang={lang} />
-                      ))}
-                    </div>
-                  </Fragment>
-                ))}
-              </div>
+              <TypeEffectiveness
+                defenderTypes={types}
+                effectiveness={effectiveness}
+                attackTypes={getTypesForGeneration(generation)}
+                lang={lang}
+              />
             </div>
           )}
         </div>

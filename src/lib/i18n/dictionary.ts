@@ -391,6 +391,8 @@ const de = {
     defenderWeakHeading: "Schwächen als Verteidiger",
     teamStrengthHeading: "Stärken gegen mein Team",
     matrixHeading: "Typen-Matrix",
+    legendOffense: "Grün = du triffst stark · Rot = du triffst schwach · Schwarz = wirkungslos",
+    legendDefense: "Grün = dein Team nimmt wenig · Rot = dein Team nimmt viel · Schwarz = immun",
     addCard: "Weiterer Gegner",
   },
   tms: {
@@ -845,6 +847,8 @@ const en: Dictionary = {
     defenderWeakHeading: "Weaknesses as defender",
     teamStrengthHeading: "Strengths against my team",
     matrixHeading: "Type matrix",
+    legendOffense: "Green = you hit hard · Red = you hit weakly · Black = no effect",
+    legendDefense: "Green = your team takes little · Red = your team takes a lot · Black = immune",
     addCard: "Add opponent",
   },
   tms: {
@@ -1300,6 +1304,8 @@ const fr: Dictionary = {
     defenderWeakHeading: "Faiblesses en défense",
     teamStrengthHeading: "Forces contre mon équipe",
     matrixHeading: "Matrice des types",
+    legendOffense: "Vert = vous frappez fort · Rouge = vous frappez faiblement · Noir = sans effet",
+    legendDefense: "Vert = votre équipe encaisse peu · Rouge = votre équipe encaisse beaucoup · Noir = immunisé",
     addCard: "Ajouter un adversaire",
   },
   tms: {
@@ -1755,6 +1761,8 @@ const es: Dictionary = {
     defenderWeakHeading: "Debilidades como defensor",
     teamStrengthHeading: "Fortalezas contra mi equipo",
     matrixHeading: "Matriz de tipos",
+    legendOffense: "Verde = golpeas fuerte · Rojo = golpeas flojo · Negro = sin efecto",
+    legendDefense: "Verde = tu equipo recibe poco · Rojo = tu equipo recibe mucho · Negro = inmune",
     addCard: "Añadir rival",
   },
   tms: {
@@ -2210,6 +2218,8 @@ const it: Dictionary = {
     defenderWeakHeading: "Debolezze in difesa",
     teamStrengthHeading: "Punti di forza contro la mia squadra",
     matrixHeading: "Matrice dei tipi",
+    legendOffense: "Verde = colpisci forte · Rosso = colpisci debolmente · Nero = nessun effetto",
+    legendDefense: "Verde = la tua squadra subisce poco · Rosso = la tua squadra subisce molto · Nero = immune",
     addCard: "Aggiungi avversario",
   },
   tms: {

@@ -1,14 +1,14 @@
 "use client";
 
-import { Fragment, useEffect, useMemo, useRef, useState, useTransition } from "react";
+import { Fragment, useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { Pokemon } from "@/lib/data";
 import type { BallId, StatusId } from "@/lib/catchrate";
 import { ballHasCondition, getBallIdsForGeneration, STATUS_IDS, computeCatchChance } from "@/lib/catchrate";
 import type { EffectivenessTable } from "@/lib/effectiveness";
-import { computeDefenseMultipliers } from "@/lib/effectiveness";
 import { quickCatch } from "@/lib/actions";
 import { formatActionError } from "@/lib/actionErrors";
+import { useToast } from "@/components/ui/ToastProvider";
 import { useClampedIntInput } from "@/lib/useClampedIntInput";
 import type { RunSettings } from "@/lib/runSettings";
 import { Player, RunMode } from "@/generated/prisma/enums";
@@ -20,11 +20,11 @@ import { usePlayerLabel } from "@/components/PlayerNamesProvider";
 import { usePokemonDetail } from "@/components/PokemonDetailProvider";
 import { PokemonSprite } from "@/components/PokemonSprite";
 import { TypeBadge } from "@/components/TypeBadge";
+import { TypeEffectiveness } from "@/components/ui/TypeEffectiveness";
 import { NICKNAME_MAX } from "@/components/EncounterEditor";
 
 export type OpenSlot = { routeId: number; player: Player; routeName: string };
 
-const WEAKNESS_GROUPS = [4, 2, 0.5, 0.25, 0] as const;
 
 const inputClass =
   "w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:focus:border-zinc-400";
@@ -264,8 +264,8 @@ export function CatchCardBody({
   const router = useRouter();
   const { lang } = useLanguage();
   const t = translations[lang].catchrate;
-  const tTypen = translations[lang].typen;
   const playerLabel = usePlayerLabel();
+  const toast = useToast();
   const detail = usePokemonDetail();
   const ballIds = getBallIdsForGeneration(generation, versionGroup);
 
@@ -301,18 +301,6 @@ export function CatchCardBody({
   const ballNote = (t.ballNotes as Partial<Record<BallId, string>>)[ball];
   const hasCondition = ballHasCondition(ball);
 
-  // Defensive matchups for the selected Pokémon.
-  const weaknessGroups = useMemo(() => {
-    if (!selected) return [];
-    const mult = computeDefenseMultipliers(effectiveness, selectedTypes, attackTypes);
-    return WEAKNESS_GROUPS.map((g) => ({
-      mult: g,
-      label: { 4: tTypen.weak4, 2: tTypen.weak2, 0.5: tTypen.resist2, 0.25: tTypen.resist4, 0: tTypen.immune }[g] as string,
-      types: attackTypes.filter((ty) => mult[ty] === g),
-    })).filter((row) => row.types.length > 0);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selected, effectiveness, attackTypes, generation, lang]);
-
   function handleQuickCatch(
     routeId: number,
     player: Player,
@@ -329,7 +317,9 @@ export function CatchCardBody({
         setCaughtMsg(t.caughtDone(name, slot.routeName));
         router.refresh();
       } else {
-        setCaughtMsg(formatActionError(res.error, lang));
+        // Used to land in setCaughtMsg, which is rendered in emerald further
+        // down - a failed catch reported its error in success green.
+        toast.error(formatActionError(res.error, lang));
       }
     });
   }
@@ -492,23 +482,14 @@ export function CatchCardBody({
       </div>
 
       {/* Type weaknesses of the selected Pokémon */}
-      {selected && weaknessGroups.length > 0 && (
+      {selected && selectedTypes.length > 0 && (
         <div className="mt-3">
-          {/* Same two-column grid as the Pokédex card - see the comment there. */}
-          <div className="grid grid-cols-[max-content_1fr] items-start gap-x-2 gap-y-1.5">
-            {weaknessGroups.map((row) => (
-              <Fragment key={row.mult}>
-                <span className="whitespace-nowrap pt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
-                  {row.label}:
-                </span>
-                <div className="flex flex-wrap gap-1">
-                  {row.types.map((type) => (
-                    <TypeBadge key={type} type={type} lang={lang} />
-                  ))}
-                </div>
-              </Fragment>
-            ))}
-          </div>
+          <TypeEffectiveness
+            defenderTypes={selectedTypes}
+            effectiveness={effectiveness}
+            attackTypes={attackTypes}
+            lang={lang}
+          />
         </div>
       )}
 

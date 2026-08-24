@@ -35,6 +35,15 @@ function TypeAbbrev({ type, lang, dimmed }: { type: string; lang: Lang; dimmed: 
   );
 }
 
+// Both matrices are coloured from the PLAYER's point of view - green always
+// means "good for you". That is consistent, but it also means the same green
+// carries a 2 in the offensive matrix and a fraction in the defensive one, and
+// with both tables on screen at once that reads as a contradiction unless the
+// framing is stated. Hence the legend under each heading.
+function MatrixLegend({ text }: { text: string }) {
+  return <p className="mb-2 text-xs text-ink-subtle">{text}</p>;
+}
+
 // Matrix cell (attacker vs defender, offensive view): green = super effective.
 function matrixCellStyle(multiplier: number): { text: string; className: string } {
   if (multiplier === 2) return { text: "2", className: "bg-green-500 text-white dark:bg-green-600" };
@@ -292,7 +301,7 @@ export function BattleCardBody({
                         key={team.player}
                         className="rounded-lg border border-zinc-200 p-4 dark:border-zinc-800"
                       >
-                        <h3 className="mb-3 text-sm font-semibold text-zinc-600 dark:text-zinc-300">
+                        <h3 className="mb-1 text-sm font-semibold text-zinc-600 dark:text-zinc-300">
                           {t.teamStrengthHeading}
                           {mode !== "CLASSIC" && (
                             <span className="ml-2 font-normal text-zinc-400 dark:text-zinc-500">
@@ -300,6 +309,7 @@ export function BattleCardBody({
                             </span>
                           )}
                         </h3>
+                        <MatrixLegend text={t.legendDefense} />
                         <TeamMatchup
                           members={team.members}
                           attackTypes={opponentAttackTypes}
@@ -316,9 +326,10 @@ export function BattleCardBody({
 
       {/* Full type matrix (gen-aware) at the very bottom, dimmed to the opponent. */}
       <section>
-        <h3 className="mb-3 text-sm font-semibold text-zinc-600 dark:text-zinc-300">
+        <h3 className="mb-1 text-sm font-semibold text-zinc-600 dark:text-zinc-300">
           {t.matrixHeading}
         </h3>
+          <MatrixLegend text={t.legendOffense} />
         <div className="overflow-x-auto">
           <table className="border-separate border-spacing-0.5">
             <thead>
