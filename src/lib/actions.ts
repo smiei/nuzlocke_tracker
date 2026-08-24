@@ -15,7 +15,6 @@ import { EncounterStatus, LinkStatus, Player, RunMode } from "@/generated/prisma
 import type { ActionError } from "@/lib/actionErrors";
 import type { BackupFile } from "@/lib/backup";
 import { applyBackup, backupFilename, buildBackup, buildBackupZip, parseBackup } from "@/lib/backup";
-import { clearEncounterDraft, clearEncounterDraftsForRun, setEncounterDraft } from "@/lib/draftStore";
 import { DEFAULT_RULES } from "@/lib/defaultRules";
 import { parseRunSettings, RUN_SETTING_KEYS, type RunSettings } from "@/lib/runSettings";
 import type { Lang } from "@/lib/i18n/dictionary";
@@ -199,7 +198,6 @@ export async function saveEncounter(
   // The row is now a real Encounter - any pre-confirm draft for this slot is
   // stale and would otherwise linger as a ghost pick if the row is cleared
   // later.
-  clearEncounterDraft(runId, routeId, player);
 
   revalidatePath("/tracker");
   revalidatePath("/links");
@@ -207,34 +205,6 @@ export async function saveEncounter(
   return { success: true };
 }
 
-export type SaveEncounterDraftInput = {
-  runId: number;
-  routeId: number;
-  player: Player;
-  // null = the picker was cleared - drops the draft entirely rather than
-  // storing a pokemonId-less placeholder.
-  pokemonId: number | null;
-  status: EncounterStatus;
-  nickname: string;
-  shiny: boolean;
-};
-
-// Broadcasts an unconfirmed pick (species/status/nickname/shiny) to every
-// other connected client over the same SSE bus a real save uses, WITHOUT
-// touching the DB - only "Bestätigen" (saveEncounter) writes the row and
-// takes the route out of "Nur offene". This is what lets two SoulLink
-// players see the same in-progress entry before either one confirms it.
-// Ephemeral and best-effort: never surfaces an error to the caller.
-export async function saveEncounterDraft(input: SaveEncounterDraftInput): Promise<void> {
-  const { runId, routeId, player, pokemonId, status, shiny } = input;
-  const nickname = input.nickname.trim().slice(0, 10);
-  if (pokemonId === null) {
-    clearEncounterDraft(runId, routeId, player);
-  } else {
-    setEncounterDraft(runId, { routeId, player, pokemonId, status, nickname, shiny });
-  }
-  publishChange(runId);
-}
 
 export type QuickCatchResult =
   | { success: true; addedToTeam: boolean }
@@ -353,7 +323,6 @@ export async function clearEncounter(
       if (remaining === 0) await tx.soulLink.delete({ where: { id: soulLinkId } });
     }
   });
-  clearEncounterDraft(runId, routeId, player);
 
   revalidatePath("/tracker");
   revalidatePath("/links");
@@ -743,7 +712,6 @@ export async function deleteRun(runId: number): Promise<DeleteRunResult> {
   }
 
   await prisma.run.delete({ where: { id: runId } });
-  clearEncounterDraftsForRun(runId);
   revalidatePath("/", "layout");
   publishChange(runId);
   return { success: true };

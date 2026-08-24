@@ -12,7 +12,6 @@ import { EncounterEditor } from "@/components/EncounterEditor";
 import { ProgressBar } from "@/components/ProgressBar";
 import { usePlayerLabel } from "@/components/PlayerNamesProvider";
 import type { RunSettings } from "@/lib/runSettings";
-import type { EncounterDraft } from "@/lib/draftStore";
 
 export function TrackerView({
   runId,
@@ -22,7 +21,6 @@ export function TrackerView({
   routes,
   pokemonList,
   encounters,
-  drafts,
 }: {
   runId: number;
   mode: RunMode;
@@ -31,7 +29,6 @@ export function TrackerView({
   routes: Route[];
   pokemonList: Pokemon[];
   encounters: Encounter[];
-  drafts: EncounterDraft[];
 }) {
   const playerLabel = usePlayerLabel();
   const tTracker = translations[lang].tracker;
@@ -40,12 +37,25 @@ export function TrackerView({
   // the main-game list stays tidy until the league is beaten.
   const [showPostgame, setShowPostgame] = useState(false);
   const [openOnly, setOpenOnly] = useState(false);
+  // The route the user last edited. "Open only" keeps it on screen even once it
+  // is complete, so filling in a species no longer makes the row vanish before
+  // the nickname, shiny flag or status can be set. Exactly one extra row, and
+  // it moves along as you work down the list.
+  //
+  // This replaces the "Bestätigen" button that used to solve the same problem
+  // by deferring the save - which in turn needed a whole draft-broadcast
+  // mechanism so the other player still saw the in-progress pick. Both are gone.
+  const [lastTouchedRouteId, setLastTouchedRouteId] = useState<number | null>(null);
 
   // "statics" rule off = static locations aren't tracked at all. The full
   // `routes` array still goes to the editors below - it's their lookup table
   // for route names in clause warnings, which may point at a static route.
   const trackable = settings.statics ? routes : routes.filter((r) => r.type === "route");
-  const visible = openOnly ? trackable.filter((r) => !isRouteDone(r, encounters, isClassic)) : trackable;
+  const visible = openOnly
+    ? trackable.filter(
+        (r) => !isRouteDone(r, encounters, isClassic) || r.id === lastTouchedRouteId,
+      )
+    : trackable;
   const mainRoutes = visible.filter((r) => !r.postgame);
   const postgameRoutes = visible.filter((r) => r.postgame);
 
@@ -98,7 +108,7 @@ export function TrackerView({
               routes={routes}
               pokemonList={pokemonList}
               encounters={encounters}
-              draft={drafts.find((d) => d.routeId === route.id && d.player === Player.PLAYER1) ?? null}
+              onTouched={setLastTouchedRouteId}
             />
           ) : (
             <>
@@ -115,7 +125,7 @@ export function TrackerView({
                   routes={routes}
                   pokemonList={pokemonList}
                   encounters={encounters}
-                  draft={drafts.find((d) => d.routeId === route.id && d.player === Player.PLAYER1) ?? null}
+              onTouched={setLastTouchedRouteId}
                 />
               </div>
               <div>
@@ -131,7 +141,7 @@ export function TrackerView({
                   routes={routes}
                   pokemonList={pokemonList}
                   encounters={encounters}
-                  draft={drafts.find((d) => d.routeId === route.id && d.player === Player.PLAYER2) ?? null}
+              onTouched={setLastTouchedRouteId}
                 />
               </div>
             </>

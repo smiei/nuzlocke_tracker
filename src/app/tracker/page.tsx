@@ -11,7 +11,6 @@ import {
   getPokemonForms,
 } from "@/lib/data";
 import { prisma } from "@/lib/prisma";
-import { getEncounterDrafts } from "@/lib/draftStore";
 import { resolveRunId } from "@/lib/runs";
 import { getLang } from "@/lib/i18n/getLang";
 import { translations } from "@/lib/i18n/dictionary";
@@ -38,7 +37,6 @@ export default async function TrackerPage({
   const routes = getRoutes(gameId);
   const pokemonList = getPokemonList(game.dexLimit, game.generation);
   const encounters = await prisma.encounter.findMany({ where: { runId } });
-  const drafts = getEncounterDrafts(runId);
 
   return (
     <div>
@@ -72,7 +70,6 @@ export default async function TrackerPage({
               routes={routes}
               pokemonList={pokemonList}
               encounters={encounters}
-              drafts={drafts}
             />
           </PokemonDetailProvider>
         </PlayerNamesProvider>

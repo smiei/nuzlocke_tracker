@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import type { Pokemon, Route } from "@/lib/data";
 import type { Encounter } from "@/generated/prisma/client";
 import { EncounterStatus, type Player } from "@/generated/prisma/enums";
-import { saveEncounter, saveEncounterDraft, clearEncounter } from "@/lib/actions";
+import { saveEncounter, clearEncounter } from "@/lib/actions";
 import { formatActionError } from "@/lib/actionErrors";
 import { useDialog } from "@/components/DialogProvider";
 import type { Lang } from "@/lib/i18n/dictionary";
@@ -14,7 +14,6 @@ import { pokemonName, routeName } from "@/lib/i18n/localize";
 import { PokemonCombobox } from "@/components/PokemonCombobox";
 import { PokemonInfoButton } from "@/components/PokemonDetailProvider";
 import type { RunSettings } from "@/lib/runSettings";
-import type { EncounterDraft } from "@/lib/draftStore";
 
 // In-game nicknames are capped at 10 characters; the input enforces this and
 // shows a live counter (the server slices to the same length as a safety net).
@@ -41,7 +40,7 @@ export function EncounterEditor({
   routes,
   pokemonList,
   encounters,
-  draft,
+  onTouched,
 }: {
   runId: number;
   lang: Lang;
@@ -51,10 +50,9 @@ export function EncounterEditor({
   routes: Route[];
   pokemonList: Pokemon[];
   encounters: Encounter[];
-  // The other clients' not-yet-confirmed pick for this exact route/player, if
-  // any (see saveEncounterDraft) - null once a real Encounter exists, since
-  // `current` then takes over.
-  draft: EncounterDraft | null;
+  // Reports which route was last edited, so the Tracker's "open only" filter
+  // can keep it on screen while the rest of the row is filled in.
+  onTouched: (routeId: number) => void;
 }) {
   const router = useRouter();
   const { confirm } = useDialog();
@@ -96,14 +94,14 @@ export function EncounterEditor({
   // (draft) fills in for it - so every client shows the same in-progress row
   // even before "Bestätigen". `current` always wins once it exists.
   const [selectedId, setSelectedId] = useState<number | null>(
-    current?.pokemonId ?? draft?.pokemonId ?? null,
+    current?.pokemonId ?? null,
   );
   const [status, setStatus] = useState<EncounterStatus>(
-    current?.status ?? draft?.status ?? EncounterStatus.CAUGHT,
+    current?.status ?? EncounterStatus.CAUGHT,
   );
-  const [nickname, setNickname] = useState(current?.nickname ?? draft?.nickname ?? "");
+  const [nickname, setNickname] = useState(current?.nickname ?? "");
   const [nickFocused, setNickFocused] = useState(false);
-  const [shiny, setShiny] = useState(current?.shiny ?? draft?.shiny ?? false);
+  const [shiny, setShiny] = useState(current?.shiny ?? false);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
@@ -113,19 +111,15 @@ export function EncounterEditor({
   })();
 
   useEffect(() => {
-    setSelectedId(current?.pokemonId ?? draft?.pokemonId ?? null);
-    setStatus(current?.status ?? draft?.status ?? EncounterStatus.CAUGHT);
-    setNickname(current?.nickname ?? draft?.nickname ?? "");
-    setShiny(current?.shiny ?? draft?.shiny ?? false);
+    setSelectedId(current?.pokemonId ?? null);
+    setStatus(current?.status ?? EncounterStatus.CAUGHT);
+    setNickname(current?.nickname ?? "");
+    setShiny(current?.shiny ?? false);
   }, [
     current?.pokemonId,
     current?.status,
     current?.nickname,
     current?.shiny,
-    draft?.pokemonId,
-    draft?.status,
-    draft?.nickname,
-    draft?.shiny,
   ]);
 
   // Static/gift is a fixed property of the location (routes.json `type`),
@@ -166,6 +160,7 @@ export function EncounterEditor({
     shiny?: boolean;
   }) {
     setError(null);
+    onTouched(routeId);
     startTransition(async () => {
       const result = await saveEncounter({ runId, routeId, player, ...next });
       if (result.success) {
@@ -173,35 +168,20 @@ export function EncounterEditor({
       } else {
         setError(formatActionError(result.error, lang));
         // Revert the optimistic UI change - the save was rejected server-side.
-        setSelectedId(current?.pokemonId ?? draft?.pokemonId ?? null);
-        setStatus(current?.status ?? draft?.status ?? EncounterStatus.CAUGHT);
-        setNickname(current?.nickname ?? draft?.nickname ?? "");
-        setShiny(current?.shiny ?? draft?.shiny ?? false);
+        setSelectedId(current?.pokemonId ?? null);
+        setStatus(current?.status ?? EncounterStatus.CAUGHT);
+        setNickname(current?.nickname ?? "");
+        setShiny(current?.shiny ?? false);
       }
     });
   }
 
-  // Broadcasts an unconfirmed pick to every other client (see
-  // saveEncounterDraft) - fire-and-forget, no DB write, no pending/disabled
-  // state tied to it, so it never interrupts fast picking/typing.
-  function broadcastDraft(next: {
-    pokemonId: number | null;
-    status: EncounterStatus;
-    nickname: string;
-    shiny: boolean;
-  }) {
-    void saveEncounterDraft({ runId, routeId, player, ...next });
-  }
-
-  // A brand-new pick for a route with no encounter yet does NOT auto-save -
-  // it only updates local state (broadcast as a draft so every other client
-  // sees the same in-progress row), until "Bestätigen" commits pokemon/
-  // status/nickname/shiny together in one save. This is what previously made
-  // a row vanish from the Tracker tab's "Nur offene" filter the instant a
-  // species was picked, before nickname/shiny/status could be set. Editing an
-  // EXISTING encounter (current != null) keeps the old instant-save-per-
-  // field behavior - that row is already outside the "offene" filter, so the
-  // disappearing-row problem doesn't apply to it.
+  // Every field saves as soon as it changes, new row or not. That used to be
+  // gated behind a "Bestätigen" button because saving on the species pick made
+  // the row vanish from the Tracker's "open only" filter before a nickname
+  // could be typed. The filter now keeps the last-edited route on screen
+  // instead (see TrackerView), so the button - and the whole draft-broadcast
+  // mechanism it needed - is gone.
   function handleSelectPokemon(pokemonId: number) {
     setSelectedId(pokemonId);
     if (pokemonId !== current?.pokemonId) {
@@ -209,12 +189,9 @@ export function EncounterEditor({
       // flag don't carry over. Re-picking the same species keeps them.
       setNickname("");
       setShiny(false);
-      if (current) persist({ pokemonId, status, nickname: null, shiny: false });
-      else broadcastDraft({ pokemonId, status, nickname: "", shiny: false });
-    } else if (current) {
-      persist({ pokemonId, status });
+      persist({ pokemonId, status, nickname: null, shiny: false });
     } else {
-      broadcastDraft({ pokemonId, status, nickname, shiny });
+      persist({ pokemonId, status });
     }
   }
 
@@ -222,36 +199,23 @@ export function EncounterEditor({
     if (selectedId === null) return;
     const next = !shiny;
     setShiny(next);
-    if (current) persist({ pokemonId: selectedId, status, shiny: next });
-    else broadcastDraft({ pokemonId: selectedId, status, nickname, shiny: next });
+    persist({ pokemonId: selectedId, status, shiny: next });
   }
 
   function handleStatusChange(next: EncounterStatus) {
     setStatus(next);
     if (selectedId === null) return;
-    if (current) persist({ pokemonId: selectedId, status: next });
-    else broadcastDraft({ pokemonId: selectedId, status: next, nickname, shiny });
+    persist({ pokemonId: selectedId, status: next });
   }
 
-  // Saved on blur / Enter, not per keystroke - one server action/broadcast per
-  // edit.
+  // Saved on blur / Enter, not per keystroke - one server action per edit.
   function commitNickname() {
     if (selectedId === null) return;
     const trimmed = nickname.trim();
-    if (current) {
-      if (trimmed === (current?.nickname ?? "")) return;
-      persist({ pokemonId: selectedId, status, nickname: trimmed || null });
-    } else {
-      broadcastDraft({ pokemonId: selectedId, status, nickname: trimmed, shiny });
-    }
+    if (trimmed === (current?.nickname ?? "")) return;
+    persist({ pokemonId: selectedId, status, nickname: trimmed || null });
   }
 
-  // Commits a brand-new encounter (pokemon + status + nickname + shiny) in
-  // one go, once the user is done filling in the row.
-  function handleConfirmNew() {
-    if (selectedId === null) return;
-    persist({ pokemonId: selectedId, status, nickname: nickname.trim() || null, shiny });
-  }
 
   // Undo a mistaken entry: remove the encounter entirely. The confirm() must
   // run OUTSIDE startTransition - awaiting a dialog inside a transition keeps
@@ -350,16 +314,6 @@ export function EncounterEditor({
                 </span>
               )}
             </span>
-          )}
-          {!current && (
-            <button
-              type="button"
-              disabled={pending}
-              onClick={handleConfirmNew}
-              className="rounded border border-emerald-400 bg-emerald-50 px-2 py-1 font-medium text-emerald-700 transition-colors hover:bg-emerald-100 disabled:opacity-50 dark:border-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300"
-            >
-              {t.tracker.confirmEncounter}
-            </button>
           )}
           {current && (
             <button

@@ -128,7 +128,6 @@ const de = {
     nicknameLabel: "Spitzname",
     postgameShow: (n: number) => `Post-Game Content anzeigen (${n} Gebiete)`,
     postgameHide: "Post-Game Content ausblenden",
-    confirmEncounter: "Bestätigen",
     progressTitle: (done: number, total: number, percent: number) =>
       `${done} von ${total} Routen abgeschlossen (${percent}%)`,
   },
@@ -588,7 +587,6 @@ const en: Dictionary = {
     nicknameLabel: "Nickname",
     postgameShow: (n: number) => `Show post-game content (${n} areas)`,
     postgameHide: "Hide post-game content",
-    confirmEncounter: "Confirm",
     progressTitle: (done: number, total: number, percent: number) =>
       `${done} of ${total} routes completed (${percent}%)`,
   },
@@ -1046,7 +1044,6 @@ const fr: Dictionary = {
     nicknameLabel: "Surnom",
     postgameShow: (n: number) => `Afficher le contenu post-ligue (${n} zones)`,
     postgameHide: "Masquer le contenu post-ligue",
-    confirmEncounter: "Confirmer",
     progressTitle: (done: number, total: number, percent: number) =>
       `${done} routes sur ${total} terminées (${percent}%)`,
   },
@@ -1506,7 +1503,6 @@ const es: Dictionary = {
     nicknameLabel: "Mote",
     postgameShow: (n: number) => `Mostrar contenido posjuego (${n} zonas)`,
     postgameHide: "Ocultar contenido posjuego",
-    confirmEncounter: "Confirmar",
     progressTitle: (done: number, total: number, percent: number) =>
       `${done} de ${total} rutas completadas (${percent}%)`,
   },
@@ -1966,7 +1962,6 @@ const it: Dictionary = {
     nicknameLabel: "Soprannome",
     postgameShow: (n: number) => `Mostra contenuti post-gioco (${n} aree)`,
     postgameHide: "Nascondi contenuti post-gioco",
-    confirmEncounter: "Conferma",
     progressTitle: (done: number, total: number, percent: number) =>
       `${done} di ${total} percorsi completati (${percent}%)`,
   },
