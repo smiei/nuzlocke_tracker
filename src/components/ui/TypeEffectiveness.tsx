@@ -20,12 +20,21 @@ import { cn } from "./cn";
 // and colour-blind readers; the spelled-out phrase stays as the accessible name.
 const GROUPS = [4, 2, 0.5, 0.25, 0] as const;
 
+// Decimals rather than the vulgar fractions: at 12px each half of a glyph like
+// 1/2 renders around 6px tall, which is not readable - and it left the two
+// resistance steps distinguishable ONLY by that glyph, since they also shared a
+// colour.
+//
+// The five steps now run hot to cold, the same direction as the battle matrix:
+// red is the worst case for you, blue-green the best. Immunity gets a solid fill
+// instead of a fifth tint so "nothing gets through" reads at a glance;
+// bg-ink/text-canvas invert together, so it stays legible in both themes.
 const CHIPS: Record<string, { text: string; tone: string }> = {
   "4": { text: "4\u00d7", tone: "border-danger-line bg-danger-bg text-danger" },
-  "2": { text: "2\u00d7", tone: "border-danger-line bg-danger-bg text-danger" },
-  "0.5": { text: "\u00bd\u00d7", tone: "border-success-line bg-success-bg text-success" },
-  "0.25": { text: "\u00bc\u00d7", tone: "border-success-line bg-success-bg text-success" },
-  "0": { text: "0\u00d7", tone: "border-line bg-sunken text-ink-muted" },
+  "2": { text: "2\u00d7", tone: "border-warning-line bg-warning-bg text-warning" },
+  "0.5": { text: "0.5\u00d7", tone: "border-success-line bg-success-bg text-success" },
+  "0.25": { text: "0.25\u00d7", tone: "border-info-line bg-info-bg text-info" },
+  "0": { text: "0\u00d7", tone: "border-ink bg-ink text-canvas" },
 };
 
 export function TypeEffectiveness({
@@ -71,7 +80,7 @@ export function TypeEffectiveness({
               title={label}
               aria-label={label}
               className={cn(
-                "inline-flex min-w-11 justify-center rounded-md border px-2 py-1 text-xs font-semibold tabular-nums",
+                "inline-flex min-w-14 justify-center rounded-md border px-2 py-1 text-sm font-semibold tabular-nums",
                 chip.tone,
               )}
             >
