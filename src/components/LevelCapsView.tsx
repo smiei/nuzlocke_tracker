@@ -6,7 +6,12 @@ import type { LevelCap } from "@/lib/data";
 import type { Lang } from "@/lib/i18n/dictionary";
 import { translations } from "@/lib/i18n/dictionary";
 import { levelCapName, levelCapLocation, levelCapBadge } from "@/lib/i18n/localize";
+import { formatActionError } from "@/lib/actionErrors";
 import { TrainerSprite } from "@/components/TrainerSprite";
+import { Card } from "@/components/ui/Card";
+import { EmptyState } from "@/components/ui/Page";
+import { Spinner } from "@/components/ui/Spinner";
+import { useToast } from "@/components/ui/ToastProvider";
 import { toggleLevelCapDefeated } from "@/lib/actions";
 
 type LevelCapWithProgress = LevelCap & { defeated: boolean };
@@ -25,6 +30,7 @@ export function LevelCapsView({
 }) {
   const router = useRouter();
   const t = translations[lang].levelcaps;
+  const toast = useToast();
   const [overrides, setOverrides] = useState<Record<number, boolean>>({});
   const [pendingId, setPendingId] = useState<number | null>(null);
   const [, startTransition] = useTransition();
@@ -39,16 +45,24 @@ export function LevelCapsView({
         setOverrides((prev) => ({ ...prev, [cap.id]: result.defeated }));
         router.refresh();
       } else {
+        // Previously the optimistic flip was rolled back in silence, so a
+        // failed toggle looked exactly like a tap that never registered.
         setOverrides((prev) => ({ ...prev, [cap.id]: current }));
+        toast.error(formatActionError(result.error, lang));
       }
       setPendingId(null);
     });
   }
 
+  if (levelCaps.length === 0) {
+    return <EmptyState title={t.empty} />;
+  }
+
   return (
-    <div className="flex flex-col divide-y divide-zinc-200 rounded-md border border-zinc-200 dark:divide-zinc-800 dark:border-zinc-800">
+    <Card padding="none" className="divide-y divide-line overflow-hidden">
       {levelCaps.map((cap) => {
         const defeated = overrides[cap.id] ?? cap.defeated;
+        const pending = pendingId === cap.id;
         const name = levelCapName(cap, lang);
         const location = levelCapLocation(cap, lang);
         const badge = levelCapBadge(cap, lang);
@@ -56,12 +70,11 @@ export function LevelCapsView({
           <button
             key={cap.id}
             type="button"
-            disabled={pendingId === cap.id}
+            disabled={pending}
+            aria-pressed={defeated}
             onClick={() => handleToggle(cap)}
             className={`flex w-full items-center gap-4 p-3 text-left transition-colors disabled:opacity-70 sm:p-4 ${
-              defeated
-                ? "bg-red-50/50 opacity-60 dark:bg-red-950/20"
-                : "hover:bg-zinc-50 dark:hover:bg-zinc-900"
+              defeated ? "bg-danger-bg/60 opacity-60" : "hover:bg-hover"
             }`}
           >
             {/* Sprite files are slugged from the canonical German name; the
@@ -74,31 +87,30 @@ export function LevelCapsView({
             />
             <div className="min-w-0 flex-1">
               <div
-                className={`truncate font-medium ${
-                  defeated ? "text-zinc-400 line-through dark:text-zinc-600" : ""
-                }`}
+                className={`truncate font-medium ${defeated ? "text-ink-subtle line-through" : "text-ink"}`}
               >
                 {name}
               </div>
-              <div className="truncate text-xs text-zinc-500 dark:text-zinc-400">
+              <div className="truncate text-xs text-ink-muted">
                 {location}
-                {badge ? ` · ${badge}` : ""}
+                {badge ? ` \u00b7 ${badge}` : ""}
               </div>
             </div>
+            {pending && <Spinner className="shrink-0 text-ink-muted" />}
             {cap.max_level !== null && (
               <div className="shrink-0 text-right">
                 {/* "cap / cap-2": one team member may reach the cap, the rest
                     stay two levels below (house rule). */}
-                <div className="text-lg font-semibold tabular-nums">
+                <div className="text-lg font-semibold tabular-nums text-ink">
                   {cap.max_level}
-                  <span className="text-zinc-400 dark:text-zinc-500"> / {cap.max_level - 2}</span>
+                  <span className="text-ink-subtle"> / {cap.max_level - 2}</span>
                 </div>
-                <div className="text-xs text-zinc-400 dark:text-zinc-500">{t.maxLevel}</div>
+                <div className="text-xs text-ink-subtle">{t.maxLevel}</div>
               </div>
             )}
           </button>
         );
       })}
-    </div>
+    </Card>
   );
 }

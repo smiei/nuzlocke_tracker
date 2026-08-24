@@ -122,7 +122,7 @@ describe("data/pokemon-history.json", () => {
       for (const [apiKey, was] of Object.entries(entry.stats)) {
         const key = KEYS[apiKey];
         if (!key) continue;
-        expect(now.stats[key] - (was as number), `#${entry.id} ${apiKey}`).toBe(10);
+        expect((now.stats[key] ?? 0) - (was as number), `#${entry.id} ${apiKey}`).toBe(10);
         expected += 10;
       }
       const then = pokemonForGeneration(history, now, 5);

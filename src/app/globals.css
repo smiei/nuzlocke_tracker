@@ -4,30 +4,134 @@
    follow that class instead of the OS-level prefers-color-scheme media query. */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Kept in step with what <body>'s Tailwind utilities actually paint
-   (bg-white / dark:bg-zinc-950, text-zinc-900 / dark:text-zinc-50) - those win
-   over the `body` rule below, so a different value here would be a silent lie.
-   The same two background values appear in public/manifest.webmanifest and in
-   ThemeColorSync; change all three together. */
+/* ---------------------------------------------------------------------------
+   Semantic colour tokens.
+
+   Every value is declared once per theme below and exposed through `@theme
+   inline`, so `bg-panel` / `border-line` / `text-ink-muted` already resolve
+   correctly in BOTH themes and need no `dark:` counterpart. That is the point:
+   the app previously carried 435 hand-paired `x dark:x` declarations, and the
+   pairs had drifted - ten different zinc shades were in use for "border", and
+   inputs disagreed with each other about their own dark background.
+
+   Rule going forward: reach for a token first. A raw `zinc-*` utility is only
+   correct where the colour is genuinely one-off.
+   --------------------------------------------------------------------------- */
 :root {
-  --background: #ffffff;
-  --foreground: #18181b;
+  --canvas: #ffffff; /* page background */
+  --panel: #ffffff; /* raised surface: card, dropdown, modal */
+  --sunken: #fafafa; /* subtle fill: table head, inactive track */
+  --hover: #f4f4f5; /* hover wash on neutral controls */
+
+  --line: #e4e4e7; /* default divider / card border */
+  --line-strong: #d4d4d8; /* input + control border, needs more contrast */
+
+  --ink: #18181b; /* primary text */
+  --ink-muted: #71717a; /* secondary text */
+  --ink-subtle: #a1a1aa; /* captions, placeholders */
+
+  --accent: #18181b; /* primary button fill */
+  --accent-ink: #ffffff; /* text on --accent */
+
+  --success: #047857;
+  --success-bg: #ecfdf5;
+  --success-line: #6ee7b7;
+  --warning: #b45309;
+  --warning-bg: #fffbeb;
+  --warning-line: #fcd34d;
+  --danger: #b91c1c;
+  --danger-bg: #fef2f2;
+  --danger-line: #fca5a5;
+  --info: #0369a1;
+  --info-bg: #f0f9ff;
+  --info-line: #7dd3fc;
+
+  --focus: #0ea5e9; /* one focus ring for the whole app */
+}
+
+.dark {
+  --canvas: #09090b;
+  --panel: #18181b;
+  --sunken: #18181b;
+  --hover: #27272a;
+
+  --line: #27272a;
+  --line-strong: #3f3f46;
+
+  --ink: #fafafa;
+  --ink-muted: #a1a1aa;
+  --ink-subtle: #71717a;
+
+  --accent: #fafafa;
+  --accent-ink: #18181b;
+
+  --success: #6ee7b7;
+  --success-bg: #022c22;
+  --success-line: #047857;
+  --warning: #fcd34d;
+  --warning-bg: #2c1a02;
+  --warning-line: #b45309;
+  --danger: #fca5a5;
+  --danger-bg: #2c0b0b;
+  --danger-line: #b91c1c;
+  --info: #7dd3fc;
+  --info-bg: #082f49;
+  --info-line: #0369a1;
+
+  --focus: #38bdf8;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-canvas: var(--canvas);
+  --color-panel: var(--panel);
+  --color-sunken: var(--sunken);
+  --color-hover: var(--hover);
+
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-subtle: var(--ink-subtle);
+
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+
+  --color-success: var(--success);
+  --color-success-bg: var(--success-bg);
+  --color-success-line: var(--success-line);
+  --color-warning: var(--warning);
+  --color-warning-bg: var(--warning-bg);
+  --color-warning-line: var(--warning-line);
+  --color-danger: var(--danger);
+  --color-danger-bg: var(--danger-bg);
+  --color-danger-line: var(--danger-line);
+  --color-info: var(--info);
+  --color-info-bg: var(--info-bg);
+  --color-info-line: var(--info-line);
+
+  --color-focus: var(--focus);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-.dark {
-  --background: #09090b;
-  --foreground: #fafafa;
+/* The two canvas values also appear in public/manifest.webmanifest and in
+   ThemeColorSync.tsx - change all three together. */
+body {
+  background: var(--canvas);
+  color: var(--ink);
+  /* Previously `Arial, Helvetica, sans-serif`, which silently overrode the
+     Geist font loaded in layout.tsx: the whole app rendered in Arial while
+     --font-sans went unused in all 58 components. */
+  font-family: var(--font-sans), system-ui, sans-serif;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* One focus ring for every interactive element. There were none at all before,
+   and 17 `outline-none` declarations removing the browser default. */
+@layer base {
+  :where(a, button, input, select, textarea, [tabindex]):focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
 }

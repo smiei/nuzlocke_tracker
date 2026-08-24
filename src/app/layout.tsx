@@ -8,6 +8,7 @@ import { HeaderTitle } from "@/components/HeaderTitle";
 import { RunSwitcher } from "@/components/RunSwitcher";
 import { HeaderMenu } from "@/components/HeaderMenu";
 import { DialogProvider } from "@/components/DialogProvider";
+import { ToastProvider } from "@/components/ui/ToastProvider";
 import { LiveRefresh } from "@/components/LiveRefresh";
 import { ServiceWorkerRegistrar } from "@/components/ServiceWorkerRegistrar";
 import { ThemeColorSync } from "@/components/ThemeColorSync";
@@ -103,6 +104,7 @@ export default async function RootLayout({
         <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png" />
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <LanguageProvider>
+            <ToastProvider>
             <DialogProvider>
             <TabOrderProvider>
               <header className="border-b border-zinc-200 dark:border-zinc-800">
@@ -137,6 +139,7 @@ export default async function RootLayout({
               <SessionWatch />
             </TabOrderProvider>
             </DialogProvider>
+            </ToastProvider>
           </LanguageProvider>
         </ThemeProvider>
       </body>

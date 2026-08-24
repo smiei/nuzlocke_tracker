@@ -222,6 +222,7 @@ const de = {
     progressTitle: (done: number, total: number, percent: number) =>
       `${done} von ${total} Kämpfen abgeschlossen (${percent}%)`,
     eliteFourMarker: "Ab hier: Top 4",
+    empty: "Keine Kämpfe in diesem Spielpaket hinterlegt.",
   },
   weaknesses: {
     heading: "Team-Schwächen",
@@ -675,6 +676,7 @@ const en: Dictionary = {
     progressTitle: (done: number, total: number, percent: number) =>
       `${done} of ${total} battles completed (${percent}%)`,
     eliteFourMarker: "Elite Four starts here",
+    empty: "No battles defined in this game pack.",
   },
   weaknesses: {
     heading: "Team Weaknesses",
@@ -1129,6 +1131,7 @@ const fr: Dictionary = {
     progressTitle: (done: number, total: number, percent: number) =>
       `${done} combats sur ${total} terminés (${percent}%)`,
     eliteFourMarker: "Le Conseil 4 commence ici",
+    empty: "Aucun combat défini dans ce pack de jeu.",
   },
   weaknesses: {
     heading: "Faiblesses de l'équipe",
@@ -1583,6 +1586,7 @@ const es: Dictionary = {
     progressTitle: (done: number, total: number, percent: number) =>
       `${done} de ${total} combates completados (${percent}%)`,
     eliteFourMarker: "Aquí empieza el Alto Mando",
+    empty: "No hay combates definidos en este paquete de juego.",
   },
   weaknesses: {
     heading: "Debilidades del equipo",
@@ -2037,6 +2041,7 @@ const it: Dictionary = {
     progressTitle: (done: number, total: number, percent: number) =>
       `${done} di ${total} combattimenti completati (${percent}%)`,
     eliteFourMarker: "Qui inizia la Superquattro",
+    empty: "Nessuna lotta definita in questo pacchetto di gioco.",
   },
   weaknesses: {
     heading: "Debolezze della squadra",
