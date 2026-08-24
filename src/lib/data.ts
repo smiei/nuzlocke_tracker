@@ -80,6 +80,11 @@ export type PokemonStats = {
   "Sp.-V.": number;
   "Init.": number;
   Summe: number;
+  // Gen 1 ONLY. That generation had a single Special stat governing both
+  // special attack and special defence; the split came in Gen 2. Set by
+  // pokemonForGeneration for a Gen-1 game, absent everywhere else - its
+  // presence is what tells the UI to render five stat rows instead of six.
+  Spezial?: number;
 };
 
 export type Pokemon = {

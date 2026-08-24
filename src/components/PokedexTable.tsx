@@ -19,6 +19,7 @@ type ColumnKey =
   | "Vert."
   | "Sp.-A."
   | "Sp.-V."
+  | "Spezial"
   | "Init."
   | "rang"
   | "Summe";
@@ -39,7 +40,7 @@ function getSortValue(
     case "rang":
       return ranks.get(pokemon.id) ?? Number.MAX_SAFE_INTEGER;
     default:
-      return pokemon.stats[key];
+      return pokemon.stats[key] ?? 0;
   }
 }
 
@@ -71,6 +72,7 @@ export function PokedexTable({
     [pokemon],
   );
 
+  const gen1 = pokemon.some((p) => p.stats.Spezial !== undefined);
   const COLUMNS: { key: ColumnKey; label: string; align?: "right"; hideClass?: string }[] = [
     { key: "id", label: columns.id, hideClass: "hidden md:table-cell" },
     { key: "name", label: columns.name },
@@ -78,8 +80,32 @@ export function PokedexTable({
     { key: "KP", label: columns.kp, align: "right", hideClass: "hidden md:table-cell" },
     { key: "Ang.", label: columns.ang, align: "right", hideClass: "hidden lg:table-cell" },
     { key: "Vert.", label: columns.vert, align: "right", hideClass: "hidden lg:table-cell" },
-    { key: "Sp.-A.", label: columns.spA, align: "right", hideClass: "hidden lg:table-cell" },
-    { key: "Sp.-V.", label: columns.spV, align: "right", hideClass: "hidden lg:table-cell" },
+    // Gen 1 had one Special stat rather than the attack/defence pair, so that
+    // game gets a single column. `Spezial` is set only by pokemonForGeneration
+    // for generation 1, which makes its presence the switch.
+    ...(gen1
+      ? [
+          {
+            key: "Spezial" as const,
+            label: columns.spez,
+            align: "right" as const,
+            hideClass: "hidden lg:table-cell",
+          },
+        ]
+      : [
+          {
+            key: "Sp.-A." as const,
+            label: columns.spA,
+            align: "right" as const,
+            hideClass: "hidden lg:table-cell",
+          },
+          {
+            key: "Sp.-V." as const,
+            label: columns.spV,
+            align: "right" as const,
+            hideClass: "hidden lg:table-cell",
+          },
+        ]),
     { key: "Init.", label: columns.init, align: "right", hideClass: "hidden md:table-cell" },
     { key: "rang", label: columns.rang, align: "right" },
     { key: "Summe", label: columns.summe, align: "right" },
@@ -297,12 +323,20 @@ export function PokedexTable({
                   <td className="px-3 py-2 text-right tabular-nums hidden lg:table-cell">
                     {p.stats["Vert."]}
                   </td>
-                  <td className="px-3 py-2 text-right tabular-nums hidden lg:table-cell">
-                    {p.stats["Sp.-A."]}
-                  </td>
-                  <td className="px-3 py-2 text-right tabular-nums hidden lg:table-cell">
-                    {p.stats["Sp.-V."]}
-                  </td>
+                  {gen1 ? (
+                    <td className="px-3 py-2 text-right tabular-nums hidden lg:table-cell">
+                      {p.stats.Spezial}
+                    </td>
+                  ) : (
+                    <>
+                      <td className="px-3 py-2 text-right tabular-nums hidden lg:table-cell">
+                        {p.stats["Sp.-A."]}
+                      </td>
+                      <td className="px-3 py-2 text-right tabular-nums hidden lg:table-cell">
+                        {p.stats["Sp.-V."]}
+                      </td>
+                    </>
+                  )}
                   <td className="px-3 py-2 text-right tabular-nums hidden md:table-cell">
                     {p.stats["Init."]}
                   </td>

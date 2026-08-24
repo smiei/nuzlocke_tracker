@@ -130,15 +130,47 @@ describe("data/pokemon-history.json", () => {
     }
   });
 
-  it("leaves Gen 1's single Special stat alone", () => {
-    // Gen 1 had ONE Special governing attack and defence, which the six-stat
-    // model cannot express; mapping it onto both would double-count it in
-    // Summe. The entries stay in the file so the decision is reversible.
-    const specials = history.filter((e) => e.stats && "special" in e.stats);
-    expect(specials.length).toBeGreaterThan(0);
-    const pikachu = pokemon.find((p) => p.id === 25)!;
-    expect(pokemonForGeneration(history, pikachu, 1).stats["Sp.-A."]).toBe(
-      pikachu.stats["Sp.-A."],
+  it("covers every Gen 1 species with a Special value", () => {
+    const withSpecial = new Set(
+      history.filter((e) => e.stats && "special" in e.stats).map((e) => e.id),
     );
+    for (let id = 1; id <= 151; id++) expect(withSpecial.has(id), `#${id}`).toBe(true);
+  });
+
+  it("collapses Gen 1 to a single Special and counts it once in the total", () => {
+    // Gen 1 had ONE Special stat driving both special attack and defence, and
+    // its base stat total counts it once. Real cartridge values, HP/Atk/Def/
+    // Special/Speed - Mewtwo is 590 there, not the 680 the split-era numbers
+    // would give.
+    const cases: [number, number, number, number, number, number][] = [
+      [150, 106, 110, 90, 154, 130],
+      [25, 35, 55, 30, 50, 90],
+      [65, 55, 50, 45, 135, 120],
+      [143, 160, 110, 65, 65, 30],
+      [6, 78, 84, 78, 85, 100],
+      [94, 60, 65, 60, 130, 110],
+    ];
+    for (const [id, hp, atk, def, special, speed] of cases) {
+      const out = pokemonForGeneration(history, pokemon.find((p) => p.id === id)!, 1);
+      expect(out.stats.Spezial, `#${id} Spezial`).toBe(special);
+      expect(out.stats.Summe, `#${id} Summe`).toBe(hp + atk + def + special + speed);
+      // Mirrored onto both split stats too, so a generic consumer still reads
+      // the number the game actually used.
+      expect(out.stats["Sp.-A."]).toBe(special);
+      expect(out.stats["Sp.-V."]).toBe(special);
+    }
+  });
+
+  it("never sets Spezial outside Gen 1", () => {
+    // Its presence is what makes the UI drop to five stat rows, so a stray one
+    // in Gen 2+ would silently hide a real stat.
+    for (const generation of [2, 3, 4, 5]) {
+      for (const entry of pokemon) {
+        expect(
+          pokemonForGeneration(history, entry, generation).stats.Spezial,
+          `#${entry.id} gen ${generation}`,
+        ).toBeUndefined();
+      }
+    }
   });
 });

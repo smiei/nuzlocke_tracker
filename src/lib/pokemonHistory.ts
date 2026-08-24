@@ -33,12 +33,15 @@ const STAT_KEYS: Record<string, keyof PokemonStats> = {
   "special-attack": "Sp.-A.",
   "special-defense": "Sp.-V.",
   speed: "Init.",
-  // Deliberately absent: "special". Gen 1 had a single Special stat governing
-  // both attack and defence, which this app's six-stat model cannot express -
-  // mapping it onto Sp.-A. AND Sp.-V. would double-count it in `Summe` and put
-  // every Gen-1 BST well above the real one. The generated file keeps those
-  // entries so the decision stays reversible; see the note in CLAUDE.md.
 };
+
+// Gen 1 handled separately: it had ONE Special stat driving both special
+// attack and special defence, and its base stat total counts that value once
+// (Mewtwo is 106/110/90/154/130 = 590, not the 680 the split-era numbers give).
+// So a Gen-1 game gets `Spezial` set - which is what makes the UI collapse the
+// two special rows into one - plus Sp.-A./Sp.-V. mirrored to the same number so
+// any generic consumer still reads a truthful per-stat value.
+const GEN1_SPECIAL = "special";
 
 // The types and base stats a Pokémon actually had in the given generation.
 // Returns the input object unchanged when nothing applies, so callers can rely
@@ -51,20 +54,40 @@ export function pokemonForGeneration(
   let types: string[] | undefined;
   let stats: PokemonStats | undefined;
 
-  for (const entry of history) {
-    if (entry.id !== pokemon.id || generation > entry.maxGeneration) continue;
+  // Several entries can cover the same generation - Pikachu has one for its
+  // Gen-1 Special AND one for the Gen-6 Defence buff, and both apply when
+  // rendering a Gen-1 game. Applying them from the widest window to the
+  // narrowest lets the most specific one win: without this the Gen-5 entry
+  // would overwrite the Gen-1 Special that was set first.
+  const applicable = history
+    .filter((entry) => entry.id === pokemon.id && generation <= entry.maxGeneration)
+    .sort((a, b) => b.maxGeneration - a.maxGeneration);
 
+  for (const entry of applicable) {
     if (entry.types) types = entry.types;
 
     if (entry.stats) {
       const next: PokemonStats = { ...(stats ?? pokemon.stats) };
       for (const [apiKey, value] of Object.entries(entry.stats)) {
+        if (value === undefined) continue;
+        if (apiKey === GEN1_SPECIAL) {
+          next.Spezial = value;
+          next["Sp.-A."] = value;
+          next["Sp.-V."] = value;
+          continue;
+        }
         const key = STAT_KEYS[apiKey];
-        if (key && value !== undefined) next[key] = value;
+        if (key) next[key] = value;
       }
-      // Summe is stored rather than derived, so it has to be recomputed or the
-      // card would show six stats that do not add up to their own total.
-      next.Summe = next.KP + next["Ang."] + next["Vert."] + next["Sp.-A."] + next["Sp.-V."] + next["Init."];
+      // Summe is stored rather than derived, so it has to be recomputed - and
+      // with the Gen-1 Special counted ONCE, or every Gen-1 total would come
+      // out roughly a hundred points too high.
+      next.Summe =
+        next.KP +
+        next["Ang."] +
+        next["Vert."] +
+        next["Init."] +
+        (next.Spezial !== undefined ? next.Spezial : next["Sp.-A."] + next["Sp.-V."]);
       stats = next;
     }
   }

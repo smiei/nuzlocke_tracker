@@ -20,13 +20,29 @@ import { PokemonSprite } from "@/components/PokemonSprite";
 
 const WEAKNESS_GROUPS = [4, 2, 0.5, 0.25, 0] as const;
 
-// Order + label keys for the six base stats (matching pokedex.columns).
-const STAT_ROWS: { key: keyof Pokemon["stats"]; labelKey: "kp" | "ang" | "vert" | "spA" | "spV" | "init" }[] = [
+// Order + label keys for the base stats (matching pokedex.columns).
+type StatRow = {
+  key: keyof Pokemon["stats"];
+  labelKey: "kp" | "ang" | "vert" | "spA" | "spV" | "spez" | "init";
+};
+
+const STAT_ROWS: StatRow[] = [
   { key: "KP", labelKey: "kp" },
   { key: "Ang.", labelKey: "ang" },
   { key: "Vert.", labelKey: "vert" },
   { key: "Sp.-A.", labelKey: "spA" },
   { key: "Sp.-V.", labelKey: "spV" },
+  { key: "Init.", labelKey: "init" },
+];
+
+// Gen 1 had a single Special stat instead of the attack/defence pair, so a
+// Gen-1 game shows five rows. `Spezial` is only ever set by
+// pokemonForGeneration for generation 1, which makes it the switch.
+const STAT_ROWS_GEN1: StatRow[] = [
+  { key: "KP", labelKey: "kp" },
+  { key: "Ang.", labelKey: "ang" },
+  { key: "Vert.", labelKey: "vert" },
+  { key: "Spezial", labelKey: "spez" },
   { key: "Init.", labelKey: "init" },
 ];
 
@@ -361,8 +377,8 @@ export function PokemonDetailModal({
           {td.stats}
         </h3>
         <div className="mb-4 space-y-1">
-          {STAT_ROWS.map(({ key, labelKey }) => {
-            const value = pokemon.stats[key];
+          {(pokemon.stats.Spezial !== undefined ? STAT_ROWS_GEN1 : STAT_ROWS).map(({ key, labelKey }) => {
+            const value = pokemon.stats[key] ?? 0;
             return (
               <div key={key} className="flex items-center gap-2">
                 <span className="w-14 shrink-0 text-xs text-zinc-500 dark:text-zinc-400">
