@@ -25,8 +25,14 @@ export async function GET(request: Request) {
       send(`: connected\n\n`);
       const unsubscribe = subscribe((payload) => send(`data: ${payload}\n\n`));
 
-      // Comment-only heartbeat so idle proxies don't drop the connection.
-      const heartbeat = setInterval(() => send(`: ping\n\n`), 30000);
+      // Heartbeat: keeps idle proxies from dropping the connection, and -
+      // deliberately a NAMED event rather than a bare `: ping` comment - it
+      // lets the client see the stream is still alive. A comment produces no
+      // JS-visible event at all, and on iOS 18 the client has nothing else to
+      // go on: WebKit leaves readyState at OPEN and fires no error once the
+      // connection has actually died (see LiveRefresh). `event: ping` does not
+      // trigger onmessage, so it never causes a refresh of its own.
+      const heartbeat = setInterval(() => send(`event: ping\ndata: 1\n\n`), 20000);
 
       request.signal.addEventListener("abort", () => {
         closed = true;
