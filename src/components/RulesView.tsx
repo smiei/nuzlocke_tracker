@@ -10,6 +10,7 @@ import type { Lang } from "@/lib/i18n/dictionary";
 import { translations } from "@/lib/i18n/dictionary";
 import type { RunSettings } from "@/lib/runSettings";
 import { RunMode } from "@/generated/prisma/enums";
+import { useToast } from "@/components/ui/ToastProvider";
 
 // The boolean rule toggles (playerNames is handled separately).
 type BooleanSettingKey = Exclude<keyof RunSettings, "playerNames">;
@@ -116,7 +117,8 @@ export function RulesView({
   settings: RunSettings;
 }) {
   const router = useRouter();
-  const { alert, confirm } = useDialog();
+  const toast = useToast();
+  const { confirm } = useDialog();
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(markdown);
   const [notesOpen, setNotesOpen] = useState(true);
@@ -143,7 +145,7 @@ export function RulesView({
         router.refresh();
       } else {
         setLocal((prev) => ({ ...prev, [key]: !next }));
-        await alert({ message: formatActionError(result.error, lang) });
+        toast.error(formatActionError(result.error, lang));
       }
     });
   }
@@ -156,7 +158,7 @@ export function RulesView({
     startTransition(async () => {
       const result = await updateRunSettings(runId, { playerNames: nextNames });
       if (result.success) router.refresh();
-      else await alert({ message: formatActionError(result.error, lang) });
+      else toast.error(formatActionError(result.error, lang));
     });
   }
 
@@ -180,7 +182,7 @@ export function RulesView({
         setEditing(false);
         router.refresh();
       } else {
-        await alert({ message: formatActionError(result.error, lang) });
+        toast.error(formatActionError(result.error, lang));
       }
     });
   }

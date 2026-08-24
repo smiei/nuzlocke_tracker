@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation";
 import type { SoulLinkView } from "@/lib/types";
 import { setTeamSlot } from "@/lib/actions";
 import { formatActionError } from "@/lib/actionErrors";
-import { useDialog } from "@/components/DialogProvider";
 import type { Lang } from "@/lib/i18n/dictionary";
 import { translations } from "@/lib/i18n/dictionary";
 import { PokemonSprite } from "@/components/PokemonSprite";
+import { useToast } from "@/components/ui/ToastProvider";
 
 const TEAM_SIZE = 6;
 
@@ -28,7 +28,7 @@ export function AddToTeamButton({
   teamLinks: SoulLinkView[];
 }) {
   const router = useRouter();
-  const { alert } = useDialog();
+  const toast = useToast();
   const [open, setOpen] = useState(false);
   const [pending, startTransition] = useTransition();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -51,7 +51,7 @@ export function AddToTeamButton({
         setOpen(false);
         router.refresh();
       } else {
-        await alert({ message: formatActionError(result.error, lang) });
+        toast.error(formatActionError(result.error, lang));
       }
     });
   }

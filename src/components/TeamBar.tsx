@@ -12,6 +12,7 @@ import { translations } from "@/lib/i18n/dictionary";
 import { EncounterTile } from "@/components/EncounterTile";
 import { PokemonSprite } from "@/components/PokemonSprite";
 import { usePlayerLabel } from "@/components/PlayerNamesProvider";
+import { useToast } from "@/components/ui/ToastProvider";
 
 const TEAM_SIZE = 6;
 
@@ -127,7 +128,8 @@ export function TeamBar({
   links: SoulLinkView[];
 }) {
   const router = useRouter();
-  const { alert, confirm } = useDialog();
+  const toast = useToast();
+  const { confirm } = useDialog();
   const playerLabel = usePlayerLabel();
   const [pending, startTransition] = useTransition();
   const [deadMenuId, setDeadMenuId] = useState<number | null>(null);
@@ -146,7 +148,7 @@ export function TeamBar({
   function handleSelect(position: number, soulLinkId: number | null) {
     startTransition(async () => {
       const result = await setTeamSlot(runId, position, soulLinkId);
-      if (!result.success) await alert({ message: formatActionError(result.error, lang) });
+      if (!result.success) toast.error(formatActionError(result.error, lang));
       router.refresh();
     });
   }
@@ -158,7 +160,7 @@ export function TeamBar({
     if (!(await confirm({ message: t.links.clearTeamConfirm, danger: true }))) return;
     startTransition(async () => {
       const result = await clearTeam(runId);
-      if (!result.success) await alert({ message: formatActionError(result.error, lang) });
+      if (!result.success) toast.error(formatActionError(result.error, lang));
       router.refresh();
     });
   }
@@ -169,7 +171,7 @@ export function TeamBar({
     setDeadCause("");
     startTransition(async () => {
       const result = await markDead(runId, soulLinkId, deathPlayer ?? null, cause);
-      if (!result.success) await alert({ message: formatActionError(result.error, lang) });
+      if (!result.success) toast.error(formatActionError(result.error, lang));
       router.refresh();
     });
   }

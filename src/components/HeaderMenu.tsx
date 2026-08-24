@@ -14,6 +14,7 @@ import type { RunSummary } from "@/lib/types";
 import { RenameRunDialog } from "@/components/RenameRunDialog";
 import { ImportBackupDialog } from "@/components/ImportBackupDialog";
 import { TabOrderDialog } from "@/components/TabOrderDialog";
+import { useToast } from "@/components/ui/ToastProvider";
 
 function GearIcon({ className }: { className?: string }) {
   return (
@@ -61,6 +62,7 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
   const searchParams = useSearchParams();
   const { lang, setLang } = useLanguage();
   const { confirm, alert } = useDialog();
+  const toast = useToast();
   const [open, setOpen] = useState(false);
   const [renameOpen, setRenameOpen] = useState(false);
   const [tabOrderOpen, setTabOrderOpen] = useState(false);
@@ -94,8 +96,12 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
     }
     startTransition(async () => {
       const result = await exportRunBackup(activeRun.id);
-      if (result.success) downloadJson(result.filename, result.backup);
-      else await alert({ message: formatActionError(result.error, lang) });
+      if (result.success) {
+        downloadJson(result.filename, result.backup);
+        toast.success(result.filename);
+      } else {
+        toast.error(formatActionError(result.error, lang));
+      }
     });
   }
 
@@ -108,8 +114,9 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
           result.filename,
           new Blob([base64ToBytes(result.zipBase64)], { type: "application/zip" }),
         );
+        toast.success(result.filename);
       } else {
-        await alert({ message: formatActionError(result.error, lang) });
+        toast.error(formatActionError(result.error, lang));
       }
     });
   }
@@ -132,7 +139,7 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
         .map((bytes) => parseBackup(decoder.decode(bytes)))
         .filter((b): b is BackupFile => b !== null);
       if (parts.length === 0) {
-        await alert({ message: formatActionError({ key: "backupInvalid" }, lang) });
+        toast.error(formatActionError({ key: "backupInvalid" }, lang));
         return;
       }
       const merged: BackupFile = {
@@ -147,11 +154,11 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
     }
     const parsed = parseBackup(json);
     if (!parsed) {
-      await alert({ message: formatActionError({ key: "backupInvalid" }, lang) });
+      toast.error(formatActionError({ key: "backupInvalid" }, lang));
       return;
     }
     if (parsed.runs.length === 0) {
-      await alert({ message: formatActionError({ key: "backupEmpty" }, lang) });
+      toast.error(formatActionError({ key: "backupEmpty" }, lang));
       return;
     }
     // Naming is asked for every time (see ImportBackupDialog) rather than
@@ -168,9 +175,9 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
       if (result.success) {
         setImportState(null);
         router.refresh();
-        await alert({ message: t.backup.importSuccess(result.runCount) });
+        toast.success(t.backup.importSuccess(result.runCount));
       } else {
-        await alert({ message: formatActionError(result.error, lang) });
+        toast.error(formatActionError(result.error, lang));
       }
     });
   }
@@ -183,7 +190,7 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
         setRenameOpen(false);
         router.refresh();
       } else {
-        await alert({ message: formatActionError(result.error, lang) });
+        toast.error(formatActionError(result.error, lang));
       }
     });
   }
@@ -192,18 +199,23 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
     setOpen(false);
     if (!activeRun) return;
 
-    const confirmOpts = { danger: true, confirmLabel: t.runSwitcher.deleteButton };
-    if (!(await confirm({ ...confirmOpts, message: t.runSwitcher.confirmDelete1(activeRun.name) })))
-      return;
-    if (!(await confirm({ ...confirmOpts, message: t.runSwitcher.confirmDelete2(activeRun.name) })))
-      return;
+    // One confirmation, not two. The second dialog added no safety - both
+    // auto-focus their primary button, so two Enter presses destroyed a run -
+    // while making an ordinary delete feel like a fight.
+    const confirmed = await confirm({
+      danger: true,
+      confirmLabel: t.runSwitcher.deleteButton,
+      message: t.runSwitcher.confirmDelete1(activeRun.name),
+    });
+    if (!confirmed) return;
 
     startTransition(async () => {
       const result = await deleteRun(activeRun.id);
       if (result.success) {
+        toast.success(t.runSwitcher.deleteButton);
         router.push(pathname);
       } else {
-        await alert({ message: formatActionError(result.error, lang) });
+        toast.error(formatActionError(result.error, lang));
       }
     });
   }

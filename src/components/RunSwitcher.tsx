@@ -4,13 +4,13 @@ import { useState, useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { createRun } from "@/lib/actions";
 import { formatActionError } from "@/lib/actionErrors";
-import { useDialog } from "@/components/DialogProvider";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import { translations } from "@/lib/i18n/dictionary";
 import { localizeName } from "@/lib/i18n/localize";
 import { RunMode } from "@/generated/prisma/enums";
 import type { GameSummary, RunSummary } from "@/lib/types";
 import { NewRunDialog } from "@/components/NewRunDialog";
+import { useToast } from "@/components/ui/ToastProvider";
 
 // Run select + a compact "+" (new run). Rename/delete live in the header
 // menu (HeaderMenu) to keep this bar narrow on phones.
@@ -21,7 +21,7 @@ export function RunSwitcher({ runs, games }: { runs: RunSummary[]; games: GameSu
   const [pending, startTransition] = useTransition();
   const [dialogOpen, setDialogOpen] = useState(false);
   const { lang } = useLanguage();
-  const { alert } = useDialog();
+  const toast = useToast();
   const t = translations[lang].runSwitcher;
 
   const activeId = Number(searchParams.get("run")) || runs[0]?.id;
@@ -49,7 +49,7 @@ export function RunSwitcher({ runs, games }: { runs: RunSummary[]; games: GameSu
         setDialogOpen(false);
         router.push(`/rules?run=${result.runId}`);
       } else {
-        await alert({ message: formatActionError(result.error, lang) });
+        toast.error(formatActionError(result.error, lang));
       }
     });
   }

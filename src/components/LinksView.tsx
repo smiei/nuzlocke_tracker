@@ -8,7 +8,6 @@ import { markDead, markAlive } from "@/lib/actions";
 import { formatActionError } from "@/lib/actionErrors";
 import { GEN3_TYPES } from "@/lib/effectiveness";
 import { TYPE_LABELS } from "@/lib/pokemonTypes";
-import { useDialog } from "@/components/DialogProvider";
 import type { Lang } from "@/lib/i18n/dictionary";
 import { translations } from "@/lib/i18n/dictionary";
 import { AddToTeamButton } from "@/components/AddToTeamButton";
@@ -19,6 +18,7 @@ import { TeamBar } from "@/components/TeamBar";
 import { TypeBadge } from "@/components/TypeBadge";
 import { usePlayerLabel } from "@/components/PlayerNamesProvider";
 import { usePersistentState } from "@/lib/usePersistentState";
+import { useToast } from "@/components/ui/ToastProvider";
 
 const SORT_MODE_KEY = "nuzlocke:linksSortMode";
 type SortMode = "default" | "summe" | "summeMax";
@@ -35,7 +35,7 @@ export function LinksView({
   soulLinks: SoulLinkView[];
 }) {
   const router = useRouter();
-  const { alert } = useDialog();
+  const toast = useToast();
   const playerLabel = usePlayerLabel();
   const [pendingId, setPendingId] = useState<number | null>(null);
   const [, startTransition] = useTransition();
@@ -114,7 +114,7 @@ export function LinksView({
     setDeadCause("");
     startTransition(async () => {
       const result = await markDead(runId, id, deathPlayer ?? null, cause);
-      if (!result.success) await alert({ message: formatActionError(result.error, lang) });
+      if (!result.success) toast.error(formatActionError(result.error, lang));
       router.refresh();
       setPendingId(null);
     });
@@ -124,7 +124,7 @@ export function LinksView({
     setPendingId(id);
     startTransition(async () => {
       const result = await markAlive(runId, id);
-      if (!result.success) await alert({ message: formatActionError(result.error, lang) });
+      if (!result.success) toast.error(formatActionError(result.error, lang));
       router.refresh();
       setPendingId(null);
     });

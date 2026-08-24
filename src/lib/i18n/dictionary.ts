@@ -100,8 +100,6 @@ const de = {
     create: "Erstellen",
     confirmDelete1: (name: string) =>
       `Run "${name}" wirklich löschen? Alle Encounters, Links und der Level-Cap-Fortschritt dieses Runs gehen unwiderruflich verloren.`,
-    confirmDelete2: (name: string) =>
-      `Bist du dir ganz sicher? "${name}" kann danach NICHT wiederhergestellt werden.`,
     soloSuffix: " (Solo)",
   },
   player: {
@@ -215,6 +213,11 @@ const de = {
       formBase: "Normalform",
       openInAnalyze: "Im Kampf & Fang öffnen",
     },
+  },
+  errorPage: {
+    title: "Da ist etwas schiefgelaufen",
+    hint: "Die Seite konnte nicht geladen werden. Ein neuer Versuch hilft meistens.",
+    retry: "Erneut versuchen",
   },
   levelcaps: {
     heading: "Reise",
@@ -557,8 +560,6 @@ const en: Dictionary = {
     create: "Create",
     confirmDelete1: (name: string) =>
       `Really delete run "${name}"? All encounters, links, and level cap progress for this run will be lost permanently.`,
-    confirmDelete2: (name: string) =>
-      `Are you absolutely sure? "${name}" cannot be restored afterwards.`,
     soloSuffix: " (Solo)",
   },
   player: {
@@ -671,6 +672,11 @@ const en: Dictionary = {
       formBase: "Normal Forme",
       openInAnalyze: "Open in Battle & Catch",
     },
+  },
+  errorPage: {
+    title: "Something went wrong",
+    hint: "This page could not be loaded. Trying again usually helps.",
+    retry: "Try again",
   },
   levelcaps: {
     heading: "Journey",
@@ -1012,8 +1018,6 @@ const fr: Dictionary = {
     create: "Créer",
     confirmDelete1: (name: string) =>
       `Vraiment supprimer le run « ${name} » ? Toutes les rencontres, tous les liens et la progression des level caps de ce run seront définitivement perdus.`,
-    confirmDelete2: (name: string) =>
-      `Es-tu vraiment sûr ? « ${name} » ne pourra PAS être restauré.`,
     soloSuffix: " (Solo)",
   },
   player: {
@@ -1128,6 +1132,11 @@ const fr: Dictionary = {
       formBase: "Forme normale",
       openInAnalyze: "Ouvrir dans Combat & Capture",
     },
+  },
+  errorPage: {
+    title: "Une erreur est survenue",
+    hint: "Cette page n'a pas pu être chargée. Réessayer suffit généralement.",
+    retry: "Réessayer",
   },
   levelcaps: {
     heading: "Aventure",
@@ -1469,8 +1478,6 @@ const es: Dictionary = {
     create: "Crear",
     confirmDelete1: (name: string) =>
       `¿Eliminar de verdad el run "${name}"? Todos los encuentros, enlaces y el progreso de level caps de este run se perderán para siempre.`,
-    confirmDelete2: (name: string) =>
-      `¿Estás completamente seguro? "${name}" NO se podrá restaurar.`,
     soloSuffix: " (Solo)",
   },
   player: {
@@ -1585,6 +1592,11 @@ const es: Dictionary = {
       formBase: "Forma normal",
       openInAnalyze: "Abrir en Combate y captura",
     },
+  },
+  errorPage: {
+    title: "Algo ha salido mal",
+    hint: "No se ha podido cargar la página. Volver a intentarlo suele bastar.",
+    retry: "Reintentar",
   },
   levelcaps: {
     heading: "Aventura",
@@ -1926,8 +1938,6 @@ const it: Dictionary = {
     create: "Crea",
     confirmDelete1: (name: string) =>
       `Eliminare davvero il run "${name}"? Tutti gli incontri, i link e i progressi dei level cap di questo run andranno persi per sempre.`,
-    confirmDelete2: (name: string) =>
-      `Sei proprio sicuro? "${name}" NON potrà essere ripristinato.`,
     soloSuffix: " (Solo)",
   },
   player: {
@@ -2042,6 +2052,11 @@ const it: Dictionary = {
       formBase: "Forma normale",
       openInAnalyze: "Apri in Lotta e cattura",
     },
+  },
+  errorPage: {
+    title: "Qualcosa è andato storto",
+    hint: "Impossibile caricare la pagina. Riprovare di solito basta.",
+    retry: "Riprova",
   },
   levelcaps: {
     heading: "Viaggio",
