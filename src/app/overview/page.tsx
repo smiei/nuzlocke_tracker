@@ -18,7 +18,6 @@ import {
 import { getTypesForGeneration, teamOffensiveCoverage } from "@/lib/effectiveness";
 import { attackTypesAtLevel } from "@/lib/learnset";
 import { maxEvolvedSumme } from "@/lib/evolutions";
-import { typesForGeneration } from "@/lib/pokemonTypes";
 import { computeLevelCapProgress, computeRouteProgress, eliteFourIndex } from "@/lib/progress";
 import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
@@ -110,7 +109,7 @@ export default async function OverviewPage({
   for (const link of soulLinks) {
     if (link.status === LinkStatus.DEAD || link.teamPosition === null) continue;
     for (const e of link.encounters) {
-      const pokemon = getPokemonById(e.currentPokemonId);
+      const pokemon = getPokemonById(e.currentPokemonId, game.generation);
       if (!pokemon) continue;
       teamByPlayer.get(e.player)?.push({
         encounterId: e.id,
@@ -118,7 +117,7 @@ export default async function OverviewPage({
         // Formes with their own movepool keep it; the rest fall back.
         speciesId: movepoolId(pokemon, (id) => learnset[String(id)] !== undefined),
         name: displayNameWithForm(pokemon, lang),
-        types: typesForGeneration(e.currentPokemonId, pokemon.types, game.generation),
+        types: pokemon.types,
       });
     }
   }
@@ -202,7 +201,7 @@ export default async function OverviewPage({
         soulLinkId: link.id,
         routeName: route ? routeName(route, lang) : `Route #${link.routeId}`,
         pokemon: link.encounters.map((e) => {
-          const p = getPokemonById(e.currentPokemonId);
+          const p = getPokemonById(e.currentPokemonId, game.generation);
           const species = p ? pokemonName(p, lang) : `#${e.currentPokemonId}`;
           const nick = settings.nicknames && e.nickname ? e.nickname : null;
           return { id: e.currentPokemonId, name: nick ?? species, species: nick ? species : null };
@@ -234,11 +233,11 @@ export default async function OverviewPage({
     for (const e of link.encounters) {
       if (e.status !== EncounterStatus.CAUGHT) continue;
       caught.set(e.player, (caught.get(e.player) ?? 0) + 1);
-      const summe = getPokemonById(e.currentPokemonId)?.stats.Summe ?? 0;
+      const summe = getPokemonById(e.currentPokemonId, game.generation)?.stats.Summe ?? 0;
       const summeMax = maxEvolvedSumme(
         e.currentPokemonId,
         (id) => getEvolutionById(id, evoOptions)?.evolvesTo ?? [],
-        (id) => getPokemonById(id)?.stats.Summe ?? 0,
+        (id) => getPokemonById(id, game.generation)?.stats.Summe ?? 0,
         game.dexLimit,
       );
       if (link.teamPosition !== null) {
@@ -287,14 +286,14 @@ export default async function OverviewPage({
     capNext,
   };
 
-  const pokemonList = getPokemonList(game.dexLimit);
+  const pokemonList = getPokemonList(game.dexLimit, game.generation);
 
   return (
     <SpriteSetProvider spriteSet={game.spriteSet}>
       <PlayerNamesProvider names={settings.playerNames} lang={lang}>
         <PokemonDetailProvider
           pokemonList={pokemonList}
-          forms={getPokemonForms(game.dexLimit)}
+          forms={getPokemonForms(game.dexLimit, game.generation)}
           evolutions={getEvolutions(evoOptions)}
           moveData={{
             movesets: getMoveset(game.versionGroup),

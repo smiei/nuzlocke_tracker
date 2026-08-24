@@ -32,7 +32,7 @@ export default async function PokedexPage({
 
   const lang = await getLang();
   const game = getGameOrDefault(gameId);
-  const pokemon = getPokemonList(game.dexLimit);
+  const pokemon = getPokemonList(game.dexLimit, game.generation);
   const evolutions = getEvolutions({
     gameId,
     impossible: settings.evolutionOverridesImpossible,
@@ -51,7 +51,7 @@ export default async function PokedexPage({
     <SpriteSetProvider spriteSet={game.spriteSet}>
       <PokemonDetailProvider
         pokemonList={pokemon}
-        forms={getPokemonForms(game.dexLimit)}
+        forms={getPokemonForms(game.dexLimit, game.generation)}
         evolutions={evolutions}
         moveData={{
           movesets: getMoveset(game.versionGroup),

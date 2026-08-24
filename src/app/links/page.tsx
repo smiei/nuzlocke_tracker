@@ -27,7 +27,6 @@ import { getLang } from "@/lib/i18n/getLang";
 import { translations } from "@/lib/i18n/dictionary";
 import { routeName, pokemonName } from "@/lib/i18n/localize";
 import { formatEvolutionMethod } from "@/lib/evolutionMethods";
-import { typesForGeneration } from "@/lib/pokemonTypes";
 import { LinksView } from "@/components/LinksView";
 import type { SoulLinkView } from "@/lib/types";
 
@@ -81,11 +80,11 @@ export default async function LinksPage({
   // Ranks are computed within the game's dex, so "Rang #X" means the same
   // thing the Pokédex tab shows for that game.
   const game = getGameOrDefault(gameId);
-  const pokemonList = getPokemonList(game.dexLimit);
+  const pokemonList = getPokemonList(game.dexLimit, game.generation);
   // Alternate formes are NOT part of pokemonList (ids 10001+ are outside the
   // dex limit by construction) - they're a state a caught Pokémon switches
   // into, never something the Pokédex lists.
-  const formEntries = getPokemonForms(game.dexLimit);
+  const formEntries = getPokemonForms(game.dexLimit, game.generation);
   const ranks = computePokemonRanks(pokemonList);
 
   // Current level cap = the LAST DEFEATED Journey milestone with a cap (the
@@ -117,7 +116,7 @@ export default async function LinksPage({
       .map((e) => {
       // Links shows the current (possibly evolved) form - pokemonId (what was
       // actually caught) is what the Tracker tab shows and never changes here.
-      const pokemon = getPokemonById(e.currentPokemonId);
+      const pokemon = getPokemonById(e.currentPokemonId, game.generation);
       const evo = getEvolutionById(e.currentPokemonId, evoOptions);
       // Alternate formes of whatever it currently is (base included), so the
       // picker can switch both ways. Empty for the vast majority of species.
@@ -136,13 +135,13 @@ export default async function LinksPage({
         })),
         // Gated here so display components stay settings-agnostic.
         nickname: settings.nicknames ? e.nickname : null,
-        types: typesForGeneration(e.currentPokemonId, pokemon?.types ?? [], game.generation),
+        types: pokemon?.types ?? [],
         summe: pokemon?.stats.Summe ?? 0,
         // Best BST the caught form could still reach by evolving in this game.
         summeMax: maxEvolvedSumme(
           e.currentPokemonId,
           (id) => getEvolutionById(id, evoOptions)?.evolvesTo ?? [],
-          (id) => getPokemonById(id)?.stats.Summe ?? 0,
+          (id) => getPokemonById(id, game.generation)?.stats.Summe ?? 0,
           game.dexLimit,
         ),
         // A forme isn't in the ranked pool (that would shift every species'
@@ -158,7 +157,7 @@ export default async function LinksPage({
         evolvesTo: (evo?.evolvesTo ?? [])
           .filter((id) => id <= game.dexLimit)
           .map((id) => {
-          const p = getPokemonById(id);
+          const p = getPokemonById(id, game.generation);
           const targetEvo = getEvolutionById(id, evoOptions);
           const method = targetEvo?.method ?? null;
           return {
@@ -174,7 +173,7 @@ export default async function LinksPage({
           // Pre-evos introduced later (e.g. Pichu for Pikachu) don't exist
           // in older games either.
           if (!evo?.evolvesFrom || evo.evolvesFrom > game.dexLimit) return null;
-          const p = getPokemonById(evo.evolvesFrom);
+          const p = getPokemonById(evo.evolvesFrom, game.generation);
           return { id: evo.evolvesFrom, name: p ? pokemonName(p, lang) : `#${evo.evolvesFrom}` };
         })(),
       };
@@ -204,7 +203,7 @@ export default async function LinksPage({
         <PlayerNamesProvider names={settings.playerNames} lang={lang}>
           <PokemonDetailProvider
             pokemonList={pokemonList}
-            forms={getPokemonForms(game.dexLimit)}
+            forms={getPokemonForms(game.dexLimit, game.generation)}
             evolutions={getEvolutions(evoOptions)}
             moveData={{
               movesets: getMoveset(game.versionGroup),

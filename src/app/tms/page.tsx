@@ -56,7 +56,7 @@ export default async function TmsPage({
   ]);
   for (const e of caught) {
     if (e.soulLink?.status === LinkStatus.DEAD) continue;
-    const pokemon = getPokemonById(e.currentPokemonId);
+    const pokemon = getPokemonById(e.currentPokemonId, game.generation);
     if (!pokemon) continue;
     const onTeam = e.soulLink?.teamPosition != null;
     const members = byPlayer.get(e.player);
@@ -104,8 +104,8 @@ export default async function TmsPage({
     <SpriteSetProvider spriteSet={game.spriteSet}>
       <PlayerNamesProvider names={settings.playerNames} lang={lang}>
         <PokemonDetailProvider
-          pokemonList={getPokemonList(game.dexLimit)}
-          forms={getPokemonForms(game.dexLimit)}
+          pokemonList={getPokemonList(game.dexLimit, game.generation)}
+          forms={getPokemonForms(game.dexLimit, game.generation)}
           evolutions={getEvolutions({
             gameId,
             impossible: settings.evolutionOverridesImpossible,

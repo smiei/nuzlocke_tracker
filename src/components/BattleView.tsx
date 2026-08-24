@@ -6,7 +6,7 @@ import { computeDefenseMultipliers, singleTypeMultiplier } from "@/lib/effective
 import type { Learnset } from "@/lib/learnset";
 import { attackTypesAtLevel } from "@/lib/learnset";
 import { movepoolId } from "@/lib/forms";
-import { TYPE_COLORS, TYPE_LABELS, typesForGeneration } from "@/lib/pokemonTypes";
+import { TYPE_COLORS, TYPE_LABELS } from "@/lib/pokemonTypes";
 import { useClampedIntInput } from "@/lib/useClampedIntInput";
 import type { Player, RunMode } from "@/generated/prisma/client";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
@@ -124,7 +124,6 @@ export type BattleSharedProps = {
   table: EffectivenessTable;
   // Gen-appropriate attack type list for the matrix (Gen 1 lacks Dark/Steel).
   attackTypes: string[];
-  generation: number;
   learnset: Learnset;
   teams: { player: Player; members: TeamMember[] }[];
   mode: RunMode;
@@ -147,7 +146,7 @@ export function BattleCardBody({
   level: number;
   onChange: (patch: { level: number }) => void;
 }) {
-  const { pokemonList, table, attackTypes, generation, learnset, teams, mode } = shared;
+  const { pokemonList, table, attackTypes, learnset, teams, mode } = shared;
   const { lang } = useLanguage();
   const t = translations[lang].typen;
   const playerLabel = usePlayerLabel();
@@ -155,7 +154,7 @@ export function BattleCardBody({
 
   const selectedRaw = pokemonList.find((p) => p.id === selectedId) ?? null;
   const opponentTypes = selectedRaw
-    ? typesForGeneration(selectedRaw.id, selectedRaw.types, generation)
+    ? selectedRaw.types
     : [];
   // Stats card lists ALL damaging attack types (every level), independent of
   // the entered level. The team matchup below only counts types reachable by

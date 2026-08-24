@@ -14,7 +14,6 @@ import { baseSpeciesId, formLabel, formsOfSpecies, movepoolId } from "@/lib/form
 import type { Lang } from "@/lib/i18n/dictionary";
 import { translations } from "@/lib/i18n/dictionary";
 import { pokemonName } from "@/lib/i18n/localize";
-import { typesForGeneration } from "@/lib/pokemonTypes";
 import { formatEvolutionMethod } from "@/lib/evolutionMethods";
 import { TypeBadge } from "@/components/TypeBadge";
 import { PokemonSprite } from "@/components/PokemonSprite";
@@ -143,7 +142,7 @@ export function PokemonDetailModal({
   const runParam = searchParams.get("run");
   const analyzeHref = `/typen?${runParam ? `run=${runParam}&` : ""}pokemon=${pokemon.id}`;
 
-  const types = typesForGeneration(pokemon.id, pokemon.types, generation);
+  const types = pokemon.types;
   // The evolution tree is keyed by SPECIES, so a forme resolves to its base.
   // The MOVEPOOL is not: Deoxys/Wormadam/Shaymin learn different moves per
   // forme, so prefer the forme's own rows and fall back only when it has none.

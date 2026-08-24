@@ -20,7 +20,6 @@ import { resolveRunId } from "@/lib/runs";
 import { getLang } from "@/lib/i18n/getLang";
 import { routeName } from "@/lib/i18n/localize";
 import { displayNameWithForm, movepoolId } from "@/lib/forms";
-import { typesForGeneration } from "@/lib/pokemonTypes";
 import { EncounterStatus, LinkStatus, Player, RunMode } from "@/generated/prisma/client";
 import type { TeamMember } from "@/components/TeamWeaknessesView";
 import type { OpenSlot } from "@/components/CatchRateView";
@@ -46,12 +45,12 @@ export default async function AnalyzePage({
   const lang = await getLang();
   const game = getGameOrDefault(gameId);
   const learnsetTable = getLearnset(game.versionGroup);
-  const pokemonList = getPokemonList(game.dexLimit);
+  const pokemonList = getPokemonList(game.dexLimit, game.generation);
   // Formes are pickable HERE (unlike in the Pokédex or an encounter): scouting
   // a Wash Rotom or a Deoxys Attack is exactly what this tab is for. Species-
   // keyed tables (catch rates, learnsets, explosiveMap) are looked up via
   // baseSpeciesId, so a forme inherits its species' values.
-  const formEntries = getPokemonForms(game.dexLimit);
+  const formEntries = getPokemonForms(game.dexLimit, game.generation);
   const pickableList = [...pokemonList, ...formEntries];
   const moveset = getMoveset(game.versionGroup);
   const moves = getMoves(lang, game.generation);
@@ -121,14 +120,14 @@ export default async function AnalyzePage({
   ]);
   for (const link of teamLinks) {
     for (const e of link.encounters) {
-      const pokemon = getPokemonById(e.currentPokemonId);
+      const pokemon = getPokemonById(e.currentPokemonId, game.generation);
       if (!pokemon) continue;
       byPlayer.get(e.player)?.push({
         encounterId: e.id,
         pokemonId: e.currentPokemonId,
         speciesId: movepoolId(pokemon, (id) => learnsetTable[String(id)] !== undefined),
         name: displayNameWithForm(pokemon, lang),
-        types: typesForGeneration(e.currentPokemonId, pokemon.types, game.generation),
+        types: pokemon.types,
       });
     }
   }

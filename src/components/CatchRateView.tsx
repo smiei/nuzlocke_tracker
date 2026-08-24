@@ -15,7 +15,6 @@ import { Player, RunMode } from "@/generated/prisma/enums";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import { translations } from "@/lib/i18n/dictionary";
 import { pokemonName } from "@/lib/i18n/localize";
-import { typesForGeneration } from "@/lib/pokemonTypes";
 import { baseSpeciesId } from "@/lib/forms";
 import { usePlayerLabel } from "@/components/PlayerNamesProvider";
 import { usePokemonDetail } from "@/components/PokemonDetailProvider";
@@ -281,7 +280,7 @@ export function CatchCardBody({
   // alternate forme (id 10001+) has no row of its own and inherits its
   // species' values.
   const baseRate = selected ? catchRates[baseSpeciesId(selected)] : undefined;
-  const selectedTypes = selected ? typesForGeneration(selected.id, selected.types, generation) : [];
+  const selectedTypes = selected ? selected.types : [];
 
   const result =
     selected && baseRate !== undefined

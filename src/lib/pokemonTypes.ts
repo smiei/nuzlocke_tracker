@@ -109,23 +109,6 @@ export const TYPE_LABELS: Record<Lang, Record<string, string>> = {
   },
 };
 
-// Gen 1 predates the Steel type: the Magnemite line was pure Electric.
-// (No Gen-1 Pokémon carries Dark; Fairy/Gen 6+ is out of scope.) pokemon.json
-// stores the Gen-3 typing, so Gen-1 runs correct it at display/calc time.
-const GEN1_TYPE_OVERRIDES: Record<number, string[]> = {
-  81: ["electric"],
-  82: ["electric"],
-};
-
-export function typesForGeneration(
-  pokemonId: number,
-  types: string[],
-  generation: number,
-): string[] {
-  if (generation === 1) return GEN1_TYPE_OVERRIDES[pokemonId] ?? types;
-  return types;
-}
-
 export const TYPE_COLORS: Record<string, string> = {
   normal: "#A8A878",
   fire: "#F08030",

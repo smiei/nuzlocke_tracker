@@ -3,6 +3,11 @@ import path from "node:path";
 import { cache } from "react";
 import type { EffectivenessTable } from "@/lib/effectiveness";
 import type { Lang } from "@/lib/i18n/dictionary";
+import {
+  pokemonForGeneration,
+  pokemonListForGeneration,
+  type PokemonHistoryEntry,
+} from "@/lib/pokemonHistory";
 import type { LocalizedNames } from "@/lib/i18n/localize";
 import {
   historicalMoveNames,
@@ -180,22 +185,41 @@ export function getRouteById(gameId: string, routeId: number): Route | undefined
 
 // dexLimit (a game's highest obtainable national-dex id) filters the list;
 // omitted = everything in the file.
-export function getPokemonList(dexLimit?: number): Pokemon[] {
-  const list = readJson<Pokemon[]>("pokemon.json");
-  return dexLimit ? list.filter((pokemon) => pokemon.id <= dexLimit) : list;
+// Hand-off point for the era corrections: pokemon.json stores PokeAPI's
+// CURRENT types and base stats, which are wrong for every game this app
+// covers (Fairy did not exist, the Rotom formes were Electric/Ghost in Gen 4,
+// and Gen 6 buffed ~30 base stat lines). Applying it here rather than at each
+// render site means BST, ranking, maxEvolvedSumme, type coverage and the
+// detail card are all corrected from one place - see PokemonHistoryEntry.
+// `generation` omitted = PokeAPI's present-day values.
+export function getPokemonHistory(): PokemonHistoryEntry[] {
+  try {
+    return readJson<PokemonHistoryEntry[]>("pokemon-history.json");
+  } catch {
+    return [];
+  }
+}
+
+export function getPokemonList(dexLimit?: number, generation?: number): Pokemon[] {
+  const raw = readJson<Pokemon[]>("pokemon.json");
+  const list = dexLimit ? raw.filter((pokemon) => pokemon.id <= dexLimit) : raw;
+  if (generation === undefined) return list;
+  return pokemonListForGeneration(getPokemonHistory(), list, generation);
 }
 
 // Deliberately searches the UNFILTERED list, so a currentPokemonId pointing
 // at an alternate forme (id 10001+) still resolves.
-export function getPokemonById(pokemonId: number): Pokemon | undefined {
-  return getPokemonList().find((pokemon) => pokemon.id === pokemonId);
+export function getPokemonById(pokemonId: number, generation?: number): Pokemon | undefined {
+  const hit = readJson<Pokemon[]>("pokemon.json").find((pokemon) => pokemon.id === pokemonId);
+  if (!hit || generation === undefined) return hit;
+  return pokemonForGeneration(getPokemonHistory(), hit, generation);
 }
 
 // Alternate formes whose base species is within this game's dex. Kept apart
 // from getPokemonList() because a forme is a state a caught Pokémon can be
 // switched INTO, never something the Pokédex lists or an encounter picks.
-export function getPokemonForms(dexLimit?: number): Pokemon[] {
-  return getPokemonList().filter(
+export function getPokemonForms(dexLimit?: number, generation?: number): Pokemon[] {
+  return getPokemonList(undefined, generation).filter(
     (pokemon) =>
       pokemon.baseId !== undefined && (dexLimit === undefined || pokemon.baseId <= dexLimit),
   );

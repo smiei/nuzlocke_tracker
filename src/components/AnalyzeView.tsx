@@ -212,7 +212,6 @@ export function AnalyzeView({
     pokemonList,
     table: effectiveness,
     attackTypes,
-    generation,
     learnset,
     teams,
     mode,

@@ -36,7 +36,7 @@ export default async function TrackerPage({
   const lang = await getLang();
   const game = getGameOrDefault(gameId);
   const routes = getRoutes(gameId);
-  const pokemonList = getPokemonList(game.dexLimit);
+  const pokemonList = getPokemonList(game.dexLimit, game.generation);
   const encounters = await prisma.encounter.findMany({ where: { runId } });
   const drafts = getEncounterDrafts(runId);
 
@@ -47,7 +47,7 @@ export default async function TrackerPage({
         <PlayerNamesProvider names={settings.playerNames} lang={lang}>
           <PokemonDetailProvider
             pokemonList={pokemonList}
-            forms={getPokemonForms(game.dexLimit)}
+            forms={getPokemonForms(game.dexLimit, game.generation)}
             evolutions={getEvolutions({
               gameId,
               impossible: settings.evolutionOverridesImpossible,

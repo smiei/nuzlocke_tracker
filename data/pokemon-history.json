@@ -1,0 +1,1515 @@
+[
+  {
+    "id": 1,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 65
+    }
+  },
+  {
+    "id": 2,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 80
+    }
+  },
+  {
+    "id": 3,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 100
+    }
+  },
+  {
+    "id": 4,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 50
+    }
+  },
+  {
+    "id": 5,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 65
+    }
+  },
+  {
+    "id": 6,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 85
+    }
+  },
+  {
+    "id": 7,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 50
+    }
+  },
+  {
+    "id": 8,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 65
+    }
+  },
+  {
+    "id": 9,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 85
+    }
+  },
+  {
+    "id": 10,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 20
+    }
+  },
+  {
+    "id": 11,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 25
+    }
+  },
+  {
+    "id": 12,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 80
+    }
+  },
+  {
+    "id": 12,
+    "maxGeneration": 5,
+    "stats": {
+      "special-attack": 80
+    }
+  },
+  {
+    "id": 13,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 20
+    }
+  },
+  {
+    "id": 14,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 25
+    }
+  },
+  {
+    "id": 15,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 45
+    }
+  },
+  {
+    "id": 15,
+    "maxGeneration": 5,
+    "stats": {
+      "attack": 80
+    }
+  },
+  {
+    "id": 16,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 35
+    }
+  },
+  {
+    "id": 17,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 50
+    }
+  },
+  {
+    "id": 18,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 70
+    }
+  },
+  {
+    "id": 18,
+    "maxGeneration": 5,
+    "stats": {
+      "speed": 91
+    }
+  },
+  {
+    "id": 19,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 25
+    }
+  },
+  {
+    "id": 20,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 50
+    }
+  },
+  {
+    "id": 21,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 31
+    }
+  },
+  {
+    "id": 22,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 61
+    }
+  },
+  {
+    "id": 23,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 40
+    }
+  },
+  {
+    "id": 24,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 65
+    }
+  },
+  {
+    "id": 25,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 50
+    }
+  },
+  {
+    "id": 25,
+    "maxGeneration": 5,
+    "stats": {
+      "defense": 30,
+      "special-defense": 40
+    }
+  },
+  {
+    "id": 26,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 90
+    }
+  },
+  {
+    "id": 26,
+    "maxGeneration": 5,
+    "stats": {
+      "speed": 100
+    }
+  },
+  {
+    "id": 27,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 30
+    }
+  },
+  {
+    "id": 28,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 55
+    }
+  },
+  {
+    "id": 29,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 40
+    }
+  },
+  {
+    "id": 30,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 55
+    }
+  },
+  {
+    "id": 31,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 75
+    }
+  },
+  {
+    "id": 31,
+    "maxGeneration": 5,
+    "stats": {
+      "attack": 82
+    }
+  },
+  {
+    "id": 32,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 40
+    }
+  },
+  {
+    "id": 33,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 55
+    }
+  },
+  {
+    "id": 34,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 75
+    }
+  },
+  {
+    "id": 34,
+    "maxGeneration": 5,
+    "stats": {
+      "attack": 92
+    }
+  },
+  {
+    "id": 35,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 60
+    }
+  },
+  {
+    "id": 35,
+    "maxGeneration": 5,
+    "types": [
+      "normal"
+    ]
+  },
+  {
+    "id": 36,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 85
+    }
+  },
+  {
+    "id": 36,
+    "maxGeneration": 5,
+    "types": [
+      "normal"
+    ]
+  },
+  {
+    "id": 36,
+    "maxGeneration": 5,
+    "stats": {
+      "special-attack": 85
+    }
+  },
+  {
+    "id": 37,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 65
+    }
+  },
+  {
+    "id": 38,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 100
+    }
+  },
+  {
+    "id": 39,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 25
+    }
+  },
+  {
+    "id": 39,
+    "maxGeneration": 5,
+    "types": [
+      "normal"
+    ]
+  },
+  {
+    "id": 40,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 50
+    }
+  },
+  {
+    "id": 40,
+    "maxGeneration": 5,
+    "types": [
+      "normal"
+    ]
+  },
+  {
+    "id": 40,
+    "maxGeneration": 5,
+    "stats": {
+      "special-attack": 75
+    }
+  },
+  {
+    "id": 41,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 40
+    }
+  },
+  {
+    "id": 42,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 75
+    }
+  },
+  {
+    "id": 43,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 75
+    }
+  },
+  {
+    "id": 44,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 85
+    }
+  },
+  {
+    "id": 45,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 100
+    }
+  },
+  {
+    "id": 45,
+    "maxGeneration": 5,
+    "stats": {
+      "special-attack": 100
+    }
+  },
+  {
+    "id": 46,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 55
+    }
+  },
+  {
+    "id": 47,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 80
+    }
+  },
+  {
+    "id": 48,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 40
+    }
+  },
+  {
+    "id": 49,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 90
+    }
+  },
+  {
+    "id": 50,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 45
+    }
+  },
+  {
+    "id": 51,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 70
+    }
+  },
+  {
+    "id": 52,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 40
+    }
+  },
+  {
+    "id": 53,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 65
+    }
+  },
+  {
+    "id": 54,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 50
+    }
+  },
+  {
+    "id": 55,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 80
+    }
+  },
+  {
+    "id": 56,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 35
+    }
+  },
+  {
+    "id": 57,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 60
+    }
+  },
+  {
+    "id": 58,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 50
+    }
+  },
+  {
+    "id": 59,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 80
+    }
+  },
+  {
+    "id": 60,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 40
+    }
+  },
+  {
+    "id": 61,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 50
+    }
+  },
+  {
+    "id": 62,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 70
+    }
+  },
+  {
+    "id": 62,
+    "maxGeneration": 5,
+    "stats": {
+      "attack": 85
+    }
+  },
+  {
+    "id": 63,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 105
+    }
+  },
+  {
+    "id": 64,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 120
+    }
+  },
+  {
+    "id": 65,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 135
+    }
+  },
+  {
+    "id": 65,
+    "maxGeneration": 5,
+    "stats": {
+      "special-defense": 85
+    }
+  },
+  {
+    "id": 66,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 35
+    }
+  },
+  {
+    "id": 67,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 50
+    }
+  },
+  {
+    "id": 68,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 65
+    }
+  },
+  {
+    "id": 69,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 70
+    }
+  },
+  {
+    "id": 70,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 85
+    }
+  },
+  {
+    "id": 71,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 100
+    }
+  },
+  {
+    "id": 71,
+    "maxGeneration": 5,
+    "stats": {
+      "special-defense": 60
+    }
+  },
+  {
+    "id": 72,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 100
+    }
+  },
+  {
+    "id": 73,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 120
+    }
+  },
+  {
+    "id": 74,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 30
+    }
+  },
+  {
+    "id": 75,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 45
+    }
+  },
+  {
+    "id": 76,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 55
+    }
+  },
+  {
+    "id": 76,
+    "maxGeneration": 5,
+    "stats": {
+      "attack": 110
+    }
+  },
+  {
+    "id": 77,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 65
+    }
+  },
+  {
+    "id": 78,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 80
+    }
+  },
+  {
+    "id": 79,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 40
+    }
+  },
+  {
+    "id": 80,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 80
+    }
+  },
+  {
+    "id": 81,
+    "maxGeneration": 1,
+    "types": [
+      "electric"
+    ]
+  },
+  {
+    "id": 81,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 95
+    }
+  },
+  {
+    "id": 82,
+    "maxGeneration": 1,
+    "types": [
+      "electric"
+    ]
+  },
+  {
+    "id": 82,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 120
+    }
+  },
+  {
+    "id": 83,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 58
+    }
+  },
+  {
+    "id": 84,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 35
+    }
+  },
+  {
+    "id": 85,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 60
+    }
+  },
+  {
+    "id": 86,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 70
+    }
+  },
+  {
+    "id": 87,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 95
+    }
+  },
+  {
+    "id": 88,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 40
+    }
+  },
+  {
+    "id": 89,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 65
+    }
+  },
+  {
+    "id": 90,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 45
+    }
+  },
+  {
+    "id": 91,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 85
+    }
+  },
+  {
+    "id": 92,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 100
+    }
+  },
+  {
+    "id": 93,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 115
+    }
+  },
+  {
+    "id": 94,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 130
+    }
+  },
+  {
+    "id": 95,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 30
+    }
+  },
+  {
+    "id": 96,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 90
+    }
+  },
+  {
+    "id": 97,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 115
+    }
+  },
+  {
+    "id": 98,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 25
+    }
+  },
+  {
+    "id": 99,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 50
+    }
+  },
+  {
+    "id": 100,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 55
+    }
+  },
+  {
+    "id": 101,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 80
+    }
+  },
+  {
+    "id": 102,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 60
+    }
+  },
+  {
+    "id": 103,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 125
+    }
+  },
+  {
+    "id": 104,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 40
+    }
+  },
+  {
+    "id": 105,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 50
+    }
+  },
+  {
+    "id": 106,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 35
+    }
+  },
+  {
+    "id": 107,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 35
+    }
+  },
+  {
+    "id": 108,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 60
+    }
+  },
+  {
+    "id": 109,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 60
+    }
+  },
+  {
+    "id": 110,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 85
+    }
+  },
+  {
+    "id": 111,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 30
+    }
+  },
+  {
+    "id": 112,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 45
+    }
+  },
+  {
+    "id": 113,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 105
+    }
+  },
+  {
+    "id": 114,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 100
+    }
+  },
+  {
+    "id": 115,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 40
+    }
+  },
+  {
+    "id": 116,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 70
+    }
+  },
+  {
+    "id": 117,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 95
+    }
+  },
+  {
+    "id": 118,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 50
+    }
+  },
+  {
+    "id": 119,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 80
+    }
+  },
+  {
+    "id": 120,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 70
+    }
+  },
+  {
+    "id": 121,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 100
+    }
+  },
+  {
+    "id": 122,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 100
+    }
+  },
+  {
+    "id": 122,
+    "maxGeneration": 5,
+    "types": [
+      "psychic"
+    ]
+  },
+  {
+    "id": 123,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 55
+    }
+  },
+  {
+    "id": 124,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 95
+    }
+  },
+  {
+    "id": 125,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 85
+    }
+  },
+  {
+    "id": 126,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 85
+    }
+  },
+  {
+    "id": 127,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 55
+    }
+  },
+  {
+    "id": 128,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 70
+    }
+  },
+  {
+    "id": 129,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 20
+    }
+  },
+  {
+    "id": 130,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 100
+    }
+  },
+  {
+    "id": 131,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 95
+    }
+  },
+  {
+    "id": 132,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 48
+    }
+  },
+  {
+    "id": 133,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 65
+    }
+  },
+  {
+    "id": 134,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 110
+    }
+  },
+  {
+    "id": 135,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 110
+    }
+  },
+  {
+    "id": 136,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 110
+    }
+  },
+  {
+    "id": 137,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 75
+    }
+  },
+  {
+    "id": 138,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 90
+    }
+  },
+  {
+    "id": 139,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 115
+    }
+  },
+  {
+    "id": 140,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 45
+    }
+  },
+  {
+    "id": 141,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 70
+    }
+  },
+  {
+    "id": 142,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 60
+    }
+  },
+  {
+    "id": 143,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 65
+    }
+  },
+  {
+    "id": 144,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 125
+    }
+  },
+  {
+    "id": 145,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 125
+    }
+  },
+  {
+    "id": 146,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 125
+    }
+  },
+  {
+    "id": 147,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 50
+    }
+  },
+  {
+    "id": 148,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 70
+    }
+  },
+  {
+    "id": 149,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 100
+    }
+  },
+  {
+    "id": 150,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 154
+    }
+  },
+  {
+    "id": 151,
+    "maxGeneration": 1,
+    "stats": {
+      "special": 100
+    }
+  },
+  {
+    "id": 173,
+    "maxGeneration": 5,
+    "types": [
+      "normal"
+    ]
+  },
+  {
+    "id": 174,
+    "maxGeneration": 5,
+    "types": [
+      "normal"
+    ]
+  },
+  {
+    "id": 175,
+    "maxGeneration": 5,
+    "types": [
+      "normal"
+    ]
+  },
+  {
+    "id": 176,
+    "maxGeneration": 5,
+    "types": [
+      "normal",
+      "flying"
+    ]
+  },
+  {
+    "id": 181,
+    "maxGeneration": 5,
+    "stats": {
+      "defense": 75
+    }
+  },
+  {
+    "id": 182,
+    "maxGeneration": 5,
+    "stats": {
+      "defense": 85
+    }
+  },
+  {
+    "id": 183,
+    "maxGeneration": 5,
+    "types": [
+      "water"
+    ]
+  },
+  {
+    "id": 184,
+    "maxGeneration": 5,
+    "types": [
+      "water"
+    ]
+  },
+  {
+    "id": 184,
+    "maxGeneration": 5,
+    "stats": {
+      "special-attack": 50
+    }
+  },
+  {
+    "id": 189,
+    "maxGeneration": 5,
+    "stats": {
+      "special-defense": 85
+    }
+  },
+  {
+    "id": 193,
+    "maxGeneration": 3,
+    "stats": {
+      "speed": 95
+    }
+  },
+  {
+    "id": 200,
+    "maxGeneration": 3,
+    "stats": {
+      "special-attack": 85
+    }
+  },
+  {
+    "id": 209,
+    "maxGeneration": 5,
+    "types": [
+      "normal"
+    ]
+  },
+  {
+    "id": 210,
+    "maxGeneration": 5,
+    "types": [
+      "normal"
+    ]
+  },
+  {
+    "id": 242,
+    "maxGeneration": 3,
+    "stats": {
+      "hp": 255
+    }
+  },
+  {
+    "id": 267,
+    "maxGeneration": 5,
+    "stats": {
+      "special-attack": 90
+    }
+  },
+  {
+    "id": 280,
+    "maxGeneration": 5,
+    "types": [
+      "psychic"
+    ]
+  },
+  {
+    "id": 281,
+    "maxGeneration": 5,
+    "types": [
+      "psychic"
+    ]
+  },
+  {
+    "id": 282,
+    "maxGeneration": 5,
+    "types": [
+      "psychic"
+    ]
+  },
+  {
+    "id": 295,
+    "maxGeneration": 5,
+    "stats": {
+      "special-defense": 63
+    }
+  },
+  {
+    "id": 298,
+    "maxGeneration": 5,
+    "types": [
+      "normal"
+    ]
+  },
+  {
+    "id": 303,
+    "maxGeneration": 5,
+    "types": [
+      "steel"
+    ]
+  },
+  {
+    "id": 315,
+    "maxGeneration": 3,
+    "stats": {
+      "special-attack": 100
+    }
+  },
+  {
+    "id": 355,
+    "maxGeneration": 3,
+    "stats": {
+      "defense": 90
+    }
+  },
+  {
+    "id": 356,
+    "maxGeneration": 3,
+    "stats": {
+      "special-defense": 130
+    }
+  },
+  {
+    "id": 398,
+    "maxGeneration": 5,
+    "stats": {
+      "special-defense": 50
+    }
+  },
+  {
+    "id": 407,
+    "maxGeneration": 5,
+    "stats": {
+      "defense": 55
+    }
+  },
+  {
+    "id": 439,
+    "maxGeneration": 5,
+    "types": [
+      "psychic"
+    ]
+  },
+  {
+    "id": 468,
+    "maxGeneration": 5,
+    "types": [
+      "normal",
+      "flying"
+    ]
+  },
+  {
+    "id": 508,
+    "maxGeneration": 5,
+    "stats": {
+      "attack": 100
+    }
+  },
+  {
+    "id": 521,
+    "maxGeneration": 5,
+    "stats": {
+      "attack": 105
+    }
+  },
+  {
+    "id": 526,
+    "maxGeneration": 5,
+    "stats": {
+      "special-defense": 70
+    }
+  },
+  {
+    "id": 537,
+    "maxGeneration": 5,
+    "stats": {
+      "attack": 85
+    }
+  },
+  {
+    "id": 542,
+    "maxGeneration": 5,
+    "stats": {
+      "special-defense": 70
+    }
+  },
+  {
+    "id": 545,
+    "maxGeneration": 5,
+    "stats": {
+      "attack": 90
+    }
+  },
+  {
+    "id": 546,
+    "maxGeneration": 5,
+    "types": [
+      "grass"
+    ]
+  },
+  {
+    "id": 547,
+    "maxGeneration": 5,
+    "types": [
+      "grass"
+    ]
+  },
+  {
+    "id": 553,
+    "maxGeneration": 5,
+    "stats": {
+      "defense": 70
+    }
+  },
+  {
+    "id": 10008,
+    "maxGeneration": 4,
+    "types": [
+      "electric",
+      "ghost"
+    ]
+  },
+  {
+    "id": 10009,
+    "maxGeneration": 4,
+    "types": [
+      "electric",
+      "ghost"
+    ]
+  },
+  {
+    "id": 10010,
+    "maxGeneration": 4,
+    "types": [
+      "electric",
+      "ghost"
+    ]
+  },
+  {
+    "id": 10011,
+    "maxGeneration": 4,
+    "types": [
+      "electric",
+      "ghost"
+    ]
+  },
+  {
+    "id": 10012,
+    "maxGeneration": 4,
+    "types": [
+      "electric",
+      "ghost"
+    ]
+  }
+]
