@@ -10,12 +10,16 @@ import { Spinner } from "./Spinner";
 // for primary and destructive actions), `sm` is 40px and is the floor. The app
 // previously ran on ~24px buttons, which is where most of the mis-taps came
 // from.
-type Variant = "primary" | "secondary" | "danger" | "danger-solid" | "ghost";
+type Variant = "primary" | "secondary" | "success" | "danger" | "danger-solid" | "ghost";
 type Size = "sm" | "md";
 
 const VARIANTS: Record<Variant, string> = {
   primary: "bg-accent text-accent-ink hover:opacity-90",
   secondary: "border border-line-strong text-ink-muted hover:bg-hover hover:text-ink",
+  // Symmetric with `danger`: an outline in the semantic colour, filling in on
+  // hover. "Add to team", "evolve" and the quick-catch confirm all had this
+  // exact string inline.
+  success: "border border-success-line text-success hover:bg-success-bg",
   danger: "border border-danger-line text-danger hover:bg-danger-bg",
   // The destructive counterpart of `primary`: for the one button that carries
   // out the deletion, not for every button that could lead to one.

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { Button } from "@/components/ui/Button";
 import { useDropdown } from "@/lib/useDropdown";
 import { useRouter } from "next/navigation";
 import type { Pokemon } from "@/lib/data";
@@ -221,14 +222,17 @@ function QuickCatchPanel({
               className="h-10 w-28 rounded-md border border-line-strong bg-panel px-3 text-sm text-ink placeholder:text-ink-subtle disabled:cursor-not-allowed disabled:opacity-50"
             />
           )}
-          <button
-            type="button"
-            disabled={pending}
+          {/* bg-success-bg on top of the outline variant: this is the panel's
+              primary action, so it keeps the filled tint it had. */}
+          <Button
+            variant="success"
+            size="sm"
+            loading={pending}
             onClick={handleConfirm}
-            className="inline-flex h-10 shrink-0 items-center rounded-md border border-success-line bg-success-bg px-3 text-sm font-medium text-success transition-colors hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+            className="bg-success-bg"
           >
             {t.confirmCatch}
-          </button>
+          </Button>
         </div>
       )}
     </div>

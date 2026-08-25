@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { Input } from "@/components/ui/Input";
+import { Button } from "@/components/ui/Button";
 import { useDropdown } from "@/lib/useDropdown";
 import { useRouter } from "next/navigation";
 import type { SoulLinkView } from "@/lib/types";
@@ -173,14 +175,9 @@ export function TeamBar({
           {t.links.teamHeading}
         </h2>
         {slots.some((l) => l !== null) && (
-          <button
-            type="button"
-            disabled={pending}
-            onClick={handleClearTeam}
-            className="inline-flex h-10 shrink-0 items-center rounded-md border border-line px-3 text-sm font-medium text-ink-muted transition-colors hover:bg-danger-bg hover:text-danger disabled:cursor-not-allowed disabled:opacity-50"
-          >
+          <Button size="sm" loading={pending} onClick={handleClearTeam}>
             {t.links.clearTeam}
-          </button>
+          </Button>
         )}
       </div>
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
@@ -208,39 +205,42 @@ export function TeamBar({
                         })()}
                       </p>
                     </div>
-                    <button
-                      type="button"
+                    <Button
+                      size="sm"
+                      variant="danger"
                       disabled={pending}
+                      aria-expanded={deadMenuId === link.id}
                       onClick={() => {
                         setDeadCause("");
                         setDeadMenuId(deadMenuId === link.id ? null : link.id);
                       }}
-                      className="inline-flex h-10 shrink-0 items-center rounded-md border border-danger-line px-3 text-sm font-medium text-danger transition-colors hover:bg-danger-bg disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       {t.links.markDead}
-                    </button>
+                    </Button>
                   </div>
 
                   {/* Mark-dead menu: optional cause + (SoulLink) who lost theirs. */}
                   {deadMenuId === link.id && (
                     <div className="mb-3 rounded-md border border-danger-line bg-danger-bg/60 p-2">
-                      <input
+                      <Input
+                        size="sm"
                         type="text"
                         value={deadCause}
                         onChange={(e) => setDeadCause(e.target.value)}
                         maxLength={80}
                         placeholder={t.links.deathCausePlaceholder}
-                        className="mb-2 h-10 w-full rounded-md border border-line-strong bg-panel px-3 text-sm text-ink placeholder:text-ink-subtle"
+                        aria-label={t.links.deathCausePlaceholder}
+                        className="mb-2"
                       />
                       {isClassic ? (
-                        <button
-                          type="button"
-                          disabled={pending}
+                        <Button
+                          size="sm"
+                          variant="danger"
+                          loading={pending}
                           onClick={() => handleMarkDead(link.id)}
-                          className="inline-flex h-10 shrink-0 items-center rounded-md border border-danger-line px-3 text-sm font-medium text-danger transition-colors hover:bg-danger-bg disabled:cursor-not-allowed disabled:opacity-50"
                         >
                           {t.links.markDead}
-                        </button>
+                        </Button>
                       ) : (
                         <>
                           <p className="mb-1.5 text-xs font-medium text-ink-muted">
@@ -248,24 +248,23 @@ export function TeamBar({
                           </p>
                           <div className="flex flex-wrap gap-1.5">
                             {[Player.PLAYER1, Player.PLAYER2].map((p) => (
-                              <button
+                              <Button
                                 key={p}
-                                type="button"
-                                disabled={pending}
+                                size="sm"
+                                variant="danger"
+                                loading={pending}
                                 onClick={() => handleMarkDead(link.id, p)}
-                                className="inline-flex h-10 shrink-0 items-center rounded-md border border-danger-line px-3 text-sm font-medium text-danger transition-colors hover:bg-danger-bg disabled:cursor-not-allowed disabled:opacity-50"
                               >
                                 {playerLabel(p)}
-                              </button>
+                              </Button>
                             ))}
-                            <button
-                              type="button"
-                              disabled={pending}
+                            <Button
+                              size="sm"
+                              loading={pending}
                               onClick={() => handleMarkDead(link.id)}
-                              className="inline-flex h-10 shrink-0 items-center rounded-md border border-line-strong px-3 text-sm font-medium text-ink-muted transition-colors hover:bg-hover hover:text-ink disabled:cursor-not-allowed disabled:opacity-50"
                             >
                               {t.links.noAttribution}
-                            </button>
+                            </Button>
                           </div>
                         </>
                       )}

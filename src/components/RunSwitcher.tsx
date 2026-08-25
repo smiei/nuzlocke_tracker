@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { Button } from "@/components/ui/Button";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { createRun } from "@/lib/actions";
 import { formatActionError } from "@/lib/actionErrors";
@@ -70,16 +71,15 @@ export function RunSwitcher({ runs, games }: { runs: RunSummary[]; games: GameSu
           </option>
         ))}
       </select>
-      <button
-        type="button"
-        disabled={pending}
+      <Button
+        size="sm"
+        iconOnly
+        loading={pending}
+        icon={<span className="text-lg leading-none">+</span>}
         onClick={() => setDialogOpen(true)}
         aria-label={t.newRunTitle}
         title={t.newRunTitle}
-        className="flex h-10 w-10 items-center justify-center rounded-md border border-line text-ink-muted transition-colors hover:bg-hover hover:text-ink disabled:cursor-not-allowed disabled:opacity-50 text-lg font-medium"
-      >
-        +
-      </button>
+      />
       <NewRunDialog
         lang={lang}
         open={dialogOpen}

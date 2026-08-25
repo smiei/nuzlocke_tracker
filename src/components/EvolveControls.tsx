@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { Button } from "@/components/ui/Button";
 import { useDropdown } from "@/lib/useDropdown";
 import { useRouter } from "next/navigation";
 import { evolveEncounter, revertEvolution } from "@/lib/actions";
@@ -55,18 +56,17 @@ export function EvolveButton({
             className="absolute inset-[-1000%] animate-[spin_2.5s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_0deg,transparent_310deg,var(--success)_355deg,transparent_360deg)]"
           />
         )}
-        <button
-          type="button"
-          disabled={pending}
+        {/* bg-panel is load-bearing: the spinning conic-gradient ring sits
+            behind this button and has to be covered. */}
+        <Button
+          variant={anyAvailable ? "success" : "secondary"}
+          size="sm"
+          loading={pending}
           onClick={toggle}
-          className={`relative inline-flex h-10 shrink-0 items-center rounded-md border bg-panel px-3 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
-            anyAvailable
-              ? "border-success-line text-success hover:bg-success-bg"
-              : "border-line-strong text-ink-muted hover:bg-hover hover:text-ink"
-          }`}
+          className="relative bg-panel"
         >
           {t.evolve}
-        </button>
+        </Button>
       </span>
       {open && (
         <ul className="absolute z-10 mt-1 min-w-[180px] overflow-hidden rounded-lg border border-line bg-panel shadow-lg">
@@ -130,14 +130,9 @@ export function RevertButton({
 
   return (
     <div>
-      <button
-        type="button"
-        disabled={pending}
-        onClick={handleClick}
-        className="inline-flex h-10 shrink-0 items-center rounded-md border border-line-strong px-3 text-sm font-medium text-ink-muted transition-colors hover:bg-hover hover:text-ink disabled:cursor-not-allowed disabled:opacity-50"
-      >
+      <Button size="sm" loading={pending} onClick={handleClick}>
         {t.revert}
-      </button>
+      </Button>
       {error && <p className="mt-1 text-xs text-danger">{error}</p>}
     </div>
   );

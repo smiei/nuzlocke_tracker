@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { Button } from "@/components/ui/Button";
 import { useDropdown } from "@/lib/useDropdown";
 import { useRouter } from "next/navigation";
 import { setPokemonForm } from "@/lib/actions";
@@ -56,14 +57,9 @@ export function FormPicker({
 
   return (
     <div ref={containerRef} className="relative">
-      <button
-        type="button"
-        disabled={pending}
-        onClick={toggle}
-        className="inline-flex h-10 shrink-0 items-center rounded-md border border-line-strong px-3 text-sm font-medium text-ink-muted transition-colors hover:bg-hover hover:text-ink disabled:cursor-not-allowed disabled:opacity-50"
-      >
+      <Button size="sm" loading={pending} onClick={toggle}>
         {t.forms}
-      </button>
+      </Button>
       {open && (
         <ul className="absolute z-10 mt-1 min-w-[200px] overflow-hidden rounded-lg border border-line bg-panel shadow-lg">
           {options.map((option) => (

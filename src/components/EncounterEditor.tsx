@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState, useTransition } from "react";
+import { Spinner } from "@/components/ui/Spinner";
 import { useRouter } from "next/navigation";
 import type { Pokemon, Route } from "@/lib/data";
 import type { Encounter } from "@/generated/prisma/client";
@@ -324,6 +325,15 @@ export function EncounterEditor({
             </button>
           )}
         </div>
+      )}
+      {/* One indicator for the whole row rather than one per control: every
+          field here saves on change, so what matters is that the row is
+          talking to the server, not which field started it. */}
+      {pending && (
+        <span className="flex items-center gap-1.5 text-xs text-ink-subtle">
+          <Spinner />
+          {t.dialog.saving}
+        </span>
       )}
       {lockWarning && <p className="text-xs text-warning">⚠ {lockWarning}</p>}
       {/* Inline rather than a toast: with 30+ rows on screen, the error has to

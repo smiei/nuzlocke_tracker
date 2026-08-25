@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { Spinner } from "@/components/ui/Spinner";
 import { useRouter } from "next/navigation";
 import { setDeathPoint } from "@/lib/actions";
 import { formatActionError } from "@/lib/actionErrors";
@@ -63,6 +64,13 @@ export function DeathPointPicker({
           </option>
         ))}
       </select>
+      {/* The select looks identical after a save, so without this the only sign
+          anything happened is that it was briefly greyed out. */}
+      {pending && (
+        <span className="flex items-center gap-1 text-xs text-ink-subtle">
+          <Spinner />
+        </span>
+      )}
       {error && <span className="text-xs text-danger">{error}</span>}
     </span>
   );

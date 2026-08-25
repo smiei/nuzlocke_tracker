@@ -1,6 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
+import { Button } from "@/components/ui/Button";
 import { useDropdown } from "@/lib/useDropdown";
 import { useRouter } from "next/navigation";
 import type { SoulLinkView } from "@/lib/types";
@@ -60,14 +61,9 @@ export function AddToTeamButton({
 
   return (
     <div ref={containerRef} className="relative">
-      <button
-        type="button"
-        disabled={pending}
-        onClick={handleClick}
-        className="inline-flex h-10 shrink-0 items-center rounded-md border border-success-line px-3 text-sm font-medium text-success transition-colors hover:bg-success-bg disabled:cursor-not-allowed disabled:opacity-50"
-      >
+      <Button variant="success" size="sm" loading={pending} onClick={handleClick}>
         {t.addToTeam}
-      </button>
+      </Button>
       {open && (
         <ul className="absolute right-0 z-10 mt-1 min-w-[200px] overflow-hidden rounded-lg border border-line bg-panel shadow-lg">
           <li className="px-3 py-2 text-xs font-medium text-ink-subtle">

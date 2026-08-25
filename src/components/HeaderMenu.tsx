@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, useTransition } from "react";
+import { Spinner } from "@/components/ui/Spinner";
 import { useDropdown } from "@/lib/useDropdown";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { unzipSync } from "fflate";
@@ -53,7 +54,40 @@ function base64ToBytes(base64: string): Uint8Array<ArrayBuffer> {
 }
 
 const itemClass =
-  "flex min-h-10 w-full items-center px-3 py-2 text-left text-sm text-ink hover:bg-hover disabled:cursor-not-allowed disabled:opacity-50";
+  "flex min-h-10 w-full items-center gap-2 px-3 py-2 text-left text-sm text-ink hover:bg-hover disabled:cursor-not-allowed disabled:opacity-50";
+
+// Which long-running menu action is in flight, so the entry you tapped can say
+// so. Backing up every run zips the whole database; through the tunnel that is
+// seconds of nothing otherwise, and the menu used to close before the action
+// even fired, taking the tapped element with it.
+type Busy = "backupRun" | "backupAll" | "delete" | null;
+
+function MenuItem({
+  onClick,
+  busy = false,
+  disabled = false,
+  danger = false,
+  children,
+}: {
+  onClick: () => void;
+  busy?: boolean;
+  disabled?: boolean;
+  danger?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled || busy}
+      aria-busy={busy || undefined}
+      className={danger ? `${itemClass} text-danger` : itemClass}
+    >
+      {busy && <Spinner />}
+      {children}
+    </button>
+  );
+}
 
 // Gear menu bundling the rarely-needed header actions (backup/import, tab
 // order, language, run rename/delete) so the top bar stays compact on phones.
@@ -71,6 +105,7 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
     null,
   );
   const [pending, startTransition] = useTransition();
+  const [busy, setBusy] = useState<Busy>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { canPrompt, isStandalone, isIos, mounted, promptInstall } = useInstallPrompt();
   const t = translations[lang];
@@ -84,8 +119,11 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
       void alert({ message: t.backup.noRun });
       return;
     }
+    setBusy("backupRun");
     startTransition(async () => {
       const result = await exportRunBackup(activeRun.id);
+      setBusy(null);
+      setOpen(false);
       if (result.success) {
         downloadJson(result.filename, result.backup);
         toast.success(result.filename);
@@ -96,9 +134,11 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
   }
 
   function handleBackupAll() {
-    setOpen(false);
+    setBusy("backupAll");
     startTransition(async () => {
       const result = await exportAllBackup();
+      setBusy(null);
+      setOpen(false);
       if (result.success) {
         downloadBlob(
           result.filename,
@@ -199,8 +239,10 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
     });
     if (!confirmed) return;
 
+    setBusy("delete");
     startTransition(async () => {
       const result = await deleteRun(activeRun.id);
+      setBusy(null);
       if (result.success) {
         toast.success(t.runSwitcher.deleteButton);
         router.push(pathname);
@@ -251,21 +293,19 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
         <div className="absolute right-0 z-50 mt-1 w-60 overflow-hidden rounded-lg border border-line bg-panel py-1 shadow-lg">
           {mounted && !isStandalone && (
             <>
-              <button type="button" onClick={handleInstall} className={itemClass}>
-                {t.install.menuLabel}
-              </button>
+              <MenuItem onClick={handleInstall}>{t.install.menuLabel}</MenuItem>
               <div className="my-1 border-t border-line" />
             </>
           )}
-          <button type="button" onClick={handleBackupRun} className={itemClass}>
+          <MenuItem onClick={handleBackupRun} busy={busy === "backupRun"} disabled={busy !== null}>
             {t.backup.backupRun}
-          </button>
-          <button type="button" onClick={handleBackupAll} className={itemClass}>
+          </MenuItem>
+          <MenuItem onClick={handleBackupAll} busy={busy === "backupAll"} disabled={busy !== null}>
             {t.backup.backupAll}
-          </button>
-          <button type="button" onClick={handleImportClick} className={itemClass}>
+          </MenuItem>
+          <MenuItem onClick={handleImportClick} disabled={busy !== null}>
             {t.backup.import}
-          </button>
+          </MenuItem>
           <div className="my-1 border-t border-line" />
           <button
             type="button"

@@ -36,6 +36,8 @@ const de = {
     ok: "OK",
     cancel: "Abbrechen",
     confirm: "Bestätigen",
+    saving: "Speichern…",
+    saved: "Gespeichert",
   },
   menu: {
     label: "Menü",
@@ -504,6 +506,8 @@ const en: Dictionary = {
     ok: "OK",
     cancel: "Cancel",
     confirm: "Confirm",
+    saving: "Saving…",
+    saved: "Saved",
   },
   menu: {
     label: "Menu",
@@ -968,6 +972,8 @@ const fr: Dictionary = {
     ok: "OK",
     cancel: "Annuler",
     confirm: "Confirmer",
+    saving: "Enregistrement…",
+    saved: "Enregistré",
   },
   menu: {
     label: "Menu",
@@ -1436,6 +1442,8 @@ const es: Dictionary = {
     ok: "OK",
     cancel: "Cancelar",
     confirm: "Confirmar",
+    saving: "Guardando…",
+    saved: "Guardado",
   },
   menu: {
     label: "Menú",
@@ -1903,6 +1911,8 @@ const it: Dictionary = {
     ok: "OK",
     cancel: "Annulla",
     confirm: "Conferma",
+    saving: "Salvataggio…",
+    saved: "Salvato",
   },
   menu: {
     label: "Menu",

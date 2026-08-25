@@ -151,6 +151,10 @@ export function RulesView({
     startTransition(async () => {
       const result = await updateRunSettings(runId, { playerNames: nextNames });
       if (result.success) {
+        // The one action in the app whose effect is invisible where it is
+        // triggered: the field is uncontrolled, so it looks identical after a
+        // save, and the names it changes are rendered on other tabs.
+        toast.success(translations[lang].dialog.saved);
         router.refresh();
       } else {
         // The same rollback the toggles do. Without it the state kept a name
