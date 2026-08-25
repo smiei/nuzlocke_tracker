@@ -19,6 +19,10 @@ import { TypeBadge } from "@/components/TypeBadge";
 import { usePlayerLabel } from "@/components/PlayerNamesProvider";
 import { usePersistentState } from "@/lib/usePersistentState";
 import { useToast } from "@/components/ui/ToastProvider";
+import { Button } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Card";
+import { Input, Select } from "@/components/ui/Input";
+import { EmptyState } from "@/components/ui/Page";
 
 const SORT_MODE_KEY = "nuzlocke:linksSortMode";
 type SortMode = "default" | "summe" | "summeMax";
@@ -102,10 +106,21 @@ export function LinksView({
       return false;
     if (hideTeam && link.teamPosition !== null && link.status !== LinkStatus.DEAD) return false;
     // Type filter (OR): keep the link if any of its Pokémon has a selected type.
-    if (typeFilter.length > 0 && !link.encounters.some((e) => e.types.some((ty) => typeFilter.includes(ty))))
+    if (
+      typeFilter.length > 0 &&
+      !link.encounters.some((e) => e.types.some((ty) => typeFilter.includes(ty)))
+    )
       return false;
     return true;
   });
+
+  const filtersActive = evolvableOnly || hideTeam || typeFilter.length > 0;
+
+  function resetFilters() {
+    setEvolvableOnly(false);
+    setHideTeam(false);
+    setTypeFilter([]);
+  }
 
   function handleMarkDead(id: number, deathPlayer?: Player) {
     setPendingId(id);
@@ -131,92 +146,78 @@ export function LinksView({
   }
 
   if (soulLinks.length === 0) {
-    return (
-      <p className="text-zinc-500 dark:text-zinc-400">
-        {isClassic ? t.links.emptyClassic : t.links.emptySoullink}
-      </p>
-    );
+    return <EmptyState title={isClassic ? t.links.emptyClassic : t.links.emptySoullink} />;
   }
 
   return (
     <div>
       <TeamBar runId={runId} mode={mode} lang={lang} links={soulLinks} />
-      <div className="mb-3 flex flex-wrap items-center gap-2">
-        <label
-          htmlFor="links-sort"
-          className="text-sm font-medium text-zinc-500 dark:text-zinc-400"
-        >
+      <div className="mb-6 flex flex-wrap items-center gap-2">
+        <label htmlFor="links-sort" className="text-sm font-medium text-ink-muted">
           {t.links.sortLabel}
         </label>
-        <select
-          id="links-sort"
-          value={sortMode}
-          onChange={(e) => setSortMode(e.target.value as SortMode)}
-          className="rounded-md border border-zinc-200 bg-white px-2 py-1.5 text-sm dark:border-zinc-700 dark:bg-zinc-900"
-        >
-          <option value="default">{t.links.sortDefault}</option>
-          <option value="summe">{t.links.sortSumme}</option>
-          <option value="summeMax">{t.links.sortSummeMax}</option>
-        </select>
-        <button
-          type="button"
-          onClick={() => setEvolvableOnly((v) => !v)}
+        {/* Select is w-full of its box, so the width is set here rather than
+            through className - `cn` is a plain join and cannot drop w-full. */}
+        <div className="w-44">
+          <Select
+            id="links-sort"
+            size="sm"
+            value={sortMode}
+            onChange={(e) => setSortMode(e.target.value as SortMode)}
+          >
+            <option value="default">{t.links.sortDefault}</option>
+            <option value="summe">{t.links.sortSumme}</option>
+            <option value="summeMax">{t.links.sortSummeMax}</option>
+          </Select>
+        </div>
+        <Button
+          size="sm"
+          variant={evolvableOnly ? "primary" : "secondary"}
+          aria-pressed={evolvableOnly}
           title={t.links.filterEvolvableTitle}
-          className={`rounded-md border px-2 py-1.5 text-sm font-medium transition-colors ${
-            evolvableOnly
-              ? "border-emerald-400 bg-emerald-50 text-emerald-700 dark:border-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300"
-              : "border-zinc-200 text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
-          }`}
+          onClick={() => setEvolvableOnly((v) => !v)}
         >
           {t.links.filterEvolvable}
-        </button>
-        <button
-          type="button"
-          onClick={() => setHideTeam((v) => !v)}
+        </Button>
+        <Button
+          size="sm"
+          variant={hideTeam ? "primary" : "secondary"}
+          aria-pressed={hideTeam}
           title={t.links.hideTeamTitle}
-          className={`rounded-md border px-2 py-1.5 text-sm font-medium transition-colors ${
-            hideTeam
-              ? "border-emerald-400 bg-emerald-50 text-emerald-700 dark:border-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300"
-              : "border-zinc-200 text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
-          }`}
+          onClick={() => setHideTeam((v) => !v)}
         >
           {t.links.hideTeam}
-        </button>
+        </Button>
         <div ref={typeMenuRef} className="relative">
-          <button
-            type="button"
-            onClick={() => setTypeMenuOpen((v) => !v)}
+          <Button
+            size="sm"
+            variant={typeFilter.length > 0 ? "primary" : "secondary"}
+            aria-expanded={typeMenuOpen}
             title={t.links.filterTypesTitle}
-            className={`flex items-center gap-1 rounded-md border px-2 py-1.5 text-sm font-medium transition-colors ${
-              typeFilter.length > 0
-                ? "border-emerald-400 bg-emerald-50 text-emerald-700 dark:border-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300"
-                : "border-zinc-200 text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
-            }`}
+            onClick={() => setTypeMenuOpen((v) => !v)}
           >
             {t.links.filterTypes}
-            {typeFilter.length > 0 && (
-              <span className="rounded-full bg-emerald-500 px-1.5 text-xs text-white">
-                {typeFilter.length}
-              </span>
-            )}
-            <span className="text-xs text-zinc-400">▾</span>
-          </button>
+            {typeFilter.length > 0 && <span className="tabular-nums">({typeFilter.length})</span>}
+            <span aria-hidden className="text-xs">
+              ▾
+            </span>
+          </Button>
           {typeMenuOpen && (
-            <div className="absolute left-0 z-20 mt-1 w-48 rounded-md border border-zinc-200 bg-white p-1 shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
+            <div className="absolute left-0 z-20 mt-1 w-56 rounded-lg border border-line bg-panel p-1 shadow-lg">
               <div className="max-h-72 overflow-y-auto">
                 {availableTypes.map((type) => (
                   <label
                     key={type}
-                    className="flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                    className="flex h-10 cursor-pointer items-center gap-2 rounded-md px-2 hover:bg-hover"
                   >
                     <input
                       type="checkbox"
                       checked={typeFilter.includes(type)}
                       onChange={() => toggleType(type)}
-                      className="accent-emerald-500"
+                      className="accent-success"
                     />
                     <TypeBadge type={type} lang={lang} />
-                    <span className="text-sm">{TYPE_LABELS[lang][type] ?? type}</span>
+                    <span className="text-sm text-ink">{TYPE_LABELS[lang][type] ?? type}</span>
                   </label>
                 ))}
               </div>
@@ -224,7 +225,7 @@ export function LinksView({
                 <button
                   type="button"
                   onClick={() => setTypeFilter([])}
-                  className="mt-1 w-full rounded px-2 py-1.5 text-left text-xs text-zinc-500 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+                  className="mt-1 h-10 w-full rounded-md px-2 text-left text-sm text-ink-muted hover:bg-hover hover:text-ink"
                 >
                   {t.links.filterTypesClear}
                 </button>
@@ -233,167 +234,180 @@ export function LinksView({
           )}
         </div>
       </div>
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        {visibleLinks.map((link) => {
-          const isDead = link.status === LinkStatus.DEAD;
-          const onTeam = link.teamPosition !== null;
-          return (
-            <div
-              key={link.id}
-              className={`rounded-lg border p-4 ${
-                isDead
-                  ? "border-red-200 bg-red-50/50 opacity-60 dark:border-red-900/50 dark:bg-red-950/20"
-                  : onTeam
-                    ? "border-emerald-400 bg-emerald-50/40 dark:border-emerald-700 dark:bg-emerald-950/20"
-                    : "border-zinc-200 dark:border-zinc-800"
-              }`}
-            >
-              <div className="mb-3 flex items-start justify-between gap-2">
-                <div className="min-w-0">
-                  <h3 className="font-medium">{link.routeName}</h3>
-                  {/* Combined BST now → fully-evolved max (only when it can grow). */}
-                  <p
-                    className="text-xs tabular-nums text-zinc-400 dark:text-zinc-500"
-                    title={t.pokedex.columns.summe}
-                  >
-                    Σ {totalSumme(link)}
-                    {totalSummeMax(link) > totalSumme(link) && ` → ${totalSummeMax(link)}`}
-                  </p>
-                </div>
-                {isDead ? (
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-semibold text-red-500 dark:text-red-400">
-                      {t.links.dead}
-                    </span>
-                    <button
-                      type="button"
-                      disabled={pendingId === link.id}
-                      onClick={() => handleMarkAlive(link.id)}
-                      className="rounded border border-zinc-300 px-2 py-1 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-50 disabled:opacity-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
-                    >
-                      {t.links.revive}
-                    </button>
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-1.5">
-                    {!onTeam && (
-                      <AddToTeamButton
-                        runId={runId}
-                        lang={lang}
-                        linkId={link.id}
-                        teamLinks={teamLinks}
-                      />
-                    )}
-                    <button
-                      type="button"
-                      disabled={pendingId === link.id}
-                      onClick={() => {
-                        setDeadCause("");
-                        setDeadMenuId(deadMenuId === link.id ? null : link.id);
-                      }}
-                      className="rounded border border-red-300 px-2 py-1 text-xs font-medium text-red-600 transition-colors hover:bg-red-50 disabled:opacity-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950/40"
-                    >
-                      {t.links.markDead}
-                    </button>
-                  </div>
-                )}
-              </div>
 
-              {/* Mark-dead menu: optional cause + (SoulLink) who lost their mon. */}
-              {!isDead && deadMenuId === link.id && (
-                <div className="mb-3 rounded-md border border-red-200 bg-red-50/60 p-2 dark:border-red-900/50 dark:bg-red-950/20">
-                  <input
-                    type="text"
-                    value={deadCause}
-                    onChange={(e) => setDeadCause(e.target.value)}
-                    maxLength={80}
-                    placeholder={t.links.deathCausePlaceholder}
-                    className="mb-2 w-full rounded border border-zinc-300 bg-white px-2 py-1 text-xs outline-none focus:border-zinc-500 dark:border-zinc-700 dark:bg-zinc-950 dark:focus:border-zinc-400"
-                  />
-                  {isClassic ? (
-                    <button
-                      type="button"
-                      disabled={pendingId === link.id}
-                      onClick={() => handleMarkDead(link.id)}
-                      className="rounded border border-red-300 px-2 py-1 text-xs font-medium text-red-600 transition-colors hover:bg-red-100 disabled:opacity-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950/40"
+      {visibleLinks.length === 0 ? (
+        <EmptyState
+          title={t.links.noMatches}
+          action={
+            filtersActive ? (
+              <Button size="sm" onClick={resetFilters}>
+                {t.links.filterTypesClear}
+              </Button>
+            ) : undefined
+          }
+        />
+      ) : (
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {visibleLinks.map((link) => {
+            const isDead = link.status === LinkStatus.DEAD;
+            const onTeam = link.teamPosition !== null;
+            return (
+              <Card
+                key={link.id}
+                className={
+                  isDead
+                    ? "border-danger-line bg-danger-bg/50 opacity-60"
+                    : onTeam
+                      ? "border-success-line bg-success-bg/40"
+                      : ""
+                }
+              >
+                <div className="mb-3 flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <h2 className="font-medium text-ink">{link.routeName}</h2>
+                    {/* Combined BST now → fully-evolved max (only when it can grow). */}
+                    <p
+                      className="text-xs tabular-nums text-ink-subtle"
+                      title={t.pokedex.columns.summe}
                     >
-                      {t.links.markDead}
-                    </button>
+                      Σ {totalSumme(link)}
+                      {totalSummeMax(link) > totalSumme(link) && ` → ${totalSummeMax(link)}`}
+                    </p>
+                  </div>
+                  {isDead ? (
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-semibold text-danger">{t.links.dead}</span>
+                      <Button
+                        size="sm"
+                        loading={pendingId === link.id}
+                        onClick={() => handleMarkAlive(link.id)}
+                      >
+                        {t.links.revive}
+                      </Button>
+                    </div>
                   ) : (
-                    <>
-                      <p className="mb-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-300">
-                        {t.links.whoLost}
-                      </p>
-                      <div className="flex flex-wrap gap-1.5">
-                        {[Player.PLAYER1, Player.PLAYER2].map((p) => (
-                          <button
-                            key={p}
-                            type="button"
-                            disabled={pendingId === link.id}
-                            onClick={() => handleMarkDead(link.id, p)}
-                            className="rounded border border-red-300 px-2 py-1 text-xs font-medium text-red-600 transition-colors hover:bg-red-100 disabled:opacity-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950/40"
-                          >
-                            {playerLabel(p)}
-                          </button>
-                        ))}
-                        {/* No blame: deathPlayer stays null (counts as unattributed). */}
-                        <button
-                          type="button"
-                          disabled={pendingId === link.id}
-                          onClick={() => handleMarkDead(link.id)}
-                          className="rounded border border-zinc-300 px-2 py-1 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100 disabled:opacity-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
-                        >
-                          {t.links.noAttribution}
-                        </button>
-                      </div>
-                    </>
+                    <div className="flex items-center gap-1.5">
+                      {!onTeam && (
+                        <AddToTeamButton
+                          runId={runId}
+                          lang={lang}
+                          linkId={link.id}
+                          teamLinks={teamLinks}
+                        />
+                      )}
+                      <Button
+                        size="sm"
+                        variant="danger"
+                        disabled={pendingId === link.id}
+                        aria-expanded={deadMenuId === link.id}
+                        onClick={() => {
+                          setDeadCause("");
+                          setDeadMenuId(deadMenuId === link.id ? null : link.id);
+                        }}
+                      >
+                        {t.links.markDead}
+                      </Button>
+                    </div>
                   )}
                 </div>
-              )}
 
-              {isDead && (link.deathPlayer || link.deathCause) && (
-                <p className="mb-2 text-xs font-medium text-red-500 dark:text-red-400">
-                  {link.deathPlayer && t.links.deadBy(playerLabel(link.deathPlayer))}
-                  {link.deathPlayer && link.deathCause ? " · " : ""}
-                  {link.deathCause}
-                </p>
-              )}
-              <div className="flex flex-col gap-3">
-                {link.encounters.map((e) => (
-                  <EncounterTile
-                    key={e.id}
-                    encounter={e}
-                    isDead={isDead}
-                    isClassic={isClassic}
-                    lang={lang}
-                  >
-                    {!isDead && (
-                      <div className="mt-1 flex flex-wrap gap-1.5">
-                        <EvolveButton
-                          runId={runId}
-                          lang={lang}
-                          encounterId={e.id}
-                          targets={e.evolvesTo}
-                        />
-                        <FormPicker
-                          runId={runId}
-                          lang={lang}
-                          encounterId={e.id}
-                          currentId={e.pokemonId}
-                          options={e.formOptions}
-                        />
-                        {e.evolvesFrom && (
-                          <RevertButton runId={runId} lang={lang} encounterId={e.id} />
-                        )}
-                      </div>
+                {/* Mark-dead menu: optional cause + (SoulLink) who lost their mon. */}
+                {!isDead && deadMenuId === link.id && (
+                  <div className="mb-3 rounded-md border border-danger-line bg-danger-bg/60 p-2">
+                    <Input
+                      size="sm"
+                      type="text"
+                      value={deadCause}
+                      onChange={(e) => setDeadCause(e.target.value)}
+                      maxLength={80}
+                      placeholder={t.links.deathCausePlaceholder}
+                      aria-label={t.links.deathCausePlaceholder}
+                      className="mb-2"
+                    />
+                    {isClassic ? (
+                      <Button
+                        size="sm"
+                        variant="danger"
+                        loading={pendingId === link.id}
+                        onClick={() => handleMarkDead(link.id)}
+                      >
+                        {t.links.markDead}
+                      </Button>
+                    ) : (
+                      <>
+                        <p className="mb-1.5 text-xs font-medium text-ink-muted">
+                          {t.links.whoLost}
+                        </p>
+                        <div className="flex flex-wrap gap-1.5">
+                          {[Player.PLAYER1, Player.PLAYER2].map((p) => (
+                            <Button
+                              key={p}
+                              size="sm"
+                              variant="danger"
+                              disabled={pendingId === link.id}
+                              onClick={() => handleMarkDead(link.id, p)}
+                            >
+                              {playerLabel(p)}
+                            </Button>
+                          ))}
+                          {/* No blame: deathPlayer stays null (counts as unattributed). */}
+                          <Button
+                            size="sm"
+                            disabled={pendingId === link.id}
+                            onClick={() => handleMarkDead(link.id)}
+                          >
+                            {t.links.noAttribution}
+                          </Button>
+                        </div>
+                      </>
                     )}
-                  </EncounterTile>
-                ))}
-              </div>
-            </div>
-          );
-        })}
-      </div>
+                  </div>
+                )}
+
+                {isDead && (link.deathPlayer || link.deathCause) && (
+                  <p className="mb-2 text-xs font-medium text-danger">
+                    {link.deathPlayer && t.links.deadBy(playerLabel(link.deathPlayer))}
+                    {link.deathPlayer && link.deathCause ? " · " : ""}
+                    {link.deathCause}
+                  </p>
+                )}
+                <div className="flex flex-col gap-3">
+                  {link.encounters.map((e) => (
+                    <EncounterTile
+                      key={e.id}
+                      encounter={e}
+                      isDead={isDead}
+                      isClassic={isClassic}
+                      lang={lang}
+                    >
+                      {!isDead && (
+                        <div className="mt-1 flex flex-wrap gap-1.5">
+                          <EvolveButton
+                            runId={runId}
+                            lang={lang}
+                            encounterId={e.id}
+                            targets={e.evolvesTo}
+                          />
+                          <FormPicker
+                            runId={runId}
+                            lang={lang}
+                            encounterId={e.id}
+                            currentId={e.pokemonId}
+                            options={e.formOptions}
+                          />
+                          {e.evolvesFrom && (
+                            <RevertButton runId={runId} lang={lang} encounterId={e.id} />
+                          )}
+                        </div>
+                      )}
+                    </EncounterTile>
+                  ))}
+                </div>
+              </Card>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

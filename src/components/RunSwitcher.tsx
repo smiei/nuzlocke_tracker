@@ -60,7 +60,7 @@ export function RunSwitcher({ runs, games }: { runs: RunSummary[]; games: GameSu
         value={activeId ? String(activeId) : ""}
         disabled={pending}
         onChange={(e) => handleChange(e.target.value)}
-        className="max-w-40 rounded-md border border-zinc-200 bg-white px-2 py-1.5 text-sm disabled:opacity-50 sm:max-w-56 dark:border-zinc-700 dark:bg-zinc-900"
+        className="h-10 max-w-40 rounded-md border border-line-strong bg-panel px-2 text-sm text-ink disabled:cursor-not-allowed disabled:opacity-50 sm:max-w-56"
       >
         {runs.map((run) => (
           <option key={run.id} value={run.id}>
@@ -76,7 +76,7 @@ export function RunSwitcher({ runs, games }: { runs: RunSummary[]; games: GameSu
         onClick={() => setDialogOpen(true)}
         aria-label={t.newRunTitle}
         title={t.newRunTitle}
-        className="flex h-9 w-9 items-center justify-center rounded-md border border-zinc-200 text-lg font-medium text-zinc-600 transition-colors hover:bg-zinc-100 disabled:opacity-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+        className="flex h-10 w-10 items-center justify-center rounded-md border border-line text-ink-muted transition-colors hover:bg-hover hover:text-ink disabled:cursor-not-allowed disabled:opacity-50 text-lg font-medium"
       >
         +
       </button>

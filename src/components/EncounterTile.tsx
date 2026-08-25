@@ -55,7 +55,7 @@ export function EncounterTile({
       )}
       <div className="flex min-w-0 flex-col items-start gap-1 text-left">
         <span
-          className={`font-medium ${isDead ? "text-zinc-400 line-through dark:text-zinc-600" : ""}`}
+          className={`font-medium text-ink ${isDead ? "text-ink-subtle line-through" : ""}`}
         >
           {encounter.shiny && (
             <span className="mr-1" title="Shiny">
@@ -64,7 +64,7 @@ export function EncounterTile({
           )}
           {encounter.nickname ?? encounter.pokemonName}
           {encounter.nickname && (
-            <span className="ml-1.5 text-xs font-normal text-zinc-400 dark:text-zinc-500">
+            <span className="ml-1.5 text-xs font-normal text-ink-subtle">
               ({encounter.pokemonName})
             </span>
           )}
@@ -75,11 +75,11 @@ export function EncounterTile({
           ))}
         </div>
         {infoParts.length > 0 && (
-          <span className="text-xs text-zinc-400 dark:text-zinc-500">
+          <span className="text-xs text-ink-subtle">
             {infoParts.join(" · ")}
           </span>
         )}
-        <span className="text-xs text-zinc-400 dark:text-zinc-500">
+        <span className="text-xs text-ink-subtle">
           {t.links.rankSummary(encounter.rang, encounter.summe)}
         </span>
         {children}

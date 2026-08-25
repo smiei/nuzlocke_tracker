@@ -7,13 +7,30 @@ import { cn } from "./cn";
 const FIELD =
   "w-full rounded-md border border-line-strong bg-panel px-3 text-sm text-ink placeholder:text-ink-subtle disabled:cursor-not-allowed disabled:opacity-50";
 
-export function Input({ className, ...rest }: InputHTMLAttributes<HTMLInputElement>) {
-  return <input className={cn(FIELD, "h-11", className)} {...rest} />;
+// Same vocabulary as Button: `md` is the 44px default, `sm` the 40px floor for
+// dense inline rows. It has to be a prop rather than a className override,
+// because `cn` is a plain join and cannot drop the built-in height.
+// The DOM `size` attribute (a number on both input and select) is shadowed
+// deliberately - it is not used anywhere in this app.
+type Size = "sm" | "md";
+const HEIGHTS: Record<Size, string> = { sm: "h-10", md: "h-11" };
+
+export function Input({
+  size = "md",
+  className,
+  ...rest
+}: Omit<InputHTMLAttributes<HTMLInputElement>, "size"> & { size?: Size }) {
+  return <input className={cn(FIELD, HEIGHTS[size], className)} {...rest} />;
 }
 
-export function Select({ className, children, ...rest }: SelectHTMLAttributes<HTMLSelectElement>) {
+export function Select({
+  size = "md",
+  className,
+  children,
+  ...rest
+}: Omit<SelectHTMLAttributes<HTMLSelectElement>, "size"> & { size?: Size }) {
   return (
-    <select className={cn(FIELD, "h-11", className)} {...rest}>
+    <select className={cn(FIELD, HEIGHTS[size], className)} {...rest}>
       {children}
     </select>
   );

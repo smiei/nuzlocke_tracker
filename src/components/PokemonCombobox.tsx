@@ -68,7 +68,9 @@ export function PokemonCombobox({
 
   return (
     <div ref={containerRef} className="relative">
-      <div className="flex items-center gap-1.5 rounded-md border border-zinc-300 bg-white pl-1.5 pr-2 focus-within:border-zinc-500 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-900 dark:focus-within:border-zinc-400">
+      {/* h-11 to match ui/Input - the field is the primary control of every
+          encounter row, and it used to be ~30px tall. */}
+      <div className="flex h-11 items-center gap-1.5 rounded-md border border-line-strong bg-panel pl-1.5 pr-1">
         {selected && (
           <PokemonSprite pokemonId={selected.id} name={displayNameWithForm(selected, lang)} size="sm" />
         )}
@@ -88,7 +90,7 @@ export function PokemonCombobox({
             }
           }}
           placeholder={t.searchPlaceholder}
-          className="w-full bg-transparent py-1.5 text-sm outline-none"
+          className="h-full w-full bg-transparent text-sm text-ink outline-none placeholder:text-ink-subtle disabled:cursor-not-allowed disabled:opacity-50"
         />
         {onClear && selected && (
           <button
@@ -100,16 +102,16 @@ export function PokemonCombobox({
             }}
             aria-label={t.clearSelection}
             title={t.clearSelection}
-            className="shrink-0 rounded p-0.5 text-zinc-400 transition-colors hover:text-zinc-700 disabled:opacity-50 dark:hover:text-zinc-200"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md text-ink-subtle transition-colors hover:bg-hover hover:text-ink disabled:cursor-not-allowed disabled:opacity-50"
           >
             ✕
           </button>
         )}
       </div>
       {open && !disabled && (
-        <ul className="absolute z-10 mt-1 max-h-64 w-full min-w-[220px] overflow-y-auto rounded-md border border-zinc-200 bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
+        <ul className="absolute z-10 mt-1 max-h-64 w-full min-w-[220px] overflow-y-auto rounded-lg border border-line bg-panel shadow-lg">
           {results.length === 0 && (
-            <li className="px-3 py-2 text-sm text-zinc-400">{t.noResults}</li>
+            <li className="px-3 py-2 text-sm text-ink-subtle">{t.noResults}</li>
           )}
           {results.map((p) => {
             const locked = lockedFamilyIds.has(p.family_id);
@@ -119,14 +121,14 @@ export function PokemonCombobox({
                 <button
                   type="button"
                   onClick={() => handlePick(p)}
-                  className={`flex w-full items-center gap-2 px-2 py-1.5 text-left text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800 ${
-                    p.id === selectedId ? "bg-zinc-100 dark:bg-zinc-800" : ""
+                  className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm hover:bg-hover ${
+                    p.id === selectedId ? "bg-hover font-medium" : ""
                   }`}
                 >
                   <PokemonSprite pokemonId={p.id} name={name} size="sm" />
                   <span className="flex-1">{name}</span>
                   {locked && (
-                    <span className="ml-2 text-xs text-red-500 dark:text-red-400">{t.locked}</span>
+                    <span className="ml-2 text-xs text-danger">{t.locked}</span>
                   )}
                 </button>
               </li>

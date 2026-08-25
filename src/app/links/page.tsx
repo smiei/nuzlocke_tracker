@@ -16,6 +16,7 @@ import {
 import { EncounterStatus, Player, RunMode } from "@/generated/prisma/client";
 import { SpriteSetProvider } from "@/components/SpriteSetProvider";
 import { CanonicalRun } from "@/components/CanonicalRun";
+import { PageHeader } from "@/components/ui/Page";
 import { PokemonDetailProvider } from "@/components/PokemonDetailProvider";
 import { PlayerNamesProvider } from "@/components/PlayerNamesProvider";
 import { computePokemonRanks, rankForSumme } from "@/lib/ranking";
@@ -198,7 +199,7 @@ export default async function LinksPage({
   return (
     <div>
       <CanonicalRun runId={runId} />
-      <h2 className="mb-4 text-xl font-semibold">{heading}</h2>
+      <PageHeader title={heading} />
       <SpriteSetProvider spriteSet={game.spriteSet}>
         <PlayerNamesProvider names={settings.playerNames} lang={lang}>
           <PokemonDetailProvider

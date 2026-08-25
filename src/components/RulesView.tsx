@@ -11,24 +11,34 @@ import { translations } from "@/lib/i18n/dictionary";
 import type { RunSettings } from "@/lib/runSettings";
 import { RunMode } from "@/generated/prisma/enums";
 import { useToast } from "@/components/ui/ToastProvider";
+import { Button } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Card";
+import { Input, Textarea } from "@/components/ui/Input";
+import { PageHeader, Section } from "@/components/ui/Page";
 
 // The boolean rule toggles (playerNames is handled separately).
 type BooleanSettingKey = Exclude<keyof RunSettings, "playerNames">;
 
 // react-markdown emits bare elements and Tailwind's preflight strips all
 // default styles, so every rendered element gets its look via this mapping.
+//
+// Two things here are deliberate. The levels are shifted down by one - a `#` in
+// the notes renders as an <h2>, not an <h1> - because the page already has its
+// <h1> in the PageHeader, and a document embedded in a page must not open a
+// second one. And every size is one step below what it was: a `#` used to be
+// text-2xl, which made a heading inside the notes louder than the page title.
 const markdownComponents = {
-  h1: (props: React.ComponentProps<"h1">) => (
-    <h1 className="mb-3 mt-6 text-2xl font-bold first:mt-0" {...props} />
+  h1: (props: React.ComponentProps<"h2">) => (
+    <h2 className="mb-3 mt-6 text-xl font-bold first:mt-0" {...props} />
   ),
-  h2: (props: React.ComponentProps<"h2">) => (
-    <h2
-      className="mb-2 mt-6 border-b border-zinc-200 pb-1 text-xl font-semibold first:mt-0 dark:border-zinc-800"
+  h2: (props: React.ComponentProps<"h3">) => (
+    <h3
+      className="mb-2 mt-6 border-b border-line pb-1 text-lg font-semibold first:mt-0"
       {...props}
     />
   ),
-  h3: (props: React.ComponentProps<"h3">) => (
-    <h3 className="mb-2 mt-4 text-lg font-semibold first:mt-0" {...props} />
+  h3: (props: React.ComponentProps<"h4">) => (
+    <h4 className="mb-2 mt-4 text-base font-semibold first:mt-0" {...props} />
   ),
   p: (props: React.ComponentProps<"p">) => <p className="my-2 leading-relaxed" {...props} />,
   ul: (props: React.ComponentProps<"ul">) => (
@@ -39,21 +49,16 @@ const markdownComponents = {
   ),
   li: (props: React.ComponentProps<"li">) => <li className="leading-relaxed" {...props} />,
   code: (props: React.ComponentProps<"code">) => (
-    <code
-      className="rounded bg-zinc-100 px-1 py-0.5 text-sm dark:bg-zinc-800"
-      {...props}
-    />
+    <code className="rounded-md bg-sunken px-1 py-0.5 text-sm" {...props} />
   ),
   blockquote: (props: React.ComponentProps<"blockquote">) => (
     <blockquote
-      className="my-2 border-l-4 border-zinc-300 pl-3 italic text-zinc-500 dark:border-zinc-700 dark:text-zinc-400"
+      className="my-2 border-l-4 border-line-strong pl-3 italic text-ink-muted"
       {...props}
     />
   ),
-  a: (props: React.ComponentProps<"a">) => (
-    <a className="underline underline-offset-2" {...props} />
-  ),
-  hr: () => <hr className="my-4 border-zinc-200 dark:border-zinc-800" />,
+  a: (props: React.ComponentProps<"a">) => <a className="underline underline-offset-2" {...props} />,
+  hr: () => <hr className="my-4 border-line" />,
 };
 
 // Display order; staticsExemptFromClause is rendered as an indented child of
@@ -69,27 +74,14 @@ const TOGGLE_ORDER: BooleanSettingKey[] = [
   "statics",
 ];
 
-function ToggleSwitch({
-  on,
-  disabled,
-  label,
-  onToggle,
-}: {
-  on: boolean;
-  disabled: boolean;
-  label: string;
-  onToggle: () => void;
-}) {
+// Purely presentational: the surrounding row carries role="switch" and the
+// aria-checked state, so this must not be focusable or announced on its own.
+function SwitchTrack({ on }: { on: boolean }) {
   return (
-    <button
-      type="button"
-      role="switch"
-      aria-checked={on}
-      aria-label={label}
-      disabled={disabled}
-      onClick={onToggle}
-      className={`relative h-5 w-9 shrink-0 rounded-full transition-colors disabled:opacity-50 ${
-        on ? "bg-emerald-500" : "bg-zinc-300 dark:bg-zinc-700"
+    <span
+      aria-hidden
+      className={`relative block h-5 w-9 shrink-0 rounded-full transition-colors ${
+        on ? "bg-success" : "bg-line-strong"
       }`}
     >
       <span
@@ -97,7 +89,7 @@ function ToggleSwitch({
           on ? "left-[18px]" : "left-0.5"
         }`}
       />
-    </button>
+    </span>
   );
 }
 
@@ -153,12 +145,19 @@ export function RulesView({
   function commitName(player: "PLAYER1" | "PLAYER2", value: string) {
     const trimmed = value.trim().slice(0, 20);
     if (trimmed === settings.playerNames[player]) return;
+    const previous = names;
     const nextNames = { ...names, [player]: trimmed };
     setNames(nextNames);
     startTransition(async () => {
       const result = await updateRunSettings(runId, { playerNames: nextNames });
-      if (result.success) router.refresh();
-      else toast.error(formatActionError(result.error, lang));
+      if (result.success) {
+        router.refresh();
+      } else {
+        // The same rollback the toggles do. Without it the state kept a name
+        // the server had rejected.
+        setNames(previous);
+        toast.error(formatActionError(result.error, lang));
+      }
     });
   }
 
@@ -189,141 +188,121 @@ export function RulesView({
 
   return (
     <div>
-      <h2 className="mb-4 text-xl font-semibold">{t.heading}</h2>
+      <PageHeader title={t.heading} />
 
-      <section className="mb-6 max-w-3xl">
-        <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
-          {t.settingsHeading}
-        </h3>
-        <div className="divide-y divide-zinc-200 rounded-lg border border-zinc-200 dark:divide-zinc-800 dark:border-zinc-800">
-          {TOGGLE_ORDER.map((key) => {
-            const isClauseChild = key === "staticsExemptFromClause";
-            const inactive = isClauseChild && !local.speciesClause;
-            return (
-              <div
-                key={key}
-                className={`flex items-center justify-between gap-4 px-4 py-3 ${
-                  isClauseChild ? "pl-8" : ""
-                } ${inactive ? "opacity-50" : ""}`}
-              >
-                <div className="min-w-0">
-                  <p className="text-sm font-medium">{t.toggles[key].label}</p>
-                  <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                    {t.toggles[key].description}
-                  </p>
-                </div>
-                <ToggleSwitch
-                  on={local[key]}
-                  disabled={pending || inactive}
-                  label={t.toggles[key].label}
-                  onToggle={() => handleToggle(key)}
-                />
-              </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {mode === RunMode.SOULLINK && (
-        <section className="mb-6 max-w-3xl">
-          <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
-            {t.playerNamesHeading}
-          </h3>
-          <div className="rounded-lg border border-zinc-200 p-4 dark:border-zinc-800">
-            <div className="grid gap-3 sm:grid-cols-2">
-              {(["PLAYER1", "PLAYER2"] as const).map((player) => (
-                <input
-                  key={player}
-                  type="text"
-                  defaultValue={names[player]}
-                  disabled={pending}
-                  maxLength={20}
-                  placeholder={translations[lang].player[player]}
-                  onBlur={(e) => commitName(player, e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") e.currentTarget.blur();
-                  }}
-                  className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-zinc-500 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-950 dark:focus:border-zinc-400"
-                />
-              ))}
-            </div>
-            <p className="mt-2 text-xs text-zinc-500 dark:text-zinc-400">{t.playerNamesHint}</p>
-          </div>
-        </section>
-      )}
-
-      <section className="max-w-3xl">
-        <div className="mb-2 flex items-center justify-between gap-2">
-          <h3 className="text-sm font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
-            {t.notesHeading}
-          </h3>
-          <div className="flex gap-2">
-            {editing ? (
-              <>
-                <button
-                  type="button"
-                  disabled={pending}
-                  onClick={handleLoadDefault}
-                  className="rounded-md border border-zinc-300 px-3 py-1.5 text-sm font-medium text-zinc-600 transition-colors hover:bg-zinc-50 disabled:opacity-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
-                >
-                  {t.loadDefault}
-                </button>
-                <button
-                  type="button"
-                  disabled={pending}
-                  onClick={() => setEditing(false)}
-                  className="rounded-md border border-zinc-300 px-3 py-1.5 text-sm font-medium text-zinc-600 transition-colors hover:bg-zinc-50 disabled:opacity-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
-                >
-                  {t.cancel}
-                </button>
-                <button
-                  type="button"
-                  disabled={pending}
-                  onClick={handleSave}
-                  className="rounded-md bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-zinc-700 disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200"
-                >
-                  {t.save}
-                </button>
-              </>
-            ) : (
-              <>
-                <button
-                  type="button"
-                  onClick={() => setNotesOpen((open) => !open)}
-                  className="rounded-md border border-zinc-200 px-3 py-1.5 text-sm font-medium text-zinc-600 transition-colors hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
-                >
-                  {notesOpen ? t.hideNotes : t.showNotes}
-                </button>
-                {notesOpen && (
+      {/* Two columns from lg up. Everything here used to be capped at
+          max-w-3xl inside a max-w-6xl main, so switching to this tab visibly
+          narrowed the content by ~380px - while the notes still want a
+          readable measure rather than the full page width. */}
+      <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
+        <div>
+          <Section title={t.settingsHeading}>
+            <Card padding="none" className="divide-y divide-line overflow-hidden">
+              {TOGGLE_ORDER.map((key) => {
+                const isClauseChild = key === "staticsExemptFromClause";
+                const inactive = isClauseChild && !local.speciesClause;
+                return (
+                  // The whole row is the switch now. It used to be a 20x36px
+                  // target sitting at the far end of the row.
                   <button
+                    key={key}
                     type="button"
-                    onClick={handleEdit}
-                    className="rounded-md border border-zinc-200 px-3 py-1.5 text-sm font-medium text-zinc-600 transition-colors hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                    role="switch"
+                    aria-checked={local[key]}
+                    disabled={pending || inactive}
+                    onClick={() => handleToggle(key)}
+                    className={`flex w-full items-center justify-between gap-4 px-4 py-3 text-left transition-colors hover:bg-hover disabled:cursor-not-allowed ${
+                      isClauseChild ? "pl-8" : ""
+                    } ${inactive ? "opacity-50" : ""}`}
                   >
-                    {t.edit}
+                    <span className="min-w-0">
+                      <span className="block text-sm font-medium text-ink">
+                        {t.toggles[key].label}
+                      </span>
+                      <span className="block text-xs text-ink-muted">
+                        {t.toggles[key].description}
+                      </span>
+                    </span>
+                    <SwitchTrack on={local[key]} />
                   </button>
-                )}
-              </>
-            )}
-          </div>
+                );
+              })}
+            </Card>
+          </Section>
+
+          {mode === RunMode.SOULLINK && (
+            <Section title={t.playerNamesHeading}>
+              <Card>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {(["PLAYER1", "PLAYER2"] as const).map((player) => (
+                    <Input
+                      key={player}
+                      type="text"
+                      defaultValue={names[player]}
+                      disabled={pending}
+                      maxLength={20}
+                      placeholder={translations[lang].player[player]}
+                      aria-label={translations[lang].player[player]}
+                      onBlur={(e) => commitName(player, e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") e.currentTarget.blur();
+                      }}
+                    />
+                  ))}
+                </div>
+                <p className="mt-2 text-xs text-ink-muted">{t.playerNamesHint}</p>
+              </Card>
+            </Section>
+          )}
         </div>
 
-        {editing ? (
-          <textarea
-            value={draft}
-            disabled={pending}
-            onChange={(e) => setDraft(e.target.value)}
-            spellCheck={false}
-            className="h-[32rem] w-full rounded-lg border border-zinc-300 bg-white p-3 font-mono text-sm outline-none focus:border-zinc-500 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-950 dark:focus:border-zinc-400"
-          />
-        ) : (
-          notesOpen && (
-            <div className="rounded-lg border border-zinc-200 p-5 dark:border-zinc-800">
-              <ReactMarkdown components={markdownComponents}>{markdown}</ReactMarkdown>
-            </div>
-          )
-        )}
-      </section>
+        <Section
+          title={t.notesHeading}
+          actions={
+            editing ? (
+              <div className="flex gap-2">
+                <Button size="sm" disabled={pending} onClick={handleLoadDefault}>
+                  {t.loadDefault}
+                </Button>
+                <Button size="sm" disabled={pending} onClick={() => setEditing(false)}>
+                  {t.cancel}
+                </Button>
+                <Button size="sm" variant="primary" loading={pending} onClick={handleSave}>
+                  {t.save}
+                </Button>
+              </div>
+            ) : (
+              <div className="flex gap-2">
+                <Button size="sm" onClick={() => setNotesOpen((open) => !open)}>
+                  {notesOpen ? t.hideNotes : t.showNotes}
+                </Button>
+                {notesOpen && (
+                  <Button size="sm" onClick={handleEdit}>
+                    {t.edit}
+                  </Button>
+                )}
+              </div>
+            )
+          }
+        >
+          {editing ? (
+            <Textarea
+              value={draft}
+              disabled={pending}
+              onChange={(e) => setDraft(e.target.value)}
+              spellCheck={false}
+              aria-label={t.notesHeading}
+              className="h-[32rem] font-mono"
+            />
+          ) : (
+            notesOpen && (
+              <Card className="p-5">
+                <ReactMarkdown components={markdownComponents}>{markdown}</ReactMarkdown>
+              </Card>
+            )
+          )}
+        </Section>
+      </div>
     </div>
   );
 }

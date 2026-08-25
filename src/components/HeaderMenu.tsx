@@ -52,7 +52,7 @@ function base64ToBytes(base64: string): Uint8Array<ArrayBuffer> {
 }
 
 const itemClass =
-  "block w-full px-3 py-2 text-left text-sm hover:bg-zinc-100 disabled:opacity-50 dark:hover:bg-zinc-800";
+  "flex min-h-10 w-full items-center px-3 py-2 text-left text-sm text-ink hover:bg-hover disabled:cursor-not-allowed disabled:opacity-50";
 
 // Gear menu bundling the rarely-needed header actions (backup/import, tab
 // order, language, run rename/delete) so the top bar stays compact on phones.
@@ -242,7 +242,7 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
         onClick={() => setOpen((v) => !v)}
         aria-label={t.menu.label}
         title={t.menu.label}
-        className="flex h-9 w-9 items-center justify-center rounded-md border border-zinc-200 text-zinc-600 transition-colors hover:bg-zinc-100 disabled:opacity-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+        className="flex h-10 w-10 items-center justify-center rounded-md border border-line text-ink-muted transition-colors hover:bg-hover hover:text-ink disabled:cursor-not-allowed disabled:opacity-50"
       >
         <GearIcon className="h-5 w-5" />
       </button>
@@ -258,13 +258,13 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
         // sticky at z-40 now, and this menu opens straight down across it.
         // A dialog opened FROM here is also z-50 but sits later in the DOM, so
         // it still paints on top.
-        <div className="absolute right-0 z-50 mt-1 w-60 overflow-hidden rounded-md border border-zinc-200 bg-white py-1 shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
+        <div className="absolute right-0 z-50 mt-1 w-60 overflow-hidden rounded-lg border border-line bg-panel py-1 shadow-lg">
           {mounted && !isStandalone && (
             <>
               <button type="button" onClick={handleInstall} className={itemClass}>
                 {t.install.menuLabel}
               </button>
-              <div className="my-1 border-t border-zinc-200 dark:border-zinc-700" />
+              <div className="my-1 border-t border-line" />
             </>
           )}
           <button type="button" onClick={handleBackupRun} className={itemClass}>
@@ -276,7 +276,7 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
           <button type="button" onClick={handleImportClick} className={itemClass}>
             {t.backup.import}
           </button>
-          <div className="my-1 border-t border-zinc-200 dark:border-zinc-700" />
+          <div className="my-1 border-t border-line" />
           <button
             type="button"
             onClick={() => {
@@ -288,7 +288,7 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
             {t.tabOrder.label} …
           </button>
           <div className="px-3 py-2">
-            <span className="mb-1.5 block text-xs font-medium text-zinc-400 dark:text-zinc-500">
+            <span className="mb-1.5 block text-xs font-medium text-ink-subtle">
               {t.menu.language}
             </span>
             <div className="flex gap-1">
@@ -300,10 +300,10 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
                     setLang(code);
                     setOpen(false);
                   }}
-                  className={`flex-1 rounded border px-1.5 py-1 text-xs font-semibold uppercase transition-colors ${
+                  className={`h-10 flex-1 rounded-md border text-xs font-semibold uppercase transition-colors ${
                     code === lang
-                      ? "border-zinc-900 bg-zinc-900 text-white dark:border-zinc-50 dark:bg-zinc-50 dark:text-zinc-900"
-                      : "border-zinc-200 text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                      ? "border-accent bg-accent text-accent-ink"
+                      : "border-line text-ink-muted hover:bg-hover hover:text-ink"
                   }`}
                 >
                   {code}
@@ -311,7 +311,7 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
               ))}
             </div>
           </div>
-          <div className="my-1 border-t border-zinc-200 dark:border-zinc-700" />
+          <div className="my-1 border-t border-line" />
           <button
             type="button"
             disabled={!activeRun}
@@ -327,7 +327,7 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
             type="button"
             disabled={!activeRun}
             onClick={handleDelete}
-            className={`${itemClass} text-red-600 dark:text-red-400`}
+            className={`${itemClass} text-danger`}
           >
             {t.runSwitcher.deleteButton}
           </button>

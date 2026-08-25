@@ -62,30 +62,30 @@ export function EvolveButton({
         {anyAvailable && (
           <span
             aria-hidden
-            className="absolute inset-[-1000%] animate-[spin_2.5s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_0deg,transparent_310deg,#34d399_355deg,transparent_360deg)]"
+            className="absolute inset-[-1000%] animate-[spin_2.5s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_0deg,transparent_310deg,var(--success)_355deg,transparent_360deg)]"
           />
         )}
         <button
           type="button"
           disabled={pending}
           onClick={() => setOpen((o) => !o)}
-          className={`relative rounded border px-2 py-1 text-xs font-medium transition-colors disabled:opacity-50 ${
+          className={`relative inline-flex h-10 shrink-0 items-center rounded-md border bg-panel px-3 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
             anyAvailable
-              ? "border-emerald-300 bg-white text-emerald-700 hover:bg-emerald-50 dark:border-emerald-800 dark:bg-zinc-950 dark:text-emerald-300 dark:hover:bg-emerald-950/40"
-              : "border-zinc-300 bg-white text-zinc-600 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-300 dark:hover:bg-zinc-800"
+              ? "border-success-line text-success hover:bg-success-bg"
+              : "border-line-strong text-ink-muted hover:bg-hover hover:text-ink"
           }`}
         >
           {t.evolve}
         </button>
       </span>
       {open && (
-        <ul className="absolute z-10 mt-1 min-w-[180px] overflow-hidden rounded-md border border-zinc-200 bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
+        <ul className="absolute z-10 mt-1 min-w-[180px] overflow-hidden rounded-lg border border-line bg-panel shadow-lg">
           {targets.map((target) => (
             <li key={target.id}>
               <button
                 type="button"
                 onClick={() => handlePick(target.id)}
-                className="flex w-full items-center gap-2 px-2 py-1.5 text-left text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                className="flex h-10 w-full items-center gap-2 px-3 text-left text-sm text-ink hover:bg-hover"
               >
                 <PokemonSprite pokemonId={target.id} name={target.name} size="sm" />
                 <span className="flex min-w-0 flex-col">
@@ -94,8 +94,8 @@ export function EvolveButton({
                     <span
                       className={`text-xs ${
                         target.available
-                          ? "font-medium text-emerald-600 dark:text-emerald-400"
-                          : "text-zinc-400 dark:text-zinc-500"
+                          ? "font-medium text-success"
+                          : "text-ink-subtle"
                       }`}
                     >
                       {target.method}
@@ -107,7 +107,7 @@ export function EvolveButton({
           ))}
         </ul>
       )}
-      {error && <p className="mt-1 text-xs text-red-500 dark:text-red-400">{error}</p>}
+      {error && <p className="mt-1 text-xs text-danger">{error}</p>}
     </div>
   );
 }
@@ -144,11 +144,11 @@ export function RevertButton({
         type="button"
         disabled={pending}
         onClick={handleClick}
-        className="rounded border border-zinc-300 px-2 py-1 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-50 disabled:opacity-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+        className="inline-flex h-10 shrink-0 items-center rounded-md border border-line-strong px-3 text-sm font-medium text-ink-muted transition-colors hover:bg-hover hover:text-ink disabled:cursor-not-allowed disabled:opacity-50"
       >
         {t.revert}
       </button>
-      {error && <p className="mt-1 text-xs text-red-500 dark:text-red-400">{error}</p>}
+      {error && <p className="mt-1 text-xs text-danger">{error}</p>}
     </div>
   );
 }

@@ -14,6 +14,7 @@ import { pokemonName, routeName } from "@/lib/i18n/localize";
 import { PokemonCombobox } from "@/components/PokemonCombobox";
 import { PokemonInfoButton } from "@/components/PokemonDetailProvider";
 import type { RunSettings } from "@/lib/runSettings";
+import { Input } from "@/components/ui/Input";
 
 // In-game nicknames are capped at 10 characters; the input enforces this and
 // shows a live counter (the server slices to the same length as a safety net).
@@ -24,11 +25,9 @@ export const NICKNAME_MAX = 10;
 // Colour the status control so a route's outcome is readable at a glance:
 // green = caught, red = killed, amber = fled.
 const STATUS_STYLES: Record<EncounterStatus, string> = {
-  CAUGHT:
-    "border-green-400 bg-green-50 text-green-700 dark:border-green-700 dark:bg-green-950/40 dark:text-green-300",
-  KILLED:
-    "border-red-400 bg-red-50 text-red-700 dark:border-red-700 dark:bg-red-950/40 dark:text-red-300",
-  FLED: "border-amber-400 bg-amber-50 text-amber-700 dark:border-amber-600 dark:bg-amber-950/40 dark:text-amber-300",
+  CAUGHT: "border-success-line bg-success-bg text-success",
+  KILLED: "border-danger-line bg-danger-bg text-danger",
+  FLED: "border-warning-line bg-warning-bg text-warning",
 };
 
 export function EncounterEditor({
@@ -246,9 +245,7 @@ export function EncounterEditor({
         lockedFamilyIds={lockedFamilyIds}
         disabled={pending}
       />
-      {evolvedName && (
-        <span className="text-xs text-zinc-400 dark:text-zinc-500">({evolvedName})</span>
-      )}
+      {evolvedName && <span className="text-xs text-ink-subtle">({evolvedName})</span>}
       {selectedId !== null && (
         <div className="flex flex-wrap items-center gap-2 text-xs">
           <PokemonInfoButton pokemonId={selectedId} label={selectedName} />
@@ -259,10 +256,10 @@ export function EncounterEditor({
               onClick={handleShinyToggle}
               aria-pressed={shiny}
               title={t.tracker.shinyToggle}
-              className={`rounded border px-1.5 py-1 transition-colors disabled:opacity-50 ${
+              className={`h-10 w-10 shrink-0 rounded-md border transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
                 shiny
-                  ? "border-amber-400 bg-amber-50 text-amber-600 dark:border-amber-600 dark:bg-amber-950/40 dark:text-amber-300"
-                  : "border-zinc-200 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:border-zinc-700 dark:text-zinc-500 dark:hover:bg-zinc-800"
+                  ? "border-warning-line bg-warning-bg text-warning"
+                  : "border-line text-ink-subtle hover:bg-hover hover:text-ink"
               }`}
             >
               ✨
@@ -272,7 +269,7 @@ export function EncounterEditor({
             value={status}
             disabled={pending}
             onChange={(e) => handleStatusChange(e.target.value as EncounterStatus)}
-            className={`rounded border px-1.5 py-1 font-medium disabled:opacity-50 ${STATUS_STYLES[status]}`}
+            className={`h-10 shrink-0 rounded-md border px-2 font-medium disabled:cursor-not-allowed disabled:opacity-50 ${STATUS_STYLES[status]}`}
           >
             {Object.values(EncounterStatus).map((s) => (
               <option key={s} value={s}>
@@ -282,7 +279,8 @@ export function EncounterEditor({
           </select>
           {settings.nicknames && (
             <span className="inline-flex items-center gap-1">
-              <input
+              <Input
+                size="sm"
                 type="text"
                 value={nickname}
                 disabled={pending}
@@ -298,16 +296,14 @@ export function EncounterEditor({
                 onKeyDown={(e) => {
                   if (e.key === "Enter") e.currentTarget.blur();
                 }}
-                className="w-28 rounded border border-zinc-300 bg-white px-1.5 py-1 outline-none placeholder:text-zinc-400 focus:border-zinc-500 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-950 dark:placeholder:text-zinc-600 dark:focus:border-zinc-400"
+                className="w-28"
               />
               {/* Live character counter - shown while editing or when filled,
                   amber once the 10-char in-game limit is reached. */}
               {(nickFocused || nickname.length > 0) && (
                 <span
-                  className={`tabular-nums text-[10px] ${
-                    nickname.length >= NICKNAME_MAX
-                      ? "text-amber-600 dark:text-amber-400"
-                      : "text-zinc-400 dark:text-zinc-500"
+                  className={`tabular-nums text-xs ${
+                    nickname.length >= NICKNAME_MAX ? "text-warning" : "text-ink-subtle"
                   }`}
                 >
                   {nickname.length}/{NICKNAME_MAX}
@@ -321,17 +317,18 @@ export function EncounterEditor({
               disabled={pending}
               onClick={handleClear}
               title={t.tracker.clear}
-              className="rounded border border-zinc-200 px-1.5 py-1 text-zinc-500 transition-colors hover:bg-red-50 hover:text-red-600 disabled:opacity-50 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-red-950/40 dark:hover:text-red-400"
+              aria-label={t.tracker.clear}
+              className="h-10 w-10 shrink-0 rounded-md border border-line text-ink-subtle transition-colors hover:bg-danger-bg hover:text-danger disabled:cursor-not-allowed disabled:opacity-50"
             >
               🗑
             </button>
           )}
         </div>
       )}
-      {lockWarning && (
-        <p className="text-xs text-amber-600 dark:text-amber-400">⚠ {lockWarning}</p>
-      )}
-      {error && <p className="text-xs text-red-500 dark:text-red-400">{error}</p>}
+      {lockWarning && <p className="text-xs text-warning">⚠ {lockWarning}</p>}
+      {/* Inline rather than a toast: with 30+ rows on screen, the error has to
+          point at the row it belongs to. */}
+      {error && <p className="text-xs text-danger">{error}</p>}
     </div>
   );
 }

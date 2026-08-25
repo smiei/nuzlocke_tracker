@@ -65,7 +65,7 @@ function SlotPicker({
         aria-label={slotLabel}
         disabled={pending}
         onClick={() => setOpen((o) => !o)}
-        className="flex w-full items-center justify-between gap-2 rounded-md border border-zinc-200 bg-white px-2 py-1.5 text-left text-sm disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-900"
+        className="flex h-10 w-full items-center justify-between gap-2 rounded-md border border-line-strong bg-panel px-3 text-left text-sm text-ink transition-colors hover:bg-hover disabled:cursor-not-allowed disabled:opacity-50"
       >
         <span className="flex min-w-0 items-center gap-1.5">
           {current ? (
@@ -76,19 +76,19 @@ function SlotPicker({
               <span className="truncate">{linkLabel(current)}</span>
             </>
           ) : (
-            <span className="text-zinc-400 dark:text-zinc-500">{placeholder}</span>
+            <span className="text-ink-subtle">{placeholder}</span>
           )}
         </span>
-        <span className="shrink-0 text-xs text-zinc-400">▾</span>
+        <span aria-hidden className="shrink-0 text-xs text-ink-subtle">▾</span>
       </button>
       {open && (
-        <ul className="absolute bottom-full z-10 mb-1 max-h-64 w-full min-w-[200px] overflow-y-auto rounded-md border border-zinc-200 bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
+        <ul className="absolute bottom-full z-10 mb-1 max-h-64 w-full min-w-[200px] overflow-y-auto rounded-lg border border-line bg-panel shadow-lg">
           {current && (
             <li>
               <button
                 type="button"
                 onClick={() => pick(null)}
-                className="block w-full px-2 py-1.5 text-left text-sm text-zinc-400 hover:bg-zinc-100 dark:text-zinc-500 dark:hover:bg-zinc-800"
+                className="flex h-10 w-full items-center px-3 text-left text-sm text-ink-subtle hover:bg-hover"
               >
                 {placeholder}
               </button>
@@ -99,8 +99,8 @@ function SlotPicker({
               <button
                 type="button"
                 onClick={() => pick(l.id)}
-                className={`flex w-full items-center gap-2 px-2 py-1.5 text-left text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800 ${
-                  current?.id === l.id ? "bg-zinc-100 dark:bg-zinc-800" : ""
+                className={`flex h-10 w-full items-center gap-2 px-3 text-left text-sm text-ink hover:bg-hover ${
+                  current?.id === l.id ? "bg-hover font-medium" : ""
                 }`}
               >
                 {l.encounters.map((e) => (
@@ -179,15 +179,15 @@ export function TeamBar({
   return (
     <section className="mb-6">
       <div className="mb-2 flex items-center justify-between gap-2">
-        <h3 className="text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-ink-muted">
           {t.links.teamHeading}
-        </h3>
+        </h2>
         {slots.some((l) => l !== null) && (
           <button
             type="button"
             disabled={pending}
             onClick={handleClearTeam}
-            className="rounded border border-zinc-200 px-2 py-1 text-xs font-medium text-zinc-500 transition-colors hover:bg-red-50 hover:text-red-600 disabled:opacity-50 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-red-950/40 dark:hover:text-red-400"
+            className="inline-flex h-10 shrink-0 items-center rounded-md border border-line px-3 text-sm font-medium text-ink-muted transition-colors hover:bg-danger-bg hover:text-danger disabled:cursor-not-allowed disabled:opacity-50"
           >
             {t.links.clearTeam}
           </button>
@@ -199,18 +199,16 @@ export function TeamBar({
             <div
               key={i}
               className={`flex flex-col rounded-lg border p-4 ${
-                link
-                  ? "border-amber-300/50 bg-amber-50/20 dark:border-amber-600/30 dark:bg-amber-950/10"
-                  : "border-dashed border-zinc-300 dark:border-zinc-700"
+                link ? "border-warning-line/50 bg-warning-bg/20" : "border-dashed border-line-strong"
               }`}
             >
               {link ? (
                 <>
                   <div className="mb-3 flex items-start justify-between gap-2">
                     <div className="min-w-0">
-                      <h3 className="font-medium">{link.routeName}</h3>
+                      <h3 className="font-medium text-ink">{link.routeName}</h3>
                       <p
-                        className="text-xs tabular-nums text-zinc-400 dark:text-zinc-500"
+                        className="text-xs tabular-nums text-ink-subtle"
                         title={t.pokedex.columns.summe}
                       >
                         {(() => {
@@ -227,7 +225,7 @@ export function TeamBar({
                         setDeadCause("");
                         setDeadMenuId(deadMenuId === link.id ? null : link.id);
                       }}
-                      className="rounded border border-red-300 px-2 py-1 text-xs font-medium text-red-600 transition-colors hover:bg-red-50 disabled:opacity-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950/40"
+                      className="inline-flex h-10 shrink-0 items-center rounded-md border border-danger-line px-3 text-sm font-medium text-danger transition-colors hover:bg-danger-bg disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       {t.links.markDead}
                     </button>
@@ -235,27 +233,27 @@ export function TeamBar({
 
                   {/* Mark-dead menu: optional cause + (SoulLink) who lost theirs. */}
                   {deadMenuId === link.id && (
-                    <div className="mb-3 rounded-md border border-red-200 bg-red-50/60 p-2 dark:border-red-900/50 dark:bg-red-950/20">
+                    <div className="mb-3 rounded-md border border-danger-line bg-danger-bg/60 p-2">
                       <input
                         type="text"
                         value={deadCause}
                         onChange={(e) => setDeadCause(e.target.value)}
                         maxLength={80}
                         placeholder={t.links.deathCausePlaceholder}
-                        className="mb-2 w-full rounded border border-zinc-300 bg-white px-2 py-1 text-xs outline-none focus:border-zinc-500 dark:border-zinc-700 dark:bg-zinc-950 dark:focus:border-zinc-400"
+                        className="mb-2 h-10 w-full rounded-md border border-line-strong bg-panel px-3 text-sm text-ink placeholder:text-ink-subtle"
                       />
                       {isClassic ? (
                         <button
                           type="button"
                           disabled={pending}
                           onClick={() => handleMarkDead(link.id)}
-                          className="rounded border border-red-300 px-2 py-1 text-xs font-medium text-red-600 transition-colors hover:bg-red-100 disabled:opacity-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950/40"
+                          className="inline-flex h-10 shrink-0 items-center rounded-md border border-danger-line px-3 text-sm font-medium text-danger transition-colors hover:bg-danger-bg disabled:cursor-not-allowed disabled:opacity-50"
                         >
                           {t.links.markDead}
                         </button>
                       ) : (
                         <>
-                          <p className="mb-1.5 text-xs font-medium text-zinc-600 dark:text-zinc-300">
+                          <p className="mb-1.5 text-xs font-medium text-ink-muted">
                             {t.links.whoLost}
                           </p>
                           <div className="flex flex-wrap gap-1.5">
@@ -265,7 +263,7 @@ export function TeamBar({
                                 type="button"
                                 disabled={pending}
                                 onClick={() => handleMarkDead(link.id, p)}
-                                className="rounded border border-red-300 px-2 py-1 text-xs font-medium text-red-600 transition-colors hover:bg-red-100 disabled:opacity-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950/40"
+                                className="inline-flex h-10 shrink-0 items-center rounded-md border border-danger-line px-3 text-sm font-medium text-danger transition-colors hover:bg-danger-bg disabled:cursor-not-allowed disabled:opacity-50"
                               >
                                 {playerLabel(p)}
                               </button>
@@ -274,7 +272,7 @@ export function TeamBar({
                               type="button"
                               disabled={pending}
                               onClick={() => handleMarkDead(link.id)}
-                              className="rounded border border-zinc-300 px-2 py-1 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100 disabled:opacity-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                              className="inline-flex h-10 shrink-0 items-center rounded-md border border-line-strong px-3 text-sm font-medium text-ink-muted transition-colors hover:bg-hover hover:text-ink disabled:cursor-not-allowed disabled:opacity-50"
                             >
                               {t.links.noAttribution}
                             </button>
@@ -296,9 +294,9 @@ export function TeamBar({
                   </div>
                 </>
               ) : (
-                <div className="flex flex-1 flex-col items-center justify-center py-10 text-zinc-300 dark:text-zinc-700">
+                <div className="flex flex-1 flex-col items-center justify-center py-10 text-ink-subtle">
                   <span className="text-3xl leading-none">+</span>
-                  <span className="mt-1 text-xs text-zinc-400 dark:text-zinc-600">
+                  <span className="mt-1 text-xs text-ink-subtle">
                     {t.links.teamEmpty}
                   </span>
                 </div>

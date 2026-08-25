@@ -94,7 +94,7 @@ export function PokemonInfoButton({
       onClick={() => detail.open(pokemonId)}
       aria-label={label}
       title={label}
-      className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-zinc-300 text-xs font-serif italic text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-700 dark:border-zinc-600 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
+      className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-line-strong font-serif text-sm italic text-ink-muted transition-colors hover:bg-hover hover:text-ink"
     >
       i
     </button>

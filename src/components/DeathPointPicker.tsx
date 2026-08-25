@@ -50,10 +50,10 @@ export function DeathPointPicker({
         disabled={pending}
         aria-label={t.deathPoint}
         onChange={(e) => handleChange(e.target.value)}
-        className={`max-w-[15rem] truncate rounded border bg-transparent px-1 py-0.5 text-[11px] outline-none disabled:opacity-50 ${
+        className={`h-10 max-w-[15rem] truncate rounded-md border bg-transparent px-2 text-xs disabled:cursor-not-allowed disabled:opacity-50 ${
           recorded
-            ? "border-zinc-200 text-zinc-500 dark:border-zinc-700 dark:text-zinc-400"
-            : "border-dashed border-amber-400 text-amber-600 dark:border-amber-600 dark:text-amber-400"
+            ? "border-line text-ink-muted"
+            : "border-dashed border-warning-line text-warning"
         }`}
       >
         <option value="">{recorded ? t.deathPointNone : t.deathPointUnset}</option>
@@ -63,7 +63,7 @@ export function DeathPointPicker({
           </option>
         ))}
       </select>
-      {error && <span className="text-[10px] text-red-500 dark:text-red-400">{error}</span>}
+      {error && <span className="text-xs text-danger">{error}</span>}
     </span>
   );
 }

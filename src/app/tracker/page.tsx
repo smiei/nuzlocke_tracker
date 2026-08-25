@@ -12,7 +12,6 @@ import {
 import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
 import { getLang } from "@/lib/i18n/getLang";
-import { translations } from "@/lib/i18n/dictionary";
 import { TrackerView } from "@/components/TrackerView";
 import { CanonicalRun } from "@/components/CanonicalRun";
 import { SpriteSetProvider } from "@/components/SpriteSetProvider";
@@ -40,7 +39,6 @@ export default async function TrackerPage({
   return (
     <div>
       <CanonicalRun runId={runId} />
-      <h2 className="mb-4 text-xl font-semibold">{translations[lang].tracker.heading}</h2>
       <SpriteSetProvider spriteSet={game.spriteSet}>
         <PlayerNamesProvider names={settings.playerNames} lang={lang}>
           <PokemonDetailProvider

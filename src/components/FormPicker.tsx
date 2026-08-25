@@ -70,24 +70,24 @@ export function FormPicker({
         type="button"
         disabled={pending}
         onClick={() => setOpen((o) => !o)}
-        className="rounded border border-zinc-300 bg-white px-2 py-1 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-50 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-300 dark:hover:bg-zinc-800"
+        className="inline-flex h-10 shrink-0 items-center rounded-md border border-line-strong px-3 text-sm font-medium text-ink-muted transition-colors hover:bg-hover hover:text-ink disabled:cursor-not-allowed disabled:opacity-50"
       >
         {t.forms}
       </button>
       {open && (
-        <ul className="absolute z-10 mt-1 min-w-[200px] overflow-hidden rounded-md border border-zinc-200 bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
+        <ul className="absolute z-10 mt-1 min-w-[200px] overflow-hidden rounded-lg border border-line bg-panel shadow-lg">
           {options.map((option) => (
             <li key={option.id}>
               <button
                 type="button"
                 onClick={() => handlePick(option.id)}
-                className={`flex w-full items-center gap-2 px-2 py-1.5 text-left text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800 ${
-                  option.id === currentId ? "bg-zinc-100 dark:bg-zinc-800" : ""
+                className={`flex h-10 w-full items-center gap-2 px-3 text-left text-sm text-ink hover:bg-hover ${
+                  option.id === currentId ? "bg-hover font-medium" : ""
                 }`}
               >
                 <PokemonSprite pokemonId={option.id} name={option.label} size="sm" />
                 <span className="flex-1 truncate">{option.label}</span>
-                <span className="shrink-0 text-xs tabular-nums text-zinc-400 dark:text-zinc-500">
+                <span className="shrink-0 text-xs tabular-nums text-ink-subtle">
                   {option.summe}
                 </span>
               </button>
@@ -95,7 +95,7 @@ export function FormPicker({
           ))}
         </ul>
       )}
-      {error && <p className="mt-1 text-xs text-red-500 dark:text-red-400">{error}</p>}
+      {error && <p className="mt-1 text-xs text-danger">{error}</p>}
     </div>
   );
 }

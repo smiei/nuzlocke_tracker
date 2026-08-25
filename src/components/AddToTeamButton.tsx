@@ -74,13 +74,13 @@ export function AddToTeamButton({
         type="button"
         disabled={pending}
         onClick={handleClick}
-        className="rounded border border-emerald-400 px-2 py-1 text-xs font-medium text-emerald-700 transition-colors hover:bg-emerald-50 disabled:opacity-50 dark:border-emerald-700 dark:text-emerald-400 dark:hover:bg-emerald-950/40"
+        className="inline-flex h-10 shrink-0 items-center rounded-md border border-success-line px-3 text-sm font-medium text-success transition-colors hover:bg-success-bg disabled:cursor-not-allowed disabled:opacity-50"
       >
         {t.addToTeam}
       </button>
       {open && (
-        <ul className="absolute right-0 z-10 mt-1 min-w-[200px] overflow-hidden rounded-md border border-zinc-200 bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
-          <li className="px-2 py-1.5 text-xs font-medium text-zinc-400 dark:text-zinc-500">
+        <ul className="absolute right-0 z-10 mt-1 min-w-[200px] overflow-hidden rounded-lg border border-line bg-panel shadow-lg">
+          <li className="px-3 py-2 text-xs font-medium text-ink-subtle">
             {t.replaceHint}
           </li>
           {teamLinks.map((member) => (
@@ -91,7 +91,7 @@ export function AddToTeamButton({
                 onClick={() => {
                   if (member.teamPosition !== null) assign(member.teamPosition);
                 }}
-                className="flex w-full items-center gap-2 px-2 py-1.5 text-left text-sm hover:bg-zinc-100 disabled:opacity-50 dark:hover:bg-zinc-800"
+                className="flex h-10 w-full items-center gap-2 px-3 text-left text-sm text-ink hover:bg-hover disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {member.encounters.map((e) => (
                   <PokemonSprite
