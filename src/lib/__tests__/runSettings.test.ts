@@ -36,13 +36,25 @@ describe("parseRunSettings", () => {
 });
 
 describe("serializePresetSettings", () => {
-  it("keeps every boolean toggle", () => {
+  it("keeps every rule toggle", () => {
     const settings = parseRunSettings('{"speciesClause": false, "statics": false}');
     const json = JSON.parse(serializePresetSettings(settings)) as Record<string, boolean>;
-    for (const key of RUN_SETTING_KEYS) expect(typeof json[key]).toBe("boolean");
+    for (const key of RUN_SETTING_KEYS) {
+      if (key === "debugMode") continue;
+      expect(typeof json[key]).toBe("boolean");
+    }
     expect(json.speciesClause).toBe(false);
     expect(json.statics).toBe(false);
     expect(json.nicknames).toBe(true);
+  });
+
+  it("never carries debugMode into a preset", () => {
+    // It is a maintenance switch, not a rule: loading someone's ruleset must
+    // not silently turn the order export on, or off mid-investigation.
+    const settings = parseRunSettings('{"debugMode": true}');
+    expect(settings.debugMode).toBe(true);
+    expect(serializePresetSettings(settings)).not.toContain("debugMode");
+    expect(parseRunSettings(serializePresetSettings(settings)).debugMode).toBe(false);
   });
 
   it("never carries player names into a preset", () => {

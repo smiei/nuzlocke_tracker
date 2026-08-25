@@ -9,9 +9,15 @@ import type { Prisma } from "@/generated/prisma/client";
 export * from "@/lib/backupParse";
 import { BACKUP_FORMAT, BACKUP_VERSION, type BackupFile, type BackupRun } from "@/lib/backupParse";
 
-type RunWithRelations = Prisma.RunGetPayload<{
-  include: { soulLinks: true; encounters: true; levelCapProgress: true };
-}>;
+const BACKUP_INCLUDE = {
+  soulLinks: true,
+  encounters: true,
+  levelCapProgress: true,
+  customRoutes: true,
+  routeEntries: true,
+} as const;
+
+type RunWithRelations = Prisma.RunGetPayload<{ include: typeof BACKUP_INCLUDE }>;
 
 function runToBackupRun(run: RunWithRelations): BackupRun {
   const routeBySoulLinkId = new Map(run.soulLinks.map((sl) => [sl.id, sl.routeId]));
@@ -50,6 +56,17 @@ function runToBackupRun(run: RunWithRelations): BackupRun {
       defeated: lc.defeated,
       updatedAt: lc.updatedAt.toISOString(),
     })),
+    customRoutes: run.customRoutes.map((cr) => ({
+      routeId: cr.routeId,
+      name: cr.name,
+      type: cr.type,
+      afterRouteId: cr.afterRouteId,
+      createdAt: cr.createdAt.toISOString(),
+    })),
+    routeEntries: run.routeEntries.map((re) => ({
+      routeId: re.routeId,
+      seenAt: re.seenAt.toISOString(),
+    })),
   };
 }
 
@@ -57,7 +74,7 @@ export async function buildBackup(runIds?: number[]): Promise<BackupFile> {
   const runs = await prisma.run.findMany({
     where: runIds ? { id: { in: runIds } } : undefined,
     orderBy: { createdAt: "asc" },
-    include: { soulLinks: true, encounters: true, levelCapProgress: true },
+    include: BACKUP_INCLUDE,
   });
 
   return {
@@ -75,7 +92,7 @@ export async function buildBackup(runIds?: number[]): Promise<BackupFile> {
 export async function buildBackupZip(): Promise<{ filename: string; data: Uint8Array }> {
   const runs = await prisma.run.findMany({
     orderBy: { createdAt: "asc" },
-    include: { soulLinks: true, encounters: true, levelCapProgress: true },
+    include: BACKUP_INCLUDE,
   });
 
   const usedNames = new Set<string>();
@@ -118,6 +135,21 @@ export async function applyBackup(backup: BackupFile): Promise<number> {
           },
         });
 
+        // Before the encounters, so their negative routeIds resolve to a
+        // route that exists in the restored run.
+        for (const cr of run.customRoutes) {
+          await tx.customRoute.create({
+            data: {
+              runId: createdRun.id,
+              routeId: cr.routeId,
+              name: cr.name,
+              type: cr.type,
+              afterRouteId: cr.afterRouteId,
+              createdAt: new Date(cr.createdAt),
+            },
+          });
+        }
+
         const soulLinkIdByRoute = new Map<number, number>();
         for (const sl of run.soulLinks) {
           const created = await tx.soulLink.create({
@@ -159,6 +191,16 @@ export async function applyBackup(backup: BackupFile): Promise<number> {
         for (const lc of run.levelCapProgress) {
           await tx.levelCapProgress.create({
             data: { runId: createdRun.id, levelCapId: lc.levelCapId, defeated: lc.defeated },
+          });
+        }
+
+        for (const re of run.routeEntries) {
+          await tx.routeEntry.create({
+            data: {
+              runId: createdRun.id,
+              routeId: re.routeId,
+              seenAt: new Date(re.seenAt),
+            },
           });
         }
       }

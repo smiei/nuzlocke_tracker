@@ -10,12 +10,12 @@ import {
   getPokemonById,
   getPokemonList,
   getPokemonForms,
-  getRoutes,
 } from "@/lib/data";
 import { getTypesForGeneration } from "@/lib/effectiveness";
 import { explosiveMove } from "@/lib/learnset";
 import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
+import { getRoutesForRun } from "@/lib/runRoutes";
 import { getLang } from "@/lib/i18n/getLang";
 import { routeName } from "@/lib/i18n/localize";
 import { displayNameWithForm, movepoolId } from "@/lib/forms";
@@ -70,7 +70,9 @@ export default async function AnalyzePage({
   // Open (route, player) slots for the quick-catch dropdown: pairs without an
   // encounter yet. Statics honor the run's "statics" rule; Classic lists only
   // Player 1.
-  const routes = getRoutes(gameId).filter((r) => settings.statics || r.type === "route");
+  const routes = (await getRoutesForRun(runId, gameId)).filter(
+    (r) => settings.statics || r.type === "route",
+  );
   const players = mode === RunMode.CLASSIC ? [Player.PLAYER1] : [Player.PLAYER1, Player.PLAYER2];
   const openSlots: OpenSlot[] = [];
   for (const player of players) {

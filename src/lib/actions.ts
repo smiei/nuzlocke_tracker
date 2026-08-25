@@ -7,11 +7,13 @@ import {
   DEFAULT_GAME_ID,
   getGameById,
   getPokemonById,
-  getRouteById,
   getEvolutionById,
   getLevelCaps,
 } from "@/lib/data";
 import { EncounterStatus, LinkStatus, Player, RunMode } from "@/generated/prisma/client";
+import { getRouteForRun, getRoutesForRun, nextCustomRouteId } from "@/lib/runRoutes";
+import { CUSTOM_ROUTE_NAME_MAX, isCustomRouteId } from "@/lib/customRoutes";
+import { localizeName } from "@/lib/i18n/localize";
 import type { ActionError } from "@/lib/actionErrors";
 import type { BackupFile } from "@/lib/backup";
 import { applyBackup, backupFilename, buildBackup, buildBackupZip, parseBackup } from "@/lib/backup";
@@ -24,6 +26,17 @@ import {
   type RunSettings,
 } from "@/lib/runSettings";
 import type { Lang } from "@/lib/i18n/dictionary";
+
+// The tabs whose rendering depends on the run's route list or rule toggles.
+// Spelled out once instead of at each call site, which is how the list drifted
+// before.
+function revalidateRunViews() {
+  revalidatePath("/rules");
+  revalidatePath("/tracker");
+  revalidatePath("/links");
+  revalidatePath("/typen");
+  revalidatePath("/overview");
+}
 
 export type SaveEncounterInput = {
   runId: number;
@@ -111,7 +124,9 @@ export async function saveEncounter(
   if (!run) {
     return { success: false, error: { key: "runNotFound", id: runId } };
   }
-  const route = getRouteById(run.gameId, routeId);
+  // Resolves the run's own hand-added locations as well - a negative id is a
+  // CustomRoute, not an unknown route.
+  const route = await getRouteForRun(runId, run.gameId, routeId);
   if (!route) {
     return { success: false, error: { key: "unknownRoute", id: routeId } };
   }
@@ -172,6 +187,25 @@ export async function saveEncounter(
         soulLinkId,
       },
     });
+
+    // Debug order log (see RouteEntry in schema.prisma): append-only, the
+    // first write for a route wins and clearEncounter never removes it.
+    // seenAt is backfilled from the earliest encounter on the route, so a run
+    // that predates this feature keeps its real order instead of having every
+    // route stamped with the day the log started.
+    const logged = await tx.routeEntry.findUnique({
+      where: { runId_routeId: { runId, routeId } },
+    });
+    if (!logged) {
+      const first = await tx.encounter.findFirst({
+        where: { runId, routeId },
+        orderBy: { createdAt: "asc" },
+        select: { createdAt: true },
+      });
+      await tx.routeEntry.create({
+        data: { runId, routeId, seenAt: first?.createdAt ?? new Date() },
+      });
+    }
 
     // Keep the invariant "a SoulLink always has >=1 encounter" so later reads
     // (Links tab) never have to special-case empty links.
@@ -703,6 +737,200 @@ export async function saveRules(runId: number, markdown: string): Promise<SaveRu
   revalidatePath("/rules");
   publishChange(runId);
   return { success: true };
+}
+
+// --- Custom routes --------------------------------------------------------
+//
+// Per run, never per game pack: a pack's routes.json is shared by every run
+// that plays that game, and "we counted three more statics this time" is a
+// property of one playthrough. See CustomRoute in schema.prisma for why the
+// exposed id is negative and assigned rather than derived.
+
+export type AddCustomRouteResult =
+  | { success: true; routeId: number }
+  | { success: false; error: ActionError };
+
+export async function addCustomRoute(
+  runId: number,
+  name: string,
+  type: "route" | "static",
+  // Id of the route this one follows in the list; null = at the very top.
+  afterRouteId: number | null,
+): Promise<AddCustomRouteResult> {
+  const trimmed = name.trim().slice(0, CUSTOM_ROUTE_NAME_MAX);
+  if (!trimmed) {
+    return { success: false, error: { key: "nameRequired" } };
+  }
+
+  const run = await prisma.run.findUnique({ where: { id: runId } });
+  if (!run) {
+    return { success: false, error: { key: "runNotFound", id: runId } };
+  }
+  // An anchor must be a route this run actually has, or the new entry would
+  // silently land at the end of the list instead of where it was asked for.
+  if (afterRouteId !== null && !(await getRouteForRun(runId, run.gameId, afterRouteId))) {
+    return { success: false, error: { key: "unknownRoute", id: afterRouteId } };
+  }
+
+  const routeId = await nextCustomRouteId(runId);
+  await prisma.customRoute.create({
+    data: { runId, routeId, name: trimmed, type, afterRouteId },
+  });
+
+  revalidateRunViews();
+  publishChange(runId);
+  return { success: true, routeId };
+}
+
+export type DeleteCustomRouteResult = { success: true } | { success: false; error: ActionError };
+
+// Takes the route's encounters (and their SoulLink) with it. There is no
+// foreign key on routeId - for every other route it points into a JSON pack -
+// so the cleanup is explicit. The UI confirms first and says how many
+// encounters are about to go with it.
+export async function deleteCustomRoute(
+  runId: number,
+  routeId: number,
+): Promise<DeleteCustomRouteResult> {
+  if (!isCustomRouteId(routeId)) {
+    return { success: false, error: { key: "unknownRoute", id: routeId } };
+  }
+  const row = await prisma.customRoute.findUnique({
+    where: { runId_routeId: { runId, routeId } },
+  });
+  if (!row) {
+    return { success: false, error: { key: "unknownRoute", id: routeId } };
+  }
+
+  await prisma.$transaction(async (tx) => {
+    await tx.encounter.deleteMany({ where: { runId, routeId } });
+    await tx.soulLink.deleteMany({ where: { runId, routeId } });
+    await tx.routeEntry.deleteMany({ where: { runId, routeId } });
+    // Anything anchored to this route inherits its anchor, so the rest of the
+    // list stays put instead of jumping to the top.
+    await tx.customRoute.updateMany({
+      where: { runId, afterRouteId: routeId },
+      data: { afterRouteId: row.afterRouteId },
+    });
+    await tx.customRoute.delete({ where: { id: row.id } });
+  });
+
+  revalidateRunViews();
+  publishChange(runId);
+  return { success: true };
+}
+
+// --- Debug: encounter order export ----------------------------------------
+
+export type ExportRouteOrderResult =
+  | { success: true; text: string }
+  | { success: false; error: ActionError };
+
+function pad(value: string | number, width: number): string {
+  return String(value).padEnd(width);
+}
+
+// A plain-text report meant to be pasted into a coding agent whose job is to
+// reorder data/games/<gameId>/routes.json. It deliberately carries BOTH
+// lists: a run in progress has only visited part of the map, so the observed
+// order alone would not say where the untouched routes belong.
+export async function exportRouteOrder(runId: number): Promise<ExportRouteOrderResult> {
+  const run = await prisma.run.findUnique({ where: { id: runId } });
+  if (!run) {
+    return { success: false, error: { key: "runNotFound", id: runId } };
+  }
+
+  const routes = await getRoutesForRun(runId, run.gameId);
+  const [entries, encounters] = await Promise.all([
+    prisma.routeEntry.findMany({ where: { runId }, select: { routeId: true, seenAt: true } }),
+    prisma.encounter.findMany({ where: { runId }, select: { routeId: true, createdAt: true } }),
+  ]);
+
+  // The log is authoritative; Encounter.createdAt covers routes entered before
+  // the log existed. Both answer "when was this route first touched".
+  const logged = new Map(entries.map((entry) => [entry.routeId, entry.seenAt]));
+  const earliest = new Map<number, Date>();
+  for (const encounter of encounters) {
+    const current = earliest.get(encounter.routeId);
+    if (!current || encounter.createdAt < current) {
+      earliest.set(encounter.routeId, encounter.createdAt);
+    }
+  }
+
+  const seenAt = new Map<number, Date>();
+  for (const route of routes) {
+    const when = logged.get(route.id) ?? earliest.get(route.id);
+    if (when) seenAt.set(route.id, when);
+  }
+
+  const observed = [...seenAt.entries()]
+    .sort((a, b) => a[1].getTime() - b[1].getTime())
+    .map(([routeId]) => routeId);
+  const observedPos = new Map(observed.map((routeId, index) => [routeId, index + 1]));
+  const currentPos = new Map(routes.map((route, index) => [route.id, index + 1]));
+  const byId = new Map(routes.map((route) => [route.id, route]));
+  const nameOf = (routeId: number) => {
+    const route = byId.get(routeId);
+    return route ? localizeName(route.names, "de") : "?" + routeId;
+  };
+
+  const lines: string[] = [
+    "# Encounter order export",
+    "# Run: " + run.name + " (id " + run.id + ")  |  game pack: " + run.gameId,
+    "# Generated: " + new Date().toISOString(),
+    "#",
+    "# Task: reorder data/games/" + run.gameId + "/routes.json so its array order",
+    "# matches the observed order below. ROUTE IDS ARE STABLE AND MUST NOT BE",
+    "# RENUMBERED OR REUSED - the database references them. Only the order of",
+    "# the array changes. Names shown are the names.de values.",
+    "# Negative ids are this run's own additions and are NOT part of",
+    "# routes.json - ignore them when editing the file.",
+    "",
+    "## Observed order (" + observed.length + " of " + routes.length + " routes entered)",
+  ];
+
+  if (observed.length === 0) {
+    lines.push("   (nothing entered yet)");
+  } else {
+    observed.forEach((routeId, index) => {
+      const target = index + 1;
+      const now = currentPos.get(routeId) ?? 0;
+      const move = now === target ? "" : "   -> move to " + target;
+      lines.push(
+        "  " +
+          String(target).padStart(3) +
+          ". id " +
+          pad(routeId, 6) +
+          pad(nameOf(routeId), 32) +
+          "routes.json pos " +
+          pad(now, 4) +
+          move,
+      );
+    });
+  }
+
+  lines.push("", "## Current order (" + routes.length + " entries)");
+  routes.forEach((route, index) => {
+    const seen = observedPos.get(route.id);
+    const note = route.custom
+      ? seen
+        ? "custom, observed " + seen
+        : "custom, not entered yet"
+      : seen
+        ? "observed " + seen
+        : "not entered yet";
+    lines.push(
+      "  " +
+        String(index + 1).padStart(3) +
+        ". id " +
+        pad(route.id, 6) +
+        pad(localizeName(route.names, "de"), 32) +
+        pad(route.type, 8) +
+        note,
+    );
+  });
+
+  return { success: true, text: lines.join("\n") + "\n" };
 }
 
 // --- Rule presets ---------------------------------------------------------

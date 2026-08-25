@@ -189,6 +189,32 @@ export function RulesView({
     });
   }
 
+  function renderToggle(key: BooleanSettingKey) {
+    const isClauseChild = key === "staticsExemptFromClause";
+    const inactive = isClauseChild && !local.speciesClause;
+    return (
+      // The whole row is the switch. It used to be a 20x36px target sitting at
+      // the far end of the row.
+      <button
+        key={key}
+        type="button"
+        role="switch"
+        aria-checked={local[key]}
+        disabled={pending || inactive}
+        onClick={() => handleToggle(key)}
+        className={`flex w-full items-center justify-between gap-4 px-4 py-3 text-left transition-colors hover:bg-hover disabled:cursor-not-allowed ${
+          isClauseChild ? "pl-8" : ""
+        } ${inactive ? "opacity-50" : ""}`}
+      >
+        <span className="min-w-0">
+          <span className="block text-sm font-medium text-ink">{t.toggles[key].label}</span>
+          <span className="block text-xs text-ink-muted">{t.toggles[key].description}</span>
+        </span>
+        <SwitchTrack on={local[key]} />
+      </button>
+    );
+  }
+
   function handleEdit() {
     setDraft(markdown);
     setEditing(true);
@@ -264,36 +290,15 @@ export function RulesView({
         <div>
           <Section title={t.settingsHeading}>
             <Card padding="none" className="divide-y divide-line overflow-hidden">
-              {TOGGLE_ORDER.map((key) => {
-                const isClauseChild = key === "staticsExemptFromClause";
-                const inactive = isClauseChild && !local.speciesClause;
-                return (
-                  // The whole row is the switch now. It used to be a 20x36px
-                  // target sitting at the far end of the row.
-                  <button
-                    key={key}
-                    type="button"
-                    role="switch"
-                    aria-checked={local[key]}
-                    disabled={pending || inactive}
-                    onClick={() => handleToggle(key)}
-                    className={`flex w-full items-center justify-between gap-4 px-4 py-3 text-left transition-colors hover:bg-hover disabled:cursor-not-allowed ${
-                      isClauseChild ? "pl-8" : ""
-                    } ${inactive ? "opacity-50" : ""}`}
-                  >
-                    <span className="min-w-0">
-                      <span className="block text-sm font-medium text-ink">
-                        {t.toggles[key].label}
-                      </span>
-                      <span className="block text-xs text-ink-muted">
-                        {t.toggles[key].description}
-                      </span>
-                    </span>
-                    <SwitchTrack on={local[key]} />
-                  </button>
-                );
-              })}
+              {TOGGLE_ORDER.map(renderToggle)}
             </Card>
+          </Section>
+
+          {/* Its own section rather than a ninth row above: debugMode is not a
+              rule of the run, it is a maintenance switch for correcting a game
+              pack, and it has no business sitting among the clauses. */}
+          <Section title={t.debugHeading}>
+            <Card padding="none" className="overflow-hidden">{renderToggle("debugMode")}</Card>
           </Section>
 
           {mode === RunMode.SOULLINK && (

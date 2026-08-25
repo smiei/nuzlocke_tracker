@@ -24,6 +24,11 @@ export type RunSettings = {
   // Statics don't count towards / trigger the Species Clause (today's fixed
   // behavior). Off = statics are treated like regular routes by the clause.
   staticsExemptFromClause: boolean;
+  // Records the order routes are first entered and offers it as an export on
+  // the Encounter tab. Not a rule - a maintenance aid for correcting a game
+  // pack's routes.json order, off by default and expected to stay off once a
+  // pack is right. Deliberately per run, like the rules themselves.
+  debugMode: boolean;
   // Custom SoulLink player names (empty = fall back to the localized
   // "Player 1"/"Player 2"). Not a toggle - handled separately from the
   // boolean keys below.
@@ -41,6 +46,7 @@ export const DEFAULT_RUN_SETTINGS: RunSettings = {
   evolutionOverridesTimeBased: true,
   statics: true,
   staticsExemptFromClause: true,
+  debugMode: false,
   playerNames: { PLAYER1: "", PLAYER2: "" },
 };
 
@@ -88,6 +94,11 @@ export function parseRunSettings(json: string): RunSettings {
 // Max length of a RulePreset name, enforced by the action and the input.
 export const PRESET_NAME_MAX = 40;
 
+// Boolean settings a preset must NOT carry. debugMode is a maintenance switch,
+// not a rule: loading someone's ruleset should not silently turn the export UI
+// on (or off, mid-investigation).
+const PRESET_EXCLUDED_KEYS: (keyof RunSettings)[] = ["debugMode"];
+
 // Serialize just the boolean toggles, for storing in RulePreset.settingsJson.
 // playerNames is deliberately left out: it is the one part of a run's settings
 // that is about *that* run, so a preset carrying it would rename the players
@@ -96,6 +107,9 @@ export const PRESET_NAME_MAX = 40;
 // the run's own playerNames.
 export function serializePresetSettings(settings: RunSettings): string {
   const out: Record<string, boolean> = {};
-  for (const key of RUN_SETTING_KEYS) out[key] = settings[key] as boolean;
+  for (const key of RUN_SETTING_KEYS) {
+    if (PRESET_EXCLUDED_KEYS.includes(key)) continue;
+    out[key] = settings[key] as boolean;
+  }
   return JSON.stringify(out);
 }

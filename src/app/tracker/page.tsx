@@ -5,12 +5,12 @@ import {
   getMoves,
   getMoveTypeHistory,
   getMoveset,
-  getRoutes,
   getPokemonList,
   getPokemonForms,
 } from "@/lib/data";
 import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
+import { getRoutesForRun } from "@/lib/runRoutes";
 import { getLang } from "@/lib/i18n/getLang";
 import { TrackerView } from "@/components/TrackerView";
 import { CanonicalRun } from "@/components/CanonicalRun";
@@ -32,7 +32,7 @@ export default async function TrackerPage({
 
   const lang = await getLang();
   const game = getGameOrDefault(gameId);
-  const routes = getRoutes(gameId);
+  const routes = await getRoutesForRun(runId, gameId);
   const pokemonList = getPokemonList(game.dexLimit, game.generation);
   const encounters = await prisma.encounter.findMany({ where: { runId } });
 

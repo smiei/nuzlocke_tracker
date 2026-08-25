@@ -56,6 +56,8 @@ model Run {
   soulLinks        SoulLink[]
   encounters       Encounter[]
   levelCapProgress LevelCapProgress[]
+  customRoutes     CustomRoute[]
+  routeEntries     RouteEntry[]
 }
 
 // One SoulLink per (run, route), created once at least one player has a
@@ -160,4 +162,58 @@ model RulePreset {
   rulesMarkdown String   @default("")
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
+}
+
+// A location the user added by hand, for one run only. Game packs cannot
+// cover every group's house rules - somebody declares three more statics than
+// data/games/<gameId>/routes.json knows about - and editing the pack would
+// change it for every run that plays that game.
+//
+// `routeId` is what the merged route list exposes this under, and it is
+// ALWAYS NEGATIVE: pack ids are positive and must never be renumbered or
+// reused, so the two ranges can never collide. It is assigned per run
+// (-1, -2, ...) rather than derived from `id`, which is what lets a backup
+// restore it verbatim - every Encounter and SoulLink referring to it keeps
+// working without any id remapping on import.
+//
+// `afterRouteId` is the insert point in display order (the id of the route
+// this one follows, null = at the very top). Storing an anchor rather than an
+// index means the pack's own list can still be reordered underneath without
+// invalidating it.
+model CustomRoute {
+  id           Int      @id @default(autoincrement())
+  runId        Int
+  routeId      Int
+  // Single free-text name - unlike a pack route there is nothing to localize,
+  // so getRoutesForRun fans it out to every language.
+  name         String
+  // "route" | "static", matching RouteType in data.ts. A plain String rather
+  // than an enum: the values live in the JSON packs, not in the database.
+  type         String   @default("route")
+  afterRouteId Int?
+  createdAt    DateTime @default(now())
+  run          Run      @relation(fields: [runId], references: [id], onDelete: Cascade)
+
+  @@unique([runId, routeId])
+}
+
+// Debug aid: when a route was FIRST entered in this run, append-only.
+//
+// Encounter.createdAt almost answers this already, but clearEncounter deletes
+// the row, so fixing a typo would silently move that route to the end of the
+// order - which is exactly the thing this table exists to get right. Written
+// on every encounter save regardless of the run's debugMode setting, so the
+// data is already there whenever the setting is switched on; the setting only
+// controls whether the export UI is offered.
+model RouteEntry {
+  id      Int      @id @default(autoincrement())
+  runId   Int
+  routeId Int
+  // Backfilled from the earliest encounter on the route when the row is
+  // created, so switching this feature on mid-run does not stamp every
+  // existing route with today's date.
+  seenAt  DateTime @default(now())
+  run     Run      @relation(fields: [runId], references: [id], onDelete: Cascade)
+
+  @@unique([runId, routeId])
 }

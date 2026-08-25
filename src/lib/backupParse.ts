@@ -11,7 +11,10 @@ import { EncounterStatus, LinkStatus, Player, RunMode } from "@/generated/prisma
 // relationship that matters (Encounter -> SoulLink) is expressed via the
 // SoulLink's routeId, which is unique per run and stable across a round-trip.
 export const BACKUP_FORMAT = "nuzlocke-tracker-backup";
-export const BACKUP_VERSION = 1;
+// 2 added `customRoutes` and `routeEntries`. A v1 file still imports - both
+// arrays default to empty - and a v2 file read by an older build would only
+// lose those two, so the bump is informational rather than a gate.
+export const BACKUP_VERSION = 2;
 
 export type BackupSoulLink = {
   routeId: number;
@@ -45,6 +48,22 @@ export type BackupLevelCapProgress = {
   updatedAt: string;
 };
 
+export type BackupCustomRoute = {
+  // The negative id this route is exposed under. Restored verbatim, which is
+  // what keeps every Encounter/SoulLink routeId in the same file pointing at
+  // the right thing.
+  routeId: number;
+  name: string;
+  type: string;
+  afterRouteId: number | null;
+  createdAt: string;
+};
+
+export type BackupRouteEntry = {
+  routeId: number;
+  seenAt: string;
+};
+
 export type BackupRun = {
   name: string;
   mode: RunMode;
@@ -60,6 +79,9 @@ export type BackupRun = {
   soulLinks: BackupSoulLink[];
   encounters: BackupEncounter[];
   levelCapProgress: BackupLevelCapProgress[];
+  // Added in v2; absent in older files.
+  customRoutes: BackupCustomRoute[];
+  routeEntries: BackupRouteEntry[];
 };
 
 export type BackupFile = {
@@ -148,6 +170,26 @@ export function parseBackup(json: string): BackupFile | null {
             levelCapId: num(lc.levelCapId),
             defeated: lc.defeated === true,
             updatedAt: isoString(lc.updatedAt),
+          }))
+        : [],
+      customRoutes: Array.isArray(rawRun.customRoutes)
+        ? rawRun.customRoutes
+            .filter(isRecord)
+            // A custom route id is always negative; anything else in this
+            // array would collide with the game pack's own ids.
+            .filter((cr) => typeof cr.routeId === "number" && cr.routeId < 0)
+            .map((cr) => ({
+              routeId: num(cr.routeId),
+              name: typeof cr.name === "string" && cr.name.trim() ? cr.name : "Route",
+              type: cr.type === "static" ? "static" : "route",
+              afterRouteId: typeof cr.afterRouteId === "number" ? cr.afterRouteId : null,
+              createdAt: isoString(cr.createdAt),
+            }))
+        : [],
+      routeEntries: Array.isArray(rawRun.routeEntries)
+        ? rawRun.routeEntries.filter(isRecord).map((re) => ({
+            routeId: num(re.routeId),
+            seenAt: isoString(re.seenAt),
           }))
         : [],
     });

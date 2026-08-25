@@ -70,6 +70,9 @@ export type Route = {
   // Only reachable after the Elite Four (Sevii Islands 4-7, Cerulean Cave).
   // The Encounter tab collapses these behind a "post-game" toggle by default.
   postgame?: boolean;
+  // Set only by getRoutesForRun for a user-added route (negative id). Pack
+  // JSONs never carry it, so `custom` absent === "comes from the game pack".
+  custom?: boolean;
 };
 
 export type PokemonStats = {

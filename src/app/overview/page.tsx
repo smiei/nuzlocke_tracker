@@ -11,8 +11,6 @@ import {
   getPokemonById,
   getPokemonList,
   getPokemonForms,
-  getRouteById,
-  getRoutes,
 } from "@/lib/data";
 import { getTypesForGeneration, teamOffensiveCoverage } from "@/lib/effectiveness";
 import { attackTypesAtLevel } from "@/lib/learnset";
@@ -20,6 +18,7 @@ import { maxEvolvedSumme } from "@/lib/evolutions";
 import { computeLevelCapProgress, computeRouteProgress, eliteFourIndex } from "@/lib/progress";
 import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
+import { getRoutesForRun } from "@/lib/runRoutes";
 import { getLang } from "@/lib/i18n/getLang";
 import { localizeName, pokemonName, routeName } from "@/lib/i18n/localize";
 import { displayNameWithForm, movepoolId } from "@/lib/forms";
@@ -74,7 +73,9 @@ export default async function OverviewPage({
   // frozen while the array order is the display order and gets reshuffled, so
   // sorting by id would list the Memorial in a stale order (see the same note
   // in links/page.tsx). Routes no longer in the pack sort last.
-  const routeOrder = new Map(getRoutes(gameId).map((r, i) => [r.id, i]));
+  const routes = await getRoutesForRun(runId, gameId);
+  const routeById = new Map(routes.map((route) => [route.id, route]));
+  const routeOrder = new Map(routes.map((r, i) => [r.id, i]));
   const soulLinks = (
     await prisma.soulLink.findMany({
       where: { runId },
@@ -140,7 +141,7 @@ export default async function OverviewPage({
   // Progress bars (Encounter tab's + Journey tab's), mirrored at the top of
   // the Overview tab.
   const routeProgress = computeRouteProgress(
-    getRoutes(gameId),
+    routes,
     allEncounters,
     mode === RunMode.CLASSIC,
     settings.statics,
@@ -195,7 +196,7 @@ export default async function OverviewPage({
         if (link.deathPlayer) caused.set(link.deathPlayer, (caused.get(link.deathPlayer) ?? 0) + 1);
         else unattributedDeaths++;
       }
-      const route = getRouteById(gameId, link.routeId);
+      const route = routeById.get(link.routeId);
       memorial.push({
         soulLinkId: link.id,
         routeName: route ? routeName(route, lang) : `Route #${link.routeId}`,

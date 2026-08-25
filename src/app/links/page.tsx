@@ -1,7 +1,6 @@
 import {
   getEffectiveness,
   getGameOrDefault,
-  getRouteById,
   getPokemonById,
   getPokemonList,
   getEvolutionById,
@@ -10,9 +9,9 @@ import {
   getMoveTypeHistory,
   getMoveset,
   getLevelCaps,
-  getRoutes,
   getPokemonForms,
 } from "@/lib/data";
+import { getRoutesForRun } from "@/lib/runRoutes";
 import { EncounterStatus, Player, RunMode } from "@/generated/prisma/client";
 import { SpriteSetProvider } from "@/components/SpriteSetProvider";
 import { CanonicalRun } from "@/components/CanonicalRun";
@@ -99,11 +98,16 @@ export default async function LinksPage({
     .at(-1);
   const allowedLevel = lastDefeatedCap?.max_level != null ? lastDefeatedCap.max_level - 2 : 0;
 
+  // One lookup table for both the name and the sort below, and it resolves
+  // the run's own added routes as well as the pack's.
+  const routes = await getRoutesForRun(runId, gameId);
+  const routeById = new Map(routes.map((route) => [route.id, route]));
+
   const views: SoulLinkView[] = soulLinks.map((link) => ({
     id: link.id,
     routeId: link.routeId,
     routeName: (() => {
-      const route = getRouteById(gameId, link.routeId);
+      const route = routeById.get(link.routeId);
       return route ? routeName(route, lang) : `Route #${link.routeId}`;
     })(),
     status: link.status,
@@ -185,7 +189,7 @@ export default async function LinksPage({
   // reshuffled (FireRed's list was reordered), so sorting by id replays
   // whatever order the pack happened to have when the ids were handed out.
   // Routes no longer in the pack sort last rather than to the front.
-  const routeOrder = new Map(getRoutes(gameId).map((r, i) => [r.id, i]));
+  const routeOrder = new Map(routes.map((r, i) => [r.id, i]));
   views.sort((a, b) => {
     if (a.status !== b.status) return a.status === "DEAD" ? 1 : -1;
     return (

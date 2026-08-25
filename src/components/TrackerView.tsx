@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import type { Route, Pokemon } from "@/lib/data";
 import type { Encounter, RunMode } from "@/generated/prisma/client";
 import { EncounterStatus, Player } from "@/generated/prisma/enums";
@@ -8,7 +8,12 @@ import type { Lang } from "@/lib/i18n/dictionary";
 import { translations } from "@/lib/i18n/dictionary";
 import { routeName } from "@/lib/i18n/localize";
 import { isRouteDone, computeRouteProgress } from "@/lib/progress";
+import { exportRouteOrder } from "@/lib/actions";
+import { formatActionError } from "@/lib/actionErrors";
 import { EncounterEditor } from "@/components/EncounterEditor";
+import { CustomRoutesDialog } from "@/components/CustomRoutesDialog";
+import { DebugOrderDialog } from "@/components/DebugOrderDialog";
+import { useToast } from "@/components/ui/ToastProvider";
 import { ProgressBar } from "@/components/ProgressBar";
 import { usePlayerLabel } from "@/components/PlayerNamesProvider";
 import type { RunSettings } from "@/lib/runSettings";
@@ -50,6 +55,34 @@ export function TrackerView({
   // by deferring the save - which in turn needed a whole draft-broadcast
   // mechanism so the other player still saw the in-progress pick. Both are gone.
   const [lastTouchedRouteId, setLastTouchedRouteId] = useState<number | null>(null);
+  const [customOpen, setCustomOpen] = useState(false);
+  // The report is fetched before the dialog opens rather than inside it, so
+  // the dialog needs no loading state and no effect (which would land on the
+  // set-state-in-effect lint baseline).
+  const [orderText, setOrderText] = useState<string | null>(null);
+  const [exporting, startExport] = useTransition();
+  const toast = useToast();
+
+  // Every route in display order, for the "insert after" picker - statics
+  // included, since an added location may well belong after one.
+  const routeOptions = routes.map((route) => ({ id: route.id, name: routeName(route, lang) }));
+  const customRoutes = routes
+    .filter((route) => route.custom)
+    .map((route) => ({
+      id: route.id,
+      name: routeName(route, lang),
+      // Deleting a custom route takes its encounters with it, so the
+      // confirmation says how many.
+      encounterCount: encounters.filter((e) => e.routeId === route.id).length,
+    }));
+
+  function handleExportOrder() {
+    startExport(async () => {
+      const result = await exportRouteOrder(runId);
+      if (result.success) setOrderText(result.text);
+      else toast.error(formatActionError(result.error, lang));
+    });
+  }
 
   // "statics" rule off = static locations aren't tracked at all. The full
   // `routes` array still goes to the editors below - it's their lookup table
@@ -166,7 +199,7 @@ export function TrackerView({
   return (
     <div>
       <PageHeader title={tTracker.heading}>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <Button
             size="sm"
             variant={openOnly ? "primary" : "secondary"}
@@ -176,6 +209,14 @@ export function TrackerView({
           >
             {tTracker.openOnly}
           </Button>
+          <Button size="sm" onClick={() => setCustomOpen(true)}>
+            {tTracker.custom.manage}
+          </Button>
+          {settings.debugMode && (
+            <Button size="sm" loading={exporting} onClick={handleExportOrder}>
+              {tTracker.debug.export}
+            </Button>
+          )}
           <ProgressBar
             done={progress.done}
             total={progress.total}
@@ -184,6 +225,24 @@ export function TrackerView({
           />
         </div>
       </PageHeader>
+
+      <CustomRoutesDialog
+        open={customOpen}
+        onClose={() => setCustomOpen(false)}
+        runId={runId}
+        lang={lang}
+        routeOptions={routeOptions}
+        customRoutes={customRoutes}
+      />
+      {orderText !== null && (
+        <DebugOrderDialog
+          open
+          onClose={() => setOrderText(null)}
+          lang={lang}
+          text={orderText}
+          filename={`encounter-order-run-${runId}.txt`}
+        />
+      )}
 
       {visible.length === 0 ? (
         // "Open only" with everything done used to leave an empty bordered

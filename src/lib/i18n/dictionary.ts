@@ -114,6 +114,36 @@ const de = {
     FLED: "Geflohen",
   },
   tracker: {
+    custom: {
+      manage: "Eigene Routen",
+      title: "Eigene Routen",
+      nameLabel: "Name",
+      namePlaceholder: "z. B. Safari-Zone (Extra)",
+      typeLabel: "Art",
+      typeRoute: "Route",
+      typeStatic: "Static",
+      positionLabel: "Einfügen nach",
+      positionTop: "(ganz oben)",
+      add: "Hinzufügen",
+      existing: "Eigene Routen in diesem Run",
+      none: "Noch keine eigenen Routen.",
+      hint: "Zählt im Fortschrittsbalken mit und gilt nur für diesen Run.",
+      delete: "Löschen",
+      deleteConfirm: (n: number) =>
+        n === 0 ? "Wirklich löschen?" : `Wirklich löschen? ${n} Encounter gehen mit.`,
+      deleteYes: "Ja, löschen",
+      added: (name: string) => `„${name}“ hinzugefügt.`,
+      deleted: (name: string) => `„${name}“ gelöscht.`,
+    },
+    debug: {
+      export: "Reihenfolge exportieren",
+      title: "Encounter-Reihenfolge",
+      hint: "Zum Korrigieren der routes.json des Spielpakets – Text kopieren und an Claude Code schicken.",
+      copy: "Kopieren",
+      copied: "Kopiert.",
+      copyFailed: "Kopieren nicht möglich – Text bitte von Hand markieren.",
+      download: "Als Datei speichern",
+    },
     heading: "Encounter",
     searchPlaceholder: "Pokémon suchen...",
     noResults: "Keine Treffer",
@@ -242,6 +272,7 @@ const de = {
       "⚠ = kritische Schwäche: Der Angriffstyp trifft mindestens die Hälfte des Teams effektiv, ohne dass jemand resistiert.",
   },
   rules: {
+    debugHeading: "Debug",
     heading: "Regeln",
     edit: "Bearbeiten",
     save: "Speichern",
@@ -279,6 +310,11 @@ const de = {
     showNotes: "Einblenden",
     hideNotes: "Ausblenden",
     toggles: {
+      debugMode: {
+        label: "Debug: Encounter-Reihenfolge aufzeichnen",
+        description:
+          "Blendet im Encounter-Tab einen Export der Reihenfolge ein, in der Routen eingetragen wurden – zum Korrigieren der routes.json eines Spielpakets. Aufgezeichnet wird immer, der Schalter blendet nur den Export ein.",
+      },
       speciesClause: {
         label: "Species Clause",
         description:
@@ -608,6 +644,36 @@ const en: Dictionary = {
     FLED: "Fled",
   },
   tracker: {
+    custom: {
+      manage: "Custom routes",
+      title: "Custom routes",
+      nameLabel: "Name",
+      namePlaceholder: "e.g. Safari Zone (extra)",
+      typeLabel: "Kind",
+      typeRoute: "Route",
+      typeStatic: "Static",
+      positionLabel: "Insert after",
+      positionTop: "(at the very top)",
+      add: "Add",
+      existing: "Custom routes in this run",
+      none: "No custom routes yet.",
+      hint: "Counts towards the progress bar and applies to this run only.",
+      delete: "Delete",
+      deleteConfirm: (n: number) =>
+        n === 0 ? "Really delete?" : `Really delete? ${n} encounters go with it.`,
+      deleteYes: "Yes, delete",
+      added: (name: string) => `“${name}” added.`,
+      deleted: (name: string) => `“${name}” deleted.`,
+    },
+    debug: {
+      export: "Export order",
+      title: "Encounter order",
+      hint: "For correcting the game pack’s routes.json – copy the text and hand it to Claude Code.",
+      copy: "Copy",
+      copied: "Copied.",
+      copyFailed: "Could not copy – please select the text by hand.",
+      download: "Save as file",
+    },
     heading: "Encounter",
     searchPlaceholder: "Search Pokémon...",
     noResults: "No matches",
@@ -735,6 +801,7 @@ const en: Dictionary = {
       "⚠ = critical weakness: this attack type hits at least half the team super-effectively with nobody resisting it.",
   },
   rules: {
+    debugHeading: "Debug",
     heading: "Rules",
     edit: "Edit",
     save: "Save",
@@ -771,6 +838,11 @@ const en: Dictionary = {
     showNotes: "Show",
     hideNotes: "Hide",
     toggles: {
+      debugMode: {
+        label: "Debug: record encounter order",
+        description:
+          "Shows an export of the order routes were entered in on the Encounter tab – for correcting a game pack’s routes.json. The order is always recorded; this only reveals the export.",
+      },
       speciesClause: {
         label: "Species Clause",
         description:
@@ -1099,6 +1171,38 @@ const fr: Dictionary = {
     FLED: "Enfui",
   },
   tracker: {
+    custom: {
+      manage: "Routes personnalisées",
+      title: "Routes personnalisées",
+      nameLabel: "Nom",
+      namePlaceholder: "p. ex. Parc Safari (suppl.)",
+      typeLabel: "Type",
+      typeRoute: "Route",
+      typeStatic: "Statique",
+      positionLabel: "Insérer après",
+      positionTop: "(tout en haut)",
+      add: "Ajouter",
+      existing: "Routes personnalisées de ce run",
+      none: "Aucune route personnalisée.",
+      hint: "Compte dans la barre de progression et ne vaut que pour ce run.",
+      delete: "Supprimer",
+      deleteConfirm: (n: number) =>
+        n === 0
+          ? "Vraiment supprimer ?"
+          : `Vraiment supprimer ? ${n} rencontres seront supprimées avec.`,
+      deleteYes: "Oui, supprimer",
+      added: (name: string) => `« ${name} » ajouté.`,
+      deleted: (name: string) => `« ${name} » supprimé.`,
+    },
+    debug: {
+      export: "Exporter l’ordre",
+      title: "Ordre des rencontres",
+      hint: "Pour corriger le routes.json du pack – copiez le texte et donnez-le à Claude Code.",
+      copy: "Copier",
+      copied: "Copié.",
+      copyFailed: "Copie impossible – sélectionnez le texte à la main.",
+      download: "Enregistrer comme fichier",
+    },
     heading: "Rencontres",
     searchPlaceholder: "Rechercher un Pokémon...",
     noResults: "Aucun résultat",
@@ -1228,6 +1332,7 @@ const fr: Dictionary = {
       "⚠ = faiblesse critique : ce type d'attaque touche au moins la moitié de l'équipe de façon super efficace sans que personne n'y résiste.",
   },
   rules: {
+    debugHeading: "Débogage",
     heading: "Règles",
     edit: "Modifier",
     save: "Enregistrer",
@@ -1264,6 +1369,11 @@ const fr: Dictionary = {
     showNotes: "Afficher",
     hideNotes: "Masquer",
     toggles: {
+      debugMode: {
+        label: "Débogage : enregistrer l’ordre des rencontres",
+        description:
+          "Affiche dans l’onglet Rencontres un export de l’ordre dans lequel les routes ont été saisies – pour corriger le routes.json d’un pack. L’ordre est toujours enregistré ; ceci ne fait qu’afficher l’export.",
+      },
       speciesClause: {
         label: "Species Clause",
         description:
@@ -1592,6 +1702,38 @@ const es: Dictionary = {
     FLED: "Huido",
   },
   tracker: {
+    custom: {
+      manage: "Rutas propias",
+      title: "Rutas propias",
+      nameLabel: "Nombre",
+      namePlaceholder: "p. ej. Zona Safari (extra)",
+      typeLabel: "Tipo",
+      typeRoute: "Ruta",
+      typeStatic: "Estático",
+      positionLabel: "Insertar después de",
+      positionTop: "(al principio)",
+      add: "Añadir",
+      existing: "Rutas propias de este run",
+      none: "Aún no hay rutas propias.",
+      hint: "Cuenta en la barra de progreso y solo vale para este run.",
+      delete: "Eliminar",
+      deleteConfirm: (n: number) =>
+        n === 0
+          ? "¿Eliminar de verdad?"
+          : `¿Eliminar de verdad? Se borrarán ${n} encuentros con ella.`,
+      deleteYes: "Sí, eliminar",
+      added: (name: string) => `«${name}» añadida.`,
+      deleted: (name: string) => `«${name}» eliminada.`,
+    },
+    debug: {
+      export: "Exportar orden",
+      title: "Orden de encuentros",
+      hint: "Para corregir el routes.json del paquete: copia el texto y dáselo a Claude Code.",
+      copy: "Copiar",
+      copied: "Copiado.",
+      copyFailed: "No se pudo copiar: selecciona el texto a mano.",
+      download: "Guardar como archivo",
+    },
     heading: "Encuentros",
     searchPlaceholder: "Buscar Pokémon...",
     noResults: "Sin resultados",
@@ -1721,6 +1863,7 @@ const es: Dictionary = {
       "⚠ = debilidad crítica: este tipo de ataque golpea de forma supereficaz al menos a la mitad del equipo sin que nadie lo resista.",
   },
   rules: {
+    debugHeading: "Depuración",
     heading: "Reglas",
     edit: "Editar",
     save: "Guardar",
@@ -1757,6 +1900,11 @@ const es: Dictionary = {
     showNotes: "Mostrar",
     hideNotes: "Ocultar",
     toggles: {
+      debugMode: {
+        label: "Depuración: registrar el orden de encuentros",
+        description:
+          "Muestra en la pestaña Encuentros una exportación del orden en que se introdujeron las rutas, para corregir el routes.json de un paquete. El orden siempre se registra; esto solo muestra la exportación.",
+      },
       speciesClause: {
         label: "Species Clause",
         description:
@@ -2085,6 +2233,38 @@ const it: Dictionary = {
     FLED: "Fuggito",
   },
   tracker: {
+    custom: {
+      manage: "Percorsi personali",
+      title: "Percorsi personali",
+      nameLabel: "Nome",
+      namePlaceholder: "es. Zona Safari (extra)",
+      typeLabel: "Tipo",
+      typeRoute: "Percorso",
+      typeStatic: "Statico",
+      positionLabel: "Inserisci dopo",
+      positionTop: "(all’inizio)",
+      add: "Aggiungi",
+      existing: "Percorsi personali di questo run",
+      none: "Nessun percorso personale.",
+      hint: "Conta nella barra di avanzamento e vale solo per questo run.",
+      delete: "Elimina",
+      deleteConfirm: (n: number) =>
+        n === 0
+          ? "Eliminare davvero?"
+          : `Eliminare davvero? ${n} incontri verranno eliminati con esso.`,
+      deleteYes: "Sì, elimina",
+      added: (name: string) => `«${name}» aggiunto.`,
+      deleted: (name: string) => `«${name}» eliminato.`,
+    },
+    debug: {
+      export: "Esporta ordine",
+      title: "Ordine degli incontri",
+      hint: "Per correggere il routes.json del pacchetto: copia il testo e passalo a Claude Code.",
+      copy: "Copia",
+      copied: "Copiato.",
+      copyFailed: "Copia non riuscita: seleziona il testo a mano.",
+      download: "Salva come file",
+    },
     heading: "Incontri",
     searchPlaceholder: "Cerca Pokémon...",
     noResults: "Nessun risultato",
@@ -2214,6 +2394,7 @@ const it: Dictionary = {
       "⚠ = debolezza critica: questo tipo d'attacco colpisce in modo superefficace almeno metà squadra senza che nessuno resista.",
   },
   rules: {
+    debugHeading: "Debug",
     heading: "Regole",
     edit: "Modifica",
     save: "Salva",
@@ -2250,6 +2431,11 @@ const it: Dictionary = {
     showNotes: "Mostra",
     hideNotes: "Nascondi",
     toggles: {
+      debugMode: {
+        label: "Debug: registra l’ordine degli incontri",
+        description:
+          "Mostra nella scheda Incontri un’esportazione dell’ordine in cui i percorsi sono stati inseriti, per correggere il routes.json di un pacchetto. L’ordine viene sempre registrato; questo mostra solo l’esportazione.",
+      },
       speciesClause: {
         label: "Species Clause",
         description:
