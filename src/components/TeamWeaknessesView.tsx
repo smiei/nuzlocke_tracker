@@ -26,13 +26,12 @@ export type TeamMember = {
 // shines through, and 2x (orange) is clearly distinct from both 4x (red)
 // and 0x (black).
 function cellStyle(multiplier: number): { text: string; className: string } {
-  if (multiplier === 4) return { text: "4", className: "bg-red-600 text-white" };
-  if (multiplier === 2) return { text: "2", className: "bg-orange-500 text-white" };
-  if (multiplier === 0.5) return { text: "½", className: "bg-green-500 text-white" };
-  if (multiplier === 0.25) return { text: "¼", className: "bg-green-700 text-white" };
-  if (multiplier === 0)
-    return { text: "0", className: "bg-zinc-900 text-zinc-300 dark:bg-black dark:text-zinc-400" };
-  return { text: "", className: "bg-zinc-100 dark:bg-zinc-800" };
+  if (multiplier === 4) return { text: "4", className: "bg-eff-bad text-white" };
+  if (multiplier === 2) return { text: "2", className: "bg-eff-bad-mild text-white" };
+  if (multiplier === 0.5) return { text: "½", className: "bg-eff-good text-white" };
+  if (multiplier === 0.25) return { text: "¼", className: "bg-eff-good-deep text-white" };
+  if (multiplier === 0) return { text: "0", className: "bg-eff-none text-eff-none-ink" };
+  return { text: "", className: "bg-sunken" };
 }
 
 // Larger stand-alone type badge (the shared TypeBadge is sized for compact
@@ -40,7 +39,7 @@ function cellStyle(multiplier: number): { text: string; className: string } {
 function BigTypeBadge({ type, lang }: { type: string; lang: Lang }) {
   return (
     <span
-      className="inline-block rounded px-1.5 py-0.5 text-xs font-medium text-white sm:px-2.5 sm:py-1 sm:text-sm"
+      className="inline-block rounded-md px-1.5 py-0.5 text-xs font-medium text-white sm:px-2.5 sm:py-1 sm:text-sm"
       style={{ backgroundColor: TYPE_COLORS[type] ?? "#777" }}
     >
       {TYPE_LABELS[lang][type] ?? type}
@@ -83,11 +82,41 @@ function TeamTable({
   );
 
   return (
-    <div className="overflow-x-auto">
+    <>
+      {/* Phone: one line per attack type. A 17 x 6 grid of multipliers does not
+          survive a 390px screen, and the question there is "what threatens the
+          team", which the two counts answer on their own. */}
+      <ul className="flex flex-col gap-1 md:hidden">
+        {rows.map((row) => (
+          <li
+            key={row.attack}
+            className={`flex items-center gap-2 rounded-md px-2 py-2 ${
+              row.critical ? "bg-danger-bg" : ""
+            }`}
+          >
+            {row.critical && (
+              <span className="text-danger" title={t.criticalHint}>
+                ⚠
+              </span>
+            )}
+            <BigTypeBadge type={row.attack} lang={lang} />
+            <span className="ml-auto flex items-center gap-3 text-sm tabular-nums">
+              <span className={row.weak > 0 ? "font-semibold text-danger" : "text-ink-subtle"}>
+                {row.weak} {t.weakHeader}
+              </span>
+              <span className={row.resist > 0 ? "font-semibold text-success" : "text-ink-subtle"}>
+                {row.resist} {t.resistHeader}
+              </span>
+            </span>
+          </li>
+        ))}
+      </ul>
+
+      <div className="hidden overflow-x-auto md:block">
       <table className="border-separate border-spacing-0.5 sm:border-spacing-1">
         <thead>
           <tr>
-            <th className="pr-1.5 text-left text-[10px] font-medium text-zinc-400 sm:pr-3 sm:text-xs dark:text-zinc-500">
+            <th className="pr-1.5 text-left text-xs font-medium text-ink-subtle sm:pr-3">
               {t.attackType}
             </th>
             {members.map((m) => (
@@ -116,10 +145,10 @@ function TeamTable({
                 )}
               </th>
             ))}
-            <th className="px-1 text-center text-[10px] font-medium text-red-500 sm:px-3 sm:text-xs dark:text-red-400">
+            <th className="px-1 text-center text-xs font-medium text-danger sm:px-3">
               {t.weakHeader}
             </th>
-            <th className="px-1 text-center text-[10px] font-medium text-green-600 sm:px-3 sm:text-xs dark:text-green-400">
+            <th className="px-1 text-center text-xs font-medium text-success sm:px-3">
               {t.resistHeader}
             </th>
           </tr>
@@ -132,7 +161,7 @@ function TeamTable({
                     a <tr> bg bleeds through the border-spacing gaps. */}
                 {row.critical && (
                   <span
-                    className="mr-1 text-xs text-red-500 sm:mr-1.5 sm:text-base dark:text-red-400"
+                    className="mr-1 text-xs text-danger sm:mr-1.5 sm:text-base"
                     title={t.criticalHint}
                   >
                     ⚠
@@ -155,10 +184,10 @@ function TeamTable({
                 <span
                   className={`inline-block min-w-[1.5rem] rounded px-1 py-0.5 text-sm font-semibold tabular-nums sm:min-w-[2rem] sm:rounded-md sm:px-2 sm:py-1 sm:text-lg ${
                     row.critical
-                      ? "bg-red-600 text-white"
+                      ? "bg-eff-bad text-white"
                       : row.weak > 0
-                        ? "text-red-500 dark:text-red-400"
-                        : "text-zinc-300 dark:text-zinc-700"
+                        ? "text-danger"
+                        : "text-ink-subtle"
                   }`}
                 >
                   {row.weak}
@@ -166,9 +195,7 @@ function TeamTable({
               </td>
               <td
                 className={`px-1 text-center text-sm font-semibold tabular-nums sm:px-3 sm:text-lg ${
-                  row.resist > 0
-                    ? "text-green-600 dark:text-green-400"
-                    : "text-zinc-300 dark:text-zinc-700"
+                  row.resist > 0 ? "text-success" : "text-ink-subtle"
                 }`}
               >
                 {row.resist}
@@ -177,7 +204,8 @@ function TeamTable({
           ))}
         </tbody>
       </table>
-    </div>
+      </div>
+    </>
   );
 }
 
@@ -201,9 +229,11 @@ export function TeamWeaknessesView({
 
   return (
     <div>
-      <h2 className="mb-4 text-xl font-semibold">{t.weaknesses.heading}</h2>
+      {/* h3, not the page-title-sized h2 it used to be: this block sits
+          inside the Overview's "Team coverage" section. */}
+      <h3 className="mb-4 text-sm font-semibold text-ink">{t.weaknesses.heading}</h3>
       {!hasAnyMembers ? (
-        <p className="text-zinc-500 dark:text-zinc-400">{t.weaknesses.empty}</p>
+        <p className="text-sm text-ink-muted">{t.weaknesses.empty}</p>
       ) : (
         <>
           <div className="flex flex-col gap-8 xl:flex-row xl:gap-12">
@@ -212,9 +242,9 @@ export function TeamWeaknessesView({
                 team.members.length > 0 && (
                   <section key={team.player}>
                     {mode !== "CLASSIC" && (
-                      <h3 className="mb-2 text-sm font-semibold text-zinc-500 dark:text-zinc-400">
+                      <h4 className="mb-2 text-sm font-semibold text-ink-muted">
                         {playerLabel(team.player)}
-                      </h3>
+                      </h4>
                     )}
                     <TeamTable
                       members={team.members}
@@ -226,7 +256,7 @@ export function TeamWeaknessesView({
                 ),
             )}
           </div>
-          <p className="mt-5 max-w-2xl text-sm text-zinc-400 dark:text-zinc-500">
+          <p className="mt-5 max-w-prose text-sm text-ink-subtle">
             {t.weaknesses.criticalHint}
           </p>
         </>

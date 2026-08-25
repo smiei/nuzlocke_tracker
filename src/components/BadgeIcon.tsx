@@ -23,7 +23,7 @@ export function BadgeIcon({
     return (
       <div
         style={{ width: size, height: size }}
-        className="flex shrink-0 items-center justify-center rounded-full bg-zinc-100 text-[10px] text-zinc-400 dark:bg-zinc-800 dark:text-zinc-600"
+        className="flex shrink-0 items-center justify-center rounded-full bg-sunken text-xs text-ink-subtle"
         title={label}
       >
         ?

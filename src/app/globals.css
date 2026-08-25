@@ -81,7 +81,44 @@
   --focus: #38bdf8;
 }
 
+/* ---------------------------------------------------------------------------
+   Type-effectiveness fills.
+
+   Deliberately NOT the semantic --success / --danger tokens. Those are TEXT
+   colours: light pastels in dark mode, so that they read on a dark ground. Fill
+   a 32px cell with one and it turns to mush - especially in the type matrix,
+   where the columns that do not concern the current opponent are dimmed to 25%
+   and a pastel at quarter opacity is indistinguishable from the background.
+
+   These are saturated mid-tones instead, one value for both themes, always
+   carrying white text: a mid-tone reads on white and on near-black alike.
+   Shared by the full type matrix, the team matchup and the team weaknesses
+   table, so the three agree on what a multiplier looks like.
+   --------------------------------------------------------------------------- */
+:root {
+  --eff-good: #22c55e; /* resists / hits hard */
+  --eff-good-deep: #15803d; /* the stronger step: 1/4x */
+  --eff-bad: #dc2626; /* weak to / barely scratches */
+  --eff-bad-mild: #f97316; /* the milder step: 2x taken */
+  --eff-none: #18181b; /* immune */
+  --eff-none-ink: #e4e4e7;
+}
+
+.dark {
+  /* Only the immune cell needs a per-theme value - it is a neutral, and on a
+     near-black page it has to go blacker still to read as a cell at all. */
+  --eff-none: #000000;
+  --eff-none-ink: #a1a1aa;
+}
+
 @theme inline {
+  --color-eff-good: var(--eff-good);
+  --color-eff-good-deep: var(--eff-good-deep);
+  --color-eff-bad: var(--eff-bad);
+  --color-eff-bad-mild: var(--eff-bad-mild);
+  --color-eff-none: var(--eff-none);
+  --color-eff-none-ink: var(--eff-none-ink);
+
   --color-canvas: var(--canvas);
   --color-panel: var(--panel);
   --color-sunken: var(--sunken);

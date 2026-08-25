@@ -27,13 +27,13 @@ export type OpenSlot = { routeId: number; player: Player; routeName: string };
 
 
 const inputClass =
-  "w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:focus:border-zinc-400";
-const labelClass = "mb-1 block text-xs font-medium text-zinc-500 dark:text-zinc-400";
+  "h-11 w-full rounded-md border border-line-strong bg-panel px-3 text-sm text-ink placeholder:text-ink-subtle disabled:cursor-not-allowed disabled:opacity-50";
+const labelClass = "mb-1 block text-xs font-medium text-ink-muted";
 
 function hpBarColor(hpPercent: number): string {
-  if (hpPercent > 50) return "bg-green-500";
-  if (hpPercent > 20) return "bg-amber-400";
-  return "bg-red-500";
+  if (hpPercent > 50) return "bg-success";
+  if (hpPercent > 20) return "bg-warning";
+  return "bg-danger";
 }
 
 // Item sprites live in /public/ball-sprites (downloaded via
@@ -85,16 +85,16 @@ function BallPicker({
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="flex w-full items-center justify-between gap-2 rounded-md border border-zinc-300 bg-white px-3 py-1.5 text-left text-sm dark:border-zinc-700 dark:bg-zinc-900"
+        className="flex h-11 w-full items-center justify-between gap-2 rounded-md border border-line-strong bg-panel px-3 text-left text-sm text-ink transition-colors hover:bg-hover"
       >
         <span className="flex min-w-0 items-center gap-2">
           <BallSprite ball={ball} />
           <span className="truncate">{labels[ball]}</span>
         </span>
-        <span className="shrink-0 text-xs text-zinc-400">▾</span>
+        <span aria-hidden className="shrink-0 text-xs text-ink-subtle">▾</span>
       </button>
       {open && (
-        <ul className="absolute z-10 mt-1 max-h-72 w-full overflow-y-auto rounded-md border border-zinc-200 bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
+        <ul className="absolute z-10 mt-1 max-h-72 w-full overflow-y-auto rounded-lg border border-line bg-panel shadow-lg">
           {ballIds.map((id) => (
             <li key={id}>
               <button
@@ -103,8 +103,8 @@ function BallPicker({
                   setOpen(false);
                   onPick(id);
                 }}
-                className={`flex w-full items-center gap-2 px-2 py-1.5 text-left text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800 ${
-                  id === ball ? "bg-zinc-100 dark:bg-zinc-800" : ""
+                className={`flex h-10 w-full items-center gap-2 px-3 text-left text-sm text-ink hover:bg-hover ${
+                  id === ball ? "bg-hover font-medium" : ""
                 }`}
               >
                 <BallSprite ball={id} />
@@ -192,7 +192,7 @@ function QuickCatchPanel({
         value={routeId}
         disabled={disabled || pending || slots.length === 0}
         onChange={(e) => setRouteId(e.target.value ? Number(e.target.value) : "")}
-        className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-zinc-500 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-900 dark:focus:border-zinc-400"
+        className="h-11 w-full rounded-md border border-line-strong bg-panel px-3 text-sm text-ink disabled:cursor-not-allowed disabled:opacity-50"
       >
         <option value="">{t.selectRoute}</option>
         {slots.map((s) => (
@@ -212,8 +212,8 @@ function QuickCatchPanel({
               title={tTracker.shinyToggle}
               className={`rounded border px-1.5 py-1 text-xs transition-colors disabled:opacity-50 ${
                 shiny
-                  ? "border-amber-400 bg-amber-50 text-amber-600 dark:border-amber-600 dark:bg-amber-950/40 dark:text-amber-300"
-                  : "border-zinc-200 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:border-zinc-700 dark:text-zinc-500 dark:hover:bg-zinc-800"
+                  ? "border-warning-line bg-warning-bg text-warning"
+                  : "border-line text-ink-subtle hover:bg-hover hover:text-ink"
               }`}
             >
               ✨
@@ -228,14 +228,14 @@ function QuickCatchPanel({
               placeholder={tTracker.nicknamePlaceholder}
               aria-label={tTracker.nicknameLabel}
               onChange={(e) => setNickname(e.target.value)}
-              className="w-28 rounded border border-zinc-300 bg-white px-1.5 py-1 text-xs outline-none placeholder:text-zinc-400 focus:border-zinc-500 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-950 dark:placeholder:text-zinc-600 dark:focus:border-zinc-400"
+              className="h-10 w-28 rounded-md border border-line-strong bg-panel px-3 text-sm text-ink placeholder:text-ink-subtle disabled:cursor-not-allowed disabled:opacity-50"
             />
           )}
           <button
             type="button"
             disabled={pending}
             onClick={handleConfirm}
-            className="rounded-md border border-emerald-400 bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700 transition-colors hover:bg-emerald-100 disabled:opacity-50 dark:border-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300"
+            className="inline-flex h-10 shrink-0 items-center rounded-md border border-success-line bg-success-bg px-3 text-sm font-medium text-success transition-colors hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {t.confirmCatch}
           </button>
@@ -367,7 +367,7 @@ export function CatchCardBody({
         <div className="col-span-2">
           <label className={labelClass}>
             {t.hpLabel}:{" "}
-            <span className="font-semibold text-zinc-700 dark:text-zinc-200">{hpPercent}%</span>
+            <span className="font-semibold text-ink">{hpPercent}%</span>
           </label>
           <input
             type="range"
@@ -375,9 +375,9 @@ export function CatchCardBody({
             max={100}
             value={hpPercent}
             onChange={(e) => onChange({ hpPercent: Number(e.target.value) })}
-            className="w-full accent-zinc-700 dark:accent-zinc-300"
+            className="w-full accent-accent"
           />
-          <div className="mt-1 h-2.5 w-full overflow-hidden rounded-full border border-zinc-300 bg-zinc-100 dark:border-zinc-700 dark:bg-zinc-800">
+          <div className="mt-1 h-2.5 w-full overflow-hidden rounded-full border border-line bg-sunken">
             <div
               className={`h-full rounded-full transition-all ${hpBarColor(hpPercent)}`}
               style={{ width: `${hpPercent}%` }}
@@ -398,7 +398,7 @@ export function CatchCardBody({
               <button
                 type="button"
                 onClick={() => onChange({ level: 100 })}
-                className="shrink-0 rounded-md border border-zinc-300 px-2 py-2 text-xs font-medium text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-700 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
+                className="inline-flex h-11 shrink-0 items-center rounded-md border border-line-strong px-3 text-sm font-medium text-ink-muted transition-colors hover:bg-hover hover:text-ink"
               >
                 100
               </button>
@@ -426,24 +426,24 @@ export function CatchCardBody({
             type="checkbox"
             checked={conditionMet}
             onChange={(e) => onChange({ conditionMet: e.target.checked })}
-            className="mt-0.5 accent-emerald-500"
+            className="mt-0.5 accent-success"
           />
-          <span className="text-xs text-zinc-600 dark:text-zinc-300">
+          <span className="text-xs text-ink-muted">
             <span className="font-medium">{t.conditionMet}</span>
-            {ballNote && <span className="block text-zinc-400 dark:text-zinc-500">{ballNote}</span>}
+            {ballNote && <span className="block text-ink-subtle">{ballNote}</span>}
           </span>
         </label>
       )}
       {!hasCondition && ballNote && (
-        <p className="mt-3 text-xs text-zinc-400 dark:text-zinc-500">{ballNote}</p>
+        <p className="mt-3 text-xs text-ink-subtle">{ballNote}</p>
       )}
 
       {/* Result */}
       <div className="mt-4">
         {result === null || selected === null ? (
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">{t.hint}</p>
+          <p className="text-sm text-ink-muted">{t.hint}</p>
         ) : (
-          <div className="rounded-lg border border-zinc-200 p-3 dark:border-zinc-800">
+          <div className="rounded-md bg-sunken p-3">
             <div className="flex items-center gap-4">
               {detail ? (
                 <button
@@ -467,12 +467,12 @@ export function CatchCardBody({
                 <div className="text-3xl font-bold">
                   {result.guaranteed ? "100%" : `${(result.chance * 100).toFixed(2)}%`}
                 </div>
-                <div className="text-sm text-zinc-500 dark:text-zinc-400">
+                <div className="text-sm text-ink-muted">
                   {result.guaranteed
                     ? t.guaranteed
                     : `${t.resultLabel} · ${t.avgThrows((1 / result.chance).toFixed(1))}`}
                 </div>
-                <div className="mt-1 text-xs text-zinc-400 dark:text-zinc-500">
+                <div className="mt-1 text-xs text-ink-subtle">
                   {t.details(baseRate ?? 0, result.ballText, result.statusText)}
                 </div>
               </div>
@@ -494,12 +494,12 @@ export function CatchCardBody({
       )}
 
       {/* Quick-catch */}
-      <div className="mt-4 border-t border-zinc-100 pt-3 dark:border-zinc-800">
+      <div className="mt-4 border-t border-line pt-3">
         <h3 className="mb-2 text-sm font-semibold">{t.caughtHeading}</h3>
         {selectedId === null ? (
-          <p className="text-xs text-zinc-400 dark:text-zinc-500">{t.caughtNeedSelection}</p>
+          <p className="text-xs text-ink-subtle">{t.caughtNeedSelection}</p>
         ) : openSlots.length === 0 ? (
-          <p className="text-xs text-zinc-400 dark:text-zinc-500">{t.caughtNoRoutes}</p>
+          <p className="text-xs text-ink-subtle">{t.caughtNoRoutes}</p>
         ) : isSoulLink ? (
           <div className="grid gap-3 sm:grid-cols-2">
             <div>
@@ -515,7 +515,7 @@ export function CatchCardBody({
           renderQuickCatchPanel(Player.PLAYER1)
         )}
         {caughtMsg && (
-          <p className="mt-2 text-xs text-emerald-600 dark:text-emerald-400">{caughtMsg}</p>
+          <p className="mt-2 text-xs text-success">{caughtMsg}</p>
         )}
       </div>
     </>

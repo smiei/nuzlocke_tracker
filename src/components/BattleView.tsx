@@ -25,7 +25,7 @@ function TypeAbbrev({ type, lang, dimmed }: { type: string; lang: Lang; dimmed: 
   return (
     <span
       title={label}
-      className={`inline-flex h-7 w-8 items-center justify-center rounded text-[10px] font-semibold uppercase text-white transition-opacity ${
+      className={`inline-flex h-7 w-8 items-center justify-center rounded-md text-xs font-semibold uppercase text-white transition-opacity ${
         dimmed ? "opacity-25" : ""
       }`}
       style={{ backgroundColor: TYPE_COLORS[type] ?? "#777" }}
@@ -45,23 +45,29 @@ function MatrixLegend({ text }: { text: string }) {
 }
 
 // Matrix cell (attacker vs defender, offensive view): green = super effective.
+// The fills come from the --eff-* scale, not from --success / --danger: those
+// are text colours and wash out as a cell fill (see globals.css).
 function matrixCellStyle(multiplier: number): { text: string; className: string } {
-  if (multiplier === 2) return { text: "2", className: "bg-green-500 text-white dark:bg-green-600" };
-  if (multiplier === 0.5) return { text: "½", className: "bg-red-500 text-white dark:bg-red-600" };
-  if (multiplier === 0) return { text: "0", className: "bg-zinc-900 text-zinc-100 dark:bg-black dark:text-zinc-400" };
-  return { text: "", className: "bg-zinc-100 dark:bg-zinc-800/60" };
+  if (multiplier === 2) return { text: "2", className: "bg-eff-good text-white" };
+  if (multiplier === 0.5) return { text: "½", className: "bg-eff-bad text-white" };
+  if (multiplier === 0) return { text: "0", className: "bg-eff-none text-eff-none-ink" };
+  return { text: "", className: "bg-sunken" };
 }
 
 // Team-matchup cell (defender view: how the team member takes the opponent's
 // attack). Red = takes more, green = resists, black = immune.
+//
+// Five ordered steps out of the shared --eff-* scale: two depths of green for
+// the two resistances, two of red/orange for the two weaknesses, black for
+// immune. The depth carries the ordering, which is why 1/4x is a deeper green
+// rather than a different hue.
 function matchupCellStyle(multiplier: number): { text: string; className: string } {
-  if (multiplier === 4) return { text: "4", className: "bg-red-600 text-white" };
-  if (multiplier === 2) return { text: "2", className: "bg-orange-500 text-white" };
-  if (multiplier === 0.5) return { text: "½", className: "bg-green-500 text-white" };
-  if (multiplier === 0.25) return { text: "¼", className: "bg-green-700 text-white" };
-  if (multiplier === 0)
-    return { text: "0", className: "bg-zinc-900 text-zinc-300 dark:bg-black dark:text-zinc-400" };
-  return { text: "1", className: "bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500" };
+  if (multiplier === 4) return { text: "4", className: "bg-eff-bad text-white" };
+  if (multiplier === 2) return { text: "2", className: "bg-eff-bad-mild text-white" };
+  if (multiplier === 0.5) return { text: "½", className: "bg-eff-good text-white" };
+  if (multiplier === 0.25) return { text: "¼", className: "bg-eff-good-deep text-white" };
+  if (multiplier === 0) return { text: "0", className: "bg-eff-none text-eff-none-ink" };
+  return { text: "1", className: "bg-sunken text-ink-subtle" };
 }
 
 // One team's defensive matchup against the opponent's damaging attack types.
@@ -192,7 +198,7 @@ export function BattleCardBody({
   return (
     <>
       <div className="mb-4">
-        <label className="mb-1 block text-xs font-medium text-zinc-500 dark:text-zinc-400">
+        <label className="mb-1 block text-xs font-medium text-ink-muted">
           {t.levelLabel}
         </label>
         <div className="flex items-center gap-1">
@@ -200,12 +206,12 @@ export function BattleCardBody({
             type="text"
             inputMode="numeric"
             {...levelInput}
-            className="w-20 rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:focus:border-zinc-400"
+            className="h-11 w-20 rounded-md border border-line-strong bg-panel px-3 text-sm text-ink"
           />
           <button
             type="button"
             onClick={() => onChange({ level: 100 })}
-            className="rounded-md border border-zinc-300 px-2 py-2 text-xs font-medium text-zinc-500 transition-colors hover:bg-zinc-100 hover:text-zinc-700 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
+            className="inline-flex h-11 shrink-0 items-center rounded-md border border-line-strong px-3 text-sm font-medium text-ink-muted transition-colors hover:bg-hover hover:text-ink"
           >
             100
           </button>
@@ -213,14 +219,14 @@ export function BattleCardBody({
       </div>
 
       {selectedRaw === null ? (
-        <p className="mb-8 text-sm text-zinc-500 dark:text-zinc-400">{t.battleHint}</p>
+        <p className="mb-8 text-sm text-ink-muted">{t.battleHint}</p>
       ) : (
-        <div className="mb-8 space-y-4">
+        <div className="mb-8 divide-y divide-line">
           {/* Stats: the opponent's own types + its damaging attack types. */}
-          <section className="max-w-2xl rounded-lg border border-zinc-200 p-4 dark:border-zinc-800">
-            <h3 className="mb-3 text-sm font-semibold text-zinc-600 dark:text-zinc-300">
+          <section className="pb-4">
+            <h2 className="mb-3 text-sm font-semibold text-ink">
               {t.statsHeading}
-            </h3>
+            </h2>
             <div className="flex flex-wrap items-center gap-2">
               {opponentTypes.map((type) => (
                 <TypeBadge key={type} type={type} lang={lang} />
@@ -228,12 +234,12 @@ export function BattleCardBody({
             </div>
 
             {/* Opponent's damaging attack types at the chosen level */}
-            <div className="mt-3 border-t border-zinc-100 pt-3 dark:border-zinc-800">
-              <div className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+            <div className="mt-3">
+              <div className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-ink-muted">
                 {t.moveTypes} <span className="font-normal normal-case">· {t.damagingOnly}</span>
               </div>
               {allAttacks.length === 0 ? (
-                <p className="text-xs text-zinc-400 dark:text-zinc-500">—</p>
+                <p className="text-xs text-ink-subtle">—</p>
               ) : (
                 <div className="flex flex-wrap gap-1.5">
                   {allAttacks.map(({ type, level: lvl }) => (
@@ -243,7 +249,7 @@ export function BattleCardBody({
                       className={`inline-flex items-center gap-1 ${lvl > level ? "opacity-20" : ""}`}
                     >
                       <TypeBadge type={type} lang={lang} />
-                      <span className="text-[10px] text-zinc-400 dark:text-zinc-500">
+                      <span className="text-xs text-ink-subtle">
                         {translations[lang].pokedex.detail.level(lvl)}
                       </span>
                     </span>
@@ -255,17 +261,17 @@ export function BattleCardBody({
 
           {/* Weaknesses as a defender: which attack types to hit it with. */}
           {multipliers && (
-            <section className="max-w-2xl rounded-lg border border-zinc-200 p-4 dark:border-zinc-800">
-              <h3 className="mb-3 text-sm font-semibold text-zinc-600 dark:text-zinc-300">
+            <section className="py-4">
+              <h2 className="mb-3 text-sm font-semibold text-ink">
                 {t.defenderWeakHeading}
-              </h3>
+              </h2>
               <div className="flex flex-col gap-2">
                 {MULTIPLIER_GROUPS.map((group) => {
                   const types = attackTypes.filter((a) => multipliers[a] === group);
                   if (types.length === 0) return null;
                   return (
                     <div key={group} className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                      <span className="w-52 shrink-0 text-sm font-medium text-zinc-600 dark:text-zinc-300">
+                      <span className="w-52 shrink-0 text-sm font-medium text-ink-muted">
                         {groupLabels[group]}:
                       </span>
                       <div className="flex flex-wrap gap-1">
@@ -284,31 +290,31 @@ export function BattleCardBody({
               One card in Classic, one per player in SoulLink. */}
           {opponentAttackTypes.length > 0 &&
             (!hasTeam ? (
-              <section className="max-w-2xl rounded-lg border border-zinc-200 p-4 dark:border-zinc-800">
-                <h3 className="mb-3 text-sm font-semibold text-zinc-600 dark:text-zinc-300">
+              <section className="py-4">
+                <h2 className="mb-3 text-sm font-semibold text-ink">
                   {t.teamStrengthHeading}
-                </h3>
-                <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                </h2>
+                <p className="text-sm text-ink-muted">
                   {translations[lang].weaknesses.empty}
                 </p>
               </section>
             ) : (
-              <div className="flex flex-col gap-4 xl:flex-row xl:items-start">
+              <div className="flex flex-col gap-6 py-4 xl:flex-row xl:items-start">
                 {teams.map(
                   (team) =>
                     team.members.length > 0 && (
                       <section
                         key={team.player}
-                        className="rounded-lg border border-zinc-200 p-4 dark:border-zinc-800"
+                        className="min-w-0 flex-1"
                       >
-                        <h3 className="mb-1 text-sm font-semibold text-zinc-600 dark:text-zinc-300">
+                        <h2 className="mb-1 text-sm font-semibold text-ink">
                           {t.teamStrengthHeading}
                           {mode !== "CLASSIC" && (
-                            <span className="ml-2 font-normal text-zinc-400 dark:text-zinc-500">
+                            <span className="ml-2 font-normal text-ink-subtle">
                               · {playerLabel(team.player)}
                             </span>
                           )}
-                        </h3>
+                        </h2>
                         <MatrixLegend text={t.legendDefense} />
                         <TeamMatchup
                           members={team.members}
@@ -326,16 +332,16 @@ export function BattleCardBody({
 
       {/* Full type matrix (gen-aware) at the very bottom, dimmed to the opponent. */}
       <section>
-        <h3 className="mb-1 text-sm font-semibold text-zinc-600 dark:text-zinc-300">
+        <h2 className="mb-1 text-sm font-semibold text-ink">
           {t.matrixHeading}
-        </h3>
+        </h2>
           <MatrixLegend text={t.legendOffense} />
         <div className="overflow-x-auto">
           <table className="border-separate border-spacing-0.5">
             <thead>
               <tr>
                 <th className="pr-2 text-right align-bottom">
-                  <div className="text-[10px] font-medium leading-tight text-zinc-400 dark:text-zinc-500">
+                  <div className="text-xs font-medium leading-tight text-ink-subtle">
                     <div>{t.defense} →</div>
                     <div>{t.attack} ↓</div>
                   </div>
