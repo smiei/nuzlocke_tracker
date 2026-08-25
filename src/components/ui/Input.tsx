@@ -1,4 +1,7 @@
-import type { InputHTMLAttributes, SelectHTMLAttributes, TextareaHTMLAttributes } from "react";
+// ComponentPropsWithRef rather than *HTMLAttributes: React 19 passes ref as
+// a normal prop to function components, and call sites need it (the rename
+// dialog selects the text in its field once the modal has focused it).
+import type { ComponentPropsWithRef } from "react";
 import { cn } from "./cn";
 
 // 12 input variants and 7 select variants existed before, and they disagreed
@@ -19,7 +22,7 @@ export function Input({
   size = "md",
   className,
   ...rest
-}: Omit<InputHTMLAttributes<HTMLInputElement>, "size"> & { size?: Size }) {
+}: Omit<ComponentPropsWithRef<"input">, "size"> & { size?: Size }) {
   return <input className={cn(FIELD, HEIGHTS[size], className)} {...rest} />;
 }
 
@@ -28,7 +31,7 @@ export function Select({
   className,
   children,
   ...rest
-}: Omit<SelectHTMLAttributes<HTMLSelectElement>, "size"> & { size?: Size }) {
+}: Omit<ComponentPropsWithRef<"select">, "size"> & { size?: Size }) {
   return (
     <select className={cn(FIELD, HEIGHTS[size], className)} {...rest}>
       {children}
@@ -36,7 +39,7 @@ export function Select({
   );
 }
 
-export function Textarea({ className, ...rest }: TextareaHTMLAttributes<HTMLTextAreaElement>) {
+export function Textarea({ className, ...rest }: ComponentPropsWithRef<"textarea">) {
   return <textarea className={cn(FIELD, "py-2", className)} {...rest} />;
 }
 

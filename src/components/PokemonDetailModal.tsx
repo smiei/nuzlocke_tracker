@@ -16,6 +16,7 @@ import { translations } from "@/lib/i18n/dictionary";
 import { pokemonName } from "@/lib/i18n/localize";
 import { formatEvolutionMethod } from "@/lib/evolutionMethods";
 import { TypeBadge } from "@/components/TypeBadge";
+import { Modal } from "@/components/ui/Modal";
 import { TypeEffectiveness } from "@/components/ui/TypeEffectiveness";
 import { PokemonSprite } from "@/components/PokemonSprite";
 
@@ -45,6 +46,10 @@ const STAT_ROWS_GEN1: StatRow[] = [
   { key: "Init.", labelKey: "init" },
 ];
 
+// A five-step value ramp, deliberately raw rather than token-based: these are
+// saturated fills that already work on either theme background, and the
+// semantic tokens are text colours that wash out when used as a bar fill. Same
+// exception TypeBadge and the move damage classes make.
 function statColor(value: number): string {
   if (value >= 120) return "bg-emerald-500";
   if (value >= 90) return "bg-green-500";
@@ -56,13 +61,9 @@ function statColor(value: number): string {
 // One headline figure above the stat bars (rank / BST / weight).
 function MetaTile({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-md bg-zinc-100 px-1.5 py-1.5 text-center dark:bg-zinc-800/60">
-      <div className="truncate text-[10px] uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
-        {label}
-      </div>
-      <div className="mt-0.5 text-sm font-semibold tabular-nums text-zinc-800 dark:text-zinc-100">
-        {value}
-      </div>
+    <div className="rounded-md bg-sunken px-1.5 py-1.5 text-center">
+      <div className="truncate text-xs uppercase tracking-wide text-ink-subtle">{label}</div>
+      <div className="mt-0.5 text-sm font-semibold tabular-nums text-ink">{value}</div>
     </div>
   );
 }
@@ -82,17 +83,17 @@ function MoveRow({ move, lang }: { move: MoveEntry; lang: Lang }) {
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         title={td.moveDetails}
-        className="flex w-full items-center gap-2 rounded px-1 -mx-1 py-1 text-left text-sm transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-800"
+        className="-mx-1 flex min-h-10 w-full items-center gap-2 rounded-md px-1 py-1 text-left text-sm transition-colors hover:bg-hover"
       >
-        <span className="w-10 shrink-0 text-xs tabular-nums text-zinc-400 dark:text-zinc-500">
+        <span className="w-10 shrink-0 text-xs tabular-nums text-ink-subtle">
           {td.level(move.level)}
         </span>
         <TypeBadge type={move.type} lang={lang} />
-        <span className={`flex-1 ${move.damaging ? "" : "text-zinc-500 dark:text-zinc-400"}`}>
+        <span className={`flex-1 ${move.damaging ? "text-ink" : "text-ink-muted"}`}>
           {move.name}
         </span>
         <span
-          className={`shrink-0 text-xs text-zinc-400 transition-transform dark:text-zinc-500 ${
+          className={`shrink-0 text-xs text-ink-subtle transition-transform ${
             open ? "rotate-90" : ""
           }`}
         >
@@ -212,9 +213,9 @@ export function PokemonDetailModal({
     const body = (
       <>
         <PokemonSprite pokemonId={id} name={nameOf(id)} size="sm" />
-        <span className="max-w-full truncate text-[11px] leading-tight">{nameOf(id)}</span>
+        <span className="max-w-full truncate text-xs leading-tight">{nameOf(id)}</span>
         {label && (
-          <span className="max-w-full text-[10px] leading-tight text-zinc-400 dark:text-zinc-500">
+          <span className="max-w-full text-xs leading-tight text-ink-subtle">
             {label}
           </span>
         )}
@@ -225,7 +226,7 @@ export function PokemonDetailModal({
     return isCurrent ? (
       <span
         key={id}
-        className={`${shell} bg-zinc-100 font-semibold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-50`}
+        className={`${shell} bg-sunken font-semibold text-ink`}
       >
         {body}
       </span>
@@ -235,7 +236,7 @@ export function PokemonDetailModal({
         key={id}
         type="button"
         onClick={() => onSelect(id)}
-        className={`${shell} text-zinc-600 transition-colors hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-800`}
+        className={`${shell} text-ink-muted transition-colors hover:bg-hover hover:text-ink`}
       >
         {body}
       </button>
@@ -243,14 +244,18 @@ export function PokemonDetailModal({
   };
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
-      onClick={onClose}
+    // titleHidden: the card carries its own header - name centred over the
+    // sprite, types underneath - which the user arranged deliberately. Modal is
+    // here for the behaviour it brings (focus trap, Escape, scroll lock, focus
+    // restore), not for its title bar.
+    <Modal
+      open
+      onClose={onClose}
+      title={pokemonName(pokemon, lang)}
+      titleHidden
+      size="md"
     >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        className="max-h-[85vh] w-full max-w-md overflow-y-auto rounded-lg border border-zinc-200 bg-white p-5 shadow-xl dark:border-zinc-700 dark:bg-zinc-900"
-      >
+      <div>
         {/* Name, sprite and types stacked on the centre axis; the dex number
             moved down into the tiles below. Close button is absolute so it
             doesn't pull the name off-centre. */}
@@ -259,7 +264,7 @@ export function PokemonDetailModal({
             type="button"
             onClick={onClose}
             aria-label={t.dialog.cancel}
-            className="absolute right-0 top-0 rounded p-1 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
+            className="absolute right-0 top-0 flex h-10 w-10 items-center justify-center rounded-md text-ink-subtle transition-colors hover:bg-hover hover:text-ink"
           >
             ✕
           </button>
@@ -267,7 +272,7 @@ export function PokemonDetailModal({
               shrink-0 keeps it at its natural width so the evolution tree
               beside it takes the remaining space. */}
           <div className="flex shrink-0 flex-col items-center text-center">
-            <h2 className="text-lg font-semibold">{pokemonName(pokemon, lang)}</h2>
+            <h2 className="text-lg font-semibold text-ink">{pokemonName(pokemon, lang)}</h2>
             <PokemonSprite pokemonId={pokemon.id} name={pokemonName(pokemon, lang)} size="xl" />
             <div className="mt-1.5 flex flex-wrap justify-center gap-1">
               {types.map((type) => (
@@ -279,7 +284,7 @@ export function PokemonDetailModal({
               pr-6 keeps it clear of the absolutely positioned close button. */}
           <div className="flex min-w-0 flex-1 self-center flex-col gap-0.5 pr-6">
             {!familyHasEvolution ? (
-              <p className="text-xs text-zinc-400 dark:text-zinc-500">{td.noEvolution}</p>
+              <p className="text-xs text-ink-subtle">{td.noEvolution}</p>
             ) : (
               evoStages.map((ids, stage) => (
                 <div key={stage} className="flex flex-wrap justify-center gap-0.5">
@@ -309,7 +314,7 @@ export function PokemonDetailModal({
           </div>
           {formOptions.length > 1 && (
             <div>
-              <div className="mb-1 text-[10px] uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
+              <div className="mb-1 text-xs uppercase tracking-wide text-ink-subtle">
                 {td.forms}
               </div>
               <div className="flex flex-wrap gap-1">
@@ -319,10 +324,10 @@ export function PokemonDetailModal({
                     type="button"
                     onClick={() => onSelect(option.id)}
                     aria-pressed={option.id === pokemon.id}
-                    className={`rounded border px-2 py-0.5 text-xs transition-colors ${
+                    className={`inline-flex h-10 items-center rounded-md border px-3 text-xs transition-colors ${
                       option.id === pokemon.id
-                        ? "border-zinc-900 bg-zinc-900 text-white dark:border-zinc-50 dark:bg-zinc-50 dark:text-zinc-900"
-                        : "border-zinc-200 text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                        ? "border-accent bg-accent text-accent-ink"
+                        : "border-line text-ink-muted hover:bg-hover hover:text-ink"
                     }`}
                   >
                     {formLabel(option, lang)}
@@ -334,13 +339,13 @@ export function PokemonDetailModal({
           <Link
             href={analyzeHref}
             onClick={onClose}
-            className="flex items-center justify-center gap-1.5 rounded-md border border-zinc-200 px-3 py-1.5 text-xs font-medium text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-800 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
+            className="flex h-10 items-center justify-center gap-1.5 rounded-md border border-line px-3 text-sm font-medium text-ink-muted transition-colors hover:bg-hover hover:text-ink"
           >
             {td.openInAnalyze} <span aria-hidden>→</span>
           </Link>
           {types.length > 0 && (
             <div className="pt-1">
-              <h3 className="mb-1 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+              <h3 className="mb-1 text-xs font-semibold uppercase tracking-wide text-ink-muted">
                 {td.weaknesses}
               </h3>
               <TypeEffectiveness
@@ -354,7 +359,7 @@ export function PokemonDetailModal({
         </div>
 
         {/* Base stats */}
-        <h3 className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+        <h3 className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-ink-muted">
           {td.stats}
         </h3>
         <div className="mb-4 space-y-1">
@@ -362,13 +367,13 @@ export function PokemonDetailModal({
             const value = pokemon.stats[key] ?? 0;
             return (
               <div key={key} className="flex items-center gap-2">
-                <span className="w-14 shrink-0 text-xs text-zinc-500 dark:text-zinc-400">
+                <span className="w-14 shrink-0 text-xs text-ink-muted">
                   {t.pokedex.columns[labelKey]}
                 </span>
                 <span className="w-8 shrink-0 text-right text-xs font-semibold tabular-nums">
                   {value}
                 </span>
-                <span className="h-2 flex-1 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
+                <span className="h-2 flex-1 overflow-hidden rounded-full bg-sunken">
                   <span
                     className={`block h-full rounded-full ${statColor(value)}`}
                     style={{ width: `${Math.min(100, (value / 200) * 100)}%` }}
@@ -378,16 +383,16 @@ export function PokemonDetailModal({
             );
           })}
           <div className="flex items-center gap-2 pt-0.5">
-            <span className="w-14 shrink-0 text-xs font-semibold text-zinc-600 dark:text-zinc-300">
+            <span className="w-14 shrink-0 text-xs font-semibold text-ink">
               {t.pokedex.columns.summe}
             </span>
             <span className="w-8 shrink-0 text-right text-xs font-bold tabular-nums">
               {pokemon.stats.Summe}
             </span>
             {/* BST scaled to the generation's cap (720 from Gen 4, else 680). */}
-            <span className="h-2 flex-1 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
+            <span className="h-2 flex-1 overflow-hidden rounded-full bg-sunken">
               <span
-                className="block h-full rounded-full bg-zinc-500 dark:bg-zinc-400"
+                className="block h-full rounded-full bg-ink-muted"
                 style={{ width: `${Math.min(100, (pokemon.stats.Summe / maxBST) * 100)}%` }}
               />
             </span>
@@ -397,10 +402,10 @@ export function PokemonDetailModal({
         {/* Full level-up move list (bottom) */}
         {moveList.length > 0 && (
           <div>
-            <h3 className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
+            <h3 className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-ink-muted">
               {td.moves}
             </h3>
-            <div className="divide-y divide-zinc-100 dark:divide-zinc-800">
+            <div className="divide-y divide-line">
               {moveList.map((mv, i) => (
                 <MoveRow key={`${mv.name}-${i}`} move={mv} lang={lang} />
               ))}
@@ -408,6 +413,6 @@ export function PokemonDetailModal({
           </div>
         )}
       </div>
-    </div>
+    </Modal>
   );
 }

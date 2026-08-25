@@ -6,6 +6,9 @@ import type { Lang } from "@/lib/i18n/dictionary";
 import { translations } from "@/lib/i18n/dictionary";
 import { localizeName } from "@/lib/i18n/localize";
 import type { GameSummary } from "@/lib/types";
+import { Button } from "@/components/ui/Button";
+import { FieldLabel, Input, Select } from "@/components/ui/Input";
+import { Modal } from "@/components/ui/Modal";
 
 export function NewRunDialog({
   lang,
@@ -41,8 +44,6 @@ export function NewRunDialog({
     return () => clearTimeout(id);
   }, [open, initialGameId]);
 
-  if (!open) return null;
-
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const trimmed = name.trim();
@@ -51,94 +52,80 @@ export function NewRunDialog({
   }
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
-      onClick={onClose}
+    <Modal
+      open={open}
+      onClose={onClose}
+      title={t.newRunTitle}
+      // Half a form filled in should survive a stray tap on the backdrop.
+      dismissOnBackdrop={false}
+      onSubmit={handleSubmit}
+      footer={
+        <>
+          <Button size="sm" disabled={pending} onClick={onClose}>
+            {t.cancel}
+          </Button>
+          <Button
+            type="submit"
+            size="sm"
+            variant="primary"
+            loading={pending}
+            disabled={!name.trim()}
+          >
+            {t.create}
+          </Button>
+        </>
+      }
     >
-      <form
-        onClick={(e) => e.stopPropagation()}
-        onSubmit={handleSubmit}
-        className="w-full max-w-sm rounded-lg border border-zinc-200 bg-white p-4 shadow-xl dark:border-zinc-700 dark:bg-zinc-900"
-      >
-        <h2 className="mb-3 text-base font-semibold">{t.newRunTitle}</h2>
-
-        <label className="mb-1 block text-xs font-medium text-zinc-500 dark:text-zinc-400">
-          {t.nameLabel}
-        </label>
-        <input
+      <div className="mb-3">
+        <FieldLabel htmlFor="new-run-name">{t.nameLabel}</FieldLabel>
+        <Input
+          id="new-run-name"
           ref={inputRef}
           type="text"
           value={name}
           disabled={pending}
           onChange={(e) => setName(e.target.value)}
           placeholder={t.namePlaceholder}
-          className="mb-3 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-zinc-500 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-950 dark:focus:border-zinc-400"
         />
+      </div>
 
-        <label className="mb-1 block text-xs font-medium text-zinc-500 dark:text-zinc-400">
-          {t.gameLabel}
-        </label>
-        <select
+      <div className="mb-3">
+        <FieldLabel htmlFor="new-run-game">{t.gameLabel}</FieldLabel>
+        <Select
+          id="new-run-game"
           value={gameId}
           disabled={pending}
           onChange={(e) => setGameId(e.target.value)}
-          className="mb-3 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-zinc-500 disabled:opacity-50 dark:border-zinc-700 dark:bg-zinc-950 dark:focus:border-zinc-400"
         >
           {games.map((game) => (
             <option key={game.id} value={game.id}>
               {localizeName(game.names, lang)}
             </option>
           ))}
-        </select>
+        </Select>
+      </div>
 
-        <span className="mb-1 block text-xs font-medium text-zinc-500 dark:text-zinc-400">
-          {t.modeLabel}
-        </span>
-        <div className="mb-4 grid grid-cols-2 gap-2">
-          <button
-            type="button"
+      {/* Mode is fixed at creation, so it is a two-way choice rather than a
+          toggle: both options stay visible and the picked one is filled. */}
+      <span className="mb-1 block text-xs font-medium text-ink-muted">{t.modeLabel}</span>
+      <div className="grid grid-cols-2 gap-2" role="group" aria-label={t.modeLabel}>
+        {(
+          [
+            [RunMode.SOULLINK, t.modeSoullink],
+            [RunMode.CLASSIC, t.modeClassic],
+          ] as const
+        ).map(([value, label]) => (
+          <Button
+            key={value}
+            variant={mode === value ? "primary" : "secondary"}
+            aria-pressed={mode === value}
             disabled={pending}
-            onClick={() => setMode(RunMode.SOULLINK)}
-            className={`rounded-md border px-3 py-2 text-sm font-medium transition-colors disabled:opacity-50 ${
-              mode === RunMode.SOULLINK
-                ? "border-zinc-900 bg-zinc-900 text-white dark:border-zinc-50 dark:bg-zinc-50 dark:text-zinc-900"
-                : "border-zinc-300 text-zinc-600 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
-            }`}
+            onClick={() => setMode(value)}
           >
-            {t.modeSoullink}
-          </button>
-          <button
-            type="button"
-            disabled={pending}
-            onClick={() => setMode(RunMode.CLASSIC)}
-            className={`rounded-md border px-3 py-2 text-sm font-medium transition-colors disabled:opacity-50 ${
-              mode === RunMode.CLASSIC
-                ? "border-zinc-900 bg-zinc-900 text-white dark:border-zinc-50 dark:bg-zinc-50 dark:text-zinc-900"
-                : "border-zinc-300 text-zinc-600 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
-            }`}
-          >
-            {t.modeClassic}
-          </button>
-        </div>
-
-        <div className="flex justify-end gap-2">
-          <button
-            type="button"
-            disabled={pending}
-            onClick={onClose}
-            className="rounded-md border border-zinc-300 px-3 py-1.5 text-sm font-medium text-zinc-600 transition-colors hover:bg-zinc-50 disabled:opacity-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
-          >
-            {t.cancel}
-          </button>
-          <button
-            type="submit"
-            disabled={pending || !name.trim()}
-            className="rounded-md bg-zinc-900 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-zinc-700 disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-200"
-          >
-            {t.create}
-          </button>
-        </div>
-      </form>
-    </div>
+            {label}
+          </Button>
+        ))}
+      </div>
+    </Modal>
   );
 }

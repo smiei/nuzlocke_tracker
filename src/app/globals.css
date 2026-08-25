@@ -42,6 +42,12 @@
   --danger: #b91c1c;
   --danger-bg: #fef2f2;
   --danger-line: #fca5a5;
+  /* The palette had danger as text, as a wash and as a border, but no FILL -
+     so a destructive primary button had nowhere to go. Deliberately one
+     saturated value for both themes: --danger itself is a light pastel in dark
+     mode (it has to read as text there) and makes a washed-out button. */
+  --danger-solid: #dc2626;
+  --danger-solid-ink: #ffffff;
   --info: #0369a1;
   --info-bg: #f0f9ff;
   --info-line: #7dd3fc;
@@ -143,6 +149,8 @@
   --color-danger: var(--danger);
   --color-danger-bg: var(--danger-bg);
   --color-danger-line: var(--danger-line);
+  --color-danger-solid: var(--danger-solid);
+  --color-danger-solid-ink: var(--danger-solid-ink);
   --color-info: var(--info);
   --color-info-bg: var(--info-bg);
   --color-info-line: var(--info-line);
