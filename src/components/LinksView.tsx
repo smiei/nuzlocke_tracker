@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
+import { useDropdown } from "@/lib/useDropdown";
 import { useRouter } from "next/navigation";
 import type { SoulLinkView } from "@/lib/types";
 import { LinkStatus, Player, RunMode } from "@/generated/prisma/enums";
@@ -47,22 +48,15 @@ export function LinksView({
   const [evolvableOnly, setEvolvableOnly] = useState(false);
   const [hideTeam, setHideTeam] = useState(false);
   const [typeFilter, setTypeFilter] = useState<string[]>([]);
-  const [typeMenuOpen, setTypeMenuOpen] = useState(false);
+  const {
+    open: typeMenuOpen,
+    toggle: toggleTypeMenu,
+    containerRef: typeMenuRef,
+  } = useDropdown();
   const [deadMenuId, setDeadMenuId] = useState<number | null>(null);
   const [deadCause, setDeadCause] = useState("");
-  const typeMenuRef = useRef<HTMLDivElement>(null);
   const t = translations[lang];
   const isClassic = mode === RunMode.CLASSIC;
-
-  useEffect(() => {
-    function onClickOutside(event: MouseEvent) {
-      if (typeMenuRef.current && !typeMenuRef.current.contains(event.target as Node)) {
-        setTypeMenuOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", onClickOutside);
-    return () => document.removeEventListener("mousedown", onClickOutside);
-  }, []);
 
   // Only offer types that actually occur in this run's Pokémon, in canonical
   // chart order.
@@ -194,7 +188,7 @@ export function LinksView({
             variant={typeFilter.length > 0 ? "primary" : "secondary"}
             aria-expanded={typeMenuOpen}
             title={t.links.filterTypesTitle}
-            onClick={() => setTypeMenuOpen((v) => !v)}
+            onClick={toggleTypeMenu}
           >
             {t.links.filterTypes}
             {typeFilter.length > 0 && <span className="tabular-nums">({typeFilter.length})</span>}

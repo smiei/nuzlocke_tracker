@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
+import { useDropdown } from "@/lib/useDropdown";
 import { useRouter } from "next/navigation";
 import { evolveEncounter, revertEvolution } from "@/lib/actions";
 import { formatActionError } from "@/lib/actionErrors";
@@ -20,21 +21,10 @@ export function EvolveButton({
   targets: { id: number; name: string; method: string | null; available: boolean }[];
 }) {
   const router = useRouter();
-  const [open, setOpen] = useState(false);
+  const { open, setOpen, toggle, containerRef } = useDropdown();
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
-  const containerRef = useRef<HTMLDivElement>(null);
   const t = translations[lang].links;
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        setOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   if (targets.length === 0) return null;
 
@@ -68,7 +58,7 @@ export function EvolveButton({
         <button
           type="button"
           disabled={pending}
-          onClick={() => setOpen((o) => !o)}
+          onClick={toggle}
           className={`relative inline-flex h-10 shrink-0 items-center rounded-md border bg-panel px-3 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
             anyAvailable
               ? "border-success-line text-success hover:bg-success-bg"

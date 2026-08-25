@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useTransition } from "react";
+import { useDropdown } from "@/lib/useDropdown";
 import { useRouter } from "next/navigation";
 import type { SoulLinkView } from "@/lib/types";
 import { setTeamSlot } from "@/lib/actions";
@@ -29,20 +30,9 @@ export function AddToTeamButton({
 }) {
   const router = useRouter();
   const toast = useToast();
-  const [open, setOpen] = useState(false);
+  const { open, setOpen, toggle, containerRef } = useDropdown();
   const [pending, startTransition] = useTransition();
-  const containerRef = useRef<HTMLDivElement>(null);
   const t = translations[lang].links;
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        setOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   function assign(position: number) {
     startTransition(async () => {
@@ -64,7 +54,7 @@ export function AddToTeamButton({
     if (freeSlot !== undefined) {
       assign(freeSlot);
     } else {
-      setOpen((o) => !o);
+      toggle();
     }
   }
 

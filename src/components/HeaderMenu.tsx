@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
+import { useDropdown } from "@/lib/useDropdown";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { unzipSync } from "fflate";
 import { deleteRun, exportAllBackup, exportRunBackup, importBackup, renameRun } from "@/lib/actions";
@@ -63,30 +64,19 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
   const { lang, setLang } = useLanguage();
   const { confirm, alert } = useDialog();
   const toast = useToast();
-  const [open, setOpen] = useState(false);
+  const { open, setOpen, toggle, containerRef } = useDropdown();
   const [renameOpen, setRenameOpen] = useState(false);
   const [tabOrderOpen, setTabOrderOpen] = useState(false);
   const [importState, setImportState] = useState<{ json: string; runs: { name: string }[] } | null>(
     null,
   );
   const [pending, startTransition] = useTransition();
-  const containerRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { canPrompt, isStandalone, isIos, mounted, promptInstall } = useInstallPrompt();
   const t = translations[lang];
 
   const activeId = Number(searchParams.get("run")) || runs[0]?.id;
   const activeRun = runs.find((r) => r.id === activeId);
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        setOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   function handleBackupRun() {
     setOpen(false);
@@ -239,7 +229,7 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
       <button
         type="button"
         disabled={pending}
-        onClick={() => setOpen((v) => !v)}
+        onClick={toggle}
         aria-label={t.menu.label}
         title={t.menu.label}
         className="flex h-10 w-10 items-center justify-center rounded-md border border-line text-ink-muted transition-colors hover:bg-hover hover:text-ink disabled:cursor-not-allowed disabled:opacity-50"

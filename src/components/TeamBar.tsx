@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
+import { useDropdown } from "@/lib/useDropdown";
 import { useRouter } from "next/navigation";
 import type { SoulLinkView } from "@/lib/types";
 import { LinkStatus, Player, RunMode } from "@/generated/prisma/enums";
@@ -40,18 +41,7 @@ function SlotPicker({
   pending: boolean;
   onPick: (soulLinkId: number | null) => void;
 }) {
-  const [open, setOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        setOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  const { open, setOpen, toggle, containerRef } = useDropdown();
 
   function pick(id: number | null) {
     setOpen(false);
@@ -64,7 +54,7 @@ function SlotPicker({
         type="button"
         aria-label={slotLabel}
         disabled={pending}
-        onClick={() => setOpen((o) => !o)}
+        onClick={toggle}
         className="flex h-10 w-full items-center justify-between gap-2 rounded-md border border-line-strong bg-panel px-3 text-left text-sm text-ink transition-colors hover:bg-hover disabled:cursor-not-allowed disabled:opacity-50"
       >
         <span className="flex min-w-0 items-center gap-1.5">

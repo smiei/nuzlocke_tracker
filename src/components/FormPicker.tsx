@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
+import { useDropdown } from "@/lib/useDropdown";
 import { useRouter } from "next/navigation";
 import { setPokemonForm } from "@/lib/actions";
 import { formatActionError } from "@/lib/actionErrors";
@@ -29,21 +30,10 @@ export function FormPicker({
   options: FormOption[];
 }) {
   const router = useRouter();
-  const [open, setOpen] = useState(false);
+  const { open, setOpen, toggle, containerRef } = useDropdown();
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
-  const containerRef = useRef<HTMLDivElement>(null);
   const t = translations[lang].pokedex.detail;
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        setOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   if (options.length < 2) return null;
 
@@ -69,7 +59,7 @@ export function FormPicker({
       <button
         type="button"
         disabled={pending}
-        onClick={() => setOpen((o) => !o)}
+        onClick={toggle}
         className="inline-flex h-10 shrink-0 items-center rounded-md border border-line-strong px-3 text-sm font-medium text-ink-muted transition-colors hover:bg-hover hover:text-ink disabled:cursor-not-allowed disabled:opacity-50"
       >
         {t.forms}
