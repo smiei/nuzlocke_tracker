@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation";
 import {
   getEffectiveness,
   getEvolutionById,
@@ -26,6 +25,7 @@ import { localizeName, pokemonName, routeName } from "@/lib/i18n/localize";
 import { displayNameWithForm, movepoolId } from "@/lib/forms";
 import { EncounterStatus, LinkStatus, Player, RunMode } from "@/generated/prisma/client";
 import { SpriteSetProvider } from "@/components/SpriteSetProvider";
+import { CanonicalRun } from "@/components/CanonicalRun";
 import { PlayerNamesProvider } from "@/components/PlayerNamesProvider";
 import { PokemonDetailProvider } from "@/components/PokemonDetailProvider";
 import {
@@ -50,8 +50,7 @@ export default async function OverviewPage({
   searchParams: Promise<{ run?: string }>;
 }) {
   const { run } = await searchParams;
-  const { runId, mode, gameId, settings, canonical } = await resolveRunId(run);
-  if (!canonical) redirect(`/overview?run=${runId}`);
+  const { runId, mode, gameId, settings } = await resolveRunId(run);
   const game = getGameOrDefault(gameId);
   const lang = await getLang();
 
@@ -290,6 +289,7 @@ export default async function OverviewPage({
 
   return (
     <SpriteSetProvider spriteSet={game.spriteSet}>
+      <CanonicalRun runId={runId} />
       <PlayerNamesProvider names={settings.playerNames} lang={lang}>
         <PokemonDetailProvider
           pokemonList={pokemonList}

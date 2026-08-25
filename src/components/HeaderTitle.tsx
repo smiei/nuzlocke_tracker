@@ -8,9 +8,11 @@ export function HeaderTitle() {
   const t = translations[lang].header;
 
   return (
-    <h1 className="text-base font-semibold sm:text-lg">
+    // Deliberately not an <h1>: the app name is chrome, repeated on every
+    // page. The page title carries the <h1> (see ui/Page.tsx PageHeader).
+    <p className="text-base font-semibold text-ink sm:text-lg">
       <span className="sm:hidden">{t.titleShort}</span>
       <span className="hidden sm:inline">{t.titleFull}</span>
-    </h1>
+    </p>
   );
 }

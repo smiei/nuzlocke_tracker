@@ -5,26 +5,24 @@ import type { MoveDamageClass, MoveDetail } from "@/lib/learnset";
 import type { Lang } from "@/lib/i18n/dictionary";
 import { translations } from "@/lib/i18n/dictionary";
 
-// Physical/special/status get the games' own colour coding so the category
-// reads at a glance, the same way TypeBadge does for types.
+// Physical/special get the games' own colour coding so the category reads at
+// a glance - a deliberate exception to the semantic palette, the same one
+// TypeBadge makes for types. Status has no such convention, so it uses the
+// neutral surface tokens.
 const DAMAGE_CLASS_STYLES: Record<MoveDamageClass, string> = {
   physical: "bg-orange-100 text-orange-800 dark:bg-orange-950/60 dark:text-orange-300",
   special: "bg-sky-100 text-sky-800 dark:bg-sky-950/60 dark:text-sky-300",
-  status: "bg-zinc-200 text-zinc-700 dark:bg-zinc-700 dark:text-zinc-200",
+  status: "bg-sunken text-ink-muted",
 };
 
 // One value tile. `hint` carries the modern value when this generation's
 // differs (e.g. "heute 90").
 function MoveStat({ label, value, hint }: { label: string; value: ReactNode; hint?: string }) {
   return (
-    <div className="rounded bg-white px-2 py-1.5 dark:bg-zinc-900/60">
-      <div className="text-[10px] uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
-        {label}
-      </div>
-      <div className="mt-0.5 font-semibold tabular-nums text-zinc-800 dark:text-zinc-100">
-        {value}
-      </div>
-      {hint && <div className="text-[10px] text-zinc-400 dark:text-zinc-500">{hint}</div>}
+    <div className="rounded-md bg-panel px-2 py-2">
+      <div className="text-xs uppercase tracking-wide text-ink-subtle">{label}</div>
+      <div className="mt-0.5 font-semibold tabular-nums text-ink">{value}</div>
+      {hint && <div className="text-xs text-ink-subtle">{hint}</div>}
     </div>
   );
 }
@@ -46,8 +44,8 @@ export function MoveDetailPanel({
   const num = (value: number | null) => (value == null ? "—" : String(value));
 
   return (
-    <div className={`rounded-md bg-zinc-100 p-2 text-xs dark:bg-zinc-800/60 ${className}`}>
-      <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4">
+    <div className={`rounded-md border border-line bg-sunken p-2 text-sm ${className}`}>
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
         <MoveStat
           label={td.movePower}
           value={num(move.power)}
@@ -65,7 +63,7 @@ export function MoveDetailPanel({
           label={td.moveCategory}
           value={
             <span
-              className={`inline-block rounded px-1.5 py-0.5 text-[11px] font-semibold ${
+              className={`inline-block rounded-md px-1.5 py-0.5 text-xs font-semibold ${
                 DAMAGE_CLASS_STYLES[move.damageClass]
               }`}
             >
@@ -80,12 +78,12 @@ export function MoveDetailPanel({
         />
       </div>
       {move.flavor && (
-        <div className="mt-2 border-t border-zinc-200 pt-2 dark:border-zinc-700">
-          <div className="mb-1 text-[10px] uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
+        <div className="mt-2 border-t border-line pt-2">
+          <div className="mb-1 text-xs uppercase tracking-wide text-ink-subtle">
             {td.moveEffect}
             {move.effectChance != null && ` · ${td.moveChance(move.effectChance)}`}
           </div>
-          <p className="leading-relaxed text-zinc-600 dark:text-zinc-300">{move.flavor}</p>
+          <p className="leading-relaxed text-ink-muted">{move.flavor}</p>
         </div>
       )}
     </div>

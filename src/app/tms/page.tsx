@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation";
 import {
   getEffectiveness,
   getEvolutions,
@@ -17,6 +16,7 @@ import { getLang } from "@/lib/i18n/getLang";
 import { displayNameWithForm, movepoolId } from "@/lib/forms";
 import { EncounterStatus, LinkStatus, Player, RunMode } from "@/generated/prisma/client";
 import { SpriteSetProvider } from "@/components/SpriteSetProvider";
+import { CanonicalRun } from "@/components/CanonicalRun";
 import { PlayerNamesProvider } from "@/components/PlayerNamesProvider";
 import { PokemonDetailProvider } from "@/components/PokemonDetailProvider";
 import { TmCompatView, type TmTeamMember } from "@/components/TmCompatView";
@@ -30,8 +30,7 @@ export default async function TmsPage({
   searchParams: Promise<{ run?: string }>;
 }) {
   const { run } = await searchParams;
-  const { runId, mode, gameId, settings, canonical } = await resolveRunId(run);
-  if (!canonical) redirect(`/tms?run=${runId}`);
+  const { runId, mode, gameId, settings } = await resolveRunId(run);
   const game = getGameOrDefault(gameId);
   const lang = await getLang();
 
@@ -102,6 +101,7 @@ export default async function TmsPage({
 
   return (
     <SpriteSetProvider spriteSet={game.spriteSet}>
+      <CanonicalRun runId={runId} />
       <PlayerNamesProvider names={settings.playerNames} lang={lang}>
         <PokemonDetailProvider
           pokemonList={getPokemonList(game.dexLimit, game.generation)}

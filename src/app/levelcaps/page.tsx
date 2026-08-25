@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation";
 import { getGameOrDefault, getLevelCaps } from "@/lib/data";
 import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
@@ -6,7 +5,9 @@ import { getLang } from "@/lib/i18n/getLang";
 import { translations } from "@/lib/i18n/dictionary";
 import { computeLevelCapProgress, eliteFourIndex } from "@/lib/progress";
 import { LevelCapsView } from "@/components/LevelCapsView";
+import { CanonicalRun } from "@/components/CanonicalRun";
 import { ProgressBar } from "@/components/ProgressBar";
+import { PageHeader } from "@/components/ui/Page";
 
 export const dynamic = "force-dynamic";
 
@@ -16,8 +17,7 @@ export default async function LevelCapsPage({
   searchParams: Promise<{ run?: string }>;
 }) {
   const { run } = await searchParams;
-  const { runId, gameId, canonical } = await resolveRunId(run);
-  if (!canonical) redirect(`/levelcaps?run=${runId}`);
+  const { runId, gameId } = await resolveRunId(run);
 
   const lang = await getLang();
   const t = translations[lang].levelcaps;
@@ -33,8 +33,8 @@ export default async function LevelCapsPage({
 
   return (
     <div>
-      <div className="mb-4 flex items-center justify-between gap-3">
-        <h2 className="text-xl font-semibold">{t.heading}</h2>
+      <CanonicalRun runId={runId} />
+      <PageHeader title={t.heading}>
         <ProgressBar
           done={progress.done}
           total={progress.total}
@@ -43,7 +43,7 @@ export default async function LevelCapsPage({
           markerAt={markerAt ?? undefined}
           markerTitle={t.eliteFourMarker}
         />
-      </div>
+      </PageHeader>
       <LevelCapsView runId={runId} lang={lang} levelCaps={items} trainerSet={trainerSet} />
     </div>
   );

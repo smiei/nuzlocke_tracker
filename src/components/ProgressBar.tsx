@@ -24,24 +24,24 @@ export function ProgressBar({
   return (
     <div className="flex items-center gap-2" title={title}>
       <div
-        className={`relative overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800 ${
+        className={`relative overflow-hidden rounded-full bg-sunken ${
           isMd ? "h-2.5 w-28 sm:w-48" : "h-1.5 w-16 sm:w-28"
         }`}
       >
         <div
-          className="h-full rounded-full bg-green-500 transition-all"
+          className="h-full rounded-full bg-success transition-all"
           style={{ width: `${percent}%` }}
         />
         {markerPercent !== null && (
           <div
             title={markerTitle}
-            className="absolute inset-y-0 w-px bg-zinc-900/70 dark:bg-white/80"
+            className="absolute inset-y-0 w-px bg-ink/70"
             style={{ left: `${markerPercent}%` }}
           />
         )}
       </div>
       <span
-        className={`tabular-nums text-zinc-500 dark:text-zinc-400 ${isMd ? "text-sm" : "text-xs"}`}
+        className={`tabular-nums text-ink-muted ${isMd ? "text-sm" : "text-xs"}`}
       >
         {done}/{total} · {percent}%
       </span>

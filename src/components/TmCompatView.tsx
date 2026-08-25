@@ -17,6 +17,9 @@ import { MoveDetailPanel } from "@/components/MoveDetailPanel";
 import { PokemonSprite } from "@/components/PokemonSprite";
 import { usePlayerLabel } from "@/components/PlayerNamesProvider";
 import { usePokemonDetail } from "@/components/PokemonDetailProvider";
+import { Badge } from "@/components/ui/Badge";
+import { Card } from "@/components/ui/Card";
+import { EmptyState, PageHeader } from "@/components/ui/Page";
 
 // onTeam = sits in one of the 6 team slots; everything else is the bank
 // (caught and alive, but boxed).
@@ -30,11 +33,15 @@ export type TmTeamMember = {
   onTeam: boolean;
 };
 
-const METHOD_BADGE: Record<TmLearnMethod | "level", string> = {
-  tm: "bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300",
-  hm: "bg-sky-100 text-sky-700 dark:bg-sky-950/50 dark:text-sky-300",
-  tutor: "bg-violet-100 text-violet-700 dark:bg-violet-950/50 dark:text-violet-300",
-  level: "bg-zinc-100 text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400",
+// TM/HM/tutor all answer the question you came here with - "can it learn this?"
+// - so they share one positive tone and the label tells them apart; a
+// level-up-only match is the weaker answer and stays neutral. Each of the four
+// used to carry its own hand-picked colour pair (emerald/sky/violet/zinc).
+const METHOD_TONE: Record<TmLearnMethod | "level", "success" | "neutral"> = {
+  tm: "success",
+  hm: "success",
+  tutor: "success",
+  level: "neutral",
 };
 
 export function TmCompatView({
@@ -99,10 +106,9 @@ export function TmCompatView({
 
   return (
     <div>
-      <h2 className="mb-1 text-xl font-semibold">{t.heading}</h2>
-      <p className="mb-4 text-xs text-zinc-400 dark:text-zinc-500">{t.caveat}</p>
+      <PageHeader title={t.heading} description={t.caveat} />
 
-      <div className="mb-4 max-w-sm">
+      <div className="mb-6 max-w-sm">
         <MoveCombobox
           lang={lang}
           moves={moves}
@@ -112,109 +118,103 @@ export function TmCompatView({
       </div>
 
       {selectedDetail && (
-        <div className="mb-4 max-w-lg">
+        <div className="mb-6 max-w-lg">
           <MoveDetailPanel move={selectedDetail} lang={lang} />
         </div>
       )}
 
       {!hasAnyMember ? (
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">{t.empty}</p>
+        <EmptyState title={t.empty} />
       ) : selectedSlug === null ? (
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">{t.hint}</p>
+        <EmptyState title={t.hint} />
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-6">
           {!isMachineOrTutor && (
-            <p className="rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-700 dark:bg-amber-950/40 dark:text-amber-300">
+            <p className="rounded-md border border-warning-line bg-warning-bg px-3 py-2 text-sm text-warning">
               {t.notLearnable}
             </p>
           )}
-          <div className="flex flex-col gap-4 xl:flex-row xl:items-start">
-            {teams.map(
-              (team) =>
-                team.members.length > 0 && (
-                  <section
-                    key={team.player}
-                    className="min-w-[260px] flex-1 rounded-lg border border-zinc-200 p-4 dark:border-zinc-800"
-                  >
-                    <h3 className="mb-3 flex items-baseline justify-between gap-2 text-sm font-semibold text-zinc-600 dark:text-zinc-300">
-                      {/* Solo runs have a single section, and the Team/Bank
-                          dividers below already name the groups - only
-                          SoulLink needs a heading here, to tell the two
-                          players' sections apart. */}
-                      <span>{isClassic ? "" : playerLabel(team.player)}</span>
-                      <span className="text-xs font-normal tabular-nums text-zinc-400 dark:text-zinc-500">
-                        {rowsFor(team.members).filter((r) => r.methods.length > 0).length}/
-                        {team.members.length}
-                      </span>
-                    </h3>
-                    <ul className="flex flex-col gap-1.5">
-                      {rowsFor(team.members).map((r, i, rows) => (
-                        <Fragment key={r.pokemonId + "-" + r.name}>
-                          {/* One labelled divider in front of each group, so
-                              the 6-slot team and the boxed rest read as two
-                              blocks with matching headings. */}
-                          {(i === 0 || rows[i - 1].onTeam !== r.onTeam) && (
-                            <li
-                              aria-hidden
-                              className={`flex items-center gap-2 text-[10px] uppercase tracking-wide text-zinc-400 dark:text-zinc-500 ${
-                                i === 0 ? "" : "mt-1 pt-1"
-                              }`}
-                            >
-                              <span className="h-px flex-1 bg-zinc-200 dark:bg-zinc-700" />
-                              {r.onTeam ? t.teamHeading : t.bankHeading}
-                              <span className="h-px flex-1 bg-zinc-200 dark:bg-zinc-700" />
-                            </li>
-                          )}
+          <div className="flex flex-col gap-6 xl:flex-row xl:items-start">
+            {teams.map((team) => {
+              if (team.members.length === 0) return null;
+              // Was recomputed three times per team (twice inline in the JSX).
+              const rows = rowsFor(team.members);
+              const canLearn = rows.filter((r) => r.methods.length > 0).length;
+              return (
+                <Card key={team.player} className="min-w-[260px] flex-1">
+                  <div className="mb-3 flex items-baseline gap-2">
+                    {/* Solo runs have a single section, and the Team/Bank
+                        dividers below already name the groups - only SoulLink
+                        needs a heading here, to tell the two players' sections
+                        apart. It used to render an empty <span> in Classic. */}
+                    {!isClassic && (
+                      <h2 className="text-sm font-semibold text-ink">
+                        {playerLabel(team.player)}
+                      </h2>
+                    )}
+                    <span className="ml-auto text-xs tabular-nums text-ink-subtle">
+                      {canLearn}/{team.members.length}
+                    </span>
+                  </div>
+                  <ul className="flex flex-col gap-2">
+                    {rows.map((r, i) => (
+                      <Fragment key={r.pokemonId + "-" + r.name}>
+                        {/* One labelled divider in front of each group, so the
+                            6-slot team and the boxed rest read as two blocks
+                            with matching headings. */}
+                        {(i === 0 || rows[i - 1].onTeam !== r.onTeam) && (
                           <li
-                            className={`flex items-center gap-2 rounded px-1 py-0.5 ${
-                              r.methods.length === 0 ? "opacity-60" : ""
-                            } ${
-                              r.onTeam
-                                ? "bg-zinc-100 font-medium dark:bg-zinc-800/70"
-                                : ""
+                            aria-hidden
+                            className={`flex items-center gap-2 text-xs uppercase tracking-wide text-ink-subtle ${
+                              i === 0 ? "" : "mt-2"
                             }`}
                           >
-                            {detail ? (
-                              <button
-                                type="button"
-                                onClick={() => detail.open(r.pokemonId)}
-                                title={r.name}
-                                className="flex min-w-0 flex-1 cursor-pointer items-center gap-2 rounded text-left transition-opacity hover:opacity-70"
-                              >
-                                <PokemonSprite pokemonId={r.pokemonId} name={r.name} size="sm" />
-                                <span className="truncate text-sm">{r.name}</span>
-                              </button>
-                            ) : (
-                              <>
-                                <PokemonSprite pokemonId={r.pokemonId} name={r.name} size="sm" />
-                                <span className="flex-1 text-sm">{r.name}</span>
-                              </>
-                            )}
-                            {r.methods.length > 0 ? (
-                              r.methods.map((mth) => (
-                                <span
-                                  key={mth}
-                                  className={`rounded px-1.5 py-0.5 text-[10px] font-semibold ${METHOD_BADGE[mth]}`}
-                                >
-                                  {t.method[mth]}
-                                </span>
-                              ))
-                            ) : r.byLevel ? (
-                              <span
-                                className={`rounded px-1.5 py-0.5 text-[10px] font-semibold ${METHOD_BADGE.level}`}
-                              >
-                                {t.method.level}
-                              </span>
-                            ) : (
-                              <span className="text-xs text-zinc-300 dark:text-zinc-600">–</span>
-                            )}
-                            </li>
-                        </Fragment>
-                      ))}
-                    </ul>
-                  </section>
-                ),
-            )}
+                            <span className="h-px flex-1 bg-line" />
+                            {r.onTeam ? t.teamHeading : t.bankHeading}
+                            <span className="h-px flex-1 bg-line" />
+                          </li>
+                        )}
+                        <li
+                          className={`flex items-center gap-2 rounded-md px-2 ${
+                            r.methods.length === 0 ? "opacity-60" : ""
+                          } ${r.onTeam ? "bg-sunken font-medium" : ""}`}
+                        >
+                          {detail ? (
+                            <button
+                              type="button"
+                              onClick={() => detail.open(r.pokemonId)}
+                              title={r.name}
+                              className="flex min-w-0 flex-1 cursor-pointer items-center gap-2 rounded-md py-2 text-left transition-opacity hover:opacity-70"
+                            >
+                              <PokemonSprite pokemonId={r.pokemonId} name={r.name} size="sm" />
+                              <span className="truncate text-sm">{r.name}</span>
+                            </button>
+                          ) : (
+                            <div className="flex min-w-0 flex-1 items-center gap-2 py-2">
+                              <PokemonSprite pokemonId={r.pokemonId} name={r.name} size="sm" />
+                              <span className="truncate text-sm">{r.name}</span>
+                            </div>
+                          )}
+                          {r.methods.length > 0 ? (
+                            r.methods.map((mth) => (
+                              <Badge key={mth} tone={METHOD_TONE[mth]} className="shrink-0">
+                                {t.method[mth]}
+                              </Badge>
+                            ))
+                          ) : r.byLevel ? (
+                            <Badge tone={METHOD_TONE.level} className="shrink-0">
+                              {t.method.level}
+                            </Badge>
+                          ) : (
+                            <span className="shrink-0 text-xs text-ink-subtle">&ndash;</span>
+                          )}
+                        </li>
+                      </Fragment>
+                    ))}
+                  </ul>
+                </Card>
+              );
+            })}
           </div>
         </div>
       )}

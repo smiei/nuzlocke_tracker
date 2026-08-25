@@ -679,9 +679,8 @@ export async function updateRunSettings(
   revalidatePath("/rules");
   revalidatePath("/tracker");
   revalidatePath("/links");
-  revalidatePath("/catchrate");
   revalidatePath("/typen");
-  revalidatePath("/weaknesses");
+  revalidatePath("/overview");
   publishChange(runId);
   return { success: true };
 }

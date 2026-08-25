@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation";
 import {
   getEffectiveness,
   getEvolutions,
@@ -15,6 +14,7 @@ import { resolveRunId } from "@/lib/runs";
 import { getLang } from "@/lib/i18n/getLang";
 import { translations } from "@/lib/i18n/dictionary";
 import { TrackerView } from "@/components/TrackerView";
+import { CanonicalRun } from "@/components/CanonicalRun";
 import { SpriteSetProvider } from "@/components/SpriteSetProvider";
 import { PokemonDetailProvider } from "@/components/PokemonDetailProvider";
 import { PlayerNamesProvider } from "@/components/PlayerNamesProvider";
@@ -29,8 +29,7 @@ export default async function TrackerPage({
   searchParams: Promise<{ run?: string }>;
 }) {
   const { run } = await searchParams;
-  const { runId, mode, gameId, settings, canonical } = await resolveRunId(run);
-  if (!canonical) redirect(`/tracker?run=${runId}`);
+  const { runId, mode, gameId, settings } = await resolveRunId(run);
 
   const lang = await getLang();
   const game = getGameOrDefault(gameId);
@@ -40,6 +39,7 @@ export default async function TrackerPage({
 
   return (
     <div>
+      <CanonicalRun runId={runId} />
       <h2 className="mb-4 text-xl font-semibold">{translations[lang].tracker.heading}</h2>
       <SpriteSetProvider spriteSet={game.spriteSet}>
         <PlayerNamesProvider names={settings.playerNames} lang={lang}>

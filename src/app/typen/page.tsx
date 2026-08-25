@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation";
 import {
   getCatchRates,
   getEffectiveness,
@@ -22,6 +21,7 @@ import { routeName } from "@/lib/i18n/localize";
 import { displayNameWithForm, movepoolId } from "@/lib/forms";
 import { EncounterStatus, LinkStatus, Player, RunMode } from "@/generated/prisma/client";
 import type { TeamMember } from "@/components/TeamWeaknessesView";
+import { CanonicalRun } from "@/components/CanonicalRun";
 import type { OpenSlot } from "@/components/CatchRateView";
 import { AnalyzeView } from "@/components/AnalyzeView";
 import { SpriteSetProvider } from "@/components/SpriteSetProvider";
@@ -39,8 +39,7 @@ export default async function AnalyzePage({
   searchParams: Promise<{ run?: string }>;
 }) {
   const { run } = await searchParams;
-  const { runId, mode, gameId, settings, canonical } = await resolveRunId(run);
-  if (!canonical) redirect(`/typen?run=${runId}`);
+  const { runId, mode, gameId, settings } = await resolveRunId(run);
 
   const lang = await getLang();
   const game = getGameOrDefault(gameId);
@@ -144,6 +143,7 @@ export default async function AnalyzePage({
 
   return (
     <SpriteSetProvider spriteSet={game.spriteSet}>
+      <CanonicalRun runId={runId} />
       <PlayerNamesProvider names={settings.playerNames} lang={lang}>
         <PokemonDetailProvider
           pokemonList={pokemonList}

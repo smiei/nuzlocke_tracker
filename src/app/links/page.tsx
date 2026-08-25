@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation";
 import {
   getEffectiveness,
   getGameOrDefault,
@@ -16,6 +15,7 @@ import {
 } from "@/lib/data";
 import { EncounterStatus, Player, RunMode } from "@/generated/prisma/client";
 import { SpriteSetProvider } from "@/components/SpriteSetProvider";
+import { CanonicalRun } from "@/components/CanonicalRun";
 import { PokemonDetailProvider } from "@/components/PokemonDetailProvider";
 import { PlayerNamesProvider } from "@/components/PlayerNamesProvider";
 import { computePokemonRanks, rankForSumme } from "@/lib/ranking";
@@ -38,8 +38,7 @@ export default async function LinksPage({
   searchParams: Promise<{ run?: string }>;
 }) {
   const { run } = await searchParams;
-  const { runId, mode, gameId, settings, canonical } = await resolveRunId(run);
-  if (!canonical) redirect(`/links?run=${runId}`);
+  const { runId, mode, gameId, settings } = await resolveRunId(run);
   // The two randomizer rules decide which override categories from the game
   // pack's evolution-overrides.json apply (vs. vanilla methods).
   const evoOptions = {
@@ -198,6 +197,7 @@ export default async function LinksPage({
 
   return (
     <div>
+      <CanonicalRun runId={runId} />
       <h2 className="mb-4 text-xl font-semibold">{heading}</h2>
       <SpriteSetProvider spriteSet={game.spriteSet}>
         <PlayerNamesProvider names={settings.playerNames} lang={lang}>

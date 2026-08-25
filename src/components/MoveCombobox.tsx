@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { Lang } from "@/lib/i18n/dictionary";
 import { translations } from "@/lib/i18n/dictionary";
 import { TypeBadge } from "@/components/TypeBadge";
+import { Input } from "@/components/ui/Input";
 
 export type MoveOption = { slug: string; name: string; type: string };
 
@@ -56,7 +57,7 @@ export function MoveCombobox({
 
   return (
     <div ref={containerRef} className="relative">
-      <input
+      <Input
         type="text"
         value={query}
         onFocus={() => setOpen(true)}
@@ -71,20 +72,20 @@ export function MoveCombobox({
           }
         }}
         placeholder={t.searchPlaceholder}
-        className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:focus:border-zinc-400"
+        aria-label={t.searchPlaceholder}
       />
       {open && (
-        <ul className="absolute z-10 mt-1 max-h-72 w-full min-w-[240px] overflow-y-auto rounded-md border border-zinc-200 bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
+        <ul className="absolute z-10 mt-1 max-h-72 w-full min-w-[240px] overflow-y-auto rounded-lg border border-line bg-panel shadow-lg">
           {results.length === 0 && (
-            <li className="px-3 py-2 text-sm text-zinc-400">{t.noResults}</li>
+            <li className="px-3 py-2 text-sm text-ink-subtle">{t.noResults}</li>
           )}
           {results.map((m) => (
             <li key={m.slug}>
               <button
                 type="button"
                 onClick={() => handlePick(m)}
-                className={`flex w-full items-center gap-2 px-2 py-1.5 text-left text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800 ${
-                  m.slug === selectedSlug ? "bg-zinc-100 dark:bg-zinc-800" : ""
+                className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm hover:bg-hover ${
+                  m.slug === selectedSlug ? "bg-hover font-medium" : ""
                 }`}
               >
                 <TypeBadge type={m.type} lang={lang} />

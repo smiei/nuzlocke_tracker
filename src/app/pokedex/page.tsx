@@ -1,4 +1,3 @@
-import { redirect } from "next/navigation";
 import {
   getEffectiveness,
   getEvolutions,
@@ -14,8 +13,10 @@ import { resolveRunId } from "@/lib/runs";
 import { getLang } from "@/lib/i18n/getLang";
 import { translations } from "@/lib/i18n/dictionary";
 import { PokedexTable } from "@/components/PokedexTable";
+import { CanonicalRun } from "@/components/CanonicalRun";
 import { PokemonDetailProvider } from "@/components/PokemonDetailProvider";
 import { SpriteSetProvider } from "@/components/SpriteSetProvider";
+import { PageHeader } from "@/components/ui/Page";
 
 // Run-scoped: the Pokédex reflects the current run's game (dex scope, sprites,
 // generation, and the game's evolution methods for the detail card).
@@ -27,8 +28,7 @@ export default async function PokedexPage({
   searchParams: Promise<{ run?: string }>;
 }) {
   const { run } = await searchParams;
-  const { runId, gameId, settings, canonical } = await resolveRunId(run);
-  if (!canonical) redirect(`/pokedex?run=${runId}`);
+  const { runId, gameId, settings } = await resolveRunId(run);
 
   const lang = await getLang();
   const game = getGameOrDefault(gameId);
@@ -49,6 +49,7 @@ export default async function PokedexPage({
 
   return (
     <SpriteSetProvider spriteSet={game.spriteSet}>
+      <CanonicalRun runId={runId} />
       <PokemonDetailProvider
         pokemonList={pokemon}
         forms={getPokemonForms(game.dexLimit, game.generation)}
@@ -64,7 +65,7 @@ export default async function PokedexPage({
         lang={lang}
       >
         <div>
-          <h2 className="mb-4 text-xl font-semibold">{translations[lang].pokedex.heading}</h2>
+          <PageHeader title={translations[lang].pokedex.heading} />
           <PokedexTable pokemon={pokemon} lockedFamilyIds={lockedFamilyIds} />
         </div>
       </PokemonDetailProvider>

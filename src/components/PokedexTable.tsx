@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import type { Pokemon } from "@/lib/data";
 import { computePokemonRanks } from "@/lib/ranking";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
@@ -9,6 +9,10 @@ import { pokemonName } from "@/lib/i18n/localize";
 import { TypeBadge } from "@/components/TypeBadge";
 import { PokemonSprite } from "@/components/PokemonSprite";
 import { usePokemonDetail } from "@/components/PokemonDetailProvider";
+import { Button } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Card";
+import { Input } from "@/components/ui/Input";
+import { EmptyState } from "@/components/ui/Page";
 
 type ColumnKey =
   | "id"
@@ -67,10 +71,7 @@ export function PokedexTable({
     for (const p of pokemon) if (locked.has(p.family_id)) lockedCount++;
     return { lockedCount, availableCount: pokemon.length - lockedCount };
   }, [pokemon, locked]);
-  const legendaryCount = useMemo(
-    () => pokemon.filter((p) => p.legendary).length,
-    [pokemon],
-  );
+  const legendaryCount = useMemo(() => pokemon.filter((p) => p.legendary).length, [pokemon]);
 
   const gen1 = pokemon.some((p) => p.stats.Spezial !== undefined);
   const COLUMNS: { key: ColumnKey; label: string; align?: "right"; hideClass?: string }[] = [
@@ -114,19 +115,6 @@ export function PokedexTable({
   const [sortKey, setSortKey] = useState<ColumnKey>("id");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
   const [search, setSearch] = useState("");
-  const [suggestionsOpen, setSuggestionsOpen] = useState(false);
-  const [selectedId, setSelectedId] = useState<number | null>(null);
-  const searchRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
-        setSuggestionsOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
 
   function handleSort(key: ColumnKey) {
     if (key === sortKey) {
@@ -153,6 +141,8 @@ export function PokedexTable({
     return copy;
   }, [pokemon, sortKey, sortDir, ranks, lang]);
 
+  const query = search.trim().toLowerCase();
+
   const visible = useMemo(() => {
     let list = sorted;
     if (avail !== "all") {
@@ -161,197 +151,170 @@ export function PokedexTable({
       );
     }
     if (onlyLegendary) list = list.filter((p) => p.legendary);
+    // Search FILTERS now. It used to only tint the matching row yellow and
+    // scroll to it, leaving all 493 rows in place - the wrong tool for a table
+    // this long, because you search to narrow down, not to be shown where
+    // something already was. That also retires the suggestion dropdown, its
+    // click-outside listener and the scroll-into-view machinery.
+    if (query) list = list.filter((p) => pokemonName(p, lang).toLowerCase().includes(query));
     return list;
-  }, [sorted, avail, locked, onlyLegendary]);
+  }, [sorted, avail, locked, onlyLegendary, query, lang]);
 
-  const query = search.trim().toLowerCase();
-  const suggestions = useMemo(() => {
-    if (!query) return [];
-    return pokemon.filter((p) => pokemonName(p, lang).toLowerCase().includes(query)).slice(0, 8);
-  }, [pokemon, query, lang]);
+  const filtersActive = avail !== "all" || onlyLegendary || query.length > 0;
 
-  function handlePickSuggestion(p: Pokemon) {
-    setSearch(pokemonName(p, lang));
-    setSuggestionsOpen(false);
-    setSelectedId(p.id);
-    document
-      .getElementById(`pokemon-row-${p.id}`)
-      ?.scrollIntoView({ behavior: "smooth", block: "center" });
+  function resetFilters() {
+    setAvail("all");
+    setOnlyLegendary(false);
+    setSearch("");
   }
 
   return (
     <div>
-      <div className="mb-4 flex flex-wrap items-center gap-2">
-        <div ref={searchRef} className="relative w-full max-w-sm">
-        <input
+      <div className="mb-6 flex flex-wrap items-center gap-2">
+        <Input
           type="text"
           value={search}
-          onChange={(e) => {
-            setSearch(e.target.value);
-            setSuggestionsOpen(true);
-            setSelectedId(null);
-          }}
-          onFocus={() => setSuggestionsOpen(true)}
+          onChange={(e) => setSearch(e.target.value)}
           placeholder={t.searchPlaceholder}
-          className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none focus:border-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:focus:border-zinc-400"
+          aria-label={t.searchPlaceholder}
+          className="w-full max-w-sm"
         />
-        {suggestionsOpen && suggestions.length > 0 && (
-          <ul className="absolute z-10 mt-1 w-full overflow-y-auto rounded-md border border-zinc-200 bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
-            {suggestions.map((p) => (
-              <li key={p.id}>
-                <button
-                  type="button"
-                  onClick={() => handlePickSuggestion(p)}
-                  className="flex w-full items-center gap-2 px-3 py-1.5 text-left text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800"
-                >
-                  <PokemonSprite pokemonId={p.id} name={pokemonName(p, lang)} size="sm" />
-                  <span>{pokemonName(p, lang)}</span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-        </div>
         {lockedFamilyIds.length > 0 && (
-          <div className="flex flex-wrap items-center gap-2">
-            <button
-              type="button"
+          <>
+            <Button
+              size="sm"
+              variant={avail === "available" ? "primary" : "secondary"}
               aria-pressed={avail === "available"}
               onClick={() => setAvail((a) => (a === "available" ? "all" : "available"))}
-              className={`rounded-md border px-3 py-1.5 text-sm font-medium transition-colors ${
-                avail === "available"
-                  ? "border-emerald-500 bg-emerald-500 text-white dark:border-emerald-600 dark:bg-emerald-600"
-                  : "border-zinc-300 text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
-              }`}
             >
               {t.filterAvailable} ({availableCount})
-            </button>
-            <button
-              type="button"
+            </Button>
+            <Button
+              size="sm"
+              variant={avail === "locked" ? "primary" : "secondary"}
               aria-pressed={avail === "locked"}
               onClick={() => setAvail((a) => (a === "locked" ? "all" : "locked"))}
-              className={`rounded-md border px-3 py-1.5 text-sm font-medium transition-colors ${
-                avail === "locked"
-                  ? "border-amber-500 bg-amber-500 text-white dark:border-amber-600 dark:bg-amber-600"
-                  : "border-zinc-300 text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
-              }`}
             >
               {t.filterLocked} ({lockedCount})
-            </button>
-          </div>
+            </Button>
+          </>
         )}
-        <button
-          type="button"
+        <Button
+          size="sm"
+          variant={onlyLegendary ? "primary" : "secondary"}
           aria-pressed={onlyLegendary}
           onClick={() => setOnlyLegendary((v) => !v)}
-          className={`rounded-md border px-3 py-1.5 text-sm font-medium transition-colors ${
-            onlyLegendary
-              ? "border-violet-500 bg-violet-500 text-white dark:border-violet-600 dark:bg-violet-600"
-              : "border-zinc-300 text-zinc-600 hover:bg-zinc-100 dark:border-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-800"
-          }`}
         >
           {t.filterLegendary} ({legendaryCount})
-        </button>
+        </Button>
       </div>
-      <div className="overflow-x-auto rounded-md border border-zinc-200 dark:border-zinc-800">
-        <table className="w-full border-collapse text-sm">
-          <thead>
-            <tr className="border-b border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900">
-              <th className="w-12 px-2 py-2" aria-hidden />
-              {COLUMNS.map((col) => (
-                <th
-                  key={col.key}
-                  className={`px-3 py-2 font-medium text-zinc-600 dark:text-zinc-300 ${
-                    col.align === "right" ? "text-right" : "text-left"
-                  } ${col.hideClass ?? ""}`}
-                >
-                  <button
-                    type="button"
-                    onClick={() => handleSort(col.key)}
-                    className={`flex items-center gap-1 hover:text-zinc-900 dark:hover:text-zinc-50 ${
-                      col.align === "right" ? "ml-auto" : ""
+
+      {visible.length === 0 ? (
+        <EmptyState
+          title={t.noResults}
+          action={
+            filtersActive ? (
+              <Button size="sm" onClick={resetFilters}>
+                {t.resetFilters}
+              </Button>
+            ) : undefined
+          }
+        />
+      ) : (
+        <Card padding="none" className="overflow-x-auto">
+          <table className="w-full border-collapse text-sm">
+            <thead>
+              <tr className="border-b border-line bg-sunken">
+                <th className="w-12 px-2 py-2" aria-hidden />
+                {COLUMNS.map((col) => (
+                  <th
+                    key={col.key}
+                    className={`font-medium text-ink-muted ${
+                      col.align === "right" ? "text-right" : "text-left"
+                    } ${col.hideClass ?? ""}`}
+                  >
+                    {/* The button fills the whole header cell instead of sitting
+                        inside its padding - a bare label was a ~16px tall target
+                        with ten of them side by side. */}
+                    <button
+                      type="button"
+                      onClick={() => handleSort(col.key)}
+                      className={`flex w-full items-center gap-1 px-3 py-3 hover:text-ink ${
+                        col.align === "right" ? "justify-end" : ""
+                      }`}
+                    >
+                      {col.label}
+                      {sortKey === col.key && (
+                        <span aria-hidden>{sortDir === "asc" ? "▲" : "▼"}</span>
+                      )}
+                    </button>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {visible.map((p) => {
+                const name = pokemonName(p, lang);
+                const isLocked = avail === "all" && locked.has(p.family_id);
+                return (
+                  <tr
+                    key={p.id}
+                    onClick={() => detail?.open(p.id)}
+                    className={`cursor-pointer border-b border-line last:border-0 hover:bg-hover ${
+                      isLocked ? "opacity-45" : ""
                     }`}
                   >
-                    {col.label}
-                    {sortKey === col.key && <span>{sortDir === "asc" ? "▲" : "▼"}</span>}
-                  </button>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {visible.map((p) => {
-              const name = pokemonName(p, lang);
-              const isMatch = query.length > 0 && name.toLowerCase().includes(query);
-              const isSelected = p.id === selectedId;
-              const isLocked = avail === "all" && locked.has(p.family_id);
-              return (
-                <tr
-                  key={p.id}
-                  id={`pokemon-row-${p.id}`}
-                  onClick={() => detail?.open(p.id)}
-                  className={`cursor-pointer border-b border-zinc-100 last:border-0 hover:bg-zinc-50 dark:border-zinc-900 dark:hover:bg-zinc-800/50 ${
-                    isLocked ? "opacity-45" : ""
-                  } ${
-                    isSelected
-                      ? "bg-blue-50 ring-1 ring-inset ring-blue-400 dark:bg-blue-950/40"
-                      : isMatch
-                        ? "bg-yellow-100 dark:bg-yellow-900/40"
-                        : ""
-                  }`}
-                >
-                  <td className="px-2 py-2">
-                    <PokemonSprite pokemonId={p.id} name={name} size="sm" />
-                  </td>
-                  <td className="px-3 py-2 text-zinc-500 dark:text-zinc-400 hidden md:table-cell">
-                    {p.id}
-                  </td>
-                  <td className="px-3 py-2 font-medium">{name}</td>
-                  <td className="px-3 py-2 hidden sm:table-cell">
-                    <div className="flex flex-wrap gap-1">
-                      {p.types.map((type) => (
-                        <TypeBadge key={type} type={type} lang={lang} />
-                      ))}
-                    </div>
-                  </td>
-                  <td className="px-3 py-2 text-right tabular-nums hidden md:table-cell">
-                    {p.stats.KP}
-                  </td>
-                  <td className="px-3 py-2 text-right tabular-nums hidden lg:table-cell">
-                    {p.stats["Ang."]}
-                  </td>
-                  <td className="px-3 py-2 text-right tabular-nums hidden lg:table-cell">
-                    {p.stats["Vert."]}
-                  </td>
-                  {gen1 ? (
-                    <td className="px-3 py-2 text-right tabular-nums hidden lg:table-cell">
-                      {p.stats.Spezial}
+                    <td className="px-2 py-2">
+                      <PokemonSprite pokemonId={p.id} name={name} size="sm" />
                     </td>
-                  ) : (
-                    <>
-                      <td className="px-3 py-2 text-right tabular-nums hidden lg:table-cell">
-                        {p.stats["Sp.-A."]}
+                    <td className="hidden px-3 py-2 text-ink-muted md:table-cell">{p.id}</td>
+                    <td className="px-3 py-2 font-medium text-ink">{name}</td>
+                    <td className="hidden px-3 py-2 sm:table-cell">
+                      <div className="flex flex-wrap gap-1">
+                        {p.types.map((type) => (
+                          <TypeBadge key={type} type={type} lang={lang} />
+                        ))}
+                      </div>
+                    </td>
+                    <td className="hidden px-3 py-2 text-right tabular-nums md:table-cell">
+                      {p.stats.KP}
+                    </td>
+                    <td className="hidden px-3 py-2 text-right tabular-nums lg:table-cell">
+                      {p.stats["Ang."]}
+                    </td>
+                    <td className="hidden px-3 py-2 text-right tabular-nums lg:table-cell">
+                      {p.stats["Vert."]}
+                    </td>
+                    {gen1 ? (
+                      <td className="hidden px-3 py-2 text-right tabular-nums lg:table-cell">
+                        {p.stats.Spezial}
                       </td>
-                      <td className="px-3 py-2 text-right tabular-nums hidden lg:table-cell">
-                        {p.stats["Sp.-V."]}
-                      </td>
-                    </>
-                  )}
-                  <td className="px-3 py-2 text-right tabular-nums hidden md:table-cell">
-                    {p.stats["Init."]}
-                  </td>
-                  <td className="px-3 py-2 text-right tabular-nums text-zinc-500 dark:text-zinc-400">
-                    #{ranks.get(p.id)}
-                  </td>
-                  <td className="px-3 py-2 text-right font-semibold tabular-nums">
-                    {p.stats.Summe}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+                    ) : (
+                      <>
+                        <td className="hidden px-3 py-2 text-right tabular-nums lg:table-cell">
+                          {p.stats["Sp.-A."]}
+                        </td>
+                        <td className="hidden px-3 py-2 text-right tabular-nums lg:table-cell">
+                          {p.stats["Sp.-V."]}
+                        </td>
+                      </>
+                    )}
+                    <td className="hidden px-3 py-2 text-right tabular-nums md:table-cell">
+                      {p.stats["Init."]}
+                    </td>
+                    <td className="px-3 py-2 text-right tabular-nums text-ink-muted">
+                      #{ranks.get(p.id)}
+                    </td>
+                    <td className="px-3 py-2 text-right font-semibold tabular-nums text-ink">
+                      {p.stats.Summe}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </Card>
+      )}
     </div>
   );
 }

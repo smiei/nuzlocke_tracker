@@ -173,6 +173,7 @@ const de = {
     filterAvailable: "Nur verfügbare",
     filterLocked: "Nur gesperrte",
     filterLegendary: "Nur Legendäre",
+      resetFilters: "Filter zurücksetzen",
     columns: {
       id: "ID",
       name: "Name",
@@ -632,6 +633,7 @@ const en: Dictionary = {
     filterAvailable: "Only available",
     filterLocked: "Only locked",
     filterLegendary: "Only legendaries",
+      resetFilters: "Reset filters",
     columns: {
       id: "ID",
       name: "Name",
@@ -1091,6 +1093,7 @@ const fr: Dictionary = {
     filterAvailable: "Disponibles",
     filterLocked: "Bloqués",
     filterLegendary: "Légendaires uniquement",
+      resetFilters: "Réinitialiser les filtres",
     columns: {
       id: "ID",
       name: "Nom",
@@ -1550,6 +1553,7 @@ const es: Dictionary = {
     filterAvailable: "Solo disponibles",
     filterLocked: "Solo bloqueados",
     filterLegendary: "Solo legendarios",
+      resetFilters: "Restablecer filtros",
     columns: {
       id: "ID",
       name: "Nombre",
@@ -2009,6 +2013,7 @@ const it: Dictionary = {
     filterAvailable: "Solo disponibili",
     filterLocked: "Solo bloccati",
     filterLegendary: "Solo leggendari",
+      resetFilters: "Reimposta i filtri",
     columns: {
       id: "ID",
       name: "Nome",
