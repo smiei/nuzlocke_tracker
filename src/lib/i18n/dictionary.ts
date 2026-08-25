@@ -313,7 +313,7 @@ const de = {
       debugMode: {
         label: "Debug: Encounter-Reihenfolge aufzeichnen",
         description:
-          "Blendet im Encounter-Tab einen Export der Reihenfolge ein, in der Routen eingetragen wurden – zum Korrigieren der routes.json eines Spielpakets. Aufgezeichnet wird immer, der Schalter blendet nur den Export ein.",
+          "Blendet im Encounter-Tab einen Export der Reihenfolge ein, in der Routen eingetragen wurden – zum Korrigieren der routes.json eines Spielpakets. Aufgezeichnet wird immer; der Schalter blendet nur den Export ein und gilt nur auf diesem Gerät.",
       },
       speciesClause: {
         label: "Species Clause",
@@ -841,7 +841,7 @@ const en: Dictionary = {
       debugMode: {
         label: "Debug: record encounter order",
         description:
-          "Shows an export of the order routes were entered in on the Encounter tab – for correcting a game pack’s routes.json. The order is always recorded; this only reveals the export.",
+          "Shows an export of the order routes were entered in on the Encounter tab – for correcting a game pack’s routes.json. The order is always recorded; this only reveals the export, and only on this device.",
       },
       speciesClause: {
         label: "Species Clause",
@@ -1372,7 +1372,7 @@ const fr: Dictionary = {
       debugMode: {
         label: "Débogage : enregistrer l’ordre des rencontres",
         description:
-          "Affiche dans l’onglet Rencontres un export de l’ordre dans lequel les routes ont été saisies – pour corriger le routes.json d’un pack. L’ordre est toujours enregistré ; ceci ne fait qu’afficher l’export.",
+          "Affiche dans l’onglet Rencontres un export de l’ordre dans lequel les routes ont été saisies – pour corriger le routes.json d’un pack. L’ordre est toujours enregistré ; ceci ne fait qu’afficher l’export, et seulement sur cet appareil.",
       },
       speciesClause: {
         label: "Species Clause",
@@ -1903,7 +1903,7 @@ const es: Dictionary = {
       debugMode: {
         label: "Depuración: registrar el orden de encuentros",
         description:
-          "Muestra en la pestaña Encuentros una exportación del orden en que se introdujeron las rutas, para corregir el routes.json de un paquete. El orden siempre se registra; esto solo muestra la exportación.",
+          "Muestra en la pestaña Encuentros una exportación del orden en que se introdujeron las rutas, para corregir el routes.json de un paquete. El orden siempre se registra; esto solo muestra la exportación, y solo en este dispositivo.",
       },
       speciesClause: {
         label: "Species Clause",
@@ -2434,7 +2434,7 @@ const it: Dictionary = {
       debugMode: {
         label: "Debug: registra l’ordine degli incontri",
         description:
-          "Mostra nella scheda Incontri un’esportazione dell’ordine in cui i percorsi sono stati inseriti, per correggere il routes.json di un pacchetto. L’ordine viene sempre registrato; questo mostra solo l’esportazione.",
+          "Mostra nella scheda Incontri un’esportazione dell’ordine in cui i percorsi sono stati inseriti, per correggere il routes.json di un pacchetto. L’ordine viene sempre registrato; questo mostra solo l’esportazione, e solo su questo dispositivo.",
       },
       speciesClause: {
         label: "Species Clause",

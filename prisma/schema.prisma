@@ -202,9 +202,11 @@ model CustomRoute {
 // Encounter.createdAt almost answers this already, but clearEncounter deletes
 // the row, so fixing a typo would silently move that route to the end of the
 // order - which is exactly the thing this table exists to get right. Written
-// on every encounter save regardless of the run's debugMode setting, so the
-// data is already there whenever the setting is switched on; the setting only
-// controls whether the export UI is offered.
+// on every encounter save, unconditionally, so the data is already there
+// whenever somebody switches the export on. The switch itself is per DEVICE
+// (localStorage, see src/lib/useDebugMode.ts) and only controls whether the
+// export UI is offered - it is not a run setting, so it never reaches this
+// database and never syncs to the other player's phone.
 model RouteEntry {
   id      Int      @id @default(autoincrement())
   runId   Int

@@ -9,6 +9,7 @@ import { useDialog } from "@/components/DialogProvider";
 import type { Lang } from "@/lib/i18n/dictionary";
 import { translations } from "@/lib/i18n/dictionary";
 import type { RunSettings } from "@/lib/runSettings";
+import { useDebugMode } from "@/lib/useDebugMode";
 import { RunMode } from "@/generated/prisma/enums";
 import { useToast } from "@/components/ui/ToastProvider";
 import { Button } from "@/components/ui/Button";
@@ -75,6 +76,44 @@ const TOGGLE_ORDER: BooleanSettingKey[] = [
   "statics",
 ];
 
+// One switch row, shared by the rule toggles and the debug switch below them.
+// The whole row is the control; it used to be a 20x36px target sitting at the
+// far end.
+function ToggleRow({
+  label,
+  description,
+  on,
+  disabled = false,
+  indent = false,
+  onToggle,
+}: {
+  label: string;
+  description: string;
+  on: boolean;
+  disabled?: boolean;
+  indent?: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={on}
+      disabled={disabled}
+      onClick={onToggle}
+      className={`flex w-full items-center justify-between gap-4 px-4 py-3 text-left transition-colors hover:bg-hover disabled:cursor-not-allowed ${
+        indent ? "pl-8" : ""
+      } ${disabled ? "opacity-50" : ""}`}
+    >
+      <span className="min-w-0">
+        <span className="block text-sm font-medium text-ink">{label}</span>
+        <span className="block text-xs text-ink-muted">{description}</span>
+      </span>
+      <SwitchTrack on={on} />
+    </button>
+  );
+}
+
 // Purely presentational: the surrounding row carries role="switch" and the
 // aria-checked state, so this must not be focusable or announced on its own.
 function SwitchTrack({ on }: { on: boolean }) {
@@ -119,6 +158,8 @@ export function RulesView({
   const [draft, setDraft] = useState(markdown);
   const [notesOpen, setNotesOpen] = useState(true);
   const [presetDialogOpen, setPresetDialogOpen] = useState(false);
+  // Per device, not per run setting - see useDebugMode.
+  const [debugMode, setDebugMode] = useDebugMode(runId);
   const [pending, startTransition] = useTransition();
   // Optimistic toggle state; server state (possibly changed on another
   // device via live sync) wins whenever a refresh delivers new props -
@@ -191,27 +232,16 @@ export function RulesView({
 
   function renderToggle(key: BooleanSettingKey) {
     const isClauseChild = key === "staticsExemptFromClause";
-    const inactive = isClauseChild && !local.speciesClause;
     return (
-      // The whole row is the switch. It used to be a 20x36px target sitting at
-      // the far end of the row.
-      <button
+      <ToggleRow
         key={key}
-        type="button"
-        role="switch"
-        aria-checked={local[key]}
-        disabled={pending || inactive}
-        onClick={() => handleToggle(key)}
-        className={`flex w-full items-center justify-between gap-4 px-4 py-3 text-left transition-colors hover:bg-hover disabled:cursor-not-allowed ${
-          isClauseChild ? "pl-8" : ""
-        } ${inactive ? "opacity-50" : ""}`}
-      >
-        <span className="min-w-0">
-          <span className="block text-sm font-medium text-ink">{t.toggles[key].label}</span>
-          <span className="block text-xs text-ink-muted">{t.toggles[key].description}</span>
-        </span>
-        <SwitchTrack on={local[key]} />
-      </button>
+        label={t.toggles[key].label}
+        description={t.toggles[key].description}
+        on={local[key]}
+        disabled={pending || (isClauseChild && !local.speciesClause)}
+        indent={isClauseChild}
+        onToggle={() => handleToggle(key)}
+      />
     );
   }
 
@@ -294,11 +324,18 @@ export function RulesView({
             </Card>
           </Section>
 
-          {/* Its own section rather than a ninth row above: debugMode is not a
-              rule of the run, it is a maintenance switch for correcting a game
-              pack, and it has no business sitting among the clauses. */}
+          {/* Its own section rather than a ninth row above: this is not a rule
+              of the run but a maintenance switch for correcting a game pack,
+              and unlike everything above it it never leaves this device. */}
           <Section title={t.debugHeading}>
-            <Card padding="none" className="overflow-hidden">{renderToggle("debugMode")}</Card>
+            <Card padding="none" className="overflow-hidden">
+              <ToggleRow
+                label={t.toggles.debugMode.label}
+                description={t.toggles.debugMode.description}
+                on={debugMode}
+                onToggle={() => setDebugMode(!debugMode)}
+              />
+            </Card>
           </Section>
 
           {mode === RunMode.SOULLINK && (

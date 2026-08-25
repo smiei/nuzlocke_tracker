@@ -17,6 +17,7 @@ import { useToast } from "@/components/ui/ToastProvider";
 import { ProgressBar } from "@/components/ProgressBar";
 import { usePlayerLabel } from "@/components/PlayerNamesProvider";
 import type { RunSettings } from "@/lib/runSettings";
+import { useDebugMode } from "@/lib/useDebugMode";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -62,6 +63,9 @@ export function TrackerView({
   const [orderText, setOrderText] = useState<string | null>(null);
   const [exporting, startExport] = useTransition();
   const toast = useToast();
+  // Per device: the phone in the same run must not sprout debug controls
+  // because the PC switched them on.
+  const [debugMode] = useDebugMode(runId);
 
   // Every route in display order, for the "insert after" picker - statics
   // included, since an added location may well belong after one.
@@ -212,7 +216,7 @@ export function TrackerView({
           <Button size="sm" onClick={() => setCustomOpen(true)}>
             {tTracker.custom.manage}
           </Button>
-          {settings.debugMode && (
+          {debugMode && (
             <Button size="sm" loading={exporting} onClick={handleExportOrder}>
               {tTracker.debug.export}
             </Button>
