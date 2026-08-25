@@ -3,7 +3,7 @@
 import { useState } from "react";
 import type { Route, Pokemon } from "@/lib/data";
 import type { Encounter, RunMode } from "@/generated/prisma/client";
-import { Player } from "@/generated/prisma/enums";
+import { EncounterStatus, Player } from "@/generated/prisma/enums";
 import type { Lang } from "@/lib/i18n/dictionary";
 import { translations } from "@/lib/i18n/dictionary";
 import { routeName } from "@/lib/i18n/localize";
@@ -66,18 +66,33 @@ export function TrackerView({
   const progress = computeRouteProgress(routes, encounters, isClassic, settings.statics);
 
   function renderRoute(route: Route) {
-    // SoulLink: exactly one of the two players has an entry -> the other
-    // one still owes theirs; tint the row as a gentle reminder.
-    const halfDone =
-      !isClassic &&
-      encounters.some((e) => e.routeId === route.id && e.player === Player.PLAYER1) !==
-        encounters.some((e) => e.routeId === route.id && e.player === Player.PLAYER2);
+    const p1 = encounters.find((e) => e.routeId === route.id && e.player === Player.PLAYER1);
+    const p2 = isClassic
+      ? undefined
+      : encounters.find((e) => e.routeId === route.id && e.player === Player.PLAYER2);
+    const filled = [p1, p2].filter((e): e is Encounter => e !== undefined);
+    // SoulLink: exactly one of the two players has an entry -> the other still
+    // owes theirs; the warning sign next to the route name says so.
+    const halfDone = !isClassic && filled.length === 1;
+    // Every row carries a 4px rail on its left, grey until the route resolves.
+    // One lost encounter settles the whole route - in SoulLink the pair can
+    // never form, in Classic there is nothing else to wait for - so it outranks
+    // "still missing an entry" and a killed encounter reads red even while the
+    // other player owes theirs. This is what tells two adjacent routes apart at
+    // a glance; a hairline divider between two tall two-column rows does not.
+    const lost = filled.some((e) => e.status !== EncounterStatus.CAUGHT);
+    const complete = filled.length === (isClassic ? 1 : 2);
+    const tone = lost
+      ? "border-l-danger-line bg-danger-bg/40"
+      : complete
+        ? "border-l-success-line bg-success-bg/40"
+        : halfDone
+          ? "border-l-warning-line bg-warning-bg/40"
+          : "border-l-line-strong";
     return (
       <div
         key={route.id}
-        className={`flex flex-col gap-3 p-3 sm:flex-row sm:items-start sm:gap-4 sm:p-4 ${
-          halfDone ? "border-l-2 border-l-warning-line bg-warning-bg/40" : ""
-        }`}
+        className={`flex flex-col gap-3 border-l-4 p-3 sm:flex-row sm:items-start sm:gap-4 sm:p-4 ${tone}`}
       >
         <div className="shrink-0 pt-1.5 sm:w-40">
           {halfDone && (
@@ -182,7 +197,7 @@ export function TrackerView({
           }
         />
       ) : (
-        <Card padding="none" className="divide-y divide-line overflow-hidden">
+        <Card padding="none" className="divide-y divide-line-strong overflow-hidden">
           {mainRoutes.map(renderRoute)}
           {postgameRoutes.length > 0 && (
             <>

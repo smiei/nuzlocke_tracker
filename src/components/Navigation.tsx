@@ -22,7 +22,7 @@ export function Navigation() {
     .filter((item) => !hidden.includes(item.href));
 
   return (
-    <nav className="flex gap-1 overflow-x-auto px-4 sm:px-6">
+    <nav className="flex justify-center-safe gap-1 overflow-x-auto px-4 sm:px-6">
       {items.map((item) => {
         const isActive = pathname === item.href;
         const href = run ? `${item.href}?run=${run}` : item.href;

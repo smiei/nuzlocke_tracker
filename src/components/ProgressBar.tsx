@@ -29,7 +29,7 @@ export function ProgressBar({
         }`}
       >
         <div
-          className="h-full rounded-full bg-success transition-all"
+          className="h-full rounded-full bg-success-solid transition-all"
           style={{ width: `${percent}%` }}
         />
         {markerPercent !== null && (

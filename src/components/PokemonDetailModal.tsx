@@ -100,7 +100,7 @@ function MoveRow({ move, lang }: { move: MoveEntry; lang: Lang }) {
           ▸
         </span>
       </button>
-      {open && <MoveDetailPanel move={move} lang={lang} className="mb-1.5 ml-12" />}
+      {open && <MoveDetailPanel move={move} lang={lang} className="mb-1.5" />}
     </div>
   );
 }
@@ -247,27 +247,21 @@ export function PokemonDetailModal({
     // titleHidden: the card carries its own header - name centred over the
     // sprite, types underneath - which the user arranged deliberately. Modal is
     // here for the behaviour it brings (focus trap, Escape, scroll lock, focus
-    // restore), not for its title bar.
+    // restore, and the pinned close button), not for its title bar.
     <Modal
       open
       onClose={onClose}
       title={pokemonName(pokemon, lang)}
       titleHidden
+      closeLabel={t.dialog.cancel}
       size="md"
     >
       <div>
         {/* Name, sprite and types stacked on the centre axis; the dex number
-            moved down into the tiles below. Close button is absolute so it
-            doesn't pull the name off-centre. */}
-        <div className="relative mb-3 flex items-start gap-4">
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label={t.dialog.cancel}
-            className="absolute right-0 top-0 flex h-10 w-10 items-center justify-center rounded-md text-ink-subtle transition-colors hover:bg-hover hover:text-ink"
-          >
-            ✕
-          </button>
+            moved down into the tiles below. The close button belongs to Modal
+            now (closeLabel above), which pins it to the panel so it stays
+            reachable once the card scrolls. */}
+        <div className="mb-3 flex items-start gap-4">
           {/* Left column: name centred over the sprite, types underneath.
               shrink-0 keeps it at its natural width so the evolution tree
               beside it takes the remaining space. */}
@@ -281,8 +275,8 @@ export function PokemonDetailModal({
             </div>
           </div>
           {/* Right column: the evolution family, centred against the sprite.
-              pr-6 keeps it clear of the absolutely positioned close button. */}
-          <div className="flex min-w-0 flex-1 self-center flex-col gap-0.5 pr-6">
+              pr-10 keeps it clear of the pinned close button. */}
+          <div className="flex min-w-0 flex-1 self-center flex-col gap-0.5 pr-10">
             {!familyHasEvolution ? (
               <p className="text-xs text-ink-subtle">{td.noEvolution}</p>
             ) : (

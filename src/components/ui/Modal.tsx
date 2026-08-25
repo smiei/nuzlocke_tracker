@@ -30,6 +30,12 @@ export function Modal({
   onClose,
   title,
   titleHidden = false,
+  // Set to render a close button pinned to the panel's top-right corner. It
+  // sits outside the scrolling body on purpose: a tall card (the Pokemon
+  // detail modal) otherwise scrolls its own X out of reach, and the backdrop
+  // tap is not a discoverable substitute on a phone. The value is the
+  // accessible name, so the caller supplies it in its own language.
+  closeLabel,
   size = "sm",
   // Dialogs holding typed input opt out: a stray backdrop tap discarding a
   // half-filled import form is exactly the kind of thing that reads as clunky.
@@ -44,6 +50,7 @@ export function Modal({
   // a confirm dialog whose whole content is one sentence does not need one.
   title: string;
   titleHidden?: boolean;
+  closeLabel?: string;
   size?: Size;
   dismissOnBackdrop?: boolean;
   // Makes the panel itself a <form>, so Enter submits from any field. The
@@ -102,6 +109,17 @@ export function Modal({
 
   const body = (
     <>
+      {closeLabel && (
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label={closeLabel}
+          // bg-panel, because the body scrolls underneath it.
+          className="absolute right-2 top-2 z-10 flex h-10 w-10 items-center justify-center rounded-md bg-panel text-ink-subtle transition-colors hover:bg-hover hover:text-ink"
+        >
+          ✕
+        </button>
+      )}
       {!titleHidden && (
         <h2 className="border-b border-line px-4 py-3 text-base font-semibold text-ink">{title}</h2>
       )}
@@ -126,7 +144,7 @@ export function Modal({
     tabIndex: -1,
     onClick: (event: { stopPropagation: () => void }) => event.stopPropagation(),
     className: cn(
-      "flex max-h-[85vh] w-full flex-col rounded-lg border border-line bg-panel shadow-xl",
+      "relative flex max-h-[85vh] w-full flex-col rounded-lg border border-line bg-panel shadow-xl",
       SIZES[size],
     ),
   };

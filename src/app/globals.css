@@ -42,10 +42,16 @@
   --danger: #b91c1c;
   --danger-bg: #fef2f2;
   --danger-line: #fca5a5;
-  /* The palette had danger as text, as a wash and as a border, but no FILL -
-     so a destructive primary button had nowhere to go. Deliberately one
-     saturated value for both themes: --danger itself is a light pastel in dark
-     mode (it has to read as text there) and makes a washed-out button. */
+  /* The palette had success/warning/danger as text, as a wash and as a border,
+     but no FILL - so a destructive primary button, a progress bar and an HP bar
+     all had nowhere to go and reached for the text token instead. In dark mode
+     those are light pastels (they have to read as text on a dark ground), so a
+     bar filled with one comes out washed and chalky.
+     Red is one value for both themes: a mid red carries on white and on
+     near-black alike. Green and amber do not - a mid-tone dark enough to read
+     on white is too dim on near-black - so those get a per-theme step. */
+  --success-solid: #16a34a;
+  --warning-solid: #d97706;
   --danger-solid: #dc2626;
   --danger-solid-ink: #ffffff;
   --info: #0369a1;
@@ -80,6 +86,8 @@
   --danger: #fca5a5;
   --danger-bg: #2c0b0b;
   --danger-line: #b91c1c;
+  --success-solid: #22c55e;
+  --warning-solid: #f59e0b;
   --info: #7dd3fc;
   --info-bg: #082f49;
   --info-line: #0369a1;
@@ -149,6 +157,8 @@
   --color-danger: var(--danger);
   --color-danger-bg: var(--danger-bg);
   --color-danger-line: var(--danger-line);
+  --color-success-solid: var(--success-solid);
+  --color-warning-solid: var(--warning-solid);
   --color-danger-solid: var(--danger-solid);
   --color-danger-solid-ink: var(--danger-solid-ink);
   --color-info: var(--info);

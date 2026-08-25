@@ -32,10 +32,12 @@ const inputClass =
   "h-11 w-full rounded-md border border-line-strong bg-panel px-3 text-sm text-ink placeholder:text-ink-subtle disabled:cursor-not-allowed disabled:opacity-50";
 const labelClass = "mb-1 block text-xs font-medium text-ink-muted";
 
+// The *-solid fills, not the semantic tokens: those are text colours and turn
+// chalky in a bar (see globals.css).
 function hpBarColor(hpPercent: number): string {
-  if (hpPercent > 50) return "bg-success";
-  if (hpPercent > 20) return "bg-warning";
-  return "bg-danger";
+  if (hpPercent > 50) return "bg-success-solid";
+  if (hpPercent > 20) return "bg-warning-solid";
+  return "bg-danger-solid";
 }
 
 // Item sprites live in /public/ball-sprites (downloaded via

@@ -81,7 +81,7 @@ function SwitchTrack({ on }: { on: boolean }) {
     <span
       aria-hidden
       className={`relative block h-5 w-9 shrink-0 rounded-full transition-colors ${
-        on ? "bg-success" : "bg-line-strong"
+        on ? "bg-success-solid" : "bg-line-strong"
       }`}
     >
       <span
