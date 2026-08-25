@@ -83,3 +83,4 @@ claude.md
 # graphify knowledge graph output - regenerable from the sources via /graphify,
 # machine-specific paths inside, and ~1.5 MB of generated HTML/JSON
 /graphify-out/
+.mcp.json
