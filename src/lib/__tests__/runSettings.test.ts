@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { parseRunSettings, DEFAULT_RUN_SETTINGS } from "@/lib/runSettings";
+import { RUN_SETTING_KEYS, serializePresetSettings, parseRunSettings, DEFAULT_RUN_SETTINGS } from "@/lib/runSettings";
 
 describe("parseRunSettings", () => {
   it("returns all defaults for '{}' and for malformed JSON", () => {
@@ -32,5 +32,34 @@ describe("parseRunSettings", () => {
   it("falls back to empty player names when malformed", () => {
     const s = parseRunSettings('{"playerNames":{"PLAYER1": 42}}');
     expect(s.playerNames).toEqual({ PLAYER1: "", PLAYER2: "" });
+  });
+});
+
+describe("serializePresetSettings", () => {
+  it("keeps every boolean toggle", () => {
+    const settings = parseRunSettings('{"speciesClause": false, "statics": false}');
+    const json = JSON.parse(serializePresetSettings(settings)) as Record<string, boolean>;
+    for (const key of RUN_SETTING_KEYS) expect(typeof json[key]).toBe("boolean");
+    expect(json.speciesClause).toBe(false);
+    expect(json.statics).toBe(false);
+    expect(json.nicknames).toBe(true);
+  });
+
+  it("never carries player names into a preset", () => {
+    // The one part of a run's settings that is about *that* run: a preset
+    // holding it would rename the players of every run it is applied to.
+    const settings = parseRunSettings('{"playerNames":{"PLAYER1":"Ash","PLAYER2":"Gary"}}');
+    const json = serializePresetSettings(settings);
+    expect(json).not.toContain("playerNames");
+    expect(json).not.toContain("Ash");
+  });
+
+  it("round-trips back through parseRunSettings with default names", () => {
+    const settings = parseRunSettings(
+      '{"shinyClause": false, "playerNames":{"PLAYER1":"Ash","PLAYER2":"Gary"}}',
+    );
+    const back = parseRunSettings(serializePresetSettings(settings));
+    expect(back.shinyClause).toBe(false);
+    expect(back.playerNames).toEqual({ PLAYER1: "", PLAYER2: "" });
   });
 });

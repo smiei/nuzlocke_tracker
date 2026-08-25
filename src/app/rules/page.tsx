@@ -18,6 +18,13 @@ export default async function RulesPage({
   const lang = await getLang();
 
   const runRow = await prisma.run.findUnique({ where: { id: runId } });
+  // App-wide, so this is NOT filtered by runId - the same list of saved
+  // rulesets is offered in every run. Ordered by name so the dropdown reads
+  // like a list rather than by creation accident.
+  const presets = await prisma.rulePreset.findMany({
+    select: { id: true, name: true },
+    orderBy: { name: "asc" },
+  });
   const defaultMarkdown = DEFAULT_RULES[lang];
   // Pre-existing runs (created before the rules feature) have '' - show the
   // built-in ruleset for them instead of an empty page.
@@ -33,6 +40,7 @@ export default async function RulesPage({
         markdown={markdown}
         defaultMarkdown={defaultMarkdown}
         settings={settings}
+        presets={presets}
       />
     </>
   );

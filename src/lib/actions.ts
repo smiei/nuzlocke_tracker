@@ -16,7 +16,13 @@ import type { ActionError } from "@/lib/actionErrors";
 import type { BackupFile } from "@/lib/backup";
 import { applyBackup, backupFilename, buildBackup, buildBackupZip, parseBackup } from "@/lib/backup";
 import { DEFAULT_RULES } from "@/lib/defaultRules";
-import { parseRunSettings, RUN_SETTING_KEYS, type RunSettings } from "@/lib/runSettings";
+import {
+  PRESET_NAME_MAX,
+  parseRunSettings,
+  serializePresetSettings,
+  RUN_SETTING_KEYS,
+  type RunSettings,
+} from "@/lib/runSettings";
 import type { Lang } from "@/lib/i18n/dictionary";
 
 export type SaveEncounterInput = {
@@ -696,6 +702,113 @@ export async function saveRules(runId: number, markdown: string): Promise<SaveRu
   await prisma.run.update({ where: { id: runId }, data: { rulesMarkdown: markdown } });
   revalidatePath("/rules");
   publishChange(runId);
+  return { success: true };
+}
+
+// --- Rule presets ---------------------------------------------------------
+//
+// A preset is a named snapshot of the rule toggles plus the house-rules
+// markdown, stored app-wide rather than per run - the whole point is to carry
+// a ruleset from one playthrough into the next, so every run's Rules tab
+// offers the same list. None of these actions calls publishChange for the
+// preset list itself: the list is not run state, and the two that do change a
+// run (apply) publish for that run.
+
+export type SaveRulePresetResult =
+  | { success: true; id: number }
+  | { success: false; error: ActionError };
+
+// Snapshots what is STORED on the run, never what sits unsaved in the notes
+// editor - the Rules tab disables this while editing for exactly that reason.
+// `lang` mirrors what rules/page.tsx renders: a run created before the rules
+// feature has an empty rulesMarkdown and shows the built-in ruleset, so
+// without this fallback its preset would come out blank.
+export async function saveRulePreset(
+  runId: number,
+  name: string,
+  lang: Lang,
+): Promise<SaveRulePresetResult> {
+  const trimmed = name.trim().slice(0, PRESET_NAME_MAX);
+  if (!trimmed) {
+    return { success: false, error: { key: "nameRequired" } };
+  }
+
+  const run = await prisma.run.findUnique({ where: { id: runId } });
+  if (!run) {
+    return { success: false, error: { key: "runNotFound", id: runId } };
+  }
+
+  const data = {
+    settingsJson: serializePresetSettings(parseRunSettings(run.settingsJson)),
+    rulesMarkdown: run.rulesMarkdown.trim() ? run.rulesMarkdown : DEFAULT_RULES[lang],
+  };
+  // Upsert on the unique name: saving under a name that already exists is an
+  // overwrite, which is what the dialog offers ("Overwrite" instead of "Save").
+  const preset = await prisma.rulePreset.upsert({
+    where: { name: trimmed },
+    create: { name: trimmed, ...data },
+    update: data,
+  });
+
+  revalidatePath("/rules");
+  return { success: true, id: preset.id };
+}
+
+export type ApplyRulePresetResult = { success: true } | { success: false; error: ActionError };
+
+// Overwrites the run's toggles and house rules with the preset's. The run's
+// own playerNames survive - a preset never carries them (see
+// serializePresetSettings).
+export async function applyRulePreset(
+  runId: number,
+  presetId: number,
+): Promise<ApplyRulePresetResult> {
+  const run = await prisma.run.findUnique({ where: { id: runId } });
+  if (!run) {
+    return { success: false, error: { key: "runNotFound", id: runId } };
+  }
+  const preset = await prisma.rulePreset.findUnique({ where: { id: presetId } });
+  if (!preset) {
+    return { success: false, error: { key: "presetNotFound", id: presetId } };
+  }
+
+  // parseRunSettings defaults every key the preset does not mention, so an
+  // older preset saved before a new toggle existed applies that toggle's
+  // default rather than leaving the run's current value dangling.
+  const next = parseRunSettings(preset.settingsJson);
+  next.playerNames = parseRunSettings(run.settingsJson).playerNames;
+
+  await prisma.run.update({
+    where: { id: runId },
+    data: {
+      settingsJson: JSON.stringify(next),
+      rulesMarkdown: preset.rulesMarkdown,
+    },
+  });
+
+  // Same fan-out as updateRunSettings - the toggles drive rendering on several
+  // tabs, not just this one.
+  revalidatePath("/rules");
+  revalidatePath("/tracker");
+  revalidatePath("/links");
+  revalidatePath("/typen");
+  revalidatePath("/overview");
+  publishChange(runId);
+  return { success: true };
+}
+
+export type DeleteRulePresetResult = { success: true } | { success: false; error: ActionError };
+
+// App-wide, so this removes it from every run's list. Runs that had it applied
+// keep their rules - a preset is a template, not a live link.
+export async function deleteRulePreset(presetId: number): Promise<DeleteRulePresetResult> {
+  const preset = await prisma.rulePreset.findUnique({ where: { id: presetId } });
+  if (!preset) {
+    return { success: false, error: { key: "presetNotFound", id: presetId } };
+  }
+
+  await prisma.rulePreset.delete({ where: { id: presetId } });
+  revalidatePath("/rules");
   return { success: true };
 }
 

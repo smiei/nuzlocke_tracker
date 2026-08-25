@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import ReactMarkdown from "react-markdown";
-import { saveRules, updateRunSettings } from "@/lib/actions";
+import { applyRulePreset, saveRules, updateRunSettings } from "@/lib/actions";
 import { formatActionError } from "@/lib/actionErrors";
 import { useDialog } from "@/components/DialogProvider";
 import type { Lang } from "@/lib/i18n/dictionary";
@@ -13,7 +13,8 @@ import { RunMode } from "@/generated/prisma/enums";
 import { useToast } from "@/components/ui/ToastProvider";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
-import { Input, Textarea } from "@/components/ui/Input";
+import { Input, Select, Textarea } from "@/components/ui/Input";
+import { RulePresetDialog, type RulePresetSummary } from "@/components/RulePresetDialog";
 import { PageHeader, Section } from "@/components/ui/Page";
 
 // The boolean rule toggles (playerNames is handled separately).
@@ -100,6 +101,7 @@ export function RulesView({
   markdown,
   defaultMarkdown,
   settings,
+  presets,
 }: {
   runId: number;
   lang: Lang;
@@ -107,6 +109,8 @@ export function RulesView({
   markdown: string;
   defaultMarkdown: string;
   settings: RunSettings;
+  // App-wide, not run-scoped - the same list appears in every run.
+  presets: RulePresetSummary[];
 }) {
   const router = useRouter();
   const toast = useToast();
@@ -114,6 +118,7 @@ export function RulesView({
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(markdown);
   const [notesOpen, setNotesOpen] = useState(true);
+  const [presetDialogOpen, setPresetDialogOpen] = useState(false);
   const [pending, startTransition] = useTransition();
   // Optimistic toggle state; server state (possibly changed on another
   // device via live sync) wins whenever a refresh delivers new props -
@@ -165,6 +170,25 @@ export function RulesView({
     });
   }
 
+  // Overwrites both halves of this tab at once, so it asks first. The select
+  // is an action menu rather than a stored choice - nothing links a run to the
+  // preset it was loaded from, and the moment a toggle is flipped the run has
+  // diverged anyway - so it snaps back to the placeholder afterwards.
+  async function handleApplyPreset(presetId: number) {
+    const preset = presets.find((entry) => entry.id === presetId);
+    if (!preset) return;
+    if (!(await confirm({ message: t.presets.applyConfirm(preset.name) }))) return;
+    startTransition(async () => {
+      const result = await applyRulePreset(runId, presetId);
+      if (result.success) {
+        toast.success(t.presets.applied(preset.name));
+        router.refresh();
+      } else {
+        toast.error(formatActionError(result.error, lang));
+      }
+    });
+  }
+
   function handleEdit() {
     setDraft(markdown);
     setEditing(true);
@@ -192,7 +216,45 @@ export function RulesView({
 
   return (
     <div>
-      <PageHeader title={t.heading} />
+      <PageHeader title={t.heading}>
+        <div className="flex flex-wrap items-center gap-2">
+          <Select
+            size="sm"
+            aria-label={t.presets.label}
+            // Always the placeholder: see handleApplyPreset.
+            value=""
+            // While the notes editor is open the two halves of the tab
+            // disagree - the draft on screen is not what a preset would
+            // replace - so both controls stand down until it is saved.
+            disabled={pending || editing || presets.length === 0}
+            onChange={(event) => handleApplyPreset(Number(event.target.value))}
+            className="w-auto max-w-52"
+          >
+            <option value="">{t.presets.placeholder}</option>
+            {presets.map((preset) => (
+              <option key={preset.id} value={preset.id}>
+                {preset.name}
+              </option>
+            ))}
+          </Select>
+          <Button
+            size="sm"
+            disabled={pending || editing}
+            title={editing ? t.presets.editingHint : undefined}
+            onClick={() => setPresetDialogOpen(true)}
+          >
+            {t.presets.manage}
+          </Button>
+        </div>
+      </PageHeader>
+
+      <RulePresetDialog
+        open={presetDialogOpen}
+        onClose={() => setPresetDialogOpen(false)}
+        runId={runId}
+        lang={lang}
+        presets={presets}
+      />
 
       {/* Two columns from lg up. Everything here used to be capped at
           max-w-3xl inside a max-w-6xl main, so switching to this tab visibly

@@ -19,6 +19,7 @@ export type ActionError =
   | { key: "evolutionFamilyMismatch" }
   | { key: "noPreEvolution" }
   | { key: "unknownLevelCap"; id: number }
+  | { key: "presetNotFound"; id: number }
   | { key: "nameRequired" }
   | { key: "backupInvalid" }
   | { key: "backupEmpty" }
@@ -54,6 +55,8 @@ export function formatActionError(error: ActionError, lang: Lang): string {
       return t.noPreEvolution;
     case "unknownLevelCap":
       return t.unknownLevelCap(error.id);
+    case "presetNotFound":
+      return t.presetNotFound(error.id);
     case "nameRequired":
       return t.nameRequired;
     case "backupInvalid":

@@ -84,3 +84,18 @@ export function parseRunSettings(json: string): RunSettings {
   }
   return settings;
 }
+
+// Max length of a RulePreset name, enforced by the action and the input.
+export const PRESET_NAME_MAX = 40;
+
+// Serialize just the boolean toggles, for storing in RulePreset.settingsJson.
+// playerNames is deliberately left out: it is the one part of a run's settings
+// that is about *that* run, so a preset carrying it would rename the players
+// of every run it was applied to. Reading a preset back needs no counterpart -
+// parseRunSettings already defaults every missing key, and the caller keeps
+// the run's own playerNames.
+export function serializePresetSettings(settings: RunSettings): string {
+  const out: Record<string, boolean> = {};
+  for (const key of RUN_SETTING_KEYS) out[key] = settings[key] as boolean;
+  return JSON.stringify(out);
+}

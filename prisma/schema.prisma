@@ -139,3 +139,25 @@ model LevelCapProgress {
 
   @@unique([runId, levelCapId])
 }
+
+// A saved ruleset: the boolean rule toggles plus the house-rules markdown,
+// under a name. Deliberately NOT scoped to a Run - the point is to carry a
+// ruleset from one playthrough to the next, so every run's Rules tab offers
+// the same list.
+//
+// settingsJson holds the toggles only. Run.settingsJson also carries
+// playerNames, which is the one part of a run's settings that is genuinely
+// about *that* run; a preset that renamed the players every time it was
+// applied would be a trap, so presetSettingsJson() strips it on the way in
+// and applyRulePreset leaves the run's names alone on the way out.
+//
+// `name` is unique, which is what makes "save under an existing name" an
+// overwrite rather than a second entry with the same label.
+model RulePreset {
+  id            Int      @id @default(autoincrement())
+  name          String   @unique
+  settingsJson  String   @default("{}")
+  rulesMarkdown String   @default("")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
