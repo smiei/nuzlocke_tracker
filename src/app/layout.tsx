@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import { Navigation } from "@/components/Navigation";
+import { StickyNav } from "@/components/StickyNav";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { HeaderTitle } from "@/components/HeaderTitle";
 import { RunSwitcher } from "@/components/RunSwitcher";
@@ -47,10 +48,12 @@ export const viewport: Viewport = {
   // rewrites it at runtime, because next-themes toggles a class that
   // prefers-color-scheme cannot see.
   themeColor: "#ffffff",
-  // Deliberately NOT setting viewportFit: "cover" or disabling zoom. With the
-  // default fit iOS keeps the standalone viewport clear of the status bar and
-  // home indicator, and nothing in this layout is fixed/sticky, so there is
-  // nothing to inset. Pinch-zoom stays on - it matters on these dense tables.
+  // Deliberately NOT setting viewportFit: "cover" or disabling zoom. The tab
+  // strip is sticky now (see StickyNav), but with the default fit iOS lays the
+  // standalone viewport out BELOW the status bar, so `sticky top-0` pins under
+  // it rather than behind it and there is still nothing to inset. Switching to
+  // "cover" would create that work rather than solve it.
+  // Pinch-zoom stays on - it matters on these dense tables.
 };
 
 export default async function RootLayout({
@@ -67,7 +70,7 @@ export default async function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col bg-white text-zinc-900 dark:bg-zinc-950 dark:text-zinc-50">
+      <body className="min-h-full flex flex-col">
         {/* Hand-written instead of the app/manifest.ts file convention, and
             this is load-bearing: Next only ever puts crossOrigin on its
             auto-injected manifest link when VERCEL_ENV === "preview" (see
@@ -107,7 +110,9 @@ export default async function RootLayout({
             <ToastProvider>
             <DialogProvider>
             <TabOrderProvider>
-              <header className="border-b border-zinc-200 dark:border-zinc-800">
+              {/* The title row is deliberately NOT sticky: the run switcher
+                  and the gear are occasional, the tabs are constant. */}
+              <header>
                 {/* flex-wrap: on narrow screens the controls wrap to a second
                     line instead of widening the page (horizontal scroll). */}
                 <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-3 gap-y-2 px-4 py-3 sm:px-6">
@@ -115,23 +120,26 @@ export default async function RootLayout({
                   <div className="flex flex-wrap items-center gap-2">
                     <Suspense
                       fallback={
-                        <div className="h-9 w-32 rounded-md border border-zinc-200 dark:border-zinc-700" />
+                        <div className="h-9 w-32 rounded-md border border-line" />
                       }
                     >
                       <RunSwitcher runs={runs} games={games} />
                     </Suspense>
-                    <Suspense fallback={<div className="h-9 w-9 rounded-md border border-zinc-200 dark:border-zinc-700" />}>
+                    <Suspense fallback={<div className="h-9 w-9 rounded-md border border-line" />}>
                       <HeaderMenu runs={runs} />
                     </Suspense>
                     <ThemeToggle />
                   </div>
                 </div>
-                <div className="mx-auto max-w-6xl">
-                  <Suspense fallback={<div className="h-11" />}>
-                    <Navigation />
-                  </Suspense>
-                </div>
               </header>
+              <StickyNav>
+                {/* Exactly one tab's height (2px bottom border + 8px + 20px
+                    icon + 4px gap + 16px label + 8px), so the strip does not
+                    jump when Navigation replaces the fallback. */}
+                <Suspense fallback={<div className="h-[58px]" />}>
+                  <Navigation />
+                </Suspense>
+              </StickyNav>
               <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-6">{children}</main>
               <LiveRefresh />
               <ThemeColorSync />

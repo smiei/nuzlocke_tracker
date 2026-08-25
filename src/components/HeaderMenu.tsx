@@ -254,7 +254,11 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
         className="hidden"
       />
       {open && (
-        <div className="absolute right-0 z-20 mt-1 w-60 overflow-hidden rounded-md border border-zinc-200 bg-white py-1 shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
+        // z-50, not the z-20 it used to be: the tab strip below the header is
+        // sticky at z-40 now, and this menu opens straight down across it.
+        // A dialog opened FROM here is also z-50 but sits later in the DOM, so
+        // it still paints on top.
+        <div className="absolute right-0 z-50 mt-1 w-60 overflow-hidden rounded-md border border-zinc-200 bg-white py-1 shadow-lg dark:border-zinc-700 dark:bg-zinc-900">
           {mounted && !isStandalone && (
             <>
               <button type="button" onClick={handleInstall} className={itemClass}>
