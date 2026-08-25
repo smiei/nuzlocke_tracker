@@ -94,7 +94,11 @@ export function PokemonCombobox({
     <div ref={containerRef} className="relative">
       {/* h-11 to match ui/Input - the field is the primary control of every
           encounter row, and it used to be ~30px tall. */}
-      <div className="flex h-11 items-center gap-1.5 rounded-md border border-line-strong bg-panel pl-1.5 pr-1">
+      {/* The focus ring sits on the wrapper, not the input: the input is
+          borderless inside it, so its own ring would be drawn in the middle of
+          the field. globals.css gives every control a ring by default, which
+          is why the input then has to opt out with outline-none. */}
+      <div className="flex h-11 items-center gap-1.5 rounded-md border border-line-strong bg-panel pl-1.5 pr-1 focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-focus">
         {selected && (
           <PokemonSprite
             pokemonId={selected.id}
