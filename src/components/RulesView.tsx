@@ -66,6 +66,8 @@ const markdownComponents = {
 // Display order; staticsExemptFromClause is rendered as an indented child of
 // speciesClause and greyed out while the clause itself is off.
 const TOGGLE_ORDER: BooleanSettingKey[] = [
+  "freeTeam",
+  "blindflug",
   "speciesClause",
   "staticsExemptFromClause",
   "shinyClause",

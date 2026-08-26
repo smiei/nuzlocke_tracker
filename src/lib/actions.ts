@@ -820,6 +820,76 @@ export async function deleteCustomRoute(
   return { success: true };
 }
 
+// --- Free team ------------------------------------------------------------
+//
+// A free team member is an ordinary Encounter on a hidden CustomRoute. That
+// one trick is what makes this feature nearly free: the battle matchup, team
+// coverage, evolutions, the Pokedex link, backups and live sync all keep
+// working because there is nothing new for them to understand. The route is
+// flagged `hidden` so it stays off the Encounter tab and out of the progress
+// bar, which are the only two places it would look wrong.
+
+export type AddFreeTeamMemberResult =
+  | { success: true; routeId: number }
+  | { success: false; error: ActionError };
+
+export async function addFreeTeamMember(
+  runId: number,
+  pokemonId: number,
+  player: Player,
+  nickname?: string,
+): Promise<AddFreeTeamMemberResult> {
+  const run = await prisma.run.findUnique({ where: { id: runId } });
+  if (!run) {
+    return { success: false, error: { key: "runNotFound", id: runId } };
+  }
+  if (!getPokemonById(pokemonId)) {
+    return { success: false, error: { key: "unknownPokemon", id: pokemonId } };
+  }
+
+  // Anchored to the end of the current list rather than the top: the Team tab
+  // and the Memorial sort by position in the route list, so appending is what
+  // makes members read in the order they were added.
+  const existing = await getRoutesForRun(runId, run.gameId);
+  const last = existing.at(-1)?.id ?? null;
+  const slotNumber = (await prisma.customRoute.count({ where: { runId, hidden: true } })) + 1;
+  const routeId = await nextCustomRouteId(runId);
+
+  await prisma.customRoute.create({
+    data: {
+      runId,
+      routeId,
+      // Language-neutral on purpose: the label is almost never seen (the Team
+      // tab shows the Pokemon's own name) and the action has no `lang`.
+      name: `Team ${slotNumber}`,
+      type: "route",
+      afterRouteId: last,
+      hidden: true,
+    },
+  });
+
+  // Straight through the normal write path, which creates the SoulLink and
+  // calls autoAssignTeamSlot - so the member lands in the first free of the
+  // six slots with no extra code here.
+  const saved = await saveEncounter({
+    runId,
+    routeId,
+    player,
+    pokemonId,
+    status: EncounterStatus.CAUGHT,
+    nickname: nickname ?? null,
+  });
+  if (!saved.success) {
+    // Do not leave an empty slot behind if the encounter was rejected.
+    await prisma.customRoute.deleteMany({ where: { runId, routeId } });
+    return saved;
+  }
+
+  revalidateRunViews();
+  publishChange(runId);
+  return { success: true, routeId };
+}
+
 // --- Debug: encounter order export ----------------------------------------
 
 export type ExportRouteOrderResult =
@@ -840,7 +910,9 @@ export async function exportRouteOrder(runId: number): Promise<ExportRouteOrderR
     return { success: false, error: { key: "runNotFound", id: runId } };
   }
 
-  const routes = await getRoutesForRun(runId, run.gameId);
+  // Hidden routes are free-team slots, not locations - they would only add
+  // noise to a report about the order the map was played in.
+  const routes = (await getRoutesForRun(runId, run.gameId)).filter((route) => !route.hidden);
   const [entries, encounters] = await Promise.all([
     prisma.routeEntry.findMany({ where: { runId }, select: { routeId: true, seenAt: true } }),
     prisma.encounter.findMany({ where: { runId }, select: { routeId: true, createdAt: true } }),

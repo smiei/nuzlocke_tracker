@@ -54,6 +54,25 @@ const de = {
       "Dein Browser bietet keine direkte Installation an. Öffne das Browsermenü und " +
       "wähle „Zum Startbildschirm hinzufügen“ bzw. „Installieren“.",
   },
+  blindflug: {
+    name: "Blindflug",
+    hidden: "Im Blindflug ausgeblendet.",
+    enable: "Blindflug einschalten",
+    disable: "Blindflug ausschalten",
+  },
+  appearance: {
+    label: "Darstellung",
+    title: "Darstellung",
+    sizeLabel: "Größe der Oberfläche",
+    smaller: "Klein",
+    normal: "Normal",
+    larger: "Groß",
+    preview: "So sieht Fließtext in dieser Größe aus.",
+    previewSmall: "Und so die kleinen Hinweiszeilen darunter.",
+    hint: "Gilt nur auf diesem Gerät.",
+    reset: "Zurücksetzen",
+    done: "Fertig",
+  },
   tabOrder: {
     label: "Tabs anordnen",
     title: "Tabs anordnen",
@@ -165,7 +184,21 @@ const de = {
     progressTitle: (done: number, total: number, percent: number) =>
       `${done} von ${total} Routen abgeschlossen (${percent}%)`,
   },
-  links: {
+  links: {    free: {
+      add: "Pokémon hinzufügen",
+      title: "Pokémon ins Team",
+      pokemonLabel: "Pokémon",
+      playerLabel: "Für",
+      nicknameLabel: "Spitzname",
+      submit: "Hinzufügen",
+      added: (name: string) => `${name} hinzugefügt.`,
+      removed: (name: string) => `${name} entfernt.`,
+      remove: "Entfernen",
+      removeConfirm: "Wirklich entfernen?",
+      removeYes: "Ja, entfernen",
+      hint: "Legt im Hintergrund einen eigenen Eintrag an. Zählt nicht im Encounter-Fortschritt.",
+    },
+
     emptySoullink: "Noch keine SoulLinks – fange im Encounter-Tab dein erstes Pokémon.",
     emptyClassic: "Noch keine Pokémon – fange im Encounter-Tab dein erstes Pokémon.",
     markDead: "Als tot markieren",
@@ -310,6 +343,16 @@ const de = {
     showNotes: "Einblenden",
     hideNotes: "Ausblenden",
     toggles: {
+      freeTeam: {
+        label: "Freies Team (kein Nuzlocke)",
+        description:
+          "Für ganz normale Durchgänge: der Team-Tab bekommt einen „Pokémon hinzufügen“-Knopf, statt dass jedes Teammitglied über eine Route eingetragen werden muss. Der Encounter-Tab bleibt nutzbar.",
+      },
+      blindflug: {
+        label: "Blindflug",
+        description:
+          "Blendet alles aus, was die App für dich ausrechnet: Typeneffektivität an jeder Stelle sowie Attackenlisten und -beschreibungen. Die Typentabelle selbst bleibt. Gilt für den ganzen Run.",
+      },
       debugMode: {
         label: "Debug: Encounter-Reihenfolge aufzeichnen",
         description:
@@ -585,6 +628,25 @@ const en: Dictionary = {
       "Your browser has no direct install option. Open the browser menu and choose " +
       "“Add to Home screen” or “Install”.",
   },
+  blindflug: {
+    name: "Blind flight",
+    hidden: "Hidden in blind flight.",
+    enable: "Turn on blind flight",
+    disable: "Turn off blind flight",
+  },
+  appearance: {
+    label: "Appearance",
+    title: "Appearance",
+    sizeLabel: "Interface size",
+    smaller: "Small",
+    normal: "Normal",
+    larger: "Large",
+    preview: "This is what body text looks like at this size.",
+    previewSmall: "And this is the small print underneath it.",
+    hint: "Applies to this device only.",
+    reset: "Reset",
+    done: "Done",
+  },
   tabOrder: {
     label: "Arrange tabs",
     title: "Arrange tabs",
@@ -695,7 +757,21 @@ const en: Dictionary = {
     progressTitle: (done: number, total: number, percent: number) =>
       `${done} of ${total} routes completed (${percent}%)`,
   },
-  links: {
+  links: {    free: {
+      add: "Add Pokémon",
+      title: "Add to the team",
+      pokemonLabel: "Pokémon",
+      playerLabel: "For",
+      nicknameLabel: "Nickname",
+      submit: "Add",
+      added: (name: string) => `${name} added.`,
+      removed: (name: string) => `${name} removed.`,
+      remove: "Remove",
+      removeConfirm: "Really remove?",
+      removeYes: "Yes, remove",
+      hint: "Creates its own entry behind the scenes. Does not count towards encounter progress.",
+    },
+
     emptySoullink: "No SoulLinks yet – catch your first Pokémon in the Encounter tab.",
     emptyClassic: "No Pokémon yet – catch your first one in the Encounter tab.",
     markDead: "Mark as dead",
@@ -838,6 +914,16 @@ const en: Dictionary = {
     showNotes: "Show",
     hideNotes: "Hide",
     toggles: {
+      freeTeam: {
+        label: "Free team (no Nuzlocke)",
+        description:
+          "For an ordinary playthrough: the Team tab gets an \u201cadd a Pok\u00e9mon\u201d button instead of every member having to be entered against a route. The Encounter tab keeps working.",
+      },
+      blindflug: {
+        label: "Blind flight",
+        description:
+          "Hides everything the app works out for you: type effectiveness everywhere, plus move lists and descriptions. The type chart itself stays. Applies to the whole run.",
+      },
       debugMode: {
         label: "Debug: record encounter order",
         description:
@@ -1111,6 +1197,25 @@ const fr: Dictionary = {
       "Votre navigateur ne propose pas d'installation directe. Ouvrez son menu et choisissez " +
       "« Ajouter à l'écran d'accueil » ou « Installer ».",
   },
+  blindflug: {
+    name: "Vol à l’aveugle",
+    hidden: "Masqué en vol à l’aveugle.",
+    enable: "Activer le vol à l’aveugle",
+    disable: "Désactiver le vol à l’aveugle",
+  },
+  appearance: {
+    label: "Affichage",
+    title: "Affichage",
+    sizeLabel: "Taille de l’interface",
+    smaller: "Petit",
+    normal: "Normal",
+    larger: "Grand",
+    preview: "Voici à quoi ressemble le texte à cette taille.",
+    previewSmall: "Et voici les petites mentions en dessous.",
+    hint: "Ne vaut que pour cet appareil.",
+    reset: "Réinitialiser",
+    done: "Terminé",
+  },
   tabOrder: {
     label: "Organiser les onglets",
     title: "Organiser les onglets",
@@ -1224,7 +1329,21 @@ const fr: Dictionary = {
     progressTitle: (done: number, total: number, percent: number) =>
       `${done} routes sur ${total} terminées (${percent}%)`,
   },
-  links: {
+  links: {    free: {
+      add: "Ajouter un Pokémon",
+      title: "Ajouter à l’équipe",
+      pokemonLabel: "Pokémon",
+      playerLabel: "Pour",
+      nicknameLabel: "Surnom",
+      submit: "Ajouter",
+      added: (name: string) => `${name} ajouté.`,
+      removed: (name: string) => `${name} retiré.`,
+      remove: "Retirer",
+      removeConfirm: "Vraiment retirer ?",
+      removeYes: "Oui, retirer",
+      hint: "Crée sa propre entrée en arrière-plan. Ne compte pas dans la progression des rencontres.",
+    },
+
     emptySoullink:
       "Pas encore de SoulLinks – capture ton premier Pokémon dans l'onglet Rencontres.",
     emptyClassic: "Pas encore de Pokémon – capture le premier dans l'onglet Rencontres.",
@@ -1369,6 +1488,16 @@ const fr: Dictionary = {
     showNotes: "Afficher",
     hideNotes: "Masquer",
     toggles: {
+      freeTeam: {
+        label: "Équipe libre (sans Nuzlocke)",
+        description:
+          "Pour une partie normale : l’onglet Équipe reçoit un bouton « ajouter un Pokémon » au lieu de devoir saisir chaque membre via une route. L’onglet Rencontres reste utilisable.",
+      },
+      blindflug: {
+        label: "Vol à l’aveugle",
+        description:
+          "Masque tout ce que l’application calcule pour vous : l’efficacité des types partout, ainsi que les listes et descriptions d’attaques. La table des types reste. Vaut pour tout le run.",
+      },
       debugMode: {
         label: "Débogage : enregistrer l’ordre des rencontres",
         description:
@@ -1643,6 +1772,25 @@ const es: Dictionary = {
       "Tu navegador no ofrece instalación directa. Abre el menú del navegador y elige " +
       "«Añadir a pantalla de inicio» o «Instalar».",
   },
+  blindflug: {
+    name: "Vuelo a ciegas",
+    hidden: "Oculto en vuelo a ciegas.",
+    enable: "Activar vuelo a ciegas",
+    disable: "Desactivar vuelo a ciegas",
+  },
+  appearance: {
+    label: "Apariencia",
+    title: "Apariencia",
+    sizeLabel: "Tamaño de la interfaz",
+    smaller: "Pequeño",
+    normal: "Normal",
+    larger: "Grande",
+    preview: "Así se ve el texto corrido en este tamaño.",
+    previewSmall: "Y así las líneas pequeñas de debajo.",
+    hint: "Solo vale para este dispositivo.",
+    reset: "Restablecer",
+    done: "Listo",
+  },
   tabOrder: {
     label: "Ordenar pestañas",
     title: "Ordenar pestañas",
@@ -1755,7 +1903,21 @@ const es: Dictionary = {
     progressTitle: (done: number, total: number, percent: number) =>
       `${done} de ${total} rutas completadas (${percent}%)`,
   },
-  links: {
+  links: {    free: {
+      add: "Añadir Pokémon",
+      title: "Añadir al equipo",
+      pokemonLabel: "Pokémon",
+      playerLabel: "Para",
+      nicknameLabel: "Apodo",
+      submit: "Añadir",
+      added: (name: string) => `${name} añadido.`,
+      removed: (name: string) => `${name} eliminado.`,
+      remove: "Quitar",
+      removeConfirm: "¿Quitar de verdad?",
+      removeYes: "Sí, quitar",
+      hint: "Crea su propia entrada en segundo plano. No cuenta en el progreso de encuentros.",
+    },
+
     emptySoullink:
       "Aún no hay SoulLinks – captura tu primer Pokémon en la pestaña Encuentros.",
     emptyClassic: "Aún no hay Pokémon – captura el primero en la pestaña Encuentros.",
@@ -1900,6 +2062,16 @@ const es: Dictionary = {
     showNotes: "Mostrar",
     hideNotes: "Ocultar",
     toggles: {
+      freeTeam: {
+        label: "Equipo libre (sin Nuzlocke)",
+        description:
+          "Para una partida normal: la pestaña Equipo recibe un botón «añadir Pokémon» en vez de tener que introducir cada miembro por una ruta. La pestaña Encuentros sigue funcionando.",
+      },
+      blindflug: {
+        label: "Vuelo a ciegas",
+        description:
+          "Oculta todo lo que la aplicación calcula por ti: la efectividad de tipos en todas partes y las listas y descripciones de movimientos. La tabla de tipos permanece. Vale para todo el run.",
+      },
       debugMode: {
         label: "Depuración: registrar el orden de encuentros",
         description:
@@ -2174,6 +2346,25 @@ const it: Dictionary = {
       "Il tuo browser non offre un'installazione diretta. Apri il menu del browser e scegli " +
       "«Aggiungi a Home» o «Installa».",
   },
+  blindflug: {
+    name: "Volo cieco",
+    hidden: "Nascosto in volo cieco.",
+    enable: "Attiva il volo cieco",
+    disable: "Disattiva il volo cieco",
+  },
+  appearance: {
+    label: "Aspetto",
+    title: "Aspetto",
+    sizeLabel: "Dimensione dell’interfaccia",
+    smaller: "Piccolo",
+    normal: "Normale",
+    larger: "Grande",
+    preview: "Ecco come appare il testo a questa dimensione.",
+    previewSmall: "E così le piccole note qui sotto.",
+    hint: "Vale solo su questo dispositivo.",
+    reset: "Ripristina",
+    done: "Fatto",
+  },
   tabOrder: {
     label: "Disponi schede",
     title: "Disponi schede",
@@ -2286,7 +2477,21 @@ const it: Dictionary = {
     progressTitle: (done: number, total: number, percent: number) =>
       `${done} di ${total} percorsi completati (${percent}%)`,
   },
-  links: {
+  links: {    free: {
+      add: "Aggiungi Pokémon",
+      title: "Aggiungi alla squadra",
+      pokemonLabel: "Pokémon",
+      playerLabel: "Per",
+      nicknameLabel: "Soprannome",
+      submit: "Aggiungi",
+      added: (name: string) => `${name} aggiunto.`,
+      removed: (name: string) => `${name} rimosso.`,
+      remove: "Rimuovi",
+      removeConfirm: "Rimuovere davvero?",
+      removeYes: "Sì, rimuovi",
+      hint: "Crea una propria voce dietro le quinte. Non conta nel progresso degli incontri.",
+    },
+
     emptySoullink:
       "Ancora nessun SoulLink – cattura il tuo primo Pokémon nella scheda Incontri.",
     emptyClassic: "Ancora nessun Pokémon – cattura il primo nella scheda Incontri.",
@@ -2431,6 +2636,16 @@ const it: Dictionary = {
     showNotes: "Mostra",
     hideNotes: "Nascondi",
     toggles: {
+      freeTeam: {
+        label: "Squadra libera (senza Nuzlocke)",
+        description:
+          "Per una partita normale: la scheda Squadra riceve un pulsante «aggiungi Pokémon» invece di dover inserire ogni membro tramite un percorso. La scheda Incontri resta utilizzabile.",
+      },
+      blindflug: {
+        label: "Volo cieco",
+        description:
+          "Nasconde tutto ciò che l’app calcola per te: l’efficacia dei tipi ovunque e gli elenchi e le descrizioni delle mosse. La tabella dei tipi resta. Vale per tutto il run.",
+      },
       debugMode: {
         label: "Debug: registra l’ordine degli incontri",
         description:

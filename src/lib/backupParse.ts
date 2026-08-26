@@ -56,6 +56,10 @@ export type BackupCustomRoute = {
   name: string;
   type: string;
   afterRouteId: number | null;
+  // A free-team slot rather than a place the run visits. Absent in a backup
+  // written before free teams existed, where `false` is the right answer
+  // anyway - every custom route back then was a real location.
+  hidden: boolean;
   createdAt: string;
 };
 
@@ -183,6 +187,7 @@ export function parseBackup(json: string): BackupFile | null {
               name: typeof cr.name === "string" && cr.name.trim() ? cr.name : "Route",
               type: cr.type === "static" ? "static" : "route",
               afterRouteId: typeof cr.afterRouteId === "number" ? cr.afterRouteId : null,
+              hidden: cr.hidden === true,
               createdAt: isoString(cr.createdAt),
             }))
         : [],

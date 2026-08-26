@@ -36,6 +36,15 @@ describe("parseRunSettings", () => {
 });
 
 describe("serializePresetSettings", () => {
+  it("carries blindflug, because it is a house rule about the whole run", () => {
+    // Unlike debugMode (per device, excluded), Blindflug is something both
+    // players agreed to, so a saved ruleset must bring it along.
+    const settings = parseRunSettings('{"blindflug": true}');
+    expect(settings.blindflug).toBe(true);
+    expect(parseRunSettings(serializePresetSettings(settings)).blindflug).toBe(true);
+    expect(parseRunSettings("{}").blindflug).toBe(false);
+  });
+
   it("keeps every rule toggle", () => {
     const settings = parseRunSettings('{"speciesClause": false, "statics": false}');
     const json = JSON.parse(serializePresetSettings(settings)) as Record<string, boolean>;

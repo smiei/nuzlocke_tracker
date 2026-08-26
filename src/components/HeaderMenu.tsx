@@ -16,6 +16,7 @@ import type { RunSummary } from "@/lib/types";
 import { RenameRunDialog } from "@/components/RenameRunDialog";
 import { ImportBackupDialog } from "@/components/ImportBackupDialog";
 import { TabOrderDialog } from "@/components/TabOrderDialog";
+import { AppearanceDialog } from "@/components/AppearanceDialog";
 import { useToast } from "@/components/ui/ToastProvider";
 
 function GearIcon({ className }: { className?: string }) {
@@ -101,6 +102,7 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
   const { open, setOpen, toggle, containerRef } = useDropdown();
   const [renameOpen, setRenameOpen] = useState(false);
   const [tabOrderOpen, setTabOrderOpen] = useState(false);
+  const [appearanceOpen, setAppearanceOpen] = useState(false);
   const [importState, setImportState] = useState<{ json: string; runs: { name: string }[] } | null>(
     null,
   );
@@ -317,6 +319,16 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
           >
             {t.tabOrder.label} …
           </button>
+          <button
+            type="button"
+            onClick={() => {
+              setOpen(false);
+              setAppearanceOpen(true);
+            }}
+            className={itemClass}
+          >
+            {t.appearance.label} …
+          </button>
           <div className="px-3 py-2">
             <span className="mb-1.5 block text-xs font-medium text-ink-subtle">
               {t.menu.language}
@@ -372,6 +384,7 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
         onRename={handleRename}
       />
       <TabOrderDialog open={tabOrderOpen} onClose={() => setTabOrderOpen(false)} />
+      <AppearanceDialog open={appearanceOpen} onClose={() => setAppearanceOpen(false)} />
       {importState && (
         <ImportBackupDialog
           lang={lang}

@@ -24,6 +24,17 @@ export type RunSettings = {
   // Statics don't count towards / trigger the Species Clause (today's fixed
   // behavior). Off = statics are treated like regular routes by the clause.
   staticsExemptFromClause: boolean;
+  // Blindflug: hides everything the app would otherwise work out for you -
+  // type-effectiveness calculations and move lists/descriptions - so a battle
+  // has to be read from memory. The type CHART itself stays, it is reference
+  // material rather than an answer. A house rule about how the run is played,
+  // so it is a run setting (both players, all devices) and travels in presets.
+  blindflug: boolean;
+  // Free team: the run is not a Nuzlocke at all. The Team tab gets a direct
+  // "add a Pokemon" button, so a normal playthrough can use the battle scout
+  // without entering a route for every catch. Informational like every other
+  // toggle - the Encounter tab keeps working, it just is not the only way in.
+  freeTeam: boolean;
   // Custom SoulLink player names (empty = fall back to the localized
   // "Player 1"/"Player 2"). Not a toggle - handled separately from the
   // boolean keys below.
@@ -41,6 +52,8 @@ export const DEFAULT_RUN_SETTINGS: RunSettings = {
   evolutionOverridesTimeBased: true,
   statics: true,
   staticsExemptFromClause: true,
+  blindflug: false,
+  freeTeam: false,
   playerNames: { PLAYER1: "", PLAYER2: "" },
 };
 

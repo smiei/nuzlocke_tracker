@@ -25,6 +25,7 @@ import { displayNameWithForm, movepoolId } from "@/lib/forms";
 import { EncounterStatus, LinkStatus, Player, RunMode } from "@/generated/prisma/client";
 import { SpriteSetProvider } from "@/components/SpriteSetProvider";
 import { CanonicalRun } from "@/components/CanonicalRun";
+import { BlindflugProvider } from "@/components/BlindflugProvider";
 import { PlayerNamesProvider } from "@/components/PlayerNamesProvider";
 import { PokemonDetailProvider } from "@/components/PokemonDetailProvider";
 import {
@@ -289,6 +290,7 @@ export default async function OverviewPage({
   const pokemonList = getPokemonList(game.dexLimit, game.generation);
 
   return (
+    <BlindflugProvider on={settings.blindflug}>
     <SpriteSetProvider spriteSet={game.spriteSet}>
       <CanonicalRun runId={runId} />
       <PlayerNamesProvider names={settings.playerNames} lang={lang}>
@@ -330,5 +332,6 @@ export default async function OverviewPage({
         </PokemonDetailProvider>
       </PlayerNamesProvider>
     </SpriteSetProvider>
+    </BlindflugProvider>
   );
 }

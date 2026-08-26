@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { useDropdown } from "@/lib/useDropdown";
 import { useRouter } from "next/navigation";
+import type { Pokemon } from "@/lib/data";
 import type { SoulLinkView } from "@/lib/types";
 import { LinkStatus, Player, RunMode } from "@/generated/prisma/enums";
 import { markDead, markAlive } from "@/lib/actions";
@@ -24,17 +25,23 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Input, Select } from "@/components/ui/Input";
 import { EmptyState } from "@/components/ui/Page";
+import { FreeTeamDialog } from "@/components/FreeTeamDialog";
 
 const SORT_MODE_KEY = "nuzlocke:linksSortMode";
 type SortMode = "default" | "summe" | "summeMax";
 
 export function LinksView({
   runId,
+  freeTeam,
+  pokemonList,
   mode,
   lang,
   soulLinks,
 }: {
   runId: number;
+  // Free-team run: the Team tab is the way in, not the Encounter tab.
+  freeTeam: boolean;
+  pokemonList: Pokemon[];
   mode: RunMode;
   lang: Lang;
   soulLinks: SoulLinkView[];
@@ -45,6 +52,7 @@ export function LinksView({
   const [pendingId, setPendingId] = useState<number | null>(null);
   const [, startTransition] = useTransition();
   const [sortMode, setSortMode] = usePersistentState<SortMode>(SORT_MODE_KEY, "default");
+  const [freeOpen, setFreeOpen] = useState(false);
   const [evolvableOnly, setEvolvableOnly] = useState(false);
   const [hideTeam, setHideTeam] = useState(false);
   const [typeFilter, setTypeFilter] = useState<string[]>([]);
@@ -139,12 +147,39 @@ export function LinksView({
     });
   }
 
+  const addButton = freeTeam ? (
+    <Button size="sm" variant="primary" onClick={() => setFreeOpen(true)}>
+      {t.links.free.add}
+    </Button>
+  ) : null;
+  const freeDialog = freeTeam ? (
+    <FreeTeamDialog
+      open={freeOpen}
+      onClose={() => setFreeOpen(false)}
+      runId={runId}
+      mode={mode}
+      lang={lang}
+      pokemonList={pokemonList}
+    />
+  ) : null;
+
   if (soulLinks.length === 0) {
-    return <EmptyState title={isClassic ? t.links.emptyClassic : t.links.emptySoullink} />;
+    // A free-team run starts here every time, so the way to add the first
+    // member has to be reachable from the empty state itself.
+    return (
+      <>
+        <EmptyState
+          title={isClassic ? t.links.emptyClassic : t.links.emptySoullink}
+          action={addButton ?? undefined}
+        />
+        {freeDialog}
+      </>
+    );
   }
 
   return (
     <div>
+      {freeDialog}
       <TeamBar runId={runId} mode={mode} lang={lang} links={soulLinks} />
       <div className="mb-6 flex flex-wrap items-center gap-2">
         <label htmlFor="links-sort" className="text-sm font-medium text-ink-muted">
@@ -173,6 +208,7 @@ export function LinksView({
         >
           {t.links.filterEvolvable}
         </Button>
+        {addButton}
         <Button
           size="sm"
           variant={hideTeam ? "primary" : "secondary"}

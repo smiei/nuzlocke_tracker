@@ -5,6 +5,7 @@ import { ThemeProvider } from "next-themes";
 import { Navigation } from "@/components/Navigation";
 import { StickyNav } from "@/components/StickyNav";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { BlindflugToggle } from "@/components/BlindflugToggle";
 import { HeaderTitle } from "@/components/HeaderTitle";
 import { RunSwitcher } from "@/components/RunSwitcher";
 import { HeaderMenu } from "@/components/HeaderMenu";
@@ -18,6 +19,7 @@ import { TabOrderProvider } from "@/components/TabOrderProvider";
 import { LanguageProvider } from "@/lib/i18n/LanguageProvider";
 import { prisma } from "@/lib/prisma";
 import { getGames } from "@/lib/data";
+import { uiScaleBootScript } from "@/lib/uiScale";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -85,6 +87,12 @@ export default async function RootLayout({
             intermittently never shows up. useInstallPrompt reads this stash.
             React 19 does not hoist inline scripts, so it stays here and runs
             in place. */}
+        {/* Applies the stored UI size before the first paint, the same job
+            next-themes' own inline script does for the theme. Without it the
+            page renders at 100% and then jumps to the chosen size on
+            hydration. React 19 does not hoist inline scripts, so both of these
+            run here, in place, ahead of the content. */}
+        <script dangerouslySetInnerHTML={{ __html: uiScaleBootScript() }} />
         <script
           dangerouslySetInnerHTML={{
             __html:
@@ -129,14 +137,24 @@ export default async function RootLayout({
                       <HeaderMenu runs={runs} />
                     </Suspense>
                     <ThemeToggle />
+                    {/* Suspense because it reads ?run= via useSearchParams,
+                        which would otherwise opt the statically prerendered
+                        "/" out of static rendering - the same reason
+                        RunSwitcher and Navigation are wrapped. */}
+                    <Suspense fallback={<div className="h-10 w-10 rounded-md border border-line" />}>
+                      <BlindflugToggle
+                        runs={runs.map((run) => ({ id: run.id, settingsJson: run.settingsJson }))}
+                      />
+                    </Suspense>
                   </div>
                 </div>
               </header>
               <StickyNav>
                 {/* Exactly one tab's height (2px bottom border + 8px + 20px
                     icon + 4px gap + 16px label + 8px), so the strip does not
-                    jump when Navigation replaces the fallback. */}
-                <Suspense fallback={<div className="h-[58px]" />}>
+                    jump when Navigation replaces the fallback. In rem, not px,
+                    so it follows the UI-size setting like the strip itself. */}
+                <Suspense fallback={<div className="h-[3.625rem]" />}>
                   <Navigation />
                 </Suspense>
               </StickyNav>

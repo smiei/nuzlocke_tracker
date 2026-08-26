@@ -191,6 +191,11 @@ model CustomRoute {
   // than an enum: the values live in the JSON packs, not in the database.
   type         String   @default("route")
   afterRouteId Int?
+  // A slot created by the free-team feature rather than a location the run
+  // actually visits. It still needs to be a route - that is what carries an
+  // Encounter and a SoulLink, and therefore a team position - but it must not
+  // appear on the Encounter tab or count towards the encounter progress bar.
+  hidden       Boolean  @default(false)
   createdAt    DateTime @default(now())
   run          Run      @relation(fields: [runId], references: [id], onDelete: Cascade)
 

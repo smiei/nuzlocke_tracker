@@ -77,3 +77,28 @@ describe("eliteFourIndex", () => {
     expect(eliteFourIndex(levelCaps)).toBeNull();
   });
 });
+
+describe("computeRouteProgress with free-team slots", () => {
+  // A hidden route exists only to hold a team member. Counting it would make
+  // the Encounter tab's denominator climb every time somebody is added to the
+  // team, which is the opposite of progress.
+  const routes = [
+    { id: 1, type: "route" },
+    { id: 2, type: "route" },
+    { id: -1, type: "route", hidden: true },
+    { id: -2, type: "route", hidden: true },
+  ];
+
+  it("leaves hidden routes out of the total", () => {
+    const stats = computeRouteProgress(routes, [], true, true);
+    expect(stats.total).toBe(2);
+  });
+
+  it("leaves an encounter on a hidden route out of the count", () => {
+    const encounters = [{ routeId: -1, player: Player.PLAYER1 }];
+    const stats = computeRouteProgress(routes, encounters, true, true);
+    expect(stats.done).toBe(0);
+    expect(stats.total).toBe(2);
+    expect(stats.percent).toBe(0);
+  });
+});

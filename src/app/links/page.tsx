@@ -15,6 +15,7 @@ import { getRoutesForRun } from "@/lib/runRoutes";
 import { EncounterStatus, Player, RunMode } from "@/generated/prisma/client";
 import { SpriteSetProvider } from "@/components/SpriteSetProvider";
 import { CanonicalRun } from "@/components/CanonicalRun";
+import { BlindflugProvider } from "@/components/BlindflugProvider";
 import { PageHeader } from "@/components/ui/Page";
 import { PokemonDetailProvider } from "@/components/PokemonDetailProvider";
 import { PlayerNamesProvider } from "@/components/PlayerNamesProvider";
@@ -201,6 +202,7 @@ export default async function LinksPage({
   const heading = translations[lang].nav.links;
 
   return (
+    <BlindflugProvider on={settings.blindflug}>
     <div>
       <CanonicalRun runId={runId} />
       <PageHeader title={heading} />
@@ -220,10 +222,18 @@ export default async function LinksPage({
             dexLimit={game.dexLimit}
             lang={lang}
           >
-            <LinksView runId={runId} mode={mode} lang={lang} soulLinks={views} />
+            <LinksView
+              runId={runId}
+              mode={mode}
+              lang={lang}
+              soulLinks={views}
+              freeTeam={settings.freeTeam}
+              pokemonList={pokemonList}
+            />
           </PokemonDetailProvider>
         </PlayerNamesProvider>
       </SpriteSetProvider>
     </div>
+    </BlindflugProvider>
   );
 }

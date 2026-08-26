@@ -14,6 +14,7 @@ import { getRoutesForRun } from "@/lib/runRoutes";
 import { getLang } from "@/lib/i18n/getLang";
 import { TrackerView } from "@/components/TrackerView";
 import { CanonicalRun } from "@/components/CanonicalRun";
+import { BlindflugProvider } from "@/components/BlindflugProvider";
 import { SpriteSetProvider } from "@/components/SpriteSetProvider";
 import { PokemonDetailProvider } from "@/components/PokemonDetailProvider";
 import { PlayerNamesProvider } from "@/components/PlayerNamesProvider";
@@ -37,6 +38,7 @@ export default async function TrackerPage({
   const encounters = await prisma.encounter.findMany({ where: { runId } });
 
   return (
+    <BlindflugProvider on={settings.blindflug}>
     <div>
       <CanonicalRun runId={runId} />
       <SpriteSetProvider spriteSet={game.spriteSet}>
@@ -73,5 +75,6 @@ export default async function TrackerPage({
         </PlayerNamesProvider>
       </SpriteSetProvider>
     </div>
+    </BlindflugProvider>
   );
 }

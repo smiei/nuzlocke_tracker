@@ -61,6 +61,7 @@ function runToBackupRun(run: RunWithRelations): BackupRun {
       name: cr.name,
       type: cr.type,
       afterRouteId: cr.afterRouteId,
+      hidden: cr.hidden,
       createdAt: cr.createdAt.toISOString(),
     })),
     routeEntries: run.routeEntries.map((re) => ({
@@ -145,6 +146,7 @@ export async function applyBackup(backup: BackupFile): Promise<number> {
               name: cr.name,
               type: cr.type,
               afterRouteId: cr.afterRouteId,
+              hidden: cr.hidden,
               createdAt: new Date(cr.createdAt),
             },
           });

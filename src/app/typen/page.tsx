@@ -22,6 +22,7 @@ import { displayNameWithForm, movepoolId } from "@/lib/forms";
 import { EncounterStatus, LinkStatus, Player, RunMode } from "@/generated/prisma/client";
 import type { TeamMember } from "@/components/TeamWeaknessesView";
 import { CanonicalRun } from "@/components/CanonicalRun";
+import { BlindflugProvider } from "@/components/BlindflugProvider";
 import type { OpenSlot } from "@/components/CatchRateView";
 import { AnalyzeView } from "@/components/AnalyzeView";
 import { SpriteSetProvider } from "@/components/SpriteSetProvider";
@@ -71,7 +72,7 @@ export default async function AnalyzePage({
   // encounter yet. Statics honor the run's "statics" rule; Classic lists only
   // Player 1.
   const routes = (await getRoutesForRun(runId, gameId)).filter(
-    (r) => settings.statics || r.type === "route",
+    (r) => !r.hidden && (settings.statics || r.type === "route"),
   );
   const players = mode === RunMode.CLASSIC ? [Player.PLAYER1] : [Player.PLAYER1, Player.PLAYER2];
   const openSlots: OpenSlot[] = [];
@@ -144,6 +145,7 @@ export default async function AnalyzePage({
   const attackTypes = getTypesForGeneration(game.generation);
 
   return (
+    <BlindflugProvider on={settings.blindflug}>
     <SpriteSetProvider spriteSet={game.spriteSet}>
       <CanonicalRun runId={runId} />
       <PlayerNamesProvider names={settings.playerNames} lang={lang}>
@@ -182,5 +184,6 @@ export default async function AnalyzePage({
         </PokemonDetailProvider>
       </PlayerNamesProvider>
     </SpriteSetProvider>
+    </BlindflugProvider>
   );
 }

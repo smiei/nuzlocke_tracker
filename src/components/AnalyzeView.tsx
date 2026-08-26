@@ -22,6 +22,7 @@ import {
   type OpenSlot,
 } from "@/components/CatchRateView";
 import { BattleCardBody, type BattleSharedProps } from "@/components/BattleView";
+import { useBlindflug } from "@/components/BlindflugProvider";
 import { Card } from "@/components/ui/Card";
 import { PageHeader } from "@/components/ui/Page";
 import type { TeamMember } from "@/components/TeamWeaknessesView";
@@ -60,6 +61,7 @@ function AnalyzeCard({
   const { lang } = useLanguage();
   const t = translations[lang].typen;
   const tCatch = translations[lang].catchrate;
+  const blindflug = useBlindflug();
   const { selectedId, view, battleLevel } = state;
 
   const selected = catchShared.pokemonList.find((p) => p.id === selectedId) ?? null;
@@ -111,7 +113,8 @@ function AnalyzeCard({
       {isLocked && (
         <p className="mb-3 text-xs text-warning">⚠ {tCatch.lockWarning}</p>
       )}
-      {explosive && (
+      {/* Knowing the opponent can blow up in your face is move knowledge. */}
+      {explosive && !blindflug && (
         <p
           className={`mb-3 rounded-md px-2.5 py-1.5 text-sm font-medium ${
             explosive.level <= battleLevel

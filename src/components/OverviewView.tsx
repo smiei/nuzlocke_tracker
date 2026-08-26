@@ -9,6 +9,7 @@ import type { LocalizedNames } from "@/lib/i18n/localize";
 import { localizeName } from "@/lib/i18n/localize";
 import type { ProgressStats } from "@/lib/progress";
 import { TeamWeaknessesView, type TeamMember } from "@/components/TeamWeaknessesView";
+import { BlindflugNotice, useBlindflug } from "@/components/BlindflugProvider";
 import { TypeBadge } from "@/components/TypeBadge";
 import { PokemonSprite } from "@/components/PokemonSprite";
 import { ProgressBar } from "@/components/ProgressBar";
@@ -158,6 +159,7 @@ export function OverviewView({
   deathPointOptions: DeathPointOption[];
 }) {
   const t = translations[lang].overview;
+  const blindflug = useBlindflug();
   const tLinks = translations[lang].links;
   const playerLabel = usePlayerLabel();
   const detail = usePokemonDetail();
@@ -269,8 +271,14 @@ export function OverviewView({
             </div>
           </Section>
 
-          {/* Team coverage: defensive (reused) + offensive gaps */}
+          {/* Team coverage: defensive (reused) + offensive gaps. The
+              heading stays under Blindflug so the tab does not silently
+              lose a section - only its contents go. */}
           <Section title={t.coverage}>
+            {blindflug ? (
+              <BlindflugNotice />
+            ) : (
+            <>
             <Card className="mb-4">
               <TeamWeaknessesView
                 lang={lang}
@@ -315,6 +323,8 @@ export function OverviewView({
                   ),
               )}
             </div>
+            </>
+            )}
           </Section>
         </>
       )}

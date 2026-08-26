@@ -17,6 +17,7 @@ import { displayNameWithForm, movepoolId } from "@/lib/forms";
 import { EncounterStatus, LinkStatus, Player, RunMode } from "@/generated/prisma/client";
 import { SpriteSetProvider } from "@/components/SpriteSetProvider";
 import { CanonicalRun } from "@/components/CanonicalRun";
+import { BlindflugProvider } from "@/components/BlindflugProvider";
 import { PlayerNamesProvider } from "@/components/PlayerNamesProvider";
 import { PokemonDetailProvider } from "@/components/PokemonDetailProvider";
 import { TmCompatView, type TmTeamMember } from "@/components/TmCompatView";
@@ -100,6 +101,7 @@ export default async function TmsPage({
     .sort((a, b) => a.name.localeCompare(b.name));
 
   return (
+    <BlindflugProvider on={settings.blindflug}>
     <SpriteSetProvider spriteSet={game.spriteSet}>
       <CanonicalRun runId={runId} />
       <PlayerNamesProvider names={settings.playerNames} lang={lang}>
@@ -133,5 +135,6 @@ export default async function TmsPage({
         </PokemonDetailProvider>
       </PlayerNamesProvider>
     </SpriteSetProvider>
+    </BlindflugProvider>
   );
 }

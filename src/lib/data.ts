@@ -73,6 +73,11 @@ export type Route = {
   // Set only by getRoutesForRun for a user-added route (negative id). Pack
   // JSONs never carry it, so `custom` absent === "comes from the game pack".
   custom?: boolean;
+  // A free-team slot: it exists to hold a team member, not because the run
+  // visits it. Still part of the merged list so the Team tab and the Memorial
+  // can resolve its name, but filtered out of the Encounter tab and out of the
+  // encounter progress bar.
+  hidden?: boolean;
 };
 
 export type PokemonStats = {

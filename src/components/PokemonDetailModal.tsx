@@ -18,6 +18,7 @@ import { formatEvolutionMethod } from "@/lib/evolutionMethods";
 import { TypeBadge } from "@/components/TypeBadge";
 import { Modal } from "@/components/ui/Modal";
 import { TypeEffectiveness } from "@/components/ui/TypeEffectiveness";
+import { BlindflugNotice, useBlindflug } from "@/components/BlindflugProvider";
 import { PokemonSprite } from "@/components/PokemonSprite";
 
 // Order + label keys for the base stats (matching pokedex.columns).
@@ -137,6 +138,7 @@ export function PokemonDetailModal({
   onClose: () => void;
 }) {
   const t = translations[lang];
+  const blindflug = useBlindflug();
   const td = t.pokedex.detail;
   const searchParams = useSearchParams();
 
@@ -337,7 +339,7 @@ export function PokemonDetailModal({
           >
             {td.openInAnalyze} <span aria-hidden>→</span>
           </Link>
-          {types.length > 0 && (
+          {!blindflug && types.length > 0 && (
             <div className="pt-1">
               <h3 className="mb-1 text-xs font-semibold uppercase tracking-wide text-ink-muted">
                 {td.weaknesses}
@@ -394,7 +396,10 @@ export function PokemonDetailModal({
         </div>
 
         {/* Full level-up move list (bottom) */}
-        {moveList.length > 0 && (
+        {blindflug ? (
+          <BlindflugNotice />
+        ) : (
+          moveList.length > 0 && (
           <div>
             <h3 className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-ink-muted">
               {td.moves}
@@ -405,6 +410,7 @@ export function PokemonDetailModal({
               ))}
             </div>
           </div>
+          )
         )}
       </div>
     </Modal>

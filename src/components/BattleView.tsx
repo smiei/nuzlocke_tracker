@@ -5,6 +5,7 @@ import type { EffectivenessTable } from "@/lib/effectiveness";
 import { computeDefenseMultipliers, singleTypeMultiplier } from "@/lib/effectiveness";
 import type { Learnset } from "@/lib/learnset";
 import { attackTypesAtLevel } from "@/lib/learnset";
+import { BlindflugNotice, useBlindflug } from "@/components/BlindflugProvider";
 import { movepoolId } from "@/lib/forms";
 import { TYPE_COLORS, TYPE_LABELS } from "@/lib/pokemonTypes";
 import { useClampedIntInput } from "@/lib/useClampedIntInput";
@@ -165,6 +166,7 @@ export function BattleCardBody({
   const { lang } = useLanguage();
   const t = translations[lang].typen;
   const playerLabel = usePlayerLabel();
+  const blindflug = useBlindflug();
   const levelInput = useClampedIntInput(level, 1, 100, 100, (n) => onChange({ level: n }));
 
   const selectedRaw = pokemonList.find((p) => p.id === selectedId) ?? null;
@@ -233,7 +235,13 @@ export function BattleCardBody({
               ))}
             </div>
 
-            {/* Opponent's damaging attack types at the chosen level */}
+            {/* Opponent's damaging attack types at the chosen level.
+                Under Blindflug this is exactly the kind of thing you are
+                supposed to remember, so it goes - with a line saying so,
+                since an otherwise empty section reads as a bug. */}
+            {blindflug ? (
+              <BlindflugNotice className="mt-3" />
+            ) : (
             <div className="mt-3">
               <div className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-ink-muted">
                 {t.moveTypes} <span className="font-normal normal-case">· {t.damagingOnly}</span>
@@ -257,10 +265,11 @@ export function BattleCardBody({
                 </div>
               )}
             </div>
+            )}
           </section>
 
           {/* Weaknesses as a defender: which attack types to hit it with. */}
-          {multipliers && (
+          {!blindflug && multipliers && (
             <section className="py-4">
               <h2 className="mb-3 text-sm font-semibold text-ink">
                 {t.defenderWeakHeading}
@@ -288,7 +297,8 @@ export function BattleCardBody({
 
           {/* Strengths against my team: opponent's attacks vs each member.
               One card in Classic, one per player in SoulLink. */}
-          {opponentAttackTypes.length > 0 &&
+          {!blindflug &&
+            opponentAttackTypes.length > 0 &&
             (!hasTeam ? (
               <section className="py-4">
                 <h2 className="mb-3 text-sm font-semibold text-ink">

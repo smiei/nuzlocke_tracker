@@ -59,6 +59,12 @@
   --info-line: #7dd3fc;
 
   --focus: #0ea5e9; /* one focus ring for the whole app */
+
+  /* Blindflug's marker colour. One value for both themes, like --danger-solid:
+     it is only ever a 3px stripe and a button outline, and a muted violet
+     reads on white and on near-black alike. Deliberately a hue nothing else in
+     the app uses, so the stripe cannot be mistaken for a status. */
+  --blindflug: #8b5cf6;
 }
 
 .dark {
@@ -166,6 +172,7 @@
   --color-info-line: var(--info-line);
 
   --color-focus: var(--focus);
+  --color-blindflug: var(--blindflug);
 
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);

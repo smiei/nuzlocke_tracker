@@ -23,6 +23,7 @@ import { usePokemonDetail } from "@/components/PokemonDetailProvider";
 import { PokemonSprite } from "@/components/PokemonSprite";
 import { TypeBadge } from "@/components/TypeBadge";
 import { TypeEffectiveness } from "@/components/ui/TypeEffectiveness";
+import { useBlindflug } from "@/components/BlindflugProvider";
 import { NICKNAME_MAX } from "@/components/EncounterEditor";
 
 export type OpenSlot = { routeId: number; player: Player; routeName: string };
@@ -261,6 +262,7 @@ export function CatchCardBody({
   const { lang } = useLanguage();
   const t = translations[lang].catchrate;
   const playerLabel = usePlayerLabel();
+  const blindflug = useBlindflug();
   const toast = useToast();
   const detail = usePokemonDetail();
   const ballIds = getBallIdsForGeneration(generation, versionGroup);
@@ -477,8 +479,10 @@ export function CatchCardBody({
         )}
       </div>
 
-      {/* Type weaknesses of the selected Pokémon */}
-      {selected && selectedTypes.length > 0 && (
+      {/* Type weaknesses of the selected Pokémon - the one thing on this
+          card Blindflug takes away; the catch maths is not analysis of
+          the opponent, it is arithmetic you could do on paper. */}
+      {!blindflug && selected && selectedTypes.length > 0 && (
         <div className="mt-3">
           <TypeEffectiveness
             defenderTypes={selectedTypes}

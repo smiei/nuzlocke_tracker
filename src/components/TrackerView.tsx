@@ -68,10 +68,13 @@ export function TrackerView({
   const [debugMode] = useDebugMode(runId);
 
   // Every route in display order, for the "insert after" picker - statics
-  // included, since an added location may well belong after one.
-  const routeOptions = routes.map((route) => ({ id: route.id, name: routeName(route, lang) }));
+  // included, since an added location may well belong after one, but not the
+  // free-team slots, which are not places.
+  const routeOptions = routes
+    .filter((route) => !route.hidden)
+    .map((route) => ({ id: route.id, name: routeName(route, lang) }));
   const customRoutes = routes
-    .filter((route) => route.custom)
+    .filter((route) => route.custom && !route.hidden)
     .map((route) => ({
       id: route.id,
       name: routeName(route, lang),
@@ -91,7 +94,10 @@ export function TrackerView({
   // "statics" rule off = static locations aren't tracked at all. The full
   // `routes` array still goes to the editors below - it's their lookup table
   // for route names in clause warnings, which may point at a static route.
-  const trackable = settings.statics ? routes : routes.filter((r) => r.type === "route");
+  // `hidden` = a free-team slot, which is a team row wearing a route's
+  // clothes; it has no business on the Encounter tab.
+  const onTheMap = routes.filter((r) => !r.hidden);
+  const trackable = settings.statics ? onTheMap : onTheMap.filter((r) => r.type === "route");
   const visible = openOnly
     ? trackable.filter((r) => !isRouteDone(r, encounters, isClassic) || r.id === lastTouchedRouteId)
     : trackable;
@@ -161,38 +167,28 @@ export function TrackerView({
             />
           ) : (
             <>
-              <div>
-                <span className="mb-1 block text-xs font-medium text-ink-subtle">
-                  {playerLabel(Player.PLAYER1)}
-                </span>
-                <EncounterEditor
-                  runId={runId}
-                  lang={lang}
-                  settings={settings}
-                  routeId={route.id}
-                  player={Player.PLAYER1}
-                  routes={routes}
-                  pokemonList={pokemonList}
-                  encounters={encounters}
-                  onTouched={setLastTouchedRouteId}
-                />
-              </div>
-              <div>
-                <span className="mb-1 block text-xs font-medium text-ink-subtle">
-                  {playerLabel(Player.PLAYER2)}
-                </span>
-                <EncounterEditor
-                  runId={runId}
-                  lang={lang}
-                  settings={settings}
-                  routeId={route.id}
-                  player={Player.PLAYER2}
-                  routes={routes}
-                  pokemonList={pokemonList}
-                  encounters={encounters}
-                  onTouched={setLastTouchedRouteId}
-                />
-              </div>
+              {/* Each player gets an outlined surface of their own. Stacked on
+                  a phone, a filled row is four controls tall per player, and
+                  with nothing but a gap between them the two blocks read as one
+                  long list - you cannot see where Player 1 ends. */}
+              {[Player.PLAYER1, Player.PLAYER2].map((player) => (
+                <div key={player} className="rounded-md border border-line p-2">
+                  <span className="mb-1 block text-xs font-medium text-ink-subtle">
+                    {playerLabel(player)}
+                  </span>
+                  <EncounterEditor
+                    runId={runId}
+                    lang={lang}
+                    settings={settings}
+                    routeId={route.id}
+                    player={player}
+                    routes={routes}
+                    pokemonList={pokemonList}
+                    encounters={encounters}
+                    onTouched={setLastTouchedRouteId}
+                  />
+                </div>
+              ))}
             </>
           )}
         </div>
@@ -260,7 +256,9 @@ export function TrackerView({
           }
         />
       ) : (
-        <Card padding="none" className="divide-y divide-line-strong overflow-hidden">
+        <Card padding="none" className="divide-y-2 divide-line-strong overflow-hidden">
+          {/* divide-y-2 on the Card above: a hairline has to hold its own
+              against the outcome tint filling the rows on either side of it. */}
           {mainRoutes.map(renderRoute)}
           {postgameRoutes.length > 0 && (
             <>

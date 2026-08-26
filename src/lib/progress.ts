@@ -3,7 +3,7 @@ import type { LevelCap } from "@/lib/data";
 
 export type ProgressStats = { done: number; total: number; percent: number };
 
-type RouteLike = { id: number; type: string; postgame?: boolean };
+type RouteLike = { id: number; type: string; postgame?: boolean; hidden?: boolean };
 type EncounterLike = { routeId: number; player: Player };
 
 // A route counts as "done" once every player slot has an entry (any status):
@@ -32,7 +32,10 @@ export function computeRouteProgress(
   isClassic: boolean,
   statics: boolean,
 ): ProgressStats {
-  const trackable = statics ? routes : routes.filter((r) => r.type === "route");
+  // `hidden` routes are free-team slots, not places the run goes: counting
+  // them would make the denominator grow every time a team member is added.
+  const visible = routes.filter((r) => !r.hidden);
+  const trackable = statics ? visible : visible.filter((r) => r.type === "route");
   const nonPostgame = trackable.filter((r) => !r.postgame);
   const done = nonPostgame.filter((r) => isRouteDone(r, encounters, isClassic)).length;
   return { done, total: nonPostgame.length, percent: toPercent(done, nonPostgame.length) };

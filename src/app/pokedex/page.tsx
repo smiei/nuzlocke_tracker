@@ -14,6 +14,7 @@ import { getLang } from "@/lib/i18n/getLang";
 import { translations } from "@/lib/i18n/dictionary";
 import { PokedexTable } from "@/components/PokedexTable";
 import { CanonicalRun } from "@/components/CanonicalRun";
+import { BlindflugProvider } from "@/components/BlindflugProvider";
 import { PokemonDetailProvider } from "@/components/PokemonDetailProvider";
 import { SpriteSetProvider } from "@/components/SpriteSetProvider";
 import { PageHeader } from "@/components/ui/Page";
@@ -48,6 +49,7 @@ export default async function PokedexPage({
   const lockedFamilyIds = [...new Set(encounters.map((e) => e.familyId))];
 
   return (
+    <BlindflugProvider on={settings.blindflug}>
     <SpriteSetProvider spriteSet={game.spriteSet}>
       <CanonicalRun runId={runId} />
       <PokemonDetailProvider
@@ -70,5 +72,6 @@ export default async function PokedexPage({
         </div>
       </PokemonDetailProvider>
     </SpriteSetProvider>
+    </BlindflugProvider>
   );
 }

@@ -25,6 +25,7 @@ export type CustomRouteInput = {
   name: string;
   type: string;
   afterRouteId: number | null;
+  hidden?: boolean;
 };
 
 // A custom route has one free-text name, but Route.names is localized and
@@ -37,6 +38,7 @@ export function customRouteToRoute(row: Omit<CustomRouteInput, "afterRouteId">):
     names,
     type: (row.type === "static" ? "static" : "route") satisfies RouteType,
     custom: true,
+    hidden: row.hidden === true,
   };
 }
 

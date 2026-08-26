@@ -32,6 +32,13 @@ describe("customRouteToRoute", () => {
   it("falls back to a normal route for an unknown type string", () => {
     expect(customRouteToRoute({ routeId: -1, name: "x", type: "nonsense" }).type).toBe("route");
   });
+
+  it("carries the hidden flag, and defaults it to false", () => {
+    // `hidden` is what keeps a free-team slot off the Encounter tab; a lost
+    // flag would put six fake routes in front of the player.
+    expect(customRouteToRoute({ routeId: -1, name: "Team 1", type: "route", hidden: true }).hidden).toBe(true);
+    expect(customRouteToRoute({ routeId: -2, name: "Safari", type: "route" }).hidden).toBe(false);
+  });
 });
 
 describe("mergeRoutes", () => {

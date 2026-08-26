@@ -14,6 +14,7 @@ import type {
 import { moveDetail, tmLearnMethods } from "@/lib/learnset";
 import { MoveCombobox, type MoveOption } from "@/components/MoveCombobox";
 import { MoveDetailPanel } from "@/components/MoveDetailPanel";
+import { useBlindflug } from "@/components/BlindflugProvider";
 import { PokemonSprite } from "@/components/PokemonSprite";
 import { usePlayerLabel } from "@/components/PlayerNamesProvider";
 import { usePokemonDetail } from "@/components/PokemonDetailProvider";
@@ -66,6 +67,7 @@ export function TmCompatView({
   moveTypeHistory: MoveTypeHistoryEntry[];
 }) {
   const t = translations[lang].tms;
+  const blindflug = useBlindflug();
   const playerLabel = usePlayerLabel();
   const detail = usePokemonDetail();
   const [selectedSlug, setSelectedSlug] = useState<string | null>(null);
@@ -117,7 +119,10 @@ export function TmCompatView({
         />
       </div>
 
-      {selectedDetail && (
+      {/* The compatibility table below stays under Blindflug - who can
+          learn a move is movepool planning, not a battle answer. Only
+          the power/accuracy/effect card goes. */}
+      {selectedDetail && !blindflug && (
         <div className="mb-6 max-w-lg">
           <MoveDetailPanel move={selectedDetail} lang={lang} />
         </div>
