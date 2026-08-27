@@ -22,13 +22,17 @@ export function useBlindflug(): boolean {
 
 // Stands in where a WHOLE block disappears (the opponent's move types, the
 // team matchup, the Pokédex move list, the Overview's coverage section). An
-// empty card with no explanation reads as a bug; a single muted line reads as
-// a choice. Inline chips are dropped silently instead - a notice per chip
-// would be louder than the thing it replaced.
+// empty card with no explanation reads as a bug; a single line reads as a
+// choice. Inline chips are dropped silently instead - a notice per chip would
+// be louder than the thing it replaced.
+//
+// In the mode's own colour, not the usual caption grey: it is the same signal
+// as the stripe at the top of the page and the header button, so a reader who
+// wonders why something is missing recognises the answer instead of reading
+// it. That also puts it ABOVE --ink-subtle in contrast, which is what carries
+// captions everywhere else.
 export function BlindflugNotice({ className = "" }: { className?: string }) {
   const { lang } = useLanguage();
   const t = translations[lang].blindflug;
-  return (
-    <p className={`text-xs italic text-ink-subtle ${className}`}>{t.hidden}</p>
-  );
+  return <p className={`text-xs italic text-blindflug ${className}`}>{t.hidden}</p>;
 }
