@@ -395,22 +395,24 @@ export function PokemonDetailModal({
           </div>
         </div>
 
-        {/* Full level-up move list (bottom) */}
-        {blindflug ? (
-          <BlindflugNotice />
-        ) : (
-          moveList.length > 0 && (
+        {/* Full level-up move list (bottom). Under Blindflug the heading stays
+            and only the list goes: the heading is what names the thing that is
+            missing, and without it the notice is a riddle. */}
+        {(blindflug || moveList.length > 0) && (
           <div>
             <h3 className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-ink-muted">
               {td.moves}
             </h3>
-            <div className="divide-y divide-line">
-              {moveList.map((mv, i) => (
-                <MoveRow key={`${mv.name}-${i}`} move={mv} lang={lang} />
-              ))}
-            </div>
+            {blindflug ? (
+              <BlindflugNotice />
+            ) : (
+              <div className="divide-y divide-line">
+                {moveList.map((mv, i) => (
+                  <MoveRow key={`${mv.name}-${i}`} move={mv} lang={lang} />
+                ))}
+              </div>
+            )}
           </div>
-          )
         )}
       </div>
     </Modal>

@@ -235,18 +235,16 @@ export function BattleCardBody({
               ))}
             </div>
 
-            {/* Opponent's damaging attack types at the chosen level.
-                Under Blindflug this is exactly the kind of thing you are
-                supposed to remember, so it goes - with a line saying so,
-                since an otherwise empty section reads as a bug. */}
-            {blindflug ? (
-              <BlindflugNotice className="mt-3" />
-            ) : (
+            {/* Opponent's damaging attack types at the chosen level. Under
+                Blindflug the heading stays and only the types go - it is what
+                names what is being withheld. */}
             <div className="mt-3">
               <div className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-ink-muted">
                 {t.moveTypes} <span className="font-normal normal-case">· {t.damagingOnly}</span>
               </div>
-              {allAttacks.length === 0 ? (
+              {blindflug ? (
+                <BlindflugNotice />
+              ) : allAttacks.length === 0 ? (
                 <p className="text-xs text-ink-subtle">—</p>
               ) : (
                 <div className="flex flex-wrap gap-1.5">
@@ -265,7 +263,6 @@ export function BattleCardBody({
                 </div>
               )}
             </div>
-            )}
           </section>
 
           {/* Weaknesses as a defender: which attack types to hit it with. */}
