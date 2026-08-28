@@ -56,7 +56,7 @@ const de = {
   },
   blindflug: {
     name: "Blindflug",
-    hidden: "Im Blindflug ausgeblendet.",
+    hidden: "Im Blindflug ausgeblendet",
     enable: "Blindflug einschalten",
     disable: "Blindflug ausschalten",
   },
@@ -630,7 +630,7 @@ const en: Dictionary = {
   },
   blindflug: {
     name: "Blind flight",
-    hidden: "Hidden in blind flight.",
+    hidden: "Hidden in blind flight",
     enable: "Turn on blind flight",
     disable: "Turn off blind flight",
   },
@@ -1199,7 +1199,7 @@ const fr: Dictionary = {
   },
   blindflug: {
     name: "Vol à l’aveugle",
-    hidden: "Masqué en vol à l’aveugle.",
+    hidden: "Masqué en vol à l’aveugle",
     enable: "Activer le vol à l’aveugle",
     disable: "Désactiver le vol à l’aveugle",
   },
@@ -1774,7 +1774,7 @@ const es: Dictionary = {
   },
   blindflug: {
     name: "Vuelo a ciegas",
-    hidden: "Oculto en vuelo a ciegas.",
+    hidden: "Oculto en vuelo a ciegas",
     enable: "Activar vuelo a ciegas",
     disable: "Desactivar vuelo a ciegas",
   },
@@ -2348,7 +2348,7 @@ const it: Dictionary = {
   },
   blindflug: {
     name: "Volo cieco",
-    hidden: "Nascosto in volo cieco.",
+    hidden: "Nascosto in volo cieco",
     enable: "Attiva il volo cieco",
     disable: "Disattiva il volo cieco",
   },

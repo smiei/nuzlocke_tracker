@@ -1,6 +1,6 @@
 "use client";
 
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { updateRunSettings } from "@/lib/actions";
 import { formatActionError } from "@/lib/actionErrors";
@@ -44,6 +44,7 @@ export function BlindflugToggle({
   const { lang } = useLanguage();
   const t = translations[lang].blindflug;
   const [pending, startTransition] = useTransition();
+  const [flash, setFlash] = useState(false);
 
   const requested = Number(searchParams.get("run"));
   const run = runs.find((r) => r.id === requested) ?? runs[0];
@@ -55,10 +56,17 @@ export function BlindflugToggle({
 
   function toggle() {
     if (!run) return;
+    const next = !on;
     startTransition(async () => {
-      const result = await updateRunSettings(run.id, { blindflug: !on });
-      if (result.success) router.refresh();
-      else toast.error(formatActionError(result.error, lang));
+      const result = await updateRunSettings(run.id, { blindflug: next });
+      if (result.success) {
+        // Only on the way IN. Switching the handicap on is the moment worth
+        // staging; switching it off is just going back to normal.
+        if (next) setFlash(true);
+        router.refresh();
+      } else {
+        toast.error(formatActionError(result.error, lang));
+      }
     });
   }
 
@@ -71,24 +79,37 @@ export function BlindflugToggle({
         aria-pressed={on}
         aria-label={on ? t.disable : t.enable}
         title={on ? t.disable : t.enable}
-        className={`flex h-10 w-10 items-center justify-center rounded-md border transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
+        // Active it grows from an icon square into a labelled pill. The mode
+        // is not a preference you set once and forget - it should be legible
+        // from across the room which state the run is in.
+        className={`flex h-10 items-center justify-center gap-2 rounded-md border font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
           on
-            ? "border-blindflug text-blindflug"
-            : "border-line text-ink-muted hover:bg-hover hover:text-ink"
+            ? "border-blindflug bg-blindflug/10 px-3 text-blindflug"
+            : "w-10 border-line text-ink-muted hover:bg-hover hover:text-ink"
         }`}
       >
         {pending ? <Spinner /> : <BlindfoldIcon className="h-5 w-5" />}
+        {on && <span className="text-xs uppercase tracking-wider">{t.name}</span>}
       </button>
 
-      {/* The "you are in this mode" marker, on every page and every scroll
-          position without covering anything: a hairline pinned to the top of
-          the viewport. z-30 keeps it under Modal (50) and Toast (60) but over
-          the sticky tab strip (40), so it stays visible while the strip slides
-          up and down. */}
+      {/* Hazard tape across the top of the viewport: the run is sealed off.
+          z-30 keeps it under Modal (50) and Toast (60) but over the sticky tab
+          strip (40), so it stays put while the strip slides up and down. */}
       {on && (
         <div
           aria-hidden
-          className="pointer-events-none fixed inset-x-0 top-0 z-30 h-1 bg-blindflug"
+          className="blindflug-tape pointer-events-none fixed inset-x-0 top-0 z-30 h-2"
+        />
+      )}
+
+      {/* One scan down the page as the mode comes on, then gone. It unmounts
+          itself on animationend rather than on a timer, so it cannot outlive
+          its own animation - see the reduced-motion note in globals.css. */}
+      {flash && (
+        <div
+          aria-hidden
+          onAnimationEnd={() => setFlash(false)}
+          className="blindflug-flash pointer-events-none fixed inset-0 z-40"
         />
       )}
     </>

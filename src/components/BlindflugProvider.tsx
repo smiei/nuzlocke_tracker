@@ -21,18 +21,29 @@ export function useBlindflug(): boolean {
 }
 
 // Stands in where a WHOLE block disappears (the opponent's move types, the
-// team matchup, the Pokédex move list, the Overview's coverage section). An
-// empty card with no explanation reads as a bug; a single line reads as a
-// choice. Inline chips are dropped silently instead - a notice per chip would
-// be louder than the thing it replaced.
+// Pokédex move list, the Overview's coverage section). Always rendered UNDER
+// that block's own heading, never instead of it - the heading is what names
+// the thing being withheld.
 //
-// In the mode's own colour, not the usual caption grey: it is the same signal
-// as the stripe at the top of the page and the header button, so a reader who
-// wonders why something is missing recognises the answer instead of reading
-// it. That also puts it ABOVE --ink-subtle in contrast, which is what carries
-// captions everywhere else.
+// A struck-out block rather than a line of grey text: the gap is the point, so
+// it gets area. The caller keeps its heading, this fills the space the content
+// used to occupy, and the hatch matches the tape at the top of the page so the
+// two read as the same signal.
+//
+// Inline chips are still dropped silently - a redaction block per chip would
+// be far louder than the chip it replaced.
 export function BlindflugNotice({ className = "" }: { className?: string }) {
   const { lang } = useLanguage();
   const t = translations[lang].blindflug;
-  return <p className={`text-xs italic text-blindflug ${className}`}>{t.hidden}</p>;
+  return (
+    <div
+      className={`blindflug-redacted flex min-h-16 items-center justify-center rounded-md px-3 py-4 ${className}`}
+    >
+      {/* The label sits on the panel colour so it punches a hole through the
+          hatch instead of fighting it. */}
+      <span className="rounded-sm bg-panel px-2 py-1 text-xs font-bold uppercase tracking-widest text-blindflug">
+        {t.hidden}
+      </span>
+    </div>
+  );
 }
