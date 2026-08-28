@@ -235,18 +235,33 @@ body {
   border: 1px solid color-mix(in srgb, var(--blindflug) 40%, transparent);
 }
 
-/* One violet scan sweeping down the page the moment the mode is switched on.
+/* One violet scan down the page and back up again when the mode comes on.
    Fires once and unmounts itself on animationend - which is why the reduced
    motion rule shortens the animation instead of removing it: with
-   `animation: none` the event never fires and the overlay would stay put. */
+   `animation: none` the event never fires and the overlay would stay put.
+
+   The band fades in at the start and out at the end rather than appearing and
+   vanishing at full strength, so the sweep reads as one movement instead of
+   two flashes. ease-in-out on each leg gives it the weight of something
+   turning around at the bottom. */
 @keyframes blindflug-sweep {
-  from {
+  0% {
     transform: translateY(-100%);
+    opacity: 0;
+  }
+  12% {
     opacity: 1;
   }
-  to {
+  50% {
     transform: translateY(100%);
-    opacity: 0.15;
+    opacity: 1;
+  }
+  88% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100%);
+    opacity: 0;
   }
 }
 
@@ -258,7 +273,7 @@ body {
     color-mix(in srgb, var(--blindflug) 60%, transparent) 58%,
     transparent 100%
   );
-  animation: blindflug-sweep 800ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: blindflug-sweep 1600ms ease-in-out forwards;
 }
 
 @media (prefers-reduced-motion: reduce) {

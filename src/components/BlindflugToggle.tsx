@@ -50,23 +50,34 @@ export function BlindflugToggle({
   const run = runs.find((r) => r.id === requested) ?? runs[0];
   const on = run ? parseRunSettings(run.settingsJson).blindflug : false;
 
+  // Fire the sweep on the TRANSITION into the mode, not in the click handler.
+  // Blindflug is a run setting, so updateRunSettings publishes over SSE and
+  // every device in the run refreshes - hooking the animation to the incoming
+  // state means the other player's phone stages the moment too, instead of
+  // just quietly sprouting hazard tape.
+  //
+  // Synced during render rather than in an effect, the pattern RulesView uses:
+  // an effect here would land on the set-state-in-effect lint baseline. On
+  // first mount prevOn starts equal to `on`, so opening a page that is already
+  // in Blindflug does not sweep - only entering it does.
+  const [prevOn, setPrevOn] = useState(on);
+  if (prevOn !== on) {
+    setPrevOn(on);
+    // Only on the way IN. Leaving the mode is a return to normal and needs no
+    // staging.
+    if (on) setFlash(true);
+  }
+
   // No runs yet (a fresh database, before the first page resolves one): there
   // is nothing to toggle, and a dead button is worse than none.
   if (!run) return null;
 
   function toggle() {
     if (!run) return;
-    const next = !on;
     startTransition(async () => {
-      const result = await updateRunSettings(run.id, { blindflug: next });
-      if (result.success) {
-        // Only on the way IN. Switching the handicap on is the moment worth
-        // staging; switching it off is just going back to normal.
-        if (next) setFlash(true);
-        router.refresh();
-      } else {
-        toast.error(formatActionError(result.error, lang));
-      }
+      const result = await updateRunSettings(run.id, { blindflug: !on });
+      if (result.success) router.refresh();
+      else toast.error(formatActionError(result.error, lang));
     });
   }
 
