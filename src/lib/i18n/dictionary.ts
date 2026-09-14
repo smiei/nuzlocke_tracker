@@ -42,6 +42,7 @@ const de = {
   menu: {
     label: "Menü",
     language: "Sprache",
+    version: "Version",
   },
   install: {
     menuLabel: "App installieren",
@@ -616,6 +617,7 @@ const en: Dictionary = {
   menu: {
     label: "Menu",
     language: "Language",
+    version: "Version",
   },
   install: {
     menuLabel: "Install app",
@@ -1185,6 +1187,7 @@ const fr: Dictionary = {
   menu: {
     label: "Menu",
     language: "Langue",
+    version: "Version",
   },
   install: {
     menuLabel: "Installer l'application",
@@ -1760,6 +1763,7 @@ const es: Dictionary = {
   menu: {
     label: "Menú",
     language: "Idioma",
+    version: "Versión",
   },
   install: {
     menuLabel: "Instalar aplicación",
@@ -2334,6 +2338,7 @@ const it: Dictionary = {
   menu: {
     label: "Menu",
     language: "Lingua",
+    version: "Versione",
   },
   install: {
     menuLabel: "Installa l'app",

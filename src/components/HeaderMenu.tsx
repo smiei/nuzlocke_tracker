@@ -373,6 +373,16 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
           >
             {t.runSwitcher.deleteButton}
           </button>
+          <div className="my-1 border-t border-line" />
+          {/* Baked in at image build time (Dockerfile ARG APP_VERSION,
+              inlined into the client bundle since it's NEXT_PUBLIC_*) - not
+              runtime-readable, so this is only ever what the image itself
+              shipped with. Exists so a running instance (this Pixel, that
+              Unraid box) can be checked against the Docker Hub tag it's
+              supposed to be, instead of guessed at. */}
+          <div className="px-3 py-1.5 text-xs text-ink-subtle">
+            {t.menu.version} {process.env.NEXT_PUBLIC_APP_VERSION ?? "dev"}
+          </div>
         </div>
       )}
       <RenameRunDialog
