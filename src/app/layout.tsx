@@ -46,10 +46,21 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  // A static default so the tag exists in the initial HTML; ThemeColorSync
-  // rewrites it at runtime, because next-themes toggles a class that
-  // prefers-color-scheme cannot see.
-  themeColor: "#ffffff",
+  // A media-scoped pair, not one flat string: Android reads theme-color for
+  // an installed standalone PWA's status bar before React ever hydrates, and
+  // in that window ThemeColorSync hasn't run yet - a single "#ffffff" default
+  // left the status bar white (with icons Android had already picked white
+  // too, to match a system-dark device) whenever the OS was in dark mode,
+  // which is exactly the "invisible battery icon on a white bar" bug this
+  // fixes. The media query lets the browser pick correctly with no JS at all
+  // for the common case (defaultTheme="system"). ThemeColorSync still
+  // overrides both tags once it runs, for the case where the in-app theme is
+  // switched against the OS setting. Keep in step with --canvas in
+  // globals.css and background_color in manifest.webmanifest.
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#09090b" },
+  ],
   // Deliberately NOT setting viewportFit: "cover" or disabling zoom. The tab
   // strip is sticky now (see StickyNav), but with the default fit iOS lays the
   // standalone viewport out BELOW the status bar, so `sticky top-0` pins under

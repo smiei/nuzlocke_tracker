@@ -21,8 +21,15 @@ export function ThemeColorSync() {
     const wanted = resolvedTheme === "dark" ? THEME_COLORS.dark : THEME_COLORS.light;
 
     const apply = () => {
-      const meta = document.querySelector('meta[name="theme-color"]');
-      if (meta && meta.getAttribute("content") !== wanted) meta.setAttribute("content", wanted);
+      // Two tags now (see layout.tsx's `viewport.themeColor`), one per
+      // prefers-color-scheme value, so the status bar is right before any JS
+      // runs. Once the in-app theme is known, both get the same resolved
+      // colour - collapsing the media distinction here is what makes an
+      // in-app override against the OS setting take effect instead of the
+      // "wrong" tag silently winning via its own media match.
+      document.querySelectorAll('meta[name="theme-color"]').forEach((meta) => {
+        if (meta.getAttribute("content") !== wanted) meta.setAttribute("content", wanted);
+      });
     };
 
     apply();
