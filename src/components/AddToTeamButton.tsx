@@ -48,7 +48,8 @@ export function AddToTeamButton({
   }
 
   function handleClick() {
-    const occupied = new Set(teamLinks.map((l) => l.teamPosition));
+    // A fusion group can hold several slots (see TeamBar).
+    const occupied = new Set(teamLinks.flatMap((l) => l.teamPositions));
     const freeSlot = Array.from({ length: TEAM_SIZE }, (_, i) => i).find(
       (i) => !occupied.has(i),
     );
@@ -83,6 +84,7 @@ export function AddToTeamButton({
                   <PokemonSprite
                     key={e.id}
                     pokemonId={e.pokemonId}
+                    bodyId={e.body?.pokemonId ?? null}
                     name={e.pokemonName}
                     size="sm"
                   />

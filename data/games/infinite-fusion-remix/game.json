@@ -1,0 +1,26 @@
+{
+  "id": "infinite-fusion-remix",
+  "sort": 11,
+  "generation": 5,
+  "dataGeneration": 7,
+  "species": true,
+  "nameLang": "en",
+  "dexLimit": 800,
+  "spriteSet": "black-white",
+  "versionGroup": "infinite-fusion",
+  "trainerSet": "infinite-fusion",
+  "fusion": {
+    "spriteBase": "https://ifd-spaces.sfo2.cdn.digitaloceanspaces.com",
+    "customPath": "custom",
+    "generatedPath": "generated"
+  },
+  "names": {
+    "de": "Pokémon Infinite Fusion (Remix)",
+    "en": "Pokémon Infinite Fusion (Remix)",
+    "fr": "Pokémon Infinite Fusion (Remix)",
+    "es": "Pokémon Infinite Fusion (Remix)",
+    "it": "Pokémon Infinite Fusion (Remix)"
+  },
+  "sourceVersion": "unknown - the reference clone (github.com/fbosch/infinite-fusion-nuzlocke) carried no game-version marker",
+  "sourceDate": "2026-09-15"
+}

@@ -54,6 +54,35 @@ export type GameInfo = {
   // Defaults to the game id when absent.
   trainerSet?: string;
   names: LocalizedNames;
+  // Selects the type chart plus the pokemon-history/catchrate-history/
+  // move-name-history era-correction tables, independently of `generation`
+  // (which keeps selecting the catch formula and ball list). Missing = same
+  // as `generation`, i.e. every pack before Infinite Fusion is unaffected.
+  // Exists because Infinite Fusion's battle mechanics are Gen 5 but its
+  // Pokemon/type roster is newer (it includes Fairy) - see gameData.ts, which
+  // is what every page should call instead of using `generation` directly for
+  // these five functions.
+  dataGeneration?: number;
+  // When true, this pack's species list is the explicit allowlist in
+  // data/games/<id>/species.json instead of "every id <= dexLimit". Exists
+  // for Infinite Fusion, whose ~572 species are scattered up to national dex
+  // #800, not a contiguous prefix - see getSpeciesList() and gameData.ts.
+  species?: boolean;
+  // Forces every Pokemon name this pack shows to this ONE language,
+  // regardless of the UI language - for a pack whose source game was never
+  // translated (Infinite Fusion is English-only). Missing = normal
+  // per-language localizeName() behaviour. Only affects Pokemon names (routes
+  // and level caps for such a pack are simply authored with the same string
+  // in every language key, no runtime override needed there).
+  nameLang?: Lang;
+  // Gates the whole fusion feature (the Team tab's fuse/unfuse/swap UI,
+  // fusion-aware rendering) and carries the fan-art CDN's URL template, so a
+  // takedown (see CLAUDE.md - the canonical sprite source has already been
+  // disabled once) is a live /data edit, not a rebuild. Sprite URLs are
+  // `${spriteBase}/${customPath}/<ifId>.png` (single) or
+  // `.../<headIfId>.<bodyIfId>.png` (fusion), same for generatedPath as the
+  // algorithmic fallback. Missing = this pack has no fusion feature at all.
+  fusion?: { spriteBase: string; customPath: string; generatedPath: string };
 };
 
 // "route" = normal wild encounter; "static" = fixed encounter (NPC gift,
@@ -242,6 +271,26 @@ export function getLevelCaps(gameId: string): LevelCap[] {
   return readGameJson<LevelCap[]>(gameId, "levelcaps.json");
 }
 
+export type SpeciesEntry = {
+  // The source game's own dex number - what its fan sprite CDN (if any) keys
+  // its URLs by. Unused by anything in this file; carried here so a pack that
+  // needs it (Infinite Fusion's sprite lookup) has one place both the species
+  // allowlist and the id mapping come from.
+  ifId: number;
+  // THIS app's pokemon.json id for that species - a national-dex id for most
+  // entries, but a forme id (10001+) for the handful of species the source
+  // game splits into what this app already models as separate alternate
+  // formes (e.g. Oricorio's styles) rather than one base species.
+  ourId: number;
+};
+
+// Explicit species allowlist for a pack whose roster is NOT a contiguous
+// "every id <= dexLimit" range - see GameInfo.species and gameData.ts, which
+// is what pages should call instead of reading this directly.
+export function getSpeciesList(gameId: string): SpeciesEntry[] {
+  return readGameJson<SpeciesEntry[]>(gameId, "species.json");
+}
+
 // How a Pokémon evolves FROM its pre-evolution (rendered in the evolve
 // dropdown). Generated from PokeAPI by scripts/generate-evolutions.mjs;
 // ROM-specific changes live in data/evolution-overrides.json.
@@ -340,11 +389,17 @@ export function getEvolutionById(
 
 // Gen 1 has its own chart (no Dark/Steel, Ghost-vs-Psychic bug, Bug/Poison
 // hitting each other super-effectively, Ice neutral vs Fire); gens 2-5 share
-// the standard pre-Fairy chart in effectiveness.json.
+// the standard pre-Fairy chart in effectiveness.json. Generation 6+ selects
+// effectiveness-gen6.json, which adds Fee (Fairy) on top of that same
+// pre-Fairy chart - see the long comment at the top of that file for why it
+// is NOT simply the real modern chart (Steel keeps every Gen-2-5 resistance
+// it already had, Ghost/Dark included, but does not gain one against Fairy).
+// No pack here uses generation/dataGeneration >= 6 yet; this exists for
+// Infinite Fusion (see gameData.ts's dataGeneration).
 export function getEffectiveness(generation = 3): EffectivenessTable {
-  return readJson<EffectivenessTable>(
-    generation === 1 ? "effectiveness-gen1.json" : "effectiveness.json",
-  );
+  if (generation === 1) return readJson<EffectivenessTable>("effectiveness-gen1.json");
+  if (generation >= 6) return readJson<EffectivenessTable>("effectiveness-gen6.json");
+  return readJson<EffectivenessTable>("effectiveness.json");
 }
 
 export type CatchRateEntry = {

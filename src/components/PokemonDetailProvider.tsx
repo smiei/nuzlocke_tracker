@@ -11,7 +11,8 @@ import { PokemonDetailModal } from "@/components/PokemonDetailModal";
 // (Pokémon tab sprite click, Encounter/Catchrate info buttons, Pokédex rows)
 // without every one of them threading the game data through props. The page
 // provides the game-scoped data once; consumers just call open(id).
-type DetailContext = { open: (pokemonId: number) => void };
+// Infinite Fusion: open(headId, bodyId) opens the card of a fusion.
+type DetailContext = { open: (pokemonId: number, bodyId?: number | null) => void };
 
 const Ctx = createContext<DetailContext | null>(null);
 
@@ -40,19 +41,20 @@ export function PokemonDetailProvider({
   lang: Lang;
   children: React.ReactNode;
 }) {
-  const [openId, setOpenId] = useState<number | null>(null);
-  // openId may be a forme id (10001+), which only lives in `forms`.
-  const pokemon =
-    openId != null
-      ? pokemonList.find((p) => p.id === openId) ?? forms.find((p) => p.id === openId) ?? null
-      : null;
+  const [opened, setOpened] = useState<{ id: number; bodyId: number | null } | null>(null);
+  // An id may be a forme id (10001+), which only lives in `forms`.
+  const find = (id: number) =>
+    pokemonList.find((p) => p.id === id) ?? forms.find((p) => p.id === id) ?? null;
+  const pokemon = opened ? find(opened.id) : null;
+  const body = opened?.bodyId != null ? find(opened.bodyId) : null;
 
   return (
-    <Ctx.Provider value={{ open: setOpenId }}>
+    <Ctx.Provider value={{ open: (id, bodyId = null) => setOpened({ id, bodyId }) }}>
       {children}
       {pokemon && (
         <PokemonDetailModal
           pokemon={pokemon}
+          body={body}
           allPokemon={pokemonList}
           forms={forms}
           evolutions={evolutions}
@@ -63,8 +65,10 @@ export function PokemonDetailProvider({
           generation={generation}
           dexLimit={dexLimit}
           lang={lang}
-          onSelect={setOpenId}
-          onClose={() => setOpenId(null)}
+          // Evolution links and a fusion's component tiles both open a
+          // single species' card.
+          onSelect={(id) => setOpened({ id, bodyId: null })}
+          onClose={() => setOpened(null)}
         />
       )}
     </Ctx.Provider>

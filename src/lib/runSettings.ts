@@ -35,6 +35,12 @@ export type RunSettings = {
   // without entering a route for every catch. Informational like every other
   // toggle - the Encounter tab keeps working, it just is not the only way in.
   freeTeam: boolean;
+  // Infinite Fusion only (see CLAUDE.md): a house-rule challenge variant where
+  // only fusions with a hand-drawn CDN sprite (as opposed to the algorithmic
+  // "generated" fallback) are allowed. The fusion dialog probes the CDN and
+  // warns when a chosen pair has none - it never blocks the save, same spirit
+  // as every other toggle here.
+  customSpritesOnly: boolean;
   // Custom SoulLink player names (empty = fall back to the localized
   // "Player 1"/"Player 2"). Not a toggle - handled separately from the
   // boolean keys below.
@@ -54,6 +60,7 @@ export const DEFAULT_RUN_SETTINGS: RunSettings = {
   staticsExemptFromClause: true,
   blindflug: false,
   freeTeam: false,
+  customSpritesOnly: false,
   playerNames: { PLAYER1: "", PLAYER2: "" },
 };
 

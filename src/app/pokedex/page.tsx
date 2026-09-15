@@ -1,13 +1,12 @@
+import { getEvolutions, getGameOrDefault, getMoveTypeHistory, getMoveset } from "@/lib/data";
 import {
-  getEffectiveness,
-  getEvolutions,
-  getGameOrDefault,
-  getMoves,
-  getMoveTypeHistory,
-  getMoveset,
-  getPokemonList,
-  getPokemonForms,
-} from "@/lib/data";
+  getEffectivenessForGame,
+  getMovesForGame,
+  getPokemonListForGame,
+  getPokemonFormsForGame,
+  getDataGenerationForGame,
+  getFusionSpriteConfigForGame,
+} from "@/lib/gameData";
 import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
 import { getLang } from "@/lib/i18n/getLang";
@@ -33,7 +32,7 @@ export default async function PokedexPage({
 
   const lang = await getLang();
   const game = getGameOrDefault(gameId);
-  const pokemon = getPokemonList(game.dexLimit, game.generation);
+  const pokemon = getPokemonListForGame(game);
   const evolutions = getEvolutions({
     gameId,
     impossible: settings.evolutionOverridesImpossible,
@@ -50,19 +49,19 @@ export default async function PokedexPage({
 
   return (
     <BlindflugProvider on={settings.blindflug}>
-    <SpriteSetProvider spriteSet={game.spriteSet}>
+    <SpriteSetProvider spriteSet={game.spriteSet} fusion={getFusionSpriteConfigForGame(game)}>
       <CanonicalRun runId={runId} />
       <PokemonDetailProvider
         pokemonList={pokemon}
-        forms={getPokemonForms(game.dexLimit, game.generation)}
+        forms={getPokemonFormsForGame(game)}
         evolutions={evolutions}
         moveData={{
           movesets: getMoveset(game.versionGroup),
-          moves: getMoves(lang, game.generation),
+          moves: getMovesForGame(game, lang),
         }}
         moveTypeHistory={getMoveTypeHistory()}
-        effectiveness={getEffectiveness(game.generation)}
-        generation={game.generation}
+        effectiveness={getEffectivenessForGame(game)}
+        generation={getDataGenerationForGame(game)}
         dexLimit={game.dexLimit}
         lang={lang}
       >

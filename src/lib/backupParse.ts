@@ -11,10 +11,14 @@ import { EncounterStatus, LinkStatus, Player, RunMode } from "@/generated/prisma
 // relationship that matters (Encounter -> SoulLink) is expressed via the
 // SoulLink's routeId, which is unique per run and stable across a round-trip.
 export const BACKUP_FORMAT = "nuzlocke-tracker-backup";
-// 2 added `customRoutes` and `routeEntries`. A v1 file still imports - both
-// arrays default to empty - and a v2 file read by an older build would only
-// lose those two, so the bump is informational rather than a gate.
-export const BACKUP_VERSION = 2;
+// 2 added `customRoutes` and `routeEntries`. 3 added `deathLevelCapId`/
+// `diedAt` on SoulLink (missing before, so a restore lost the Memorial's
+// chronological order) and `fusedInto` on Encounter (Infinite Fusion - see
+// CLAUDE.md). A v1/v2 file still imports - the new fields default to null/
+// empty - and importBackup() warns when a file's OWN version is newer than
+// this constant (an older build reading a newer backup would silently drop
+// fields it doesn't know about, fusions included).
+export const BACKUP_VERSION = 3;
 
 export type BackupSoulLink = {
   routeId: number;
@@ -22,6 +26,11 @@ export type BackupSoulLink = {
   teamPosition: number | null;
   deathPlayer: Player | null;
   deathCause: string | null;
+  // Added in v3; null in an older file (no death point was ever recorded, or
+  // it predates death-point tracking - the two look the same on import,
+  // which just means it parks at the top of the Memorial until edited).
+  deathLevelCapId: number | null;
+  diedAt: string | null;
   createdAt: string;
   updatedAt: string;
 };
@@ -38,6 +47,11 @@ export type BackupEncounter = {
   shiny: boolean;
   // routeId of the SoulLink this encounter belongs to, or null if unlinked.
   soulLinkRouteId: number | null;
+  // Added in v3 (Infinite Fusion): identifies this fusion's HOST by
+  // (routeId, player) rather than by id - ids aren't exported, see the file
+  // header. null = not a fusion donor. Resolved in a SECOND pass on import,
+  // after every encounter has a fresh id (applyBackup in backup.ts).
+  fusedInto: { routeId: number; player: Player } | null;
   createdAt: string;
   updatedAt: string;
 };
@@ -114,6 +128,18 @@ function isoString(value: unknown): string {
   return typeof value === "string" ? value : new Date().toISOString();
 }
 
+// Unlike isoString(), a missing value here is a real "not recorded" state,
+// not a fallback timestamp - used for diedAt.
+function isoStringOrNull(value: unknown): string | null {
+  return typeof value === "string" ? value : null;
+}
+
+function fusedIntoRef(value: unknown): { routeId: number; player: Player } | null {
+  if (!isRecord(value)) return null;
+  if (typeof value.routeId !== "number" || !isEnumValue(Player, value.player)) return null;
+  return { routeId: value.routeId, player: value.player };
+}
+
 // Lenient by design: a valid envelope with unexpected extras still imports;
 // only a wrong `format` marker or non-array `runs` rejects the whole file.
 // Individual rows fall back to safe defaults rather than aborting the import.
@@ -148,6 +174,8 @@ export function parseBackup(json: string): BackupFile | null {
                 : null,
             deathPlayer: isEnumValue(Player, sl.deathPlayer) ? sl.deathPlayer : null,
             deathCause: typeof sl.deathCause === "string" ? sl.deathCause : null,
+            deathLevelCapId: typeof sl.deathLevelCapId === "number" ? sl.deathLevelCapId : null,
+            diedAt: isoStringOrNull(sl.diedAt),
             createdAt: isoString(sl.createdAt),
             updatedAt: isoString(sl.updatedAt),
           }))
@@ -165,6 +193,7 @@ export function parseBackup(json: string): BackupFile | null {
             shiny: e.shiny === true,
             soulLinkRouteId:
               typeof e.soulLinkRouteId === "number" ? e.soulLinkRouteId : null,
+            fusedInto: fusedIntoRef(e.fusedInto),
             createdAt: isoString(e.createdAt),
             updatedAt: isoString(e.updatedAt),
           }))

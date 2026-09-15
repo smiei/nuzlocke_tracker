@@ -193,6 +193,12 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
       toast.error(formatActionError({ key: "backupEmpty" }, lang));
       return;
     }
+    // A file newer than this build understands - an older build reading it
+    // would silently drop fields it doesn't know about yet (fusions
+    // included). Not a hard stop: the import is still lenient/best-effort.
+    if (parsed.version > BACKUP_VERSION) {
+      toast.info(t.backup.importNewerVersion);
+    }
     // Naming is asked for every time (see ImportBackupDialog) rather than
     // reusing the backup's stored name - re-importing an old backup of a run
     // that's since moved on used to silently shadow the newer run under the

@@ -1,0 +1,2599 @@
+[
+  {
+    "id": 1,
+    "names": {
+      "de": "Starter",
+      "en": "Starter",
+      "fr": "Starter",
+      "es": "Starter",
+      "it": "Starter"
+    },
+    "type": "static",
+    "sourceId": "f47ac10b-58cc-4372-a567-0e02b2c3d479"
+  },
+  {
+    "id": 2,
+    "names": {
+      "de": "Route 1",
+      "en": "Route 1",
+      "fr": "Route 1",
+      "es": "Route 1",
+      "it": "Route 1"
+    },
+    "type": "route",
+    "sourceId": "288d719e-5aab-4097-b98d-f1ffbd780a9b"
+  },
+  {
+    "id": 3,
+    "names": {
+      "de": "Viridian City (Gift)",
+      "en": "Viridian City (Gift)",
+      "fr": "Viridian City (Gift)",
+      "es": "Viridian City (Gift)",
+      "it": "Viridian City (Gift)"
+    },
+    "type": "static",
+    "sourceId": "b0d831b0-eada-4ae2-8761-d9226404ec41:Gift"
+  },
+  {
+    "id": 4,
+    "names": {
+      "de": "Viridian City (Trade)",
+      "en": "Viridian City (Trade)",
+      "fr": "Viridian City (Trade)",
+      "es": "Viridian City (Trade)",
+      "it": "Viridian City (Trade)"
+    },
+    "type": "static",
+    "sourceId": "b0d831b0-eada-4ae2-8761-d9226404ec41:Trade"
+  },
+  {
+    "id": 5,
+    "names": {
+      "de": "Route 22",
+      "en": "Route 22",
+      "fr": "Route 22",
+      "es": "Route 22",
+      "it": "Route 22"
+    },
+    "type": "route",
+    "sourceId": "a1e59912-1eb5-4b2a-b3b3-e5ae27f66e68"
+  },
+  {
+    "id": 6,
+    "names": {
+      "de": "Route 22 (Static)",
+      "en": "Route 22 (Static)",
+      "fr": "Route 22 (Static)",
+      "es": "Route 22 (Static)",
+      "it": "Route 22 (Static)"
+    },
+    "type": "static",
+    "sourceId": "a1e59912-1eb5-4b2a-b3b3-e5ae27f66e68:Static"
+  },
+  {
+    "id": 7,
+    "names": {
+      "de": "Route 22 (Quest)",
+      "en": "Route 22 (Quest)",
+      "fr": "Route 22 (Quest)",
+      "es": "Route 22 (Quest)",
+      "it": "Route 22 (Quest)"
+    },
+    "type": "static",
+    "sourceId": "a1e59912-1eb5-4b2a-b3b3-e5ae27f66e68:Quest"
+  },
+  {
+    "id": 8,
+    "names": {
+      "de": "Secret Garden",
+      "en": "Secret Garden",
+      "fr": "Secret Garden",
+      "es": "Secret Garden",
+      "it": "Secret Garden"
+    },
+    "type": "route",
+    "sourceId": "a065b453-158d-4893-a97f-29d369e47b15"
+  },
+  {
+    "id": 9,
+    "names": {
+      "de": "Route 2",
+      "en": "Route 2",
+      "fr": "Route 2",
+      "es": "Route 2",
+      "it": "Route 2"
+    },
+    "type": "route",
+    "sourceId": "2bfcf429-cddc-478e-9e66-5d2938c4b2ec"
+  },
+  {
+    "id": 10,
+    "names": {
+      "de": "Route 2 (Trade)",
+      "en": "Route 2 (Trade)",
+      "fr": "Route 2 (Trade)",
+      "es": "Route 2 (Trade)",
+      "it": "Route 2 (Trade)"
+    },
+    "type": "static",
+    "sourceId": "2bfcf429-cddc-478e-9e66-5d2938c4b2ec:Trade"
+  },
+  {
+    "id": 11,
+    "names": {
+      "de": "Viridian Forest",
+      "en": "Viridian Forest",
+      "fr": "Viridian Forest",
+      "es": "Viridian Forest",
+      "it": "Viridian Forest"
+    },
+    "type": "route",
+    "sourceId": "cf2cb9dd-88ca-49ca-af77-34b3c5158548"
+  },
+  {
+    "id": 12,
+    "names": {
+      "de": "Viridian Forest (Static)",
+      "en": "Viridian Forest (Static)",
+      "fr": "Viridian Forest (Static)",
+      "es": "Viridian Forest (Static)",
+      "it": "Viridian Forest (Static)"
+    },
+    "type": "static",
+    "sourceId": "cf2cb9dd-88ca-49ca-af77-34b3c5158548:Static"
+  },
+  {
+    "id": 13,
+    "names": {
+      "de": "Viridian Forest (Quest)",
+      "en": "Viridian Forest (Quest)",
+      "fr": "Viridian Forest (Quest)",
+      "es": "Viridian Forest (Quest)",
+      "it": "Viridian Forest (Quest)"
+    },
+    "type": "static",
+    "sourceId": "cf2cb9dd-88ca-49ca-af77-34b3c5158548:Quest"
+  },
+  {
+    "id": 14,
+    "names": {
+      "de": "Hidden Forest",
+      "en": "Hidden Forest",
+      "fr": "Hidden Forest",
+      "es": "Hidden Forest",
+      "it": "Hidden Forest"
+    },
+    "type": "route",
+    "sourceId": "84dda96e-93ca-4b60-a11c-57e4be46537d"
+  },
+  {
+    "id": 15,
+    "names": {
+      "de": "Pewter City (Gift)",
+      "en": "Pewter City (Gift)",
+      "fr": "Pewter City (Gift)",
+      "es": "Pewter City (Gift)",
+      "it": "Pewter City (Gift)"
+    },
+    "type": "static",
+    "sourceId": "2ba36f88-3565-416c-a9ef-346d29a62c8a:Gift"
+  },
+  {
+    "id": 16,
+    "names": {
+      "de": "Pewter City (Trade)",
+      "en": "Pewter City (Trade)",
+      "fr": "Pewter City (Trade)",
+      "es": "Pewter City (Trade)",
+      "it": "Pewter City (Trade)"
+    },
+    "type": "static",
+    "sourceId": "2ba36f88-3565-416c-a9ef-346d29a62c8a:Trade"
+  },
+  {
+    "id": 17,
+    "names": {
+      "de": "Pewter City (Quest)",
+      "en": "Pewter City (Quest)",
+      "fr": "Pewter City (Quest)",
+      "es": "Pewter City (Quest)",
+      "it": "Pewter City (Quest)"
+    },
+    "type": "static",
+    "sourceId": "2ba36f88-3565-416c-a9ef-346d29a62c8a:Quest"
+  },
+  {
+    "id": 18,
+    "names": {
+      "de": "Route 3",
+      "en": "Route 3",
+      "fr": "Route 3",
+      "es": "Route 3",
+      "it": "Route 3"
+    },
+    "type": "route",
+    "sourceId": "95829ddb-65b6-473d-8cc8-050597e07a56"
+  },
+  {
+    "id": 19,
+    "names": {
+      "de": "Route 3 (Gift)",
+      "en": "Route 3 (Gift)",
+      "fr": "Route 3 (Gift)",
+      "es": "Route 3 (Gift)",
+      "it": "Route 3 (Gift)"
+    },
+    "type": "static",
+    "sourceId": "95829ddb-65b6-473d-8cc8-050597e07a56:Gift"
+  },
+  {
+    "id": 20,
+    "names": {
+      "de": "Mt. Moon",
+      "en": "Mt. Moon",
+      "fr": "Mt. Moon",
+      "es": "Mt. Moon",
+      "it": "Mt. Moon"
+    },
+    "type": "route",
+    "sourceId": "eeceb211-68de-4a8a-a407-9230a16e6899"
+  },
+  {
+    "id": 21,
+    "names": {
+      "de": "Mt. Moon (Gift)",
+      "en": "Mt. Moon (Gift)",
+      "fr": "Mt. Moon (Gift)",
+      "es": "Mt. Moon (Gift)",
+      "it": "Mt. Moon (Gift)"
+    },
+    "type": "static",
+    "sourceId": "eeceb211-68de-4a8a-a407-9230a16e6899:Gift"
+  },
+  {
+    "id": 22,
+    "names": {
+      "de": "Route 4",
+      "en": "Route 4",
+      "fr": "Route 4",
+      "es": "Route 4",
+      "it": "Route 4"
+    },
+    "type": "route",
+    "sourceId": "4a8832db-6ef9-4615-946d-e8341bd2af47"
+  },
+  {
+    "id": 23,
+    "names": {
+      "de": "Route 4 (Static)",
+      "en": "Route 4 (Static)",
+      "fr": "Route 4 (Static)",
+      "es": "Route 4 (Static)",
+      "it": "Route 4 (Static)"
+    },
+    "type": "static",
+    "sourceId": "4a8832db-6ef9-4615-946d-e8341bd2af47:Static"
+  },
+  {
+    "id": 24,
+    "names": {
+      "de": "Cerulean City",
+      "en": "Cerulean City",
+      "fr": "Cerulean City",
+      "es": "Cerulean City",
+      "it": "Cerulean City"
+    },
+    "type": "route",
+    "sourceId": "5e4ab76e-a25a-4804-865a-1d6ba341ffe4"
+  },
+  {
+    "id": 25,
+    "names": {
+      "de": "Cerulean City (Static)",
+      "en": "Cerulean City (Static)",
+      "fr": "Cerulean City (Static)",
+      "es": "Cerulean City (Static)",
+      "it": "Cerulean City (Static)"
+    },
+    "type": "static",
+    "sourceId": "5e4ab76e-a25a-4804-865a-1d6ba341ffe4:Static"
+  },
+  {
+    "id": 26,
+    "names": {
+      "de": "Cerulean City (Gift)",
+      "en": "Cerulean City (Gift)",
+      "fr": "Cerulean City (Gift)",
+      "es": "Cerulean City (Gift)",
+      "it": "Cerulean City (Gift)"
+    },
+    "type": "static",
+    "sourceId": "5e4ab76e-a25a-4804-865a-1d6ba341ffe4:Gift"
+  },
+  {
+    "id": 27,
+    "names": {
+      "de": "Cerulean City (Trade)",
+      "en": "Cerulean City (Trade)",
+      "fr": "Cerulean City (Trade)",
+      "es": "Cerulean City (Trade)",
+      "it": "Cerulean City (Trade)"
+    },
+    "type": "static",
+    "sourceId": "5e4ab76e-a25a-4804-865a-1d6ba341ffe4:Trade"
+  },
+  {
+    "id": 28,
+    "names": {
+      "de": "Route 24",
+      "en": "Route 24",
+      "fr": "Route 24",
+      "es": "Route 24",
+      "it": "Route 24"
+    },
+    "type": "route",
+    "sourceId": "70b5aa10-2bbe-4d50-a4cd-56097207b1e8"
+  },
+  {
+    "id": 29,
+    "names": {
+      "de": "Route 24 (Static)",
+      "en": "Route 24 (Static)",
+      "fr": "Route 24 (Static)",
+      "es": "Route 24 (Static)",
+      "it": "Route 24 (Static)"
+    },
+    "type": "static",
+    "sourceId": "70b5aa10-2bbe-4d50-a4cd-56097207b1e8:Static"
+  },
+  {
+    "id": 30,
+    "names": {
+      "de": "Route 25",
+      "en": "Route 25",
+      "fr": "Route 25",
+      "es": "Route 25",
+      "it": "Route 25"
+    },
+    "type": "route",
+    "sourceId": "bbe21b75-c7ca-42d4-b68d-11859385082a"
+  },
+  {
+    "id": 31,
+    "names": {
+      "de": "Cerulean Cape",
+      "en": "Cerulean Cape",
+      "fr": "Cerulean Cape",
+      "es": "Cerulean Cape",
+      "it": "Cerulean Cape"
+    },
+    "type": "route",
+    "sourceId": "b74b3c29-5c7e-486c-a8a2-788987b024dc"
+  },
+  {
+    "id": 32,
+    "names": {
+      "de": "Cerulean Cape (Static)",
+      "en": "Cerulean Cape (Static)",
+      "fr": "Cerulean Cape (Static)",
+      "es": "Cerulean Cape (Static)",
+      "it": "Cerulean Cape (Static)"
+    },
+    "type": "static",
+    "sourceId": "b74b3c29-5c7e-486c-a8a2-788987b024dc:Static"
+  },
+  {
+    "id": 33,
+    "names": {
+      "de": "Bill's garden",
+      "en": "Bill's garden",
+      "fr": "Bill's garden",
+      "es": "Bill's garden",
+      "it": "Bill's garden"
+    },
+    "type": "route",
+    "sourceId": "53509ae6-3b87-4500-a013-9210d5fd60b3"
+  },
+  {
+    "id": 34,
+    "names": {
+      "de": "Route 5",
+      "en": "Route 5",
+      "fr": "Route 5",
+      "es": "Route 5",
+      "it": "Route 5"
+    },
+    "type": "route",
+    "sourceId": "e635f3bb-be57-40ae-b4ec-1267466c0642"
+  },
+  {
+    "id": 35,
+    "names": {
+      "de": "Route 5 (Static)",
+      "en": "Route 5 (Static)",
+      "fr": "Route 5 (Static)",
+      "es": "Route 5 (Static)",
+      "it": "Route 5 (Static)"
+    },
+    "type": "static",
+    "sourceId": "e635f3bb-be57-40ae-b4ec-1267466c0642:Static"
+  },
+  {
+    "id": 36,
+    "names": {
+      "de": "Route 5 (Trade)",
+      "en": "Route 5 (Trade)",
+      "fr": "Route 5 (Trade)",
+      "es": "Route 5 (Trade)",
+      "it": "Route 5 (Trade)"
+    },
+    "type": "static",
+    "sourceId": "e635f3bb-be57-40ae-b4ec-1267466c0642:Trade"
+  },
+  {
+    "id": 37,
+    "names": {
+      "de": "Route 6",
+      "en": "Route 6",
+      "fr": "Route 6",
+      "es": "Route 6",
+      "it": "Route 6"
+    },
+    "type": "route",
+    "sourceId": "c2c09845-8208-4d3f-9043-d4137c941e9a"
+  },
+  {
+    "id": 38,
+    "names": {
+      "de": "Vermillion City",
+      "en": "Vermillion City",
+      "fr": "Vermillion City",
+      "es": "Vermillion City",
+      "it": "Vermillion City"
+    },
+    "type": "route",
+    "sourceId": "9611b486-0ef9-4f5c-a703-b102a2647c20"
+  },
+  {
+    "id": 39,
+    "names": {
+      "de": "Vermillion City (Static)",
+      "en": "Vermillion City (Static)",
+      "fr": "Vermillion City (Static)",
+      "es": "Vermillion City (Static)",
+      "it": "Vermillion City (Static)"
+    },
+    "type": "static",
+    "sourceId": "9611b486-0ef9-4f5c-a703-b102a2647c20:Static"
+  },
+  {
+    "id": 40,
+    "names": {
+      "de": "Vermillion City (Trade)",
+      "en": "Vermillion City (Trade)",
+      "fr": "Vermillion City (Trade)",
+      "es": "Vermillion City (Trade)",
+      "it": "Vermillion City (Trade)"
+    },
+    "type": "static",
+    "sourceId": "9611b486-0ef9-4f5c-a703-b102a2647c20:Trade"
+  },
+  {
+    "id": 41,
+    "names": {
+      "de": "Route 11",
+      "en": "Route 11",
+      "fr": "Route 11",
+      "es": "Route 11",
+      "it": "Route 11"
+    },
+    "type": "route",
+    "sourceId": "60cce3f1-a2e5-4043-9e40-9c08a8ca5370"
+  },
+  {
+    "id": 42,
+    "names": {
+      "de": "Route 11 (Trade)",
+      "en": "Route 11 (Trade)",
+      "fr": "Route 11 (Trade)",
+      "es": "Route 11 (Trade)",
+      "it": "Route 11 (Trade)"
+    },
+    "type": "static",
+    "sourceId": "60cce3f1-a2e5-4043-9e40-9c08a8ca5370:Trade"
+  },
+  {
+    "id": 43,
+    "names": {
+      "de": "Route 9",
+      "en": "Route 9",
+      "fr": "Route 9",
+      "es": "Route 9",
+      "it": "Route 9"
+    },
+    "type": "route",
+    "sourceId": "ceb1abc4-961a-46dd-aa86-b25b6f94aaff"
+  },
+  {
+    "id": 44,
+    "names": {
+      "de": "Route 10",
+      "en": "Route 10",
+      "fr": "Route 10",
+      "es": "Route 10",
+      "it": "Route 10"
+    },
+    "type": "route",
+    "sourceId": "64a2f32f-e7ed-4c4a-9515-291b530da28d"
+  },
+  {
+    "id": 45,
+    "names": {
+      "de": "Route 10 (Static)",
+      "en": "Route 10 (Static)",
+      "fr": "Route 10 (Static)",
+      "es": "Route 10 (Static)",
+      "it": "Route 10 (Static)"
+    },
+    "type": "static",
+    "sourceId": "64a2f32f-e7ed-4c4a-9515-291b530da28d:Static"
+  },
+  {
+    "id": 46,
+    "names": {
+      "de": "Rock Tunnel",
+      "en": "Rock Tunnel",
+      "fr": "Rock Tunnel",
+      "es": "Rock Tunnel",
+      "it": "Rock Tunnel"
+    },
+    "type": "route",
+    "sourceId": "c9372f33-fdfd-4226-b0bd-d7075612f731"
+  },
+  {
+    "id": 47,
+    "names": {
+      "de": "Rock Tunnel (Gift)",
+      "en": "Rock Tunnel (Gift)",
+      "fr": "Rock Tunnel (Gift)",
+      "es": "Rock Tunnel (Gift)",
+      "it": "Rock Tunnel (Gift)"
+    },
+    "type": "static",
+    "sourceId": "c9372f33-fdfd-4226-b0bd-d7075612f731:Gift"
+  },
+  {
+    "id": 48,
+    "names": {
+      "de": "Lavender Town (Gift)",
+      "en": "Lavender Town (Gift)",
+      "fr": "Lavender Town (Gift)",
+      "es": "Lavender Town (Gift)",
+      "it": "Lavender Town (Gift)"
+    },
+    "type": "static",
+    "sourceId": "b53af7d4-1051-4241-816d-e684c667a2dd:Gift"
+  },
+  {
+    "id": 49,
+    "names": {
+      "de": "Route 8",
+      "en": "Route 8",
+      "fr": "Route 8",
+      "es": "Route 8",
+      "it": "Route 8"
+    },
+    "type": "route",
+    "sourceId": "71716dce-89d4-46e5-80bc-c84b7aa96254"
+  },
+  {
+    "id": 50,
+    "names": {
+      "de": "Route 7",
+      "en": "Route 7",
+      "fr": "Route 7",
+      "es": "Route 7",
+      "it": "Route 7"
+    },
+    "type": "route",
+    "sourceId": "0be7b69c-59a4-4923-8cd5-2922b2e3d255"
+  },
+  {
+    "id": 51,
+    "names": {
+      "de": "Celadon City",
+      "en": "Celadon City",
+      "fr": "Celadon City",
+      "es": "Celadon City",
+      "it": "Celadon City"
+    },
+    "type": "route",
+    "sourceId": "9a150358-4a83-437e-a8c0-90a7719d3e32"
+  },
+  {
+    "id": 52,
+    "names": {
+      "de": "Celadon City (Static)",
+      "en": "Celadon City (Static)",
+      "fr": "Celadon City (Static)",
+      "es": "Celadon City (Static)",
+      "it": "Celadon City (Static)"
+    },
+    "type": "static",
+    "sourceId": "9a150358-4a83-437e-a8c0-90a7719d3e32:Static"
+  },
+  {
+    "id": 53,
+    "names": {
+      "de": "Celadon City (Trade)",
+      "en": "Celadon City (Trade)",
+      "fr": "Celadon City (Trade)",
+      "es": "Celadon City (Trade)",
+      "it": "Celadon City (Trade)"
+    },
+    "type": "static",
+    "sourceId": "9a150358-4a83-437e-a8c0-90a7719d3e32:Trade"
+  },
+  {
+    "id": 54,
+    "names": {
+      "de": "Celadon City (Quest)",
+      "en": "Celadon City (Quest)",
+      "fr": "Celadon City (Quest)",
+      "es": "Celadon City (Quest)",
+      "it": "Celadon City (Quest)"
+    },
+    "type": "static",
+    "sourceId": "9a150358-4a83-437e-a8c0-90a7719d3e32:Quest"
+  },
+  {
+    "id": 55,
+    "names": {
+      "de": "Celadon Sewers",
+      "en": "Celadon Sewers",
+      "fr": "Celadon Sewers",
+      "es": "Celadon Sewers",
+      "it": "Celadon Sewers"
+    },
+    "type": "route",
+    "sourceId": "f1c84583-7bea-4a8c-ba9a-44d9152bbb1f"
+  },
+  {
+    "id": 56,
+    "names": {
+      "de": "Celadon Sewers (Static)",
+      "en": "Celadon Sewers (Static)",
+      "fr": "Celadon Sewers (Static)",
+      "es": "Celadon Sewers (Static)",
+      "it": "Celadon Sewers (Static)"
+    },
+    "type": "static",
+    "sourceId": "f1c84583-7bea-4a8c-ba9a-44d9152bbb1f:Static"
+  },
+  {
+    "id": 57,
+    "names": {
+      "de": "Pokemon Tower",
+      "en": "Pokemon Tower",
+      "fr": "Pokemon Tower",
+      "es": "Pokemon Tower",
+      "it": "Pokemon Tower"
+    },
+    "type": "route",
+    "sourceId": "46953d30-f72c-415a-8ddb-5d4013eeaf1f"
+  },
+  {
+    "id": 58,
+    "names": {
+      "de": "Route 12",
+      "en": "Route 12",
+      "fr": "Route 12",
+      "es": "Route 12",
+      "it": "Route 12"
+    },
+    "type": "route",
+    "sourceId": "3c1499fb-6cc5-4f50-997d-9a43a7ee3d8c"
+  },
+  {
+    "id": 59,
+    "names": {
+      "de": "Route 12 (Static)",
+      "en": "Route 12 (Static)",
+      "fr": "Route 12 (Static)",
+      "es": "Route 12 (Static)",
+      "it": "Route 12 (Static)"
+    },
+    "type": "static",
+    "sourceId": "3c1499fb-6cc5-4f50-997d-9a43a7ee3d8c:Static"
+  },
+  {
+    "id": 60,
+    "names": {
+      "de": "Flooded Cave",
+      "en": "Flooded Cave",
+      "fr": "Flooded Cave",
+      "es": "Flooded Cave",
+      "it": "Flooded Cave"
+    },
+    "type": "route",
+    "sourceId": "d1dcb3ba-2faf-4ebc-9d43-7f775c93cc08"
+  },
+  {
+    "id": 61,
+    "names": {
+      "de": "Route 13",
+      "en": "Route 13",
+      "fr": "Route 13",
+      "es": "Route 13",
+      "it": "Route 13"
+    },
+    "type": "route",
+    "sourceId": "4c3e2d97-b963-4077-9f3c-658e71917118"
+  },
+  {
+    "id": 62,
+    "names": {
+      "de": "Route 13 (Static)",
+      "en": "Route 13 (Static)",
+      "fr": "Route 13 (Static)",
+      "es": "Route 13 (Static)",
+      "it": "Route 13 (Static)"
+    },
+    "type": "static",
+    "sourceId": "4c3e2d97-b963-4077-9f3c-658e71917118:Static"
+  },
+  {
+    "id": 63,
+    "names": {
+      "de": "Route 14",
+      "en": "Route 14",
+      "fr": "Route 14",
+      "es": "Route 14",
+      "it": "Route 14"
+    },
+    "type": "route",
+    "sourceId": "eda1119e-e387-4d09-b0a7-7b1f49d111ce"
+  },
+  {
+    "id": 64,
+    "names": {
+      "de": "Route 15",
+      "en": "Route 15",
+      "fr": "Route 15",
+      "es": "Route 15",
+      "it": "Route 15"
+    },
+    "type": "route",
+    "sourceId": "9db44c52-07ce-47ce-b674-306cca13e143"
+  },
+  {
+    "id": 65,
+    "names": {
+      "de": "Route 16",
+      "en": "Route 16",
+      "fr": "Route 16",
+      "es": "Route 16",
+      "it": "Route 16"
+    },
+    "type": "route",
+    "sourceId": "c05ff29d-823e-4ab9-a5ca-44e2e0775785"
+  },
+  {
+    "id": 66,
+    "names": {
+      "de": "Route 16 (Static)",
+      "en": "Route 16 (Static)",
+      "fr": "Route 16 (Static)",
+      "es": "Route 16 (Static)",
+      "it": "Route 16 (Static)"
+    },
+    "type": "static",
+    "sourceId": "c05ff29d-823e-4ab9-a5ca-44e2e0775785:Static"
+  },
+  {
+    "id": 67,
+    "names": {
+      "de": "Viridian River",
+      "en": "Viridian River",
+      "fr": "Viridian River",
+      "es": "Viridian River",
+      "it": "Viridian River"
+    },
+    "type": "route",
+    "sourceId": "a9cde357-7578-4722-b5dc-95d803a845c7"
+  },
+  {
+    "id": 68,
+    "names": {
+      "de": "Viridian River (Static)",
+      "en": "Viridian River (Static)",
+      "fr": "Viridian River (Static)",
+      "es": "Viridian River (Static)",
+      "it": "Viridian River (Static)"
+    },
+    "type": "static",
+    "sourceId": "a9cde357-7578-4722-b5dc-95d803a845c7:Static"
+  },
+  {
+    "id": 69,
+    "names": {
+      "de": "Route 17",
+      "en": "Route 17",
+      "fr": "Route 17",
+      "es": "Route 17",
+      "it": "Route 17"
+    },
+    "type": "route",
+    "sourceId": "61715c14-b1e3-41f4-8fb4-4f840ee98848"
+  },
+  {
+    "id": 70,
+    "names": {
+      "de": "Route 17 (Static)",
+      "en": "Route 17 (Static)",
+      "fr": "Route 17 (Static)",
+      "es": "Route 17 (Static)",
+      "it": "Route 17 (Static)"
+    },
+    "type": "static",
+    "sourceId": "61715c14-b1e3-41f4-8fb4-4f840ee98848:Static"
+  },
+  {
+    "id": 71,
+    "names": {
+      "de": "Route 17 (Quest)",
+      "en": "Route 17 (Quest)",
+      "fr": "Route 17 (Quest)",
+      "es": "Route 17 (Quest)",
+      "it": "Route 17 (Quest)"
+    },
+    "type": "static",
+    "sourceId": "61715c14-b1e3-41f4-8fb4-4f840ee98848:Quest"
+  },
+  {
+    "id": 72,
+    "names": {
+      "de": "Route 18",
+      "en": "Route 18",
+      "fr": "Route 18",
+      "es": "Route 18",
+      "it": "Route 18"
+    },
+    "type": "route",
+    "sourceId": "0d8f1078-d55b-4fea-a18b-78697bd6d98a"
+  },
+  {
+    "id": 73,
+    "names": {
+      "de": "Route 18 (Static)",
+      "en": "Route 18 (Static)",
+      "fr": "Route 18 (Static)",
+      "es": "Route 18 (Static)",
+      "it": "Route 18 (Static)"
+    },
+    "type": "static",
+    "sourceId": "0d8f1078-d55b-4fea-a18b-78697bd6d98a:Static"
+  },
+  {
+    "id": 74,
+    "names": {
+      "de": "Saffron City (Static)",
+      "en": "Saffron City (Static)",
+      "fr": "Saffron City (Static)",
+      "es": "Saffron City (Static)",
+      "it": "Saffron City (Static)"
+    },
+    "type": "static",
+    "sourceId": "8033f454-936a-4702-9766-7f223d8a3070:Static"
+  },
+  {
+    "id": 75,
+    "names": {
+      "de": "Saffron City (Quest)",
+      "en": "Saffron City (Quest)",
+      "fr": "Saffron City (Quest)",
+      "es": "Saffron City (Quest)",
+      "it": "Saffron City (Quest)"
+    },
+    "type": "static",
+    "sourceId": "8033f454-936a-4702-9766-7f223d8a3070:Quest"
+  },
+  {
+    "id": 76,
+    "names": {
+      "de": "Creepy House",
+      "en": "Creepy House",
+      "fr": "Creepy House",
+      "es": "Creepy House",
+      "it": "Creepy House"
+    },
+    "type": "route",
+    "sourceId": "1a8af28d-41b8-41d6-b652-a222c9d76750"
+  },
+  {
+    "id": 77,
+    "names": {
+      "de": "Creepy House (Static)",
+      "en": "Creepy House (Static)",
+      "fr": "Creepy House (Static)",
+      "es": "Creepy House (Static)",
+      "it": "Creepy House (Static)"
+    },
+    "type": "static",
+    "sourceId": "1a8af28d-41b8-41d6-b652-a222c9d76750:Static"
+  },
+  {
+    "id": 78,
+    "names": {
+      "de": "Route 23",
+      "en": "Route 23",
+      "fr": "Route 23",
+      "es": "Route 23",
+      "it": "Route 23"
+    },
+    "type": "route",
+    "sourceId": "fa27dcdf-1919-4d8b-870d-2bd49432826e"
+  },
+  {
+    "id": 79,
+    "names": {
+      "de": "Route 23 (Static)",
+      "en": "Route 23 (Static)",
+      "fr": "Route 23 (Static)",
+      "es": "Route 23 (Static)",
+      "it": "Route 23 (Static)"
+    },
+    "type": "static",
+    "sourceId": "fa27dcdf-1919-4d8b-870d-2bd49432826e:Static"
+  },
+  {
+    "id": 80,
+    "names": {
+      "de": "Route 19",
+      "en": "Route 19",
+      "fr": "Route 19",
+      "es": "Route 19",
+      "it": "Route 19"
+    },
+    "type": "route",
+    "sourceId": "15c36391-c04e-4a93-97b2-1ee62bafc4a6"
+  },
+  {
+    "id": 81,
+    "names": {
+      "de": "Route 19 (Static)",
+      "en": "Route 19 (Static)",
+      "fr": "Route 19 (Static)",
+      "es": "Route 19 (Static)",
+      "it": "Route 19 (Static)"
+    },
+    "type": "static",
+    "sourceId": "15c36391-c04e-4a93-97b2-1ee62bafc4a6:Static"
+  },
+  {
+    "id": 82,
+    "names": {
+      "de": "Route 20",
+      "en": "Route 20",
+      "fr": "Route 20",
+      "es": "Route 20",
+      "it": "Route 20"
+    },
+    "type": "route",
+    "sourceId": "26b3f8b0-b7b4-43c8-8859-fdf303920763"
+  },
+  {
+    "id": 83,
+    "names": {
+      "de": "Route 20 (Static)",
+      "en": "Route 20 (Static)",
+      "fr": "Route 20 (Static)",
+      "es": "Route 20 (Static)",
+      "it": "Route 20 (Static)"
+    },
+    "type": "static",
+    "sourceId": "26b3f8b0-b7b4-43c8-8859-fdf303920763:Static"
+  },
+  {
+    "id": 84,
+    "names": {
+      "de": "Seafoam Islands",
+      "en": "Seafoam Islands",
+      "fr": "Seafoam Islands",
+      "es": "Seafoam Islands",
+      "it": "Seafoam Islands"
+    },
+    "type": "route",
+    "sourceId": "ebda0fd7-060e-4236-b7ea-445a2b8c133b"
+  },
+  {
+    "id": 85,
+    "names": {
+      "de": "Seafoam Islands (Static)",
+      "en": "Seafoam Islands (Static)",
+      "fr": "Seafoam Islands (Static)",
+      "es": "Seafoam Islands (Static)",
+      "it": "Seafoam Islands (Static)"
+    },
+    "type": "static",
+    "sourceId": "ebda0fd7-060e-4236-b7ea-445a2b8c133b:Static"
+  },
+  {
+    "id": 86,
+    "names": {
+      "de": "Cinnabar Island",
+      "en": "Cinnabar Island",
+      "fr": "Cinnabar Island",
+      "es": "Cinnabar Island",
+      "it": "Cinnabar Island"
+    },
+    "type": "route",
+    "sourceId": "20337ff7-08a5-44ab-8a92-ef775e06726e"
+  },
+  {
+    "id": 87,
+    "names": {
+      "de": "Cinnabar Island (Static)",
+      "en": "Cinnabar Island (Static)",
+      "fr": "Cinnabar Island (Static)",
+      "es": "Cinnabar Island (Static)",
+      "it": "Cinnabar Island (Static)"
+    },
+    "type": "static",
+    "sourceId": "20337ff7-08a5-44ab-8a92-ef775e06726e:Static"
+  },
+  {
+    "id": 88,
+    "names": {
+      "de": "Cinnabar Island (Trade)",
+      "en": "Cinnabar Island (Trade)",
+      "fr": "Cinnabar Island (Trade)",
+      "es": "Cinnabar Island (Trade)",
+      "it": "Cinnabar Island (Trade)"
+    },
+    "type": "static",
+    "sourceId": "20337ff7-08a5-44ab-8a92-ef775e06726e:Trade"
+  },
+  {
+    "id": 89,
+    "names": {
+      "de": "Pokémon Mansion",
+      "en": "Pokémon Mansion",
+      "fr": "Pokémon Mansion",
+      "es": "Pokémon Mansion",
+      "it": "Pokémon Mansion"
+    },
+    "type": "route",
+    "sourceId": "c2cb556c-c392-4353-af65-7f4def0e096b"
+  },
+  {
+    "id": 90,
+    "names": {
+      "de": "Deep Sea",
+      "en": "Deep Sea",
+      "fr": "Deep Sea",
+      "es": "Deep Sea",
+      "it": "Deep Sea"
+    },
+    "type": "route",
+    "sourceId": "d807f7eb-ef3f-40cb-aab1-19b47460cc9b"
+  },
+  {
+    "id": 91,
+    "names": {
+      "de": "Deep Sea (Static)",
+      "en": "Deep Sea (Static)",
+      "fr": "Deep Sea (Static)",
+      "es": "Deep Sea (Static)",
+      "it": "Deep Sea (Static)"
+    },
+    "type": "static",
+    "sourceId": "d807f7eb-ef3f-40cb-aab1-19b47460cc9b:Static"
+  },
+  {
+    "id": 92,
+    "names": {
+      "de": "Bond Bridge",
+      "en": "Bond Bridge",
+      "fr": "Bond Bridge",
+      "es": "Bond Bridge",
+      "it": "Bond Bridge"
+    },
+    "type": "route",
+    "sourceId": "ee6d0d86-2796-415e-9f3c-761de8bc6372"
+  },
+  {
+    "id": 93,
+    "names": {
+      "de": "Bond Bridge (Gift)",
+      "en": "Bond Bridge (Gift)",
+      "fr": "Bond Bridge (Gift)",
+      "es": "Bond Bridge (Gift)",
+      "it": "Bond Bridge (Gift)"
+    },
+    "type": "static",
+    "sourceId": "ee6d0d86-2796-415e-9f3c-761de8bc6372:Gift"
+  },
+  {
+    "id": 94,
+    "names": {
+      "de": "Offshore Road",
+      "en": "Offshore Road",
+      "fr": "Offshore Road",
+      "es": "Offshore Road",
+      "it": "Offshore Road"
+    },
+    "type": "route",
+    "sourceId": "71a29508-94d1-4ba7-b9b3-1d81fda6a887"
+  },
+  {
+    "id": 95,
+    "names": {
+      "de": "Offshore Road (Static)",
+      "en": "Offshore Road (Static)",
+      "fr": "Offshore Road (Static)",
+      "es": "Offshore Road (Static)",
+      "it": "Offshore Road (Static)"
+    },
+    "type": "static",
+    "sourceId": "71a29508-94d1-4ba7-b9b3-1d81fda6a887:Static"
+  },
+  {
+    "id": 96,
+    "names": {
+      "de": "Mt. Ember",
+      "en": "Mt. Ember",
+      "fr": "Mt. Ember",
+      "es": "Mt. Ember",
+      "it": "Mt. Ember"
+    },
+    "type": "route",
+    "sourceId": "d62302d4-c980-4e3f-b8d9-0204226c106c"
+  },
+  {
+    "id": 97,
+    "names": {
+      "de": "Power Plant",
+      "en": "Power Plant",
+      "fr": "Power Plant",
+      "es": "Power Plant",
+      "it": "Power Plant"
+    },
+    "type": "route",
+    "sourceId": "c6944add-2615-4550-a539-90e7e3364cd6"
+  },
+  {
+    "id": 98,
+    "names": {
+      "de": "Power Plant (Static)",
+      "en": "Power Plant (Static)",
+      "fr": "Power Plant (Static)",
+      "es": "Power Plant (Static)",
+      "it": "Power Plant (Static)"
+    },
+    "type": "static",
+    "sourceId": "c6944add-2615-4550-a539-90e7e3364cd6:Static"
+  },
+  {
+    "id": 99,
+    "names": {
+      "de": "Route 21",
+      "en": "Route 21",
+      "fr": "Route 21",
+      "es": "Route 21",
+      "it": "Route 21"
+    },
+    "type": "route",
+    "sourceId": "5cd7db58-da73-4f66-941a-219d7c0d9e29"
+  },
+  {
+    "id": 100,
+    "names": {
+      "de": "Route 21 (Static)",
+      "en": "Route 21 (Static)",
+      "fr": "Route 21 (Static)",
+      "es": "Route 21 (Static)",
+      "it": "Route 21 (Static)"
+    },
+    "type": "static",
+    "sourceId": "5cd7db58-da73-4f66-941a-219d7c0d9e29:Static"
+  },
+  {
+    "id": 101,
+    "names": {
+      "de": "Route 26",
+      "en": "Route 26",
+      "fr": "Route 26",
+      "es": "Route 26",
+      "it": "Route 26"
+    },
+    "type": "route",
+    "sourceId": "33232ec5-7e59-4519-b484-258baa4a4028"
+  },
+  {
+    "id": 102,
+    "names": {
+      "de": "Route 26 (Static)",
+      "en": "Route 26 (Static)",
+      "fr": "Route 26 (Static)",
+      "es": "Route 26 (Static)",
+      "it": "Route 26 (Static)"
+    },
+    "type": "static",
+    "sourceId": "33232ec5-7e59-4519-b484-258baa4a4028:Static"
+  },
+  {
+    "id": 103,
+    "names": {
+      "de": "Route 27",
+      "en": "Route 27",
+      "fr": "Route 27",
+      "es": "Route 27",
+      "it": "Route 27"
+    },
+    "type": "route",
+    "sourceId": "7b0608c3-08a5-45f0-ab23-019669b9586d"
+  },
+  {
+    "id": 104,
+    "names": {
+      "de": "Route 27 (Static)",
+      "en": "Route 27 (Static)",
+      "fr": "Route 27 (Static)",
+      "es": "Route 27 (Static)",
+      "it": "Route 27 (Static)"
+    },
+    "type": "static",
+    "sourceId": "7b0608c3-08a5-45f0-ab23-019669b9586d:Static"
+  },
+  {
+    "id": 105,
+    "names": {
+      "de": "Tohjo Falls",
+      "en": "Tohjo Falls",
+      "fr": "Tohjo Falls",
+      "es": "Tohjo Falls",
+      "it": "Tohjo Falls"
+    },
+    "type": "route",
+    "sourceId": "b49731b2-22ae-4c4b-a1f5-970a8eb5908e"
+  },
+  {
+    "id": 106,
+    "names": {
+      "de": "Tohjo Falls (Static)",
+      "en": "Tohjo Falls (Static)",
+      "fr": "Tohjo Falls (Static)",
+      "es": "Tohjo Falls (Static)",
+      "it": "Tohjo Falls (Static)"
+    },
+    "type": "static",
+    "sourceId": "b49731b2-22ae-4c4b-a1f5-970a8eb5908e:Static"
+  },
+  {
+    "id": 107,
+    "names": {
+      "de": "Victory Road",
+      "en": "Victory Road",
+      "fr": "Victory Road",
+      "es": "Victory Road",
+      "it": "Victory Road"
+    },
+    "type": "route",
+    "sourceId": "d5b68a17-d9e9-4fe4-a0ab-3a5b46f902d0"
+  },
+  {
+    "id": 108,
+    "names": {
+      "de": "Goldenrod City (Static)",
+      "en": "Goldenrod City (Static)",
+      "fr": "Goldenrod City (Static)",
+      "es": "Goldenrod City (Static)",
+      "it": "Goldenrod City (Static)"
+    },
+    "type": "static",
+    "sourceId": "f3717d7e-9ffa-452d-9dd7-340d11631479:Static"
+  },
+  {
+    "id": 109,
+    "names": {
+      "de": "Goldenrod City (Trade)",
+      "en": "Goldenrod City (Trade)",
+      "fr": "Goldenrod City (Trade)",
+      "es": "Goldenrod City (Trade)",
+      "it": "Goldenrod City (Trade)"
+    },
+    "type": "static",
+    "sourceId": "f3717d7e-9ffa-452d-9dd7-340d11631479:Trade"
+  },
+  {
+    "id": 110,
+    "names": {
+      "de": "Route 35",
+      "en": "Route 35",
+      "fr": "Route 35",
+      "es": "Route 35",
+      "it": "Route 35"
+    },
+    "type": "route",
+    "sourceId": "fe65d2b5-1999-41f0-a3ec-d074b114f92b"
+  },
+  {
+    "id": 111,
+    "names": {
+      "de": "Route 35 (Static)",
+      "en": "Route 35 (Static)",
+      "fr": "Route 35 (Static)",
+      "es": "Route 35 (Static)",
+      "it": "Route 35 (Static)"
+    },
+    "type": "static",
+    "sourceId": "fe65d2b5-1999-41f0-a3ec-d074b114f92b:Static"
+  },
+  {
+    "id": 112,
+    "names": {
+      "de": "Route 36",
+      "en": "Route 36",
+      "fr": "Route 36",
+      "es": "Route 36",
+      "it": "Route 36"
+    },
+    "type": "route",
+    "sourceId": "bf250fc5-c8d8-4c7d-96b7-473910c166ec"
+  },
+  {
+    "id": 113,
+    "names": {
+      "de": "Route 36 (Static)",
+      "en": "Route 36 (Static)",
+      "fr": "Route 36 (Static)",
+      "es": "Route 36 (Static)",
+      "it": "Route 36 (Static)"
+    },
+    "type": "static",
+    "sourceId": "bf250fc5-c8d8-4c7d-96b7-473910c166ec:Static"
+  },
+  {
+    "id": 114,
+    "names": {
+      "de": "Route 32",
+      "en": "Route 32",
+      "fr": "Route 32",
+      "es": "Route 32",
+      "it": "Route 32"
+    },
+    "type": "route",
+    "sourceId": "1c266e7b-d89d-499f-a851-8012fe3976ee"
+  },
+  {
+    "id": 115,
+    "names": {
+      "de": "Route 32 (Static)",
+      "en": "Route 32 (Static)",
+      "fr": "Route 32 (Static)",
+      "es": "Route 32 (Static)",
+      "it": "Route 32 (Static)"
+    },
+    "type": "static",
+    "sourceId": "1c266e7b-d89d-499f-a851-8012fe3976ee:Static"
+  },
+  {
+    "id": 116,
+    "names": {
+      "de": "Ruins of Alph",
+      "en": "Ruins of Alph",
+      "fr": "Ruins of Alph",
+      "es": "Ruins of Alph",
+      "it": "Ruins of Alph"
+    },
+    "type": "route",
+    "sourceId": "7b41cc30-778a-42ce-8327-f6e1bb593fb1"
+  },
+  {
+    "id": 117,
+    "names": {
+      "de": "Ruins of Alph (Static)",
+      "en": "Ruins of Alph (Static)",
+      "fr": "Ruins of Alph (Static)",
+      "es": "Ruins of Alph (Static)",
+      "it": "Ruins of Alph (Static)"
+    },
+    "type": "static",
+    "sourceId": "7b41cc30-778a-42ce-8327-f6e1bb593fb1:Static"
+  },
+  {
+    "id": 118,
+    "names": {
+      "de": "Route 34",
+      "en": "Route 34",
+      "fr": "Route 34",
+      "es": "Route 34",
+      "it": "Route 34"
+    },
+    "type": "route",
+    "sourceId": "5d1106b7-66d6-4c05-8ab4-052531e99d8c"
+  },
+  {
+    "id": 119,
+    "names": {
+      "de": "Route 34 (Static)",
+      "en": "Route 34 (Static)",
+      "fr": "Route 34 (Static)",
+      "es": "Route 34 (Static)",
+      "it": "Route 34 (Static)"
+    },
+    "type": "static",
+    "sourceId": "5d1106b7-66d6-4c05-8ab4-052531e99d8c:Static"
+  },
+  {
+    "id": 120,
+    "names": {
+      "de": "Ilex Forest",
+      "en": "Ilex Forest",
+      "fr": "Ilex Forest",
+      "es": "Ilex Forest",
+      "it": "Ilex Forest"
+    },
+    "type": "route",
+    "sourceId": "f7180465-7c3c-45bc-8f98-66709cd4b667"
+  },
+  {
+    "id": 121,
+    "names": {
+      "de": "Ilex Forest (Static)",
+      "en": "Ilex Forest (Static)",
+      "fr": "Ilex Forest (Static)",
+      "es": "Ilex Forest (Static)",
+      "it": "Ilex Forest (Static)"
+    },
+    "type": "static",
+    "sourceId": "f7180465-7c3c-45bc-8f98-66709cd4b667:Static"
+  },
+  {
+    "id": 122,
+    "names": {
+      "de": "Slowpoke Well",
+      "en": "Slowpoke Well",
+      "fr": "Slowpoke Well",
+      "es": "Slowpoke Well",
+      "it": "Slowpoke Well"
+    },
+    "type": "route",
+    "sourceId": "61d513ac-de5f-4edf-837e-df5eae1b7a04"
+  },
+  {
+    "id": 123,
+    "names": {
+      "de": "Slowpoke Well (Static)",
+      "en": "Slowpoke Well (Static)",
+      "fr": "Slowpoke Well (Static)",
+      "es": "Slowpoke Well (Static)",
+      "it": "Slowpoke Well (Static)"
+    },
+    "type": "static",
+    "sourceId": "61d513ac-de5f-4edf-837e-df5eae1b7a04:Static"
+  },
+  {
+    "id": 124,
+    "names": {
+      "de": "Route 33",
+      "en": "Route 33",
+      "fr": "Route 33",
+      "es": "Route 33",
+      "it": "Route 33"
+    },
+    "type": "route",
+    "sourceId": "982c7a93-3eac-416c-89d3-d4e564a6f2ae"
+  },
+  {
+    "id": 125,
+    "names": {
+      "de": "Union Cave",
+      "en": "Union Cave",
+      "fr": "Union Cave",
+      "es": "Union Cave",
+      "it": "Union Cave"
+    },
+    "type": "route",
+    "sourceId": "5ad90af9-33ba-46f6-9378-8ba86e6e6cb2"
+  },
+  {
+    "id": 126,
+    "names": {
+      "de": "Union Cave (Static)",
+      "en": "Union Cave (Static)",
+      "fr": "Union Cave (Static)",
+      "es": "Union Cave (Static)",
+      "it": "Union Cave (Static)"
+    },
+    "type": "static",
+    "sourceId": "5ad90af9-33ba-46f6-9378-8ba86e6e6cb2:Static"
+  },
+  {
+    "id": 127,
+    "names": {
+      "de": "Violet City",
+      "en": "Violet City",
+      "fr": "Violet City",
+      "es": "Violet City",
+      "it": "Violet City"
+    },
+    "type": "route",
+    "sourceId": "dca32e40-b3d4-49eb-b8a9-e49b7f2c93c5"
+  },
+  {
+    "id": 128,
+    "names": {
+      "de": "Violet City (Static)",
+      "en": "Violet City (Static)",
+      "fr": "Violet City (Static)",
+      "es": "Violet City (Static)",
+      "it": "Violet City (Static)"
+    },
+    "type": "static",
+    "sourceId": "dca32e40-b3d4-49eb-b8a9-e49b7f2c93c5:Static"
+  },
+  {
+    "id": 129,
+    "names": {
+      "de": "Violet City (Gift)",
+      "en": "Violet City (Gift)",
+      "fr": "Violet City (Gift)",
+      "es": "Violet City (Gift)",
+      "it": "Violet City (Gift)"
+    },
+    "type": "static",
+    "sourceId": "dca32e40-b3d4-49eb-b8a9-e49b7f2c93c5:Gift"
+  },
+  {
+    "id": 130,
+    "names": {
+      "de": "Route 31",
+      "en": "Route 31",
+      "fr": "Route 31",
+      "es": "Route 31",
+      "it": "Route 31"
+    },
+    "type": "route",
+    "sourceId": "9c1441d2-0468-402c-a6f6-4bbc18f35ac4"
+  },
+  {
+    "id": 131,
+    "names": {
+      "de": "Route 31 (Static)",
+      "en": "Route 31 (Static)",
+      "fr": "Route 31 (Static)",
+      "es": "Route 31 (Static)",
+      "it": "Route 31 (Static)"
+    },
+    "type": "static",
+    "sourceId": "9c1441d2-0468-402c-a6f6-4bbc18f35ac4:Static"
+  },
+  {
+    "id": 132,
+    "names": {
+      "de": "Dark Cave",
+      "en": "Dark Cave",
+      "fr": "Dark Cave",
+      "es": "Dark Cave",
+      "it": "Dark Cave"
+    },
+    "type": "route",
+    "sourceId": "465a1838-d688-4102-bf3d-76660c38b70b"
+  },
+  {
+    "id": 133,
+    "names": {
+      "de": "Dark Cave (Static)",
+      "en": "Dark Cave (Static)",
+      "fr": "Dark Cave (Static)",
+      "es": "Dark Cave (Static)",
+      "it": "Dark Cave (Static)"
+    },
+    "type": "static",
+    "sourceId": "465a1838-d688-4102-bf3d-76660c38b70b:Static"
+  },
+  {
+    "id": 134,
+    "names": {
+      "de": "Route 30",
+      "en": "Route 30",
+      "fr": "Route 30",
+      "es": "Route 30",
+      "it": "Route 30"
+    },
+    "type": "route",
+    "sourceId": "d85a5568-cf90-4f63-9a6d-37d6180475d6"
+  },
+  {
+    "id": 135,
+    "names": {
+      "de": "Route 30 (Static)",
+      "en": "Route 30 (Static)",
+      "fr": "Route 30 (Static)",
+      "es": "Route 30 (Static)",
+      "it": "Route 30 (Static)"
+    },
+    "type": "static",
+    "sourceId": "d85a5568-cf90-4f63-9a6d-37d6180475d6:Static"
+  },
+  {
+    "id": 136,
+    "names": {
+      "de": "Route 29",
+      "en": "Route 29",
+      "fr": "Route 29",
+      "es": "Route 29",
+      "it": "Route 29"
+    },
+    "type": "route",
+    "sourceId": "e5a0c117-1e1a-4c46-987a-9173a735eeb3"
+  },
+  {
+    "id": 137,
+    "names": {
+      "de": "Route 29 (Gift)",
+      "en": "Route 29 (Gift)",
+      "fr": "Route 29 (Gift)",
+      "es": "Route 29 (Gift)",
+      "it": "Route 29 (Gift)"
+    },
+    "type": "static",
+    "sourceId": "e5a0c117-1e1a-4c46-987a-9173a735eeb3:Gift"
+  },
+  {
+    "id": 138,
+    "names": {
+      "de": "Route 46",
+      "en": "Route 46",
+      "fr": "Route 46",
+      "es": "Route 46",
+      "it": "Route 46"
+    },
+    "type": "route",
+    "sourceId": "b34bf1c0-2922-4e1d-9b6f-fe6a818c08bf"
+  },
+  {
+    "id": 139,
+    "names": {
+      "de": "Route 46 (Static)",
+      "en": "Route 46 (Static)",
+      "fr": "Route 46 (Static)",
+      "es": "Route 46 (Static)",
+      "it": "Route 46 (Static)"
+    },
+    "type": "static",
+    "sourceId": "b34bf1c0-2922-4e1d-9b6f-fe6a818c08bf:Static"
+  },
+  {
+    "id": 140,
+    "names": {
+      "de": "Cerulean Cave",
+      "en": "Cerulean Cave",
+      "fr": "Cerulean Cave",
+      "es": "Cerulean Cave",
+      "it": "Cerulean Cave"
+    },
+    "type": "route",
+    "sourceId": "70a3365e-447d-4017-9d6d-b17e07269492"
+  },
+  {
+    "id": 141,
+    "names": {
+      "de": "Cerulean Cave (Static)",
+      "en": "Cerulean Cave (Static)",
+      "fr": "Cerulean Cave (Static)",
+      "es": "Cerulean Cave (Static)",
+      "it": "Cerulean Cave (Static)"
+    },
+    "type": "static",
+    "sourceId": "70a3365e-447d-4017-9d6d-b17e07269492:Static"
+  },
+  {
+    "id": 142,
+    "names": {
+      "de": "Mt. Silver",
+      "en": "Mt. Silver",
+      "fr": "Mt. Silver",
+      "es": "Mt. Silver",
+      "it": "Mt. Silver"
+    },
+    "type": "route",
+    "sourceId": "6af32a9e-845d-440a-ab0e-08b8f82e4ac8"
+  },
+  {
+    "id": 143,
+    "names": {
+      "de": "Blackthorn City",
+      "en": "Blackthorn City",
+      "fr": "Blackthorn City",
+      "es": "Blackthorn City",
+      "it": "Blackthorn City"
+    },
+    "type": "route",
+    "sourceId": "9f30abb2-b8b8-4000-930d-1db78054873d"
+  },
+  {
+    "id": 144,
+    "names": {
+      "de": "Blackthorn City (Static)",
+      "en": "Blackthorn City (Static)",
+      "fr": "Blackthorn City (Static)",
+      "es": "Blackthorn City (Static)",
+      "it": "Blackthorn City (Static)"
+    },
+    "type": "static",
+    "sourceId": "9f30abb2-b8b8-4000-930d-1db78054873d:Static"
+  },
+  {
+    "id": 145,
+    "names": {
+      "de": "Blackthorn City (Quest)",
+      "en": "Blackthorn City (Quest)",
+      "fr": "Blackthorn City (Quest)",
+      "es": "Blackthorn City (Quest)",
+      "it": "Blackthorn City (Quest)"
+    },
+    "type": "static",
+    "sourceId": "9f30abb2-b8b8-4000-930d-1db78054873d:Quest"
+  },
+  {
+    "id": 146,
+    "names": {
+      "de": "Ice Mountains",
+      "en": "Ice Mountains",
+      "fr": "Ice Mountains",
+      "es": "Ice Mountains",
+      "it": "Ice Mountains"
+    },
+    "type": "route",
+    "sourceId": "6c07da4c-4966-4fda-b773-9fe6ba1746e9"
+  },
+  {
+    "id": 147,
+    "names": {
+      "de": "Ice Cavern",
+      "en": "Ice Cavern",
+      "fr": "Ice Cavern",
+      "es": "Ice Cavern",
+      "it": "Ice Cavern"
+    },
+    "type": "route",
+    "sourceId": "93826d53-6bd9-4135-b193-a0475597179e"
+  },
+  {
+    "id": 148,
+    "names": {
+      "de": "Ice Cavern (Static)",
+      "en": "Ice Cavern (Static)",
+      "fr": "Ice Cavern (Static)",
+      "es": "Ice Cavern (Static)",
+      "it": "Ice Cavern (Static)"
+    },
+    "type": "static",
+    "sourceId": "93826d53-6bd9-4135-b193-a0475597179e:Static"
+  },
+  {
+    "id": 149,
+    "names": {
+      "de": "Route 44",
+      "en": "Route 44",
+      "fr": "Route 44",
+      "es": "Route 44",
+      "it": "Route 44"
+    },
+    "type": "route",
+    "sourceId": "4cd60c9a-d2a6-4a13-8216-855523c19bd8"
+  },
+  {
+    "id": 150,
+    "names": {
+      "de": "Route 42",
+      "en": "Route 42",
+      "fr": "Route 42",
+      "es": "Route 42",
+      "it": "Route 42"
+    },
+    "type": "route",
+    "sourceId": "e8a7b3c2-9f45-4d21-8c56-7e3a9b1d4f82"
+  },
+  {
+    "id": 151,
+    "names": {
+      "de": "Mt. Mortar",
+      "en": "Mt. Mortar",
+      "fr": "Mt. Mortar",
+      "es": "Mt. Mortar",
+      "it": "Mt. Mortar"
+    },
+    "type": "route",
+    "sourceId": "c0b3a25a-d7bc-44b2-b11b-884ebdb0de79"
+  },
+  {
+    "id": 152,
+    "names": {
+      "de": "Mt. Mortar (Static)",
+      "en": "Mt. Mortar (Static)",
+      "fr": "Mt. Mortar (Static)",
+      "es": "Mt. Mortar (Static)",
+      "it": "Mt. Mortar (Static)"
+    },
+    "type": "static",
+    "sourceId": "c0b3a25a-d7bc-44b2-b11b-884ebdb0de79:Static"
+  },
+  {
+    "id": 153,
+    "names": {
+      "de": "Burned Tower",
+      "en": "Burned Tower",
+      "fr": "Burned Tower",
+      "es": "Burned Tower",
+      "it": "Burned Tower"
+    },
+    "type": "route",
+    "sourceId": "f2d9c8e1-5a64-4b73-9e28-6f1a8c3b7d95"
+  },
+  {
+    "id": 154,
+    "names": {
+      "de": "Route 43",
+      "en": "Route 43",
+      "fr": "Route 43",
+      "es": "Route 43",
+      "it": "Route 43"
+    },
+    "type": "route",
+    "sourceId": "1b1df4f9-741d-4325-9c80-288b45fe80a3"
+  },
+  {
+    "id": 155,
+    "names": {
+      "de": "Lake of Rage",
+      "en": "Lake of Rage",
+      "fr": "Lake of Rage",
+      "es": "Lake of Rage",
+      "it": "Lake of Rage"
+    },
+    "type": "route",
+    "sourceId": "beed6fad-1ddc-4400-a0b1-9fd6895a7a38"
+  },
+  {
+    "id": 156,
+    "names": {
+      "de": "Pallet Town",
+      "en": "Pallet Town",
+      "fr": "Pallet Town",
+      "es": "Pallet Town",
+      "it": "Pallet Town"
+    },
+    "type": "route"
+  },
+  {
+    "id": 157,
+    "names": {
+      "de": "Pallet Town (Static)",
+      "en": "Pallet Town (Static)",
+      "fr": "Pallet Town (Static)",
+      "es": "Pallet Town (Static)",
+      "it": "Pallet Town (Static)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 158,
+    "names": {
+      "de": "Pallet Town (Gift)",
+      "en": "Pallet Town (Gift)",
+      "fr": "Pallet Town (Gift)",
+      "es": "Pallet Town (Gift)",
+      "it": "Pallet Town (Gift)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 159,
+    "names": {
+      "de": "Hidden Tomb",
+      "en": "Hidden Tomb",
+      "fr": "Hidden Tomb",
+      "es": "Hidden Tomb",
+      "it": "Hidden Tomb"
+    },
+    "type": "route"
+  },
+  {
+    "id": 160,
+    "names": {
+      "de": "Crimson City",
+      "en": "Crimson City",
+      "fr": "Crimson City",
+      "es": "Crimson City",
+      "it": "Crimson City"
+    },
+    "type": "route"
+  },
+  {
+    "id": 161,
+    "names": {
+      "de": "Crimson City (Static)",
+      "en": "Crimson City (Static)",
+      "fr": "Crimson City (Static)",
+      "es": "Crimson City (Static)",
+      "it": "Crimson City (Static)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 162,
+    "names": {
+      "de": "Crimson City (Trade)",
+      "en": "Crimson City (Trade)",
+      "fr": "Crimson City (Trade)",
+      "es": "Crimson City (Trade)",
+      "it": "Crimson City (Trade)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 163,
+    "names": {
+      "de": "Diglett's Cave",
+      "en": "Diglett's Cave",
+      "fr": "Diglett's Cave",
+      "es": "Diglett's Cave",
+      "it": "Diglett's Cave"
+    },
+    "type": "route"
+  },
+  {
+    "id": 164,
+    "names": {
+      "de": "Area 1",
+      "en": "Area 1",
+      "fr": "Area 1",
+      "es": "Area 1",
+      "it": "Area 1"
+    },
+    "type": "route"
+  },
+  {
+    "id": 165,
+    "names": {
+      "de": "Area 2",
+      "en": "Area 2",
+      "fr": "Area 2",
+      "es": "Area 2",
+      "it": "Area 2"
+    },
+    "type": "route"
+  },
+  {
+    "id": 166,
+    "names": {
+      "de": "Area 3",
+      "en": "Area 3",
+      "fr": "Area 3",
+      "es": "Area 3",
+      "it": "Area 3"
+    },
+    "type": "route"
+  },
+  {
+    "id": 167,
+    "names": {
+      "de": "Area 4",
+      "en": "Area 4",
+      "fr": "Area 4",
+      "es": "Area 4",
+      "it": "Area 4"
+    },
+    "type": "route"
+  },
+  {
+    "id": 168,
+    "names": {
+      "de": "Area 5",
+      "en": "Area 5",
+      "fr": "Area 5",
+      "es": "Area 5",
+      "it": "Area 5"
+    },
+    "type": "route"
+  },
+  {
+    "id": 169,
+    "names": {
+      "de": "Dragon's Den",
+      "en": "Dragon's Den",
+      "fr": "Dragon's Den",
+      "es": "Dragon's Den",
+      "it": "Dragon's Den"
+    },
+    "type": "route"
+  },
+  {
+    "id": 170,
+    "names": {
+      "de": "Dragon's Den (Gift)",
+      "en": "Dragon's Den (Gift)",
+      "fr": "Dragon's Den (Gift)",
+      "es": "Dragon's Den (Gift)",
+      "it": "Dragon's Den (Gift)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 171,
+    "names": {
+      "de": "Route 37",
+      "en": "Route 37",
+      "fr": "Route 37",
+      "es": "Route 37",
+      "it": "Route 37"
+    },
+    "type": "route"
+  },
+  {
+    "id": 172,
+    "names": {
+      "de": "National Park",
+      "en": "National Park",
+      "fr": "National Park",
+      "es": "National Park",
+      "it": "National Park"
+    },
+    "type": "route"
+  },
+  {
+    "id": 173,
+    "names": {
+      "de": "National Park (Gift)",
+      "en": "National Park (Gift)",
+      "fr": "National Park (Gift)",
+      "es": "National Park (Gift)",
+      "it": "National Park (Gift)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 174,
+    "names": {
+      "de": "Treasure Beach",
+      "en": "Treasure Beach",
+      "fr": "Treasure Beach",
+      "es": "Treasure Beach",
+      "it": "Treasure Beach"
+    },
+    "type": "route"
+  },
+  {
+    "id": 175,
+    "names": {
+      "de": "Treasure Beach (Static)",
+      "en": "Treasure Beach (Static)",
+      "fr": "Treasure Beach (Static)",
+      "es": "Treasure Beach (Static)",
+      "it": "Treasure Beach (Static)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 176,
+    "names": {
+      "de": "Kindle Road",
+      "en": "Kindle Road",
+      "fr": "Kindle Road",
+      "es": "Kindle Road",
+      "it": "Kindle Road"
+    },
+    "type": "route"
+  },
+  {
+    "id": 177,
+    "names": {
+      "de": "Brine Road",
+      "en": "Brine Road",
+      "fr": "Brine Road",
+      "es": "Brine Road",
+      "it": "Brine Road"
+    },
+    "type": "route"
+  },
+  {
+    "id": 178,
+    "names": {
+      "de": "Boon Island",
+      "en": "Boon Island",
+      "fr": "Boon Island",
+      "es": "Boon Island",
+      "it": "Boon Island"
+    },
+    "type": "route"
+  },
+  {
+    "id": 179,
+    "names": {
+      "de": "Kin Island",
+      "en": "Kin Island",
+      "fr": "Kin Island",
+      "es": "Kin Island",
+      "it": "Kin Island"
+    },
+    "type": "route"
+  },
+  {
+    "id": 180,
+    "names": {
+      "de": "Kin Island (Gift)",
+      "en": "Kin Island (Gift)",
+      "fr": "Kin Island (Gift)",
+      "es": "Kin Island (Gift)",
+      "it": "Kin Island (Gift)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 181,
+    "names": {
+      "de": "Knot Island",
+      "en": "Knot Island",
+      "fr": "Knot Island",
+      "es": "Knot Island",
+      "it": "Knot Island"
+    },
+    "type": "route"
+  },
+  {
+    "id": 182,
+    "names": {
+      "de": "Knot Island (Gift)",
+      "en": "Knot Island (Gift)",
+      "fr": "Knot Island (Gift)",
+      "es": "Knot Island (Gift)",
+      "it": "Knot Island (Gift)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 183,
+    "names": {
+      "de": "Chrono Island",
+      "en": "Chrono Island",
+      "fr": "Chrono Island",
+      "es": "Chrono Island",
+      "it": "Chrono Island"
+    },
+    "type": "route"
+  },
+  {
+    "id": 184,
+    "names": {
+      "de": "Berry Forest",
+      "en": "Berry Forest",
+      "fr": "Berry Forest",
+      "es": "Berry Forest",
+      "it": "Berry Forest"
+    },
+    "type": "route"
+  },
+  {
+    "id": 185,
+    "names": {
+      "de": "Berry Forest (Static)",
+      "en": "Berry Forest (Static)",
+      "fr": "Berry Forest (Static)",
+      "es": "Berry Forest (Static)",
+      "it": "Berry Forest (Static)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 186,
+    "names": {
+      "de": "Sky Pillar",
+      "en": "Sky Pillar",
+      "fr": "Sky Pillar",
+      "es": "Sky Pillar",
+      "it": "Sky Pillar"
+    },
+    "type": "route"
+  },
+  {
+    "id": 187,
+    "names": {
+      "de": "P2 Laboratory",
+      "en": "P2 Laboratory",
+      "fr": "P2 Laboratory",
+      "es": "P2 Laboratory",
+      "it": "P2 Laboratory"
+    },
+    "type": "route"
+  },
+  {
+    "id": 188,
+    "names": {
+      "de": "Safari Zone (Area 1)",
+      "en": "Safari Zone (Area 1)",
+      "fr": "Safari Zone (Area 1)",
+      "es": "Safari Zone (Area 1)",
+      "it": "Safari Zone (Area 1)"
+    },
+    "type": "route"
+  },
+  {
+    "id": 189,
+    "names": {
+      "de": "Safari Zone (Area 2)",
+      "en": "Safari Zone (Area 2)",
+      "fr": "Safari Zone (Area 2)",
+      "es": "Safari Zone (Area 2)",
+      "it": "Safari Zone (Area 2)"
+    },
+    "type": "route"
+  },
+  {
+    "id": 190,
+    "names": {
+      "de": "Safari Zone (Area 3)",
+      "en": "Safari Zone (Area 3)",
+      "fr": "Safari Zone (Area 3)",
+      "es": "Safari Zone (Area 3)",
+      "it": "Safari Zone (Area 3)"
+    },
+    "type": "route"
+  },
+  {
+    "id": 191,
+    "names": {
+      "de": "Safari Zone (Area 4)",
+      "en": "Safari Zone (Area 4)",
+      "fr": "Safari Zone (Area 4)",
+      "es": "Safari Zone (Area 4)",
+      "it": "Safari Zone (Area 4)"
+    },
+    "type": "route"
+  },
+  {
+    "id": 192,
+    "names": {
+      "de": "Safari Zone (Area 5)",
+      "en": "Safari Zone (Area 5)",
+      "fr": "Safari Zone (Area 5)",
+      "es": "Safari Zone (Area 5)",
+      "it": "Safari Zone (Area 5)"
+    },
+    "type": "route"
+  },
+  {
+    "id": 193,
+    "names": {
+      "de": "Cerulean Team Rocket HQ (Static)",
+      "en": "Cerulean Team Rocket HQ (Static)",
+      "fr": "Cerulean Team Rocket HQ (Static)",
+      "es": "Cerulean Team Rocket HQ (Static)",
+      "it": "Cerulean Team Rocket HQ (Static)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 194,
+    "names": {
+      "de": "Destroying Sandcastles (Static)",
+      "en": "Destroying Sandcastles (Static)",
+      "fr": "Destroying Sandcastles (Static)",
+      "es": "Destroying Sandcastles (Static)",
+      "it": "Destroying Sandcastles (Static)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 195,
+    "names": {
+      "de": "Flowers (Static)",
+      "en": "Flowers (Static)",
+      "fr": "Flowers (Static)",
+      "es": "Flowers (Static)",
+      "it": "Flowers (Static)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 196,
+    "names": {
+      "de": "Mt. Moon Summit (Static)",
+      "en": "Mt. Moon Summit (Static)",
+      "fr": "Mt. Moon Summit (Static)",
+      "es": "Mt. Moon Summit (Static)",
+      "it": "Mt. Moon Summit (Static)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 197,
+    "names": {
+      "de": "Navel Rock (Static)",
+      "en": "Navel Rock (Static)",
+      "fr": "Navel Rock (Static)",
+      "es": "Navel Rock (Static)",
+      "it": "Navel Rock (Static)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 198,
+    "names": {
+      "de": "Odd Keystone (Static)",
+      "en": "Odd Keystone (Static)",
+      "fr": "Odd Keystone (Static)",
+      "es": "Odd Keystone (Static)",
+      "it": "Odd Keystone (Static)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 199,
+    "names": {
+      "de": "Old Shipwreck (Static)",
+      "en": "Old Shipwreck (Static)",
+      "fr": "Old Shipwreck (Static)",
+      "es": "Old Shipwreck (Static)",
+      "it": "Old Shipwreck (Static)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 200,
+    "names": {
+      "de": "Pokemon Mansion (Static)",
+      "en": "Pokemon Mansion (Static)",
+      "fr": "Pokemon Mansion (Static)",
+      "es": "Pokemon Mansion (Static)",
+      "it": "Pokemon Mansion (Static)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 201,
+    "names": {
+      "de": "Roaming Sevii Islands (Static)",
+      "en": "Roaming Sevii Islands (Static)",
+      "fr": "Roaming Sevii Islands (Static)",
+      "es": "Roaming Sevii Islands (Static)",
+      "it": "Roaming Sevii Islands (Static)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 202,
+    "names": {
+      "de": "Rock Smash (Static)",
+      "en": "Rock Smash (Static)",
+      "fr": "Rock Smash (Static)",
+      "es": "Rock Smash (Static)",
+      "it": "Rock Smash (Static)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 203,
+    "names": {
+      "de": "Rocket Warehouse (Static)",
+      "en": "Rocket Warehouse (Static)",
+      "fr": "Rocket Warehouse (Static)",
+      "es": "Rocket Warehouse (Static)",
+      "it": "Rocket Warehouse (Static)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 204,
+    "names": {
+      "de": "Ruby Chamber (Static)",
+      "en": "Ruby Chamber (Static)",
+      "fr": "Ruby Chamber (Static)",
+      "es": "Ruby Chamber (Static)",
+      "it": "Ruby Chamber (Static)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 205,
+    "names": {
+      "de": "Safari Zone A1 (Static)",
+      "en": "Safari Zone A1 (Static)",
+      "fr": "Safari Zone A1 (Static)",
+      "es": "Safari Zone A1 (Static)",
+      "it": "Safari Zone A1 (Static)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 206,
+    "names": {
+      "de": "Safari Zone A2 (Static)",
+      "en": "Safari Zone A2 (Static)",
+      "fr": "Safari Zone A2 (Static)",
+      "es": "Safari Zone A2 (Static)",
+      "it": "Safari Zone A2 (Static)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 207,
+    "names": {
+      "de": "Safari Zone A3 (Static)",
+      "en": "Safari Zone A3 (Static)",
+      "fr": "Safari Zone A3 (Static)",
+      "es": "Safari Zone A3 (Static)",
+      "it": "Safari Zone A3 (Static)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 208,
+    "names": {
+      "de": "Safari Zone A3 (Trade)",
+      "en": "Safari Zone A3 (Trade)",
+      "fr": "Safari Zone A3 (Trade)",
+      "es": "Safari Zone A3 (Trade)",
+      "it": "Safari Zone A3 (Trade)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 209,
+    "names": {
+      "de": "Safari Zone A4 (Static)",
+      "en": "Safari Zone A4 (Static)",
+      "fr": "Safari Zone A4 (Static)",
+      "es": "Safari Zone A4 (Static)",
+      "it": "Safari Zone A4 (Static)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 210,
+    "names": {
+      "de": "Safari Zone A5 (Static)",
+      "en": "Safari Zone A5 (Static)",
+      "fr": "Safari Zone A5 (Static)",
+      "es": "Safari Zone A5 (Static)",
+      "it": "Safari Zone A5 (Static)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 211,
+    "names": {
+      "de": "Safari Zone Temple (Static)",
+      "en": "Safari Zone Temple (Static)",
+      "fr": "Safari Zone Temple (Static)",
+      "es": "Safari Zone Temple (Static)",
+      "it": "Safari Zone Temple (Static)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 212,
+    "names": {
+      "de": "Celadon Cafe (Gift)",
+      "en": "Celadon Cafe (Gift)",
+      "fr": "Celadon Cafe (Gift)",
+      "es": "Celadon Cafe (Gift)",
+      "it": "Celadon Cafe (Gift)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 213,
+    "names": {
+      "de": "Celadon Game Corner (Gift)",
+      "en": "Celadon Game Corner (Gift)",
+      "fr": "Celadon Game Corner (Gift)",
+      "es": "Celadon Game Corner (Gift)",
+      "it": "Celadon Game Corner (Gift)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 214,
+    "names": {
+      "de": "Fighting Dojo (Gift)",
+      "en": "Fighting Dojo (Gift)",
+      "fr": "Fighting Dojo (Gift)",
+      "es": "Fighting Dojo (Gift)",
+      "it": "Fighting Dojo (Gift)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 215,
+    "names": {
+      "de": "Kanto Daycare (Gift)",
+      "en": "Kanto Daycare (Gift)",
+      "fr": "Kanto Daycare (Gift)",
+      "es": "Kanto Daycare (Gift)",
+      "it": "Kanto Daycare (Gift)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 216,
+    "names": {
+      "de": "PC (Gift)",
+      "en": "PC (Gift)",
+      "fr": "PC (Gift)",
+      "es": "PC (Gift)",
+      "it": "PC (Gift)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 217,
+    "names": {
+      "de": "S.S. Anne (Gift)",
+      "en": "S.S. Anne (Gift)",
+      "fr": "S.S. Anne (Gift)",
+      "es": "S.S. Anne (Gift)",
+      "it": "S.S. Anne (Gift)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 218,
+    "names": {
+      "de": "S.S. Anne (Trade)",
+      "en": "S.S. Anne (Trade)",
+      "fr": "S.S. Anne (Trade)",
+      "es": "S.S. Anne (Trade)",
+      "it": "S.S. Anne (Trade)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 219,
+    "names": {
+      "de": "S.S. Anne (Quest)",
+      "en": "S.S. Anne (Quest)",
+      "fr": "S.S. Anne (Quest)",
+      "es": "S.S. Anne (Quest)",
+      "it": "S.S. Anne (Quest)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 220,
+    "names": {
+      "de": "Saffron Restaurant (Gift)",
+      "en": "Saffron Restaurant (Gift)",
+      "fr": "Saffron Restaurant (Gift)",
+      "es": "Saffron Restaurant (Gift)",
+      "it": "Saffron Restaurant (Gift)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 221,
+    "names": {
+      "de": "Silph Co. (Gift)",
+      "en": "Silph Co. (Gift)",
+      "fr": "Silph Co. (Gift)",
+      "es": "Silph Co. (Gift)",
+      "it": "Silph Co. (Gift)"
+    },
+    "type": "static"
+  },
+  {
+    "id": 222,
+    "names": {
+      "de": "Saffron Nightclub (Quest)",
+      "en": "Saffron Nightclub (Quest)",
+      "fr": "Saffron Nightclub (Quest)",
+      "es": "Saffron Nightclub (Quest)",
+      "it": "Saffron Nightclub (Quest)"
+    },
+    "type": "static"
+  }
+]

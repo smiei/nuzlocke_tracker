@@ -121,6 +121,17 @@ model Encounter {
   // warning is suppressed and it never locks the family for other encounters.
   shiny            Boolean         @default(false)
   soulLinkId       Int?
+  // Infinite Fusion only (see CLAUDE.md's Infinite Fusion section). When set,
+  // THIS encounter is the donor (body) of a fusion, and fusedIntoId points at
+  // the host (head) encounter - a fusion is two ordinary catches linked
+  // together, each keeping its own route/familyId/currentPokemonId, not a
+  // third kind of row. @unique because a host has at most one donor.
+  // Data-integrity checks (never a chain: a donor is never itself a host;
+  // both encounters belong to the same run and player) live in the
+  // fuseEncounters/unfuseEncounter/swapFusion actions, not the schema.
+  fusedIntoId      Int?            @unique
+  fusedInto        Encounter?      @relation("EncounterFusion", fields: [fusedIntoId], references: [id], onDelete: SetNull)
+  fusionDonor      Encounter?      @relation("EncounterFusion")
   run              Run             @relation(fields: [runId], references: [id], onDelete: Cascade)
   soulLink         SoulLink?       @relation(fields: [soulLinkId], references: [id], onDelete: SetNull)
   createdAt        DateTime        @default(now())

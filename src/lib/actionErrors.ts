@@ -24,6 +24,12 @@ export type ActionError =
   | { key: "backupInvalid" }
   | { key: "backupEmpty" }
   | { key: "invalidTeamSlot" }
+  | { key: "fusionSameEncounter" }
+  | { key: "fusionDifferentPlayer" }
+  | { key: "fusionNotCaught" }
+  | { key: "fusionChain" }
+  | { key: "fusionNotFound" }
+  | { key: "fusionDead" }
   | { key: "unexpected" };
 
 export function formatActionError(error: ActionError, lang: Lang): string {
@@ -65,6 +71,18 @@ export function formatActionError(error: ActionError, lang: Lang): string {
       return t.backupEmpty;
     case "invalidTeamSlot":
       return t.invalidTeamSlot;
+    case "fusionSameEncounter":
+      return t.fusionSameEncounter;
+    case "fusionDifferentPlayer":
+      return t.fusionDifferentPlayer;
+    case "fusionNotCaught":
+      return t.fusionNotCaught;
+    case "fusionChain":
+      return t.fusionChain;
+    case "fusionNotFound":
+      return t.fusionNotFound;
+    case "fusionDead":
+      return t.fusionDead;
     case "unexpected":
       return t.unexpected;
   }

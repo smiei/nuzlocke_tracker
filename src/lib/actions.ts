@@ -10,9 +10,10 @@ import {
   getEvolutionById,
   getLevelCaps,
 } from "@/lib/data";
-import { EncounterStatus, LinkStatus, Player, RunMode } from "@/generated/prisma/client";
+import { EncounterStatus, LinkStatus, Player, RunMode, type Prisma } from "@/generated/prisma/client";
 import { getRouteForRun, getRoutesForRun, nextCustomRouteId } from "@/lib/runRoutes";
 import { CUSTOM_ROUTE_NAME_MAX, isCustomRouteId } from "@/lib/customRoutes";
+import { groupSoulLinks, teamSlotsNeeded } from "@/lib/fusionGroups";
 import { localizeName } from "@/lib/i18n/localize";
 import type { ActionError } from "@/lib/actionErrors";
 import type { BackupFile } from "@/lib/backup";
@@ -148,6 +149,33 @@ export async function saveEncounter(
     });
     const previousSoulLinkId = existing?.soulLinkId ?? null;
 
+    // Infinite Fusion: re-declaring this slot with a different species, or
+    // taking it off CAUGHT (Fled/Killed), dissolves any fusion it was part
+    // of - in either role. A same-species/still-CAUGHT re-save (nickname,
+    // shiny, ...) leaves an existing fusion alone.
+    // Remembered so the team slots can be re-balanced once the save is done.
+    let dissolvedGroup: number[] | null = null;
+    if (existing && (existing.pokemonId !== pokemonId || status !== EncounterStatus.CAUGHT)) {
+      const isDonor = existing.fusedIntoId !== null;
+      const isHost = (await tx.encounter.count({ where: { fusedIntoId: existing.id } })) > 0;
+      if (isDonor || isHost) {
+        const group = await fusionGroupLinkIds(tx, runId, existing.soulLinkId);
+        const onTeam = await tx.soulLink.count({
+          where: { id: { in: group }, teamPosition: { not: null } },
+        });
+        dissolvedGroup = onTeam > 0 ? group : [];
+      }
+      if (isDonor) {
+        await tx.encounter.update({ where: { id: existing.id }, data: { fusedIntoId: null } });
+      }
+      if (isHost) {
+        await tx.encounter.updateMany({
+          where: { fusedIntoId: existing.id },
+          data: { fusedIntoId: null },
+        });
+      }
+    }
+
     let soulLinkId: number | null = null;
     if (status === EncounterStatus.CAUGHT) {
       const soulLink = await tx.soulLink.upsert({
@@ -217,6 +245,10 @@ export async function saveEncounter(
         await tx.soulLink.delete({ where: { id: previousSoulLinkId } });
       }
     }
+
+    // A dissolved fusion splits its group - same slot bookkeeping as
+    // unfuseEncounter.
+    if (dissolvedGroup !== null) await rebalanceTeamSlots(tx, runId, dissolvedGroup);
   });
 
   // A fresh catch joins the team automatically while there is a free slot, so
@@ -303,13 +335,77 @@ export type MarkDeadResult = { success: true } | { success: false; error: Action
 
 // deathPlayer (SoulLink only) records whose Pokémon fainted; both die
 // together, this is just who lost theirs.
+// Every fusion donor whose HOST belongs to one of these encounters - used to
+// propagate a death (or revival) from a host's link to a donor's own link.
+// Chains are rejected everywhere fusedIntoId is written, so this is exactly
+// one level deep: a donor's own link can't itself have a donor fused in.
+// Every SoulLink whose fate is tied to `startSoulLinkId`'s via a fusion, in
+// EITHER direction, transitively: an encounter that is a DONOR pulls in its
+// host's link (the in-game fusion rule - both components always die
+// together, whichever one triggered it), and an encounter that is a HOST
+// pulls in its donor's link, which can then chain again if that link's own
+// encounters are themselves fused elsewhere. A single fusedIntoId hop is
+// never more than one level (fuseEncounters rejects a donor that's also a
+// host), but SoulLink PAIRS can still chain arbitrarily far in SoulLink mode,
+// since each player fuses independently - e.g. player 1 fuses routes 1+3,
+// player 2 fuses routes 2+4: killing route 1's link must reach route 3 (its
+// own encounter's host) and, if route 3's OTHER encounter is itself fused
+// into route 4, reach route 4 too. Missing this direction is exactly the bug
+// a first version of this function had - it only ever looked from a link's
+// encounters to their DONORS, never to the HOST a link's own encounter might
+// itself be donated into.
+async function linkedSoulLinkIds(
+  tx: Prisma.TransactionClient,
+  runId: number,
+  startSoulLinkId: number,
+): Promise<number[]> {
+  const allEncounters = await tx.encounter.findMany({
+    where: { runId },
+    select: { id: true, soulLinkId: true, fusedIntoId: true },
+  });
+  type EncounterRow = (typeof allEncounters)[number];
+  const bySoulLink = new Map<number, EncounterRow[]>();
+  for (const e of allEncounters) {
+    if (e.soulLinkId === null) continue;
+    const list = bySoulLink.get(e.soulLinkId);
+    if (list) list.push(e);
+    else bySoulLink.set(e.soulLinkId, [e]);
+  }
+  const encounterById = new Map(allEncounters.map((e) => [e.id, e]));
+  const donorByHostId = new Map(
+    allEncounters.filter((e) => e.fusedIntoId !== null).map((e) => [e.fusedIntoId as number, e]),
+  );
+
+  const visited = new Set<number>([startSoulLinkId]);
+  const queue = [startSoulLinkId];
+  while (queue.length > 0) {
+    const current = queue.pop() as number;
+    for (const e of bySoulLink.get(current) ?? []) {
+      const hostSoulLinkId =
+        e.fusedIntoId !== null ? (encounterById.get(e.fusedIntoId)?.soulLinkId ?? null) : null;
+      const donorSoulLinkId = donorByHostId.get(e.id)?.soulLinkId ?? null;
+      for (const id of [hostSoulLinkId, donorSoulLinkId]) {
+        if (id !== null && !visited.has(id)) {
+          visited.add(id);
+          queue.push(id);
+        }
+      }
+    }
+  }
+  visited.delete(startSoulLinkId);
+  return [...visited];
+}
+
 export async function markDead(
   runId: number,
   soulLinkId: number,
   deathPlayer?: Player | null,
   deathCause?: string | null,
 ): Promise<MarkDeadResult> {
-  const soulLink = await prisma.soulLink.findUnique({ where: { id: soulLinkId } });
+  const soulLink = await prisma.soulLink.findUnique({
+    where: { id: soulLinkId },
+    include: { encounters: true },
+  });
   if (!soulLink || soulLink.runId !== runId) {
     return { success: false, error: { key: "soulLinkNotFound", id: soulLinkId } };
   }
@@ -324,16 +420,22 @@ export async function markDead(
   // what diedAt marks, so the Memorial can tell it apart from the deaths that
   // predate this being tracked at all.
   const lastCap = await lastDefeatedLevelCapId(runId);
-  await prisma.soulLink.update({
-    where: { id: soulLinkId },
-    data: {
-      status: LinkStatus.DEAD,
-      teamPosition: null,
-      deathPlayer: deathPlayer ?? null,
-      deathCause: cause,
-      deathLevelCapId: lastCap,
-      diedAt: new Date(),
-    },
+  const diedAt = new Date();
+  const data = {
+    status: LinkStatus.DEAD,
+    teamPosition: null,
+    deathPlayer: deathPlayer ?? null,
+    deathCause: cause,
+    deathLevelCapId: lastCap,
+    diedAt,
+  };
+
+  await prisma.$transaction(async (tx) => {
+    await tx.soulLink.update({ where: { id: soulLinkId }, data });
+    // Infinite Fusion: every link this one's fusions transitively touch dies
+    // too - see linkedSoulLinkIds for why this has to go both directions.
+    const linkedIds = await linkedSoulLinkIds(tx, runId, soulLinkId);
+    for (const id of linkedIds) await tx.soulLink.update({ where: { id }, data });
   });
 
   revalidatePath("/tracker");
@@ -406,17 +508,264 @@ export async function setDeathPoint(
 // Counterpart to markDead - only flips the link's own status back, the
 // encounters' catch status was never touched.
 export async function markAlive(runId: number, soulLinkId: number): Promise<MarkDeadResult> {
-  const soulLink = await prisma.soulLink.findUnique({ where: { id: soulLinkId } });
+  const soulLink = await prisma.soulLink.findUnique({
+    where: { id: soulLinkId },
+    include: { encounters: true },
+  });
   if (!soulLink || soulLink.runId !== runId) {
     return { success: false, error: { key: "soulLinkNotFound", id: soulLinkId } };
   }
 
-  await prisma.soulLink.update({
-    where: { id: soulLinkId },
-    data: { status: LinkStatus.ALIVE, deathPlayer: null, deathCause: null },
+  const data = { status: LinkStatus.ALIVE, deathPlayer: null, deathCause: null };
+
+  await prisma.$transaction(async (tx) => {
+    await tx.soulLink.update({ where: { id: soulLinkId }, data });
+    // Mirrors markDead: every linked SoulLink shares one fate.
+    const linkedIds = await linkedSoulLinkIds(tx, runId, soulLinkId);
+    for (const id of linkedIds) await tx.soulLink.update({ where: { id }, data });
   });
 
   revalidatePath("/tracker");
+  revalidatePath("/links");
+  publishChange(runId);
+  return { success: true };
+}
+
+// ---------------------------------------------------------------------------
+// Infinite Fusion: fusing two of a player's own catches into one battle unit.
+// Both stay ordinary Encounter rows - see the fusedIntoId comment in
+// schema.prisma. These three actions are the only place fusedIntoId is ever
+// written directly; saveEncounter (species/status change dissolves a fusion)
+// and markDead/markAlive (death/revival propagate to a fused-in donor) also
+// touch it, but by reading it, not by these actions' validation rules.
+// ---------------------------------------------------------------------------
+
+export type FuseResult = { success: true } | { success: false; error: ActionError };
+
+// Keeps team slots in step with fusion groups (src/lib/fusionGroups.ts): a
+// group on the team holds exactly as many slots as it needs - one per battle
+// unit of whichever player has more. So once both players have fused the same
+// two routes their group gives a slot back, and while only one of them has,
+// the other player's two separate Pokémon keep two. Extra slots are released
+// from the highest position; missing ones are taken from free slots while
+// there are any (a full team just leaves the group short).
+//
+// `keepOnTeam`: link ids whose group must stay on the team even when none of
+// its links currently holds a slot - unfusing splits a group, and the half
+// that held no slot would otherwise silently drop out of the team.
+//
+// `fill: false` only releases surplus slots - setTeamSlot's clean-up of state
+// written before this bookkeeping existed, where filling first could grab
+// the very slot the user is about to assign.
+//
+// A no-op for runs without fusions: every link is its own group needing one
+// slot, which it either already has or never had.
+async function rebalanceTeamSlots(
+  tx: Prisma.TransactionClient,
+  runId: number,
+  keepOnTeam: number[] = [],
+  { fill = true }: { fill?: boolean } = {},
+): Promise<void> {
+  const run = await tx.run.findUnique({ where: { id: runId }, select: { mode: true } });
+  const links = await tx.soulLink.findMany({
+    where: { runId },
+    select: { id: true, routeId: true, status: true, teamPosition: true },
+    orderBy: { id: "asc" },
+  });
+  const encounters = await tx.encounter.findMany({
+    where: { runId },
+    select: { id: true, soulLinkId: true, player: true, fusedIntoId: true, routeId: true, status: true },
+  });
+  // A never-formed pair must not hold a slot (same rule as autoAssignTeamSlot).
+  const failedRouteIds = new Set(
+    run?.mode === RunMode.SOULLINK
+      ? encounters
+          .filter((e) => e.status === EncounterStatus.FLED || e.status === EncounterStatus.KILLED)
+          .map((e) => e.routeId)
+      : [],
+  );
+  const linkById = new Map(links.map((l) => [l.id, l]));
+  const keep = new Set(keepOnTeam);
+  const occupied = new Set(links.flatMap((l) => (l.teamPosition === null ? [] : [l.teamPosition])));
+  const releases: number[] = [];
+  const fills: number[] = [];
+
+  for (const group of groupSoulLinks(links.map((l) => l.id), encounters)) {
+    const members = group.map((id) => linkById.get(id)!);
+    if (members.some((l) => l.status === LinkStatus.DEAD)) continue;
+    const onTeam = members
+      .filter((l) => l.teamPosition !== null)
+      .sort((a, b) => (a.teamPosition as number) - (b.teamPosition as number));
+    if (onTeam.length === 0 && !group.some((id) => keep.has(id))) continue;
+    const memberIds = new Set(group);
+    const need = teamSlotsNeeded(
+      encounters.filter((e) => e.soulLinkId !== null && memberIds.has(e.soulLinkId)),
+    );
+    if (onTeam.length > need) {
+      releases.push(...onTeam.slice(need).map((l) => l.id));
+    } else if (fill && onTeam.length < need) {
+      fills.push(
+        ...members
+          .filter((l) => l.teamPosition === null && !failedRouteIds.has(l.routeId))
+          .slice(0, need - onTeam.length)
+          .map((l) => l.id),
+      );
+    }
+  }
+
+  // Releases first, so a slot one group gives back is free for another.
+  for (const id of releases) {
+    occupied.delete(linkById.get(id)!.teamPosition as number);
+    await tx.soulLink.update({ where: { id }, data: { teamPosition: null } });
+  }
+  for (const id of fills) {
+    const free = [0, 1, 2, 3, 4, 5].find((i) => !occupied.has(i));
+    if (free === undefined) break;
+    occupied.add(free);
+    await tx.soulLink.update({ where: { id }, data: { teamPosition: free } });
+  }
+}
+
+// Every link id in the same fusion group as `soulLinkId`, itself included.
+async function fusionGroupLinkIds(
+  tx: Prisma.TransactionClient,
+  runId: number,
+  soulLinkId: number | null,
+): Promise<number[]> {
+  if (soulLinkId === null) return [];
+  return [soulLinkId, ...(await linkedSoulLinkIds(tx, runId, soulLinkId))];
+}
+
+// Kopf = hostId (keeps its own route/link untouched), Körper = donorId (its
+// fusedIntoId now points at the host). Chains are rejected: neither side may
+// already be part of another fusion, in either role - a donor can't also
+// host, and a host can't also donate elsewhere.
+export async function fuseEncounters(
+  runId: number,
+  hostId: number,
+  donorId: number,
+): Promise<FuseResult> {
+  if (hostId === donorId) {
+    return { success: false, error: { key: "fusionSameEncounter" } };
+  }
+  const [host, donor] = await Promise.all([
+    prisma.encounter.findUnique({ where: { id: hostId }, include: { soulLink: true } }),
+    prisma.encounter.findUnique({ where: { id: donorId }, include: { soulLink: true } }),
+  ]);
+  if (!host || host.runId !== runId) {
+    return { success: false, error: { key: "encounterNotFound", id: hostId } };
+  }
+  if (!donor || donor.runId !== runId) {
+    return { success: false, error: { key: "encounterNotFound", id: donorId } };
+  }
+  if (host.player !== donor.player) {
+    return { success: false, error: { key: "fusionDifferentPlayer" } };
+  }
+  if (
+    host.status !== EncounterStatus.CAUGHT ||
+    donor.status !== EncounterStatus.CAUGHT ||
+    host.soulLink?.status === LinkStatus.DEAD ||
+    donor.soulLink?.status === LinkStatus.DEAD
+  ) {
+    return { success: false, error: { key: "fusionNotCaught" } };
+  }
+  const [hostAlreadyHosts, donorAlreadyHosts] = await Promise.all([
+    prisma.encounter.findUnique({ where: { fusedIntoId: hostId } }),
+    prisma.encounter.findUnique({ where: { fusedIntoId: donorId } }),
+  ]);
+  if (
+    host.fusedIntoId !== null ||
+    donor.fusedIntoId !== null ||
+    hostAlreadyHosts !== null ||
+    donorAlreadyHosts !== null
+  ) {
+    return { success: false, error: { key: "fusionChain" } };
+  }
+  // A boxed catch whose SoulLink pair never formed isn't a usable Pokémon.
+  if ((await pairNeverFormed(runId, host.routeId)) || (await pairNeverFormed(runId, donor.routeId))) {
+    return { success: false, error: { key: "fusionNotCaught" } };
+  }
+
+  await prisma.$transaction(async (tx) => {
+    await tx.encounter.update({ where: { id: donorId }, data: { fusedIntoId: hostId } });
+    await rebalanceTeamSlots(tx, runId);
+  });
+
+  revalidatePath("/links");
+  publishChange(runId);
+  return { success: true };
+}
+
+// hostId is the fusion's head; its donor (if any) is looked up via
+// fusedIntoId rather than passed in, so the caller only ever needs the one id
+// that stays stable across the fusion's lifetime.
+export async function unfuseEncounter(runId: number, hostId: number): Promise<FuseResult> {
+  const host = await prisma.encounter.findUnique({
+    where: { id: hostId },
+    include: { soulLink: true },
+  });
+  if (!host || host.runId !== runId) {
+    return { success: false, error: { key: "encounterNotFound", id: hostId } };
+  }
+  const donor = await prisma.encounter.findUnique({
+    where: { fusedIntoId: hostId },
+    include: { soulLink: true },
+  });
+  if (!donor) {
+    return { success: false, error: { key: "fusionNotFound" } };
+  }
+  if (host.soulLink?.status === LinkStatus.DEAD || donor.soulLink?.status === LinkStatus.DEAD) {
+    return { success: false, error: { key: "fusionDead" } };
+  }
+
+  await prisma.$transaction(async (tx) => {
+    // Unfusing can split the group in two; whichever half held no slot must
+    // not drop out of the team just because the other half kept it.
+    const groupBefore = await fusionGroupLinkIds(tx, runId, host.soulLinkId);
+    const wasOnTeam =
+      (await tx.soulLink.count({ where: { id: { in: groupBefore }, teamPosition: { not: null } } })) > 0;
+    await tx.encounter.update({ where: { id: donor.id }, data: { fusedIntoId: null } });
+    await rebalanceTeamSlots(tx, runId, wasOnTeam ? groupBefore : []);
+  });
+
+  revalidatePath("/links");
+  publishChange(runId);
+  return { success: true };
+}
+
+// The DNA Reverser: swaps which of the pair is head and which is body. hostId
+// is the CURRENT head - after this call the current donor is the head
+// instead, so a caller tracking "the fusion at hostId" must switch to
+// tracking the (former) donor's id.
+export async function swapFusion(runId: number, hostId: number): Promise<FuseResult> {
+  const host = await prisma.encounter.findUnique({
+    where: { id: hostId },
+    include: { soulLink: true },
+  });
+  if (!host || host.runId !== runId) {
+    return { success: false, error: { key: "encounterNotFound", id: hostId } };
+  }
+  const donor = await prisma.encounter.findUnique({
+    where: { fusedIntoId: hostId },
+    include: { soulLink: true },
+  });
+  if (!donor) {
+    return { success: false, error: { key: "fusionNotFound" } };
+  }
+  if (host.soulLink?.status === LinkStatus.DEAD || donor.soulLink?.status === LinkStatus.DEAD) {
+    return { success: false, error: { key: "fusionDead" } };
+  }
+
+  await prisma.$transaction(async (tx) => {
+    // fusedIntoId is @unique, so the old pointer must clear before the new
+    // one can be written, or the two rows would momentarily both target it.
+    await tx.encounter.update({ where: { id: donor.id }, data: { fusedIntoId: null } });
+    await tx.encounter.update({ where: { id: hostId }, data: { fusedIntoId: donor.id } });
+    // Same group, same number of units - kept for data written before group
+    // slot bookkeeping existed.
+    await rebalanceTeamSlots(tx, runId);
+  });
+
   revalidatePath("/links");
   publishChange(runId);
   return { success: true };
@@ -573,6 +922,12 @@ export type SetTeamSlotResult = { success: true } | { success: false; error: Act
 // slot and clearing the link's previous slot before assigning, all in one
 // transaction so the unique (runId, teamPosition) index is never transiently
 // violated.
+//
+// Infinite Fusion: slots belong to fusion GROUPS (see rebalanceTeamSlots), so
+// both "vacate" steps act on the whole group - replacing or emptying any slot
+// of a group takes the entire group off the team, and a group put onto a slot
+// then claims whatever further slots it needs. Every link is its own group in
+// a run without fusions, which makes this exactly the old behaviour there.
 export async function setTeamSlot(
   runId: number,
   position: number,
@@ -590,12 +945,26 @@ export async function setTeamSlot(
   }
 
   await prisma.$transaction(async (tx) => {
-    await tx.soulLink.updateMany({
+    // A group holding more slots than it needs (older data) must not count
+    // as occupying the surplus one - the Team tab shows that slot as empty.
+    await rebalanceTeamSlots(tx, runId, [], { fill: false });
+    const occupant = await tx.soulLink.findFirst({
       where: { runId, teamPosition: position },
-      data: { teamPosition: null },
+      select: { id: true },
     });
+    const vacate = new Set([
+      ...(await fusionGroupLinkIds(tx, runId, occupant?.id ?? null)),
+      ...(await fusionGroupLinkIds(tx, runId, soulLinkId)),
+    ]);
+    if (vacate.size > 0) {
+      await tx.soulLink.updateMany({
+        where: { runId, id: { in: [...vacate] } },
+        data: { teamPosition: null },
+      });
+    }
     if (soulLinkId !== null) {
       await tx.soulLink.update({ where: { id: soulLinkId }, data: { teamPosition: position } });
+      await rebalanceTeamSlots(tx, runId);
     }
   });
 

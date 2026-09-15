@@ -1,18 +1,24 @@
 import {
-  getEffectiveness,
   getEvolutionById,
   getEvolutions,
   getGameOrDefault,
   getLearnset,
   getLevelCaps,
-  getMoves,
   getMoveset,
   getMoveTypeHistory,
-  getPokemonById,
-  getPokemonList,
-  getPokemonForms,
 } from "@/lib/data";
-import { getTypesForGeneration, teamOffensiveCoverage } from "@/lib/effectiveness";
+import {
+  getEffectivenessForGame,
+  getPokemonByIdForGame,
+  getPokemonListForGame,
+  getPokemonFormsForGame,
+  getMovesForGame,
+  getAttackTypesForGame,
+  getDataGenerationForGame,
+  getFusionSpriteConfigForGame,
+  isInDex,
+} from "@/lib/gameData";
+import { teamOffensiveCoverage } from "@/lib/effectiveness";
 import { attackTypesAtLevel } from "@/lib/learnset";
 import { maxEvolvedSumme } from "@/lib/evolutions";
 import { computeLevelCapProgress, computeRouteProgress, eliteFourIndex } from "@/lib/progress";
@@ -110,7 +116,9 @@ export default async function OverviewPage({
   for (const link of soulLinks) {
     if (link.status === LinkStatus.DEAD || link.teamPosition === null) continue;
     for (const e of link.encounters) {
-      const pokemon = getPokemonById(e.currentPokemonId, game.generation);
+      // Infinite Fusion: a donor is represented by its host's fusion card.
+      if (e.fusedIntoId !== null) continue;
+      const pokemon = getPokemonByIdForGame(game, e.currentPokemonId);
       if (!pokemon) continue;
       teamByPlayer.get(e.player)?.push({
         encounterId: e.id,
@@ -159,8 +167,8 @@ export default async function OverviewPage({
 
   // --- Offensive coverage gaps per player, at the team's current level cap
   // (a move only "counts" if the team could actually have it by now).
-  const table = getEffectiveness(game.generation);
-  const defenderTypes = getTypesForGeneration(game.generation);
+  const table = getEffectivenessForGame(game);
+  const defenderTypes = getAttackTypesForGame(game);
   const coverageLevel = capCurrent ?? FALLBACK_LEVEL;
   const offensiveGaps = teams.map(({ player, members }) => {
     const atkTypes = new Set<string>();
@@ -202,7 +210,7 @@ export default async function OverviewPage({
         soulLinkId: link.id,
         routeName: route ? routeName(route, lang) : `Route #${link.routeId}`,
         pokemon: link.encounters.map((e) => {
-          const p = getPokemonById(e.currentPokemonId, game.generation);
+          const p = getPokemonByIdForGame(game, e.currentPokemonId);
           const species = p ? pokemonName(p, lang) : `#${e.currentPokemonId}`;
           const nick = settings.nicknames && e.nickname ? e.nickname : null;
           return { id: e.currentPokemonId, name: nick ?? species, species: nick ? species : null };
@@ -234,12 +242,16 @@ export default async function OverviewPage({
     for (const e of link.encounters) {
       if (e.status !== EncounterStatus.CAUGHT) continue;
       caught.set(e.player, (caught.get(e.player) ?? 0) + 1);
-      const summe = getPokemonById(e.currentPokemonId, game.generation)?.stats.Summe ?? 0;
+      // Infinite Fusion: a donor is represented by its host's fusion card,
+      // not independently - it must count towards neither team nor bank BST
+      // (it still counts as "caught" above, which is a historical tally).
+      if (e.fusedIntoId !== null) continue;
+      const summe = getPokemonByIdForGame(game, e.currentPokemonId)?.stats.Summe ?? 0;
       const summeMax = maxEvolvedSumme(
         e.currentPokemonId,
         (id) => getEvolutionById(id, evoOptions)?.evolvesTo ?? [],
-        (id) => getPokemonById(id, game.generation)?.stats.Summe ?? 0,
-        game.dexLimit,
+        (id) => getPokemonByIdForGame(game, id)?.stats.Summe ?? 0,
+        (id) => isInDex(game, id),
       );
       if (link.teamPosition !== null) {
         teamSumme += summe;
@@ -287,24 +299,24 @@ export default async function OverviewPage({
     capNext,
   };
 
-  const pokemonList = getPokemonList(game.dexLimit, game.generation);
+  const pokemonList = getPokemonListForGame(game);
 
   return (
     <BlindflugProvider on={settings.blindflug}>
-    <SpriteSetProvider spriteSet={game.spriteSet}>
+    <SpriteSetProvider spriteSet={game.spriteSet} fusion={getFusionSpriteConfigForGame(game)}>
       <CanonicalRun runId={runId} />
       <PlayerNamesProvider names={settings.playerNames} lang={lang}>
         <PokemonDetailProvider
           pokemonList={pokemonList}
-          forms={getPokemonForms(game.dexLimit, game.generation)}
+          forms={getPokemonFormsForGame(game)}
           evolutions={getEvolutions(evoOptions)}
           moveData={{
             movesets: getMoveset(game.versionGroup),
-            moves: getMoves(lang, game.generation),
+            moves: getMovesForGame(game, lang),
           }}
           moveTypeHistory={getMoveTypeHistory()}
           effectiveness={table}
-          generation={game.generation}
+          generation={getDataGenerationForGame(game)}
           dexLimit={game.dexLimit}
           lang={lang}
         >

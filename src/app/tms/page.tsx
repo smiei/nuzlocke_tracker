@@ -1,15 +1,13 @@
+import { getEvolutions, getGameOrDefault, getMoveset, getMoveTypeHistory, getTmCompat } from "@/lib/data";
 import {
-  getEffectiveness,
-  getEvolutions,
-  getGameOrDefault,
-  getMoves,
-  getMoveset,
-  getMoveTypeHistory,
-  getPokemonById,
-  getPokemonList,
-  getPokemonForms,
-  getTmCompat,
-} from "@/lib/data";
+  getEffectivenessForGame,
+  getPokemonByIdForGame,
+  getPokemonListForGame,
+  getPokemonFormsForGame,
+  getMovesForGame,
+  getDataGenerationForGame,
+  getFusionSpriteConfigForGame,
+} from "@/lib/gameData";
 import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
 import { getLang } from "@/lib/i18n/getLang";
@@ -56,7 +54,7 @@ export default async function TmsPage({
   ]);
   for (const e of caught) {
     if (e.soulLink?.status === LinkStatus.DEAD) continue;
-    const pokemon = getPokemonById(e.currentPokemonId, game.generation);
+    const pokemon = getPokemonByIdForGame(game, e.currentPokemonId);
     if (!pokemon) continue;
     const onTeam = e.soulLink?.teamPosition != null;
     const members = byPlayer.get(e.player);
@@ -90,7 +88,7 @@ export default async function TmsPage({
   const moveTypeHistory = getMoveTypeHistory();
   // With lang, so the move descriptions reach both the selected-move summary
   // and the Pokédex card opened from a team row.
-  const movesTable = getMoves(lang, game.generation);
+  const movesTable = getMovesForGame(game, lang);
   const slugs = new Set<string>(Object.keys(tmCompat));
   for (const list of Object.values(moveset)) for (const [, slug] of list) slugs.add(slug);
   const moves: MoveOption[] = [...slugs]
@@ -102,12 +100,12 @@ export default async function TmsPage({
 
   return (
     <BlindflugProvider on={settings.blindflug}>
-    <SpriteSetProvider spriteSet={game.spriteSet}>
+    <SpriteSetProvider spriteSet={game.spriteSet} fusion={getFusionSpriteConfigForGame(game)}>
       <CanonicalRun runId={runId} />
       <PlayerNamesProvider names={settings.playerNames} lang={lang}>
         <PokemonDetailProvider
-          pokemonList={getPokemonList(game.dexLimit, game.generation)}
-          forms={getPokemonForms(game.dexLimit, game.generation)}
+          pokemonList={getPokemonListForGame(game)}
+          forms={getPokemonFormsForGame(game)}
           evolutions={getEvolutions({
             gameId,
             impossible: settings.evolutionOverridesImpossible,
@@ -116,8 +114,8 @@ export default async function TmsPage({
           })}
           moveData={{ movesets: moveset, moves: movesTable }}
           moveTypeHistory={moveTypeHistory}
-          effectiveness={getEffectiveness(game.generation)}
-          generation={game.generation}
+          effectiveness={getEffectivenessForGame(game)}
+          generation={getDataGenerationForGame(game)}
           dexLimit={game.dexLimit}
           lang={lang}
         >
@@ -129,7 +127,7 @@ export default async function TmsPage({
             tmCompat={tmCompat}
             moveset={moveset}
             movesTable={movesTable}
-            generation={game.generation}
+            generation={getDataGenerationForGame(game)}
             moveTypeHistory={moveTypeHistory}
           />
         </PokemonDetailProvider>

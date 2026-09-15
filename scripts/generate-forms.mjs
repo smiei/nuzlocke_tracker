@@ -43,6 +43,33 @@ const STAT_KEYS = {
 const ROMAN = { i: 1, ii: 2, iii: 3, iv: 4, v: 5, vi: 6, vii: 7, viii: 8, ix: 9 };
 const MAX_GENERATION = 5;
 
+// Named exceptions to MAX_GENERATION, for Infinite Fusion (see CLAUDE.md's
+// Infinite Fusion section): PokeAPI's pokemon-species varieties for these
+// four Gen-7 species carry several near-duplicate colour/cosmetic entries
+// alongside the ones that matter - EXTRA_FORMS lists exactly the slugs whose
+// SHAPE (stats+types) actually differs and that Infinite Fusion's own dex
+// treats as a separate catchable entry (verified against a locally cloned
+// reference tracker's species data, see CLAUDE.md):
+//   - Oricorio: baile is already the default entry; its other three dance
+//     styles (pom-pom/pa'u/sensu) are each a distinct catchable species there.
+//   - Lycanroc: only Midnight is a separate IF entry - Dusk (a version-
+//     exclusive evolution) is NOT in IF's dex and must stay excluded.
+//   - Minior: SEVEN colours exist for each of its two shield states (meteor/
+//     core), but every colour within a state is stat- and type-identical (the
+//     cosmetic shapeOf() check below already drops the other six meteor
+//     colours against the default) - "minior-red" is simply the one
+//     representative needed for the "Core" state, not a preference for red.
+//   - Necrozma: only Ultra is a separate IF entry - Dusk Mane/Dawn Wings (the
+//     fusion-with-Solgaleo/Lunala formes) are NOT in IF's dex.
+const EXTRA_FORMS = new Set([
+  "oricorio-pom-pom",
+  "oricorio-pau",
+  "oricorio-sensu",
+  "lycanroc-midnight",
+  "minior-red",
+  "necrozma-ultra",
+]);
+
 async function fetchJson(url) {
   const res = await fetch(url);
   if (!res.ok) throw new Error(`${url} -> HTTP ${res.status}`);
@@ -108,7 +135,7 @@ async function main() {
           const mon = await fetchJson(variety.pokemon.url);
           if (shapeOf(mon) === defaultShape) continue; // cosmetic only
           const { generation, names } = await formLabels(mon.name);
-          if (!generation || generation > MAX_GENERATION) continue; // mega/regional/gmax
+          if (!EXTRA_FORMS.has(mon.name) && (!generation || generation > MAX_GENERATION)) continue; // mega/regional/gmax
           kept.push({
             id: mon.id,
             names: entry.names,

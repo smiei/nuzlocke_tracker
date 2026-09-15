@@ -4,10 +4,11 @@ import { useState, useTransition } from "react";
 import { useDropdown } from "@/lib/useDropdown";
 import { useRouter } from "next/navigation";
 import type { Pokemon } from "@/lib/data";
-import type { SoulLinkView } from "@/lib/types";
+import type { SoulLinkView, FusableEncounter } from "@/lib/types";
 import { LinkStatus, Player, RunMode } from "@/generated/prisma/enums";
-import { markDead, markAlive } from "@/lib/actions";
+import { markDead, markAlive, unfuseEncounter, swapFusion } from "@/lib/actions";
 import { formatActionError } from "@/lib/actionErrors";
+import { useDialog } from "@/components/DialogProvider";
 import { GEN3_TYPES } from "@/lib/effectiveness";
 import { TYPE_LABELS } from "@/lib/pokemonTypes";
 import type { Lang } from "@/lib/i18n/dictionary";
@@ -16,6 +17,8 @@ import { AddToTeamButton } from "@/components/AddToTeamButton";
 import { EncounterTile } from "@/components/EncounterTile";
 import { EvolveButton, RevertButton } from "@/components/EvolveControls";
 import { FormPicker } from "@/components/FormPicker";
+import { FuseDialog } from "@/components/FuseDialog";
+import { PokemonInfoButton } from "@/components/PokemonDetailProvider";
 import { TeamBar } from "@/components/TeamBar";
 import { TypeBadge } from "@/components/TypeBadge";
 import { usePlayerLabel } from "@/components/PlayerNamesProvider";
@@ -37,6 +40,9 @@ export function LinksView({
   mode,
   lang,
   soulLinks,
+  fusionEnabled = false,
+  fusableEncounters = [],
+  customSpritesOnly = false,
 }: {
   runId: number;
   // Free-team run: the Team tab is the way in, not the Encounter tab.
@@ -45,14 +51,22 @@ export function LinksView({
   mode: RunMode;
   lang: Lang;
   soulLinks: SoulLinkView[];
+  // Infinite Fusion only (see CLAUDE.md) - gates the fuse/swap/unfuse UI.
+  fusionEnabled?: boolean;
+  fusableEncounters?: FusableEncounter[];
+  customSpritesOnly?: boolean;
 }) {
   const router = useRouter();
   const toast = useToast();
+  const { confirm } = useDialog();
   const playerLabel = usePlayerLabel();
   const [pendingId, setPendingId] = useState<number | null>(null);
   const [, startTransition] = useTransition();
   const [sortMode, setSortMode] = usePersistentState<SortMode>(SORT_MODE_KEY, "default");
   const [freeOpen, setFreeOpen] = useState(false);
+  const [fuseHost, setFuseHost] = useState<{ id: number; pokemonId: number; player: Player } | null>(
+    null,
+  );
   const [evolvableOnly, setEvolvableOnly] = useState(false);
   const [hideTeam, setHideTeam] = useState(false);
   const [typeFilter, setTypeFilter] = useState<string[]>([]);
@@ -104,7 +118,15 @@ export function LinksView({
   );
 
   const visibleLinks = sortedLinks.filter((link) => {
-    if (evolvableOnly && !link.encounters.some((e) => e.evolvesTo.some((t) => t.available)))
+    // A fusion's body evolves on its own, so it counts too.
+    if (
+      evolvableOnly &&
+      !link.encounters.some(
+        (e) =>
+          e.evolvesTo.some((t) => t.available) ||
+          (e.body?.evolvesTo.some((t) => t.available) ?? false),
+      )
+    )
       return false;
     if (hideTeam && link.teamPosition !== null && link.status !== LinkStatus.DEAD) return false;
     // Type filter (OR): keep the link if any of its Pokémon has a selected type.
@@ -147,6 +169,27 @@ export function LinksView({
     });
   }
 
+  function handleSwap(hostEncounterId: number) {
+    setPendingId(hostEncounterId);
+    startTransition(async () => {
+      const result = await swapFusion(runId, hostEncounterId);
+      if (!result.success) toast.error(formatActionError(result.error, lang));
+      router.refresh();
+      setPendingId(null);
+    });
+  }
+
+  async function handleUnfuse(hostEncounterId: number) {
+    if (!(await confirm({ message: t.links.unfuseConfirm, danger: true }))) return;
+    setPendingId(hostEncounterId);
+    startTransition(async () => {
+      const result = await unfuseEncounter(runId, hostEncounterId);
+      if (!result.success) toast.error(formatActionError(result.error, lang));
+      router.refresh();
+      setPendingId(null);
+    });
+  }
+
   const addButton = freeTeam ? (
     <Button size="sm" variant="primary" onClick={() => setFreeOpen(true)}>
       {t.links.free.add}
@@ -180,6 +223,19 @@ export function LinksView({
   return (
     <div>
       {freeDialog}
+      {fusionEnabled && (
+        <FuseDialog
+          open={fuseHost !== null}
+          onClose={() => setFuseHost(null)}
+          runId={runId}
+          hostEncounterId={fuseHost?.id ?? 0}
+          hostPokemonId={fuseHost?.pokemonId ?? 0}
+          hostPlayer={fuseHost?.player ?? Player.PLAYER1}
+          candidates={fusableEncounters}
+          lang={lang}
+          customSpritesOnly={customSpritesOnly}
+        />
+      )}
       <TeamBar runId={runId} mode={mode} lang={lang} links={soulLinks} />
       <div className="mb-6 flex flex-wrap items-center gap-2">
         <label htmlFor="links-sort" className="text-sm font-medium text-ink-muted">
@@ -408,6 +464,7 @@ export function LinksView({
                       encounter={e}
                       isDead={isDead}
                       isClassic={isClassic}
+                      showRoute={link.linkIds.length > 1}
                       lang={lang}
                     >
                       {!isDead && (
@@ -427,6 +484,64 @@ export function LinksView({
                           />
                           {e.evolvesFrom && (
                             <RevertButton runId={runId} lang={lang} encounterId={e.id} />
+                          )}
+                          {fusionEnabled && !e.body && (
+                            <Button
+                              size="sm"
+                              onClick={() => setFuseHost({ id: e.id, pokemonId: e.pokemonId, player: e.player })}
+                            >
+                              {t.links.fuse}
+                            </Button>
+                          )}
+                          {fusionEnabled && e.body && (
+                            <>
+                              <Button
+                                size="sm"
+                                disabled={pendingId === e.id}
+                                title={t.links.swapTitle}
+                                onClick={() => handleSwap(e.id)}
+                              >
+                                {t.links.swap}
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="danger"
+                                disabled={pendingId === e.id}
+                                onClick={() => handleUnfuse(e.id)}
+                              >
+                                {t.links.unfuse}
+                              </Button>
+                            </>
+                          )}
+                        </div>
+                      )}
+                      {e.body && (
+                        <div className="mt-2 rounded-md border border-line-strong bg-sunken p-2">
+                          <p className="mb-1 flex items-center gap-1 text-xs font-medium text-ink-muted">
+                            {t.links.bodyLabel}: {e.body.pokemonName} · {e.body.routeName}
+                            <span className="origin-left scale-[0.6]">
+                              <PokemonInfoButton pokemonId={e.body.pokemonId} label={e.body.pokemonName} />
+                            </span>
+                          </p>
+                          {!isDead && (
+                            <div className="flex flex-wrap gap-1.5">
+                              <EvolveButton
+                                runId={runId}
+                                lang={lang}
+                                encounterId={e.body.encounterId}
+                                targets={e.body.evolvesTo}
+                              />
+                              <FormPicker
+                                runId={runId}
+                                lang={lang}
+                                encounterId={e.body.encounterId}
+                                currentId={e.body.pokemonId}
+                                options={e.body.formOptions}
+                              />
+                              {e.body.evolvesFrom && (
+                                <RevertButton runId={runId} lang={lang} encounterId={e.body.encounterId} />
+                              )}
+                            </div>
                           )}
                         </div>
                       )}

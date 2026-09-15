@@ -19,23 +19,32 @@ const summe: Record<number, number> = {
 };
 const evolvesTo = (id: number) => evo[id] ?? [];
 const summeById = (id: number) => summe[id] ?? 0;
+const upTo = (limit: number) => (id: number) => id <= limit;
 
 describe("maxEvolvedSumme", () => {
   it("follows a linear chain to the final stage", () => {
-    expect(maxEvolvedSumme(1, evolvesTo, summeById, 386)).toBe(525);
-    expect(maxEvolvedSumme(2, evolvesTo, summeById, 386)).toBe(525);
+    expect(maxEvolvedSumme(1, evolvesTo, summeById, upTo(386))).toBe(525);
+    expect(maxEvolvedSumme(2, evolvesTo, summeById, upTo(386))).toBe(525);
   });
 
   it("returns the Pokémon's own BST when it is already the end form", () => {
-    expect(maxEvolvedSumme(3, evolvesTo, summeById, 386)).toBe(525);
+    expect(maxEvolvedSumme(3, evolvesTo, summeById, upTo(386))).toBe(525);
   });
 
   it("takes the strongest branch for branching evolutions", () => {
-    expect(maxEvolvedSumme(133, evolvesTo, summeById, 386)).toBe(525);
+    expect(maxEvolvedSumme(133, evolvesTo, summeById, upTo(386))).toBe(525);
   });
 
   it("does not cross the dex limit", () => {
     // Venusaur (id 3) excluded -> best reachable is Ivysaur (405).
-    expect(maxEvolvedSumme(1, evolvesTo, summeById, 2)).toBe(405);
+    expect(maxEvolvedSumme(1, evolvesTo, summeById, upTo(2))).toBe(405);
+  });
+
+  it("works with a non-contiguous allowlist predicate", () => {
+    // Venusaur (3) excluded, Flareon (136) included despite being far above
+    // any of these ids - the point of taking a predicate instead of a ceiling.
+    const allowed = new Set([1, 2, 133, 134, 135, 136]);
+    expect(maxEvolvedSumme(1, evolvesTo, summeById, (id) => allowed.has(id))).toBe(405);
+    expect(maxEvolvedSumme(133, evolvesTo, summeById, (id) => allowed.has(id))).toBe(525);
   });
 });

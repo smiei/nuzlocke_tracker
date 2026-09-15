@@ -21,6 +21,12 @@ type RunWithRelations = Prisma.RunGetPayload<{ include: typeof BACKUP_INCLUDE }>
 
 function runToBackupRun(run: RunWithRelations): BackupRun {
   const routeBySoulLinkId = new Map(run.soulLinks.map((sl) => [sl.id, sl.routeId]));
+  // Infinite Fusion: identify a donor's host by (routeId, player) rather than
+  // by id - ids aren't exported, see the file header comment in
+  // backupParse.ts.
+  const routeAndPlayerByEncounterId = new Map(
+    run.encounters.map((e) => [e.id, { routeId: e.routeId, player: e.player }]),
+  );
   return {
     name: run.name,
     mode: run.mode,
@@ -34,6 +40,8 @@ function runToBackupRun(run: RunWithRelations): BackupRun {
       teamPosition: sl.teamPosition,
       deathPlayer: sl.deathPlayer,
       deathCause: sl.deathCause,
+      deathLevelCapId: sl.deathLevelCapId,
+      diedAt: sl.diedAt?.toISOString() ?? null,
       createdAt: sl.createdAt.toISOString(),
       updatedAt: sl.updatedAt.toISOString(),
     })),
@@ -48,6 +56,7 @@ function runToBackupRun(run: RunWithRelations): BackupRun {
       isStatic: e.isStatic,
       shiny: e.shiny,
       soulLinkRouteId: e.soulLinkId !== null ? routeBySoulLinkId.get(e.soulLinkId) ?? null : null,
+      fusedInto: e.fusedIntoId !== null ? routeAndPlayerByEncounterId.get(e.fusedIntoId) ?? null : null,
       createdAt: e.createdAt.toISOString(),
       updatedAt: e.updatedAt.toISOString(),
     })),
@@ -162,14 +171,21 @@ export async function applyBackup(backup: BackupFile): Promise<number> {
               teamPosition: sl.teamPosition,
               deathPlayer: sl.deathPlayer,
               deathCause: sl.deathCause,
+              deathLevelCapId: sl.deathLevelCapId,
+              diedAt: sl.diedAt !== null ? new Date(sl.diedAt) : null,
               createdAt: new Date(sl.createdAt),
             },
           });
           soulLinkIdByRoute.set(sl.routeId, created.id);
         }
 
+        // Keyed by (routeId, player) rather than id - ids aren't exported and
+        // don't exist yet for the fusion pass below, which runs once every
+        // encounter has a fresh one.
+        const encounterIdByRouteAndPlayer = new Map<string, number>();
+        const routeAndPlayerKey = (routeId: number, player: string) => `${routeId}:${player}`;
         for (const e of run.encounters) {
-          await tx.encounter.create({
+          const created = await tx.encounter.create({
             data: {
               runId: createdRun.id,
               routeId: e.routeId,
@@ -188,6 +204,20 @@ export async function applyBackup(backup: BackupFile): Promise<number> {
               createdAt: new Date(e.createdAt),
             },
           });
+          encounterIdByRouteAndPlayer.set(routeAndPlayerKey(e.routeId, e.player), created.id);
+        }
+
+        // Infinite Fusion, second pass: every encounter row now has a real
+        // id, so donor -> host links (stored as routeId+player in the file,
+        // see backupParse.ts) can be resolved and written.
+        for (const e of run.encounters) {
+          if (!e.fusedInto) continue;
+          const donorId = encounterIdByRouteAndPlayer.get(routeAndPlayerKey(e.routeId, e.player));
+          const hostId = encounterIdByRouteAndPlayer.get(
+            routeAndPlayerKey(e.fusedInto.routeId, e.fusedInto.player),
+          );
+          if (donorId === undefined || hostId === undefined) continue;
+          await tx.encounter.update({ where: { id: donorId }, data: { fusedIntoId: hostId } });
         }
 
         for (const lc of run.levelCapProgress) {

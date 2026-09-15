@@ -84,3 +84,8 @@ claude.md
 # machine-specific paths inside, and ~1.5 MB of generated HTML/JSON
 /graphify-out/
 .mcp.json
+
+# Local reference clone of fbosch/infinite-fusion-nuzlocke (MIT), used only as
+# a one-time data source for the Infinite Fusion game packs (see CLAUDE.md).
+# Not part of this repo.
+/fboschinfinite-fusion-nuzlocke/

@@ -1,17 +1,15 @@
+import { getEvolutions, getGameOrDefault, getLearnset, getMoveTypeHistory, getMoveset } from "@/lib/data";
 import {
-  getCatchRates,
-  getEffectiveness,
-  getEvolutions,
-  getGameOrDefault,
-  getLearnset,
-  getMoves,
-  getMoveTypeHistory,
-  getMoveset,
-  getPokemonById,
-  getPokemonList,
-  getPokemonForms,
-} from "@/lib/data";
-import { getTypesForGeneration } from "@/lib/effectiveness";
+  getCatchRatesForGame,
+  getEffectivenessForGame,
+  getPokemonByIdForGame,
+  getPokemonListForGame,
+  getPokemonFormsForGame,
+  getMovesForGame,
+  getAttackTypesForGame,
+  getDataGenerationForGame,
+  getFusionSpriteConfigForGame,
+} from "@/lib/gameData";
 import { explosiveMove } from "@/lib/learnset";
 import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
@@ -45,18 +43,18 @@ export default async function AnalyzePage({
   const lang = await getLang();
   const game = getGameOrDefault(gameId);
   const learnsetTable = getLearnset(game.versionGroup);
-  const pokemonList = getPokemonList(game.dexLimit, game.generation);
+  const pokemonList = getPokemonListForGame(game);
   // Formes are pickable HERE (unlike in the Pokédex or an encounter): scouting
   // a Wash Rotom or a Deoxys Attack is exactly what this tab is for. Species-
   // keyed tables (catch rates, learnsets, explosiveMap) are looked up via
   // baseSpeciesId, so a forme inherits its species' values.
-  const formEntries = getPokemonForms(game.dexLimit, game.generation);
+  const formEntries = getPokemonFormsForGame(game);
   const pickableList = [...pokemonList, ...formEntries];
   const moveset = getMoveset(game.versionGroup);
-  const moves = getMoves(lang, game.generation);
+  const moves = getMovesForGame(game, lang);
 
   const catchRates = Object.fromEntries(
-    getCatchRates(game.generation).map((entry) => [entry.id, entry.catch_rate]),
+    getCatchRatesForGame(game).map((entry) => [entry.id, entry.catch_rate]),
   );
 
   const encounters = await prisma.encounter.findMany({ where: { runId } });
@@ -122,7 +120,9 @@ export default async function AnalyzePage({
   ]);
   for (const link of teamLinks) {
     for (const e of link.encounters) {
-      const pokemon = getPokemonById(e.currentPokemonId, game.generation);
+      // Infinite Fusion: a donor is represented by its host's fusion card.
+      if (e.fusedIntoId !== null) continue;
+      const pokemon = getPokemonByIdForGame(game, e.currentPokemonId);
       if (!pokemon) continue;
       byPlayer.get(e.player)?.push({
         encounterId: e.id,
@@ -141,12 +141,12 @@ export default async function AnalyzePage({
           { player: Player.PLAYER2, members: byPlayer.get(Player.PLAYER2) ?? [] },
         ];
 
-  const effectiveness = getEffectiveness(game.generation);
-  const attackTypes = getTypesForGeneration(game.generation);
+  const effectiveness = getEffectivenessForGame(game);
+  const attackTypes = getAttackTypesForGame(game);
 
   return (
     <BlindflugProvider on={settings.blindflug}>
-    <SpriteSetProvider spriteSet={game.spriteSet}>
+    <SpriteSetProvider spriteSet={game.spriteSet} fusion={getFusionSpriteConfigForGame(game)}>
       <CanonicalRun runId={runId} />
       <PlayerNamesProvider names={settings.playerNames} lang={lang}>
         <PokemonDetailProvider
@@ -161,7 +161,7 @@ export default async function AnalyzePage({
           moveData={{ movesets: moveset, moves }}
           moveTypeHistory={getMoveTypeHistory()}
           effectiveness={effectiveness}
-          generation={game.generation}
+          generation={getDataGenerationForGame(game)}
           dexLimit={game.dexLimit}
           lang={lang}
         >
@@ -169,6 +169,8 @@ export default async function AnalyzePage({
             runId={runId}
             mode={mode}
             pokemonList={pickableList}
+            // The real battle-mechanics generation (ball list, catch formula),
+            // deliberately NOT dataGeneration - see CatchRateView's use of it.
             generation={game.generation}
             versionGroup={game.versionGroup}
             effectiveness={effectiveness}

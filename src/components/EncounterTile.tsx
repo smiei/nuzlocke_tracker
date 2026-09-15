@@ -17,12 +17,16 @@ export function EncounterTile({
   encounter,
   isDead,
   isClassic,
+  showRoute = false,
   lang,
   children,
 }: {
   encounter: EncounterView;
   isDead: boolean;
   isClassic: boolean;
+  // Infinite Fusion: the card spans several routes (a fusion group), so each
+  // tile says which route its Pokémon came from.
+  showRoute?: boolean;
   lang: Lang;
   children?: React.ReactNode;
 }) {
@@ -31,23 +35,32 @@ export function EncounterTile({
   const playerLabel = usePlayerLabel();
   const infoParts = [
     ...(!isClassic ? [playerLabel(encounter.player)] : []),
+    ...(showRoute ? [encounter.routeName] : []),
     ...(encounter.isStatic ? [t.links.staticTag] : []),
   ];
+  const bodyId = encounter.body?.pokemonId ?? null;
   return (
     <div className="flex w-full items-center gap-3">
       {detail ? (
         <button
           type="button"
-          onClick={() => detail.open(encounter.pokemonId)}
+          // A fusion opens the fused sheet, not just its head.
+          onClick={() => detail.open(encounter.pokemonId, bodyId)}
           title={encounter.pokemonName}
           aria-label={encounter.pokemonName}
           className="shrink-0 cursor-pointer rounded transition-opacity hover:opacity-80"
         >
-          <PokemonSprite pokemonId={encounter.pokemonId} name={encounter.pokemonName} size="xl" />
+          <PokemonSprite
+            pokemonId={encounter.pokemonId}
+            bodyId={bodyId}
+            name={encounter.pokemonName}
+            size="xl"
+          />
         </button>
       ) : (
         <PokemonSprite
           pokemonId={encounter.pokemonId}
+          bodyId={bodyId}
           name={encounter.pokemonName}
           size="xl"
           className="shrink-0"
@@ -80,7 +93,9 @@ export function EncounterTile({
           </span>
         )}
         <span className="text-xs text-ink-subtle">
-          {t.links.rankSummary(encounter.rang, encounter.summe)}
+          {encounter.body
+            ? t.links.fusionSummary(encounter.summe)
+            : t.links.rankSummary(encounter.rang, encounter.summe)}
         </span>
         {children}
       </div>

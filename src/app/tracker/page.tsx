@@ -1,13 +1,12 @@
+import { getEvolutions, getGameOrDefault, getMoveTypeHistory, getMoveset } from "@/lib/data";
 import {
-  getEffectiveness,
-  getEvolutions,
-  getGameOrDefault,
-  getMoves,
-  getMoveTypeHistory,
-  getMoveset,
-  getPokemonList,
-  getPokemonForms,
-} from "@/lib/data";
+  getEffectivenessForGame,
+  getPokemonListForGame,
+  getPokemonFormsForGame,
+  getMovesForGame,
+  getDataGenerationForGame,
+  getFusionSpriteConfigForGame,
+} from "@/lib/gameData";
 import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
 import { getRoutesForRun } from "@/lib/runRoutes";
@@ -34,18 +33,18 @@ export default async function TrackerPage({
   const lang = await getLang();
   const game = getGameOrDefault(gameId);
   const routes = await getRoutesForRun(runId, gameId);
-  const pokemonList = getPokemonList(game.dexLimit, game.generation);
+  const pokemonList = getPokemonListForGame(game);
   const encounters = await prisma.encounter.findMany({ where: { runId } });
 
   return (
     <BlindflugProvider on={settings.blindflug}>
     <div>
       <CanonicalRun runId={runId} />
-      <SpriteSetProvider spriteSet={game.spriteSet}>
+      <SpriteSetProvider spriteSet={game.spriteSet} fusion={getFusionSpriteConfigForGame(game)}>
         <PlayerNamesProvider names={settings.playerNames} lang={lang}>
           <PokemonDetailProvider
             pokemonList={pokemonList}
-            forms={getPokemonForms(game.dexLimit, game.generation)}
+            forms={getPokemonFormsForGame(game)}
             evolutions={getEvolutions({
               gameId,
               impossible: settings.evolutionOverridesImpossible,
@@ -54,11 +53,11 @@ export default async function TrackerPage({
             })}
             moveData={{
               movesets: getMoveset(game.versionGroup),
-              moves: getMoves(lang, game.generation),
+              moves: getMovesForGame(game, lang),
             }}
             moveTypeHistory={getMoveTypeHistory()}
-            effectiveness={getEffectiveness(game.generation)}
-            generation={game.generation}
+            effectiveness={getEffectivenessForGame(game)}
+            generation={getDataGenerationForGame(game)}
             dexLimit={game.dexLimit}
             lang={lang}
           >

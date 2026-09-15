@@ -1,0 +1,498 @@
+[
+  {
+    "id": 1,
+    "names": {
+      "de": "Brock",
+      "en": "Brock",
+      "fr": "Brock",
+      "es": "Brock",
+      "it": "Brock"
+    },
+    "location": {
+      "de": "Pewter City",
+      "en": "Pewter City",
+      "fr": "Pewter City",
+      "es": "Pewter City",
+      "it": "Pewter City"
+    },
+    "badge": {
+      "de": "Boulder Badge",
+      "en": "Boulder Badge",
+      "fr": "Boulder Badge",
+      "es": "Boulder Badge",
+      "it": "Boulder Badge"
+    },
+    "max_level": null
+  },
+  {
+    "id": 2,
+    "names": {
+      "de": "Misty",
+      "en": "Misty",
+      "fr": "Misty",
+      "es": "Misty",
+      "it": "Misty"
+    },
+    "location": {
+      "de": "Cerulean City",
+      "en": "Cerulean City",
+      "fr": "Cerulean City",
+      "es": "Cerulean City",
+      "it": "Cerulean City"
+    },
+    "badge": {
+      "de": "Cascade Badge",
+      "en": "Cascade Badge",
+      "fr": "Cascade Badge",
+      "es": "Cascade Badge",
+      "it": "Cascade Badge"
+    },
+    "max_level": null
+  },
+  {
+    "id": 3,
+    "names": {
+      "de": "Lt. Surge",
+      "en": "Lt. Surge",
+      "fr": "Lt. Surge",
+      "es": "Lt. Surge",
+      "it": "Lt. Surge"
+    },
+    "location": {
+      "de": "Vermilion City",
+      "en": "Vermilion City",
+      "fr": "Vermilion City",
+      "es": "Vermilion City",
+      "it": "Vermilion City"
+    },
+    "badge": {
+      "de": "Thunder Badge",
+      "en": "Thunder Badge",
+      "fr": "Thunder Badge",
+      "es": "Thunder Badge",
+      "it": "Thunder Badge"
+    },
+    "max_level": null
+  },
+  {
+    "id": 4,
+    "names": {
+      "de": "Erika",
+      "en": "Erika",
+      "fr": "Erika",
+      "es": "Erika",
+      "it": "Erika"
+    },
+    "location": {
+      "de": "Celadon City",
+      "en": "Celadon City",
+      "fr": "Celadon City",
+      "es": "Celadon City",
+      "it": "Celadon City"
+    },
+    "badge": {
+      "de": "Rainbow Badge",
+      "en": "Rainbow Badge",
+      "fr": "Rainbow Badge",
+      "es": "Rainbow Badge",
+      "it": "Rainbow Badge"
+    },
+    "max_level": null
+  },
+  {
+    "id": 5,
+    "names": {
+      "de": "Koga",
+      "en": "Koga",
+      "fr": "Koga",
+      "es": "Koga",
+      "it": "Koga"
+    },
+    "location": {
+      "de": "Fuchsia City",
+      "en": "Fuchsia City",
+      "fr": "Fuchsia City",
+      "es": "Fuchsia City",
+      "it": "Fuchsia City"
+    },
+    "badge": {
+      "de": "Soul Badge",
+      "en": "Soul Badge",
+      "fr": "Soul Badge",
+      "es": "Soul Badge",
+      "it": "Soul Badge"
+    },
+    "max_level": null
+  },
+  {
+    "id": 6,
+    "names": {
+      "de": "Sabrina",
+      "en": "Sabrina",
+      "fr": "Sabrina",
+      "es": "Sabrina",
+      "it": "Sabrina"
+    },
+    "location": {
+      "de": "Saffron City",
+      "en": "Saffron City",
+      "fr": "Saffron City",
+      "es": "Saffron City",
+      "it": "Saffron City"
+    },
+    "badge": {
+      "de": "Marsh Badge",
+      "en": "Marsh Badge",
+      "fr": "Marsh Badge",
+      "es": "Marsh Badge",
+      "it": "Marsh Badge"
+    },
+    "max_level": null
+  },
+  {
+    "id": 7,
+    "names": {
+      "de": "Blaine",
+      "en": "Blaine",
+      "fr": "Blaine",
+      "es": "Blaine",
+      "it": "Blaine"
+    },
+    "location": {
+      "de": "Cinnabar Island",
+      "en": "Cinnabar Island",
+      "fr": "Cinnabar Island",
+      "es": "Cinnabar Island",
+      "it": "Cinnabar Island"
+    },
+    "badge": {
+      "de": "Volcano Badge",
+      "en": "Volcano Badge",
+      "fr": "Volcano Badge",
+      "es": "Volcano Badge",
+      "it": "Volcano Badge"
+    },
+    "max_level": null
+  },
+  {
+    "id": 8,
+    "names": {
+      "de": "Giovanni",
+      "en": "Giovanni",
+      "fr": "Giovanni",
+      "es": "Giovanni",
+      "it": "Giovanni"
+    },
+    "location": {
+      "de": "Viridian City",
+      "en": "Viridian City",
+      "fr": "Viridian City",
+      "es": "Viridian City",
+      "it": "Viridian City"
+    },
+    "badge": {
+      "de": "Earth Badge",
+      "en": "Earth Badge",
+      "fr": "Earth Badge",
+      "es": "Earth Badge",
+      "it": "Earth Badge"
+    },
+    "max_level": null
+  },
+  {
+    "id": 9,
+    "names": {
+      "de": "Falkner",
+      "en": "Falkner",
+      "fr": "Falkner",
+      "es": "Falkner",
+      "it": "Falkner"
+    },
+    "location": {
+      "de": "Violet City",
+      "en": "Violet City",
+      "fr": "Violet City",
+      "es": "Violet City",
+      "it": "Violet City"
+    },
+    "badge": {
+      "de": "Zephyr Badge",
+      "en": "Zephyr Badge",
+      "fr": "Zephyr Badge",
+      "es": "Zephyr Badge",
+      "it": "Zephyr Badge"
+    },
+    "max_level": null
+  },
+  {
+    "id": 10,
+    "names": {
+      "de": "Kurt",
+      "en": "Kurt",
+      "fr": "Kurt",
+      "es": "Kurt",
+      "it": "Kurt"
+    },
+    "location": {
+      "de": "Azalea Town",
+      "en": "Azalea Town",
+      "fr": "Azalea Town",
+      "es": "Azalea Town",
+      "it": "Azalea Town"
+    },
+    "badge": {
+      "de": "Hive Badge",
+      "en": "Hive Badge",
+      "fr": "Hive Badge",
+      "es": "Hive Badge",
+      "it": "Hive Badge"
+    },
+    "max_level": null
+  },
+  {
+    "id": 11,
+    "names": {
+      "de": "Whitney",
+      "en": "Whitney",
+      "fr": "Whitney",
+      "es": "Whitney",
+      "it": "Whitney"
+    },
+    "location": {
+      "de": "Goldenrod City",
+      "en": "Goldenrod City",
+      "fr": "Goldenrod City",
+      "es": "Goldenrod City",
+      "it": "Goldenrod City"
+    },
+    "badge": {
+      "de": "Plain Badge",
+      "en": "Plain Badge",
+      "fr": "Plain Badge",
+      "es": "Plain Badge",
+      "it": "Plain Badge"
+    },
+    "max_level": null
+  },
+  {
+    "id": 12,
+    "names": {
+      "de": "Morty",
+      "en": "Morty",
+      "fr": "Morty",
+      "es": "Morty",
+      "it": "Morty"
+    },
+    "location": {
+      "de": "Ecruteak City",
+      "en": "Ecruteak City",
+      "fr": "Ecruteak City",
+      "es": "Ecruteak City",
+      "it": "Ecruteak City"
+    },
+    "badge": {
+      "de": "Fog Badge",
+      "en": "Fog Badge",
+      "fr": "Fog Badge",
+      "es": "Fog Badge",
+      "it": "Fog Badge"
+    },
+    "max_level": null
+  },
+  {
+    "id": 13,
+    "names": {
+      "de": "Chuck",
+      "en": "Chuck",
+      "fr": "Chuck",
+      "es": "Chuck",
+      "it": "Chuck"
+    },
+    "location": {
+      "de": "Cianwood City",
+      "en": "Cianwood City",
+      "fr": "Cianwood City",
+      "es": "Cianwood City",
+      "it": "Cianwood City"
+    },
+    "badge": {
+      "de": "Storm Badge",
+      "en": "Storm Badge",
+      "fr": "Storm Badge",
+      "es": "Storm Badge",
+      "it": "Storm Badge"
+    },
+    "max_level": null
+  },
+  {
+    "id": 14,
+    "names": {
+      "de": "Jasmine",
+      "en": "Jasmine",
+      "fr": "Jasmine",
+      "es": "Jasmine",
+      "it": "Jasmine"
+    },
+    "location": {
+      "de": "Olivine City",
+      "en": "Olivine City",
+      "fr": "Olivine City",
+      "es": "Olivine City",
+      "it": "Olivine City"
+    },
+    "badge": {
+      "de": "Mineral Badge",
+      "en": "Mineral Badge",
+      "fr": "Mineral Badge",
+      "es": "Mineral Badge",
+      "it": "Mineral Badge"
+    },
+    "max_level": null
+  },
+  {
+    "id": 15,
+    "names": {
+      "de": "Pryce",
+      "en": "Pryce",
+      "fr": "Pryce",
+      "es": "Pryce",
+      "it": "Pryce"
+    },
+    "location": {
+      "de": "Mahogany Town",
+      "en": "Mahogany Town",
+      "fr": "Mahogany Town",
+      "es": "Mahogany Town",
+      "it": "Mahogany Town"
+    },
+    "badge": {
+      "de": "Glacier Badge",
+      "en": "Glacier Badge",
+      "fr": "Glacier Badge",
+      "es": "Glacier Badge",
+      "it": "Glacier Badge"
+    },
+    "max_level": null
+  },
+  {
+    "id": 16,
+    "names": {
+      "de": "Clair",
+      "en": "Clair",
+      "fr": "Clair",
+      "es": "Clair",
+      "it": "Clair"
+    },
+    "location": {
+      "de": "Blackthorn City",
+      "en": "Blackthorn City",
+      "fr": "Blackthorn City",
+      "es": "Blackthorn City",
+      "it": "Blackthorn City"
+    },
+    "badge": {
+      "de": "Rising Badge",
+      "en": "Rising Badge",
+      "fr": "Rising Badge",
+      "es": "Rising Badge",
+      "it": "Rising Badge"
+    },
+    "max_level": null
+  },
+  {
+    "id": 17,
+    "names": {
+      "de": "Lorelei",
+      "en": "Lorelei",
+      "fr": "Lorelei",
+      "es": "Lorelei",
+      "it": "Lorelei"
+    },
+    "location": {
+      "de": "Elite Four",
+      "en": "Elite Four",
+      "fr": "Elite Four",
+      "es": "Elite Four",
+      "it": "Elite Four"
+    },
+    "badge": null,
+    "max_level": null
+  },
+  {
+    "id": 18,
+    "names": {
+      "de": "Bruno",
+      "en": "Bruno",
+      "fr": "Bruno",
+      "es": "Bruno",
+      "it": "Bruno"
+    },
+    "location": {
+      "de": "Elite Four",
+      "en": "Elite Four",
+      "fr": "Elite Four",
+      "es": "Elite Four",
+      "it": "Elite Four"
+    },
+    "badge": null,
+    "max_level": null
+  },
+  {
+    "id": 19,
+    "names": {
+      "de": "Agatha",
+      "en": "Agatha",
+      "fr": "Agatha",
+      "es": "Agatha",
+      "it": "Agatha"
+    },
+    "location": {
+      "de": "Elite Four",
+      "en": "Elite Four",
+      "fr": "Elite Four",
+      "es": "Elite Four",
+      "it": "Elite Four"
+    },
+    "badge": null,
+    "max_level": null
+  },
+  {
+    "id": 20,
+    "names": {
+      "de": "Lance",
+      "en": "Lance",
+      "fr": "Lance",
+      "es": "Lance",
+      "it": "Lance"
+    },
+    "location": {
+      "de": "Elite Four",
+      "en": "Elite Four",
+      "fr": "Elite Four",
+      "es": "Elite Four",
+      "it": "Elite Four"
+    },
+    "badge": null,
+    "max_level": null
+  },
+  {
+    "id": 21,
+    "names": {
+      "de": "Champion",
+      "en": "Champion",
+      "fr": "Champion",
+      "es": "Champion",
+      "it": "Champion"
+    },
+    "location": {
+      "de": "Elite Four",
+      "en": "Elite Four",
+      "fr": "Elite Four",
+      "es": "Elite Four",
+      "it": "Elite Four"
+    },
+    "badge": null,
+    "max_level": null,
+    "sprite": "champ"
+  }
+]

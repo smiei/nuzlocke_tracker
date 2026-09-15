@@ -26,6 +26,22 @@ function linkLabel(link: SoulLinkView): string {
   return names.length ? names.join(" & ") : link.routeName;
 }
 
+function LinkSprites({ link }: { link: SoulLinkView }) {
+  return (
+    <>
+      {link.encounters.map((e) => (
+        <PokemonSprite
+          key={e.id}
+          pokemonId={e.pokemonId}
+          bodyId={e.body?.pokemonId ?? null}
+          name={e.pokemonName}
+          size="sm"
+        />
+      ))}
+    </>
+  );
+}
+
 // Custom dropdown instead of a native <select> so each option can show the
 // link's Pokémon sprites - same pattern as the evolve dropdown.
 function SlotPicker({
@@ -62,9 +78,7 @@ function SlotPicker({
         <span className="flex min-w-0 items-center gap-1.5">
           {current ? (
             <>
-              {current.encounters.map((e) => (
-                <PokemonSprite key={e.id} pokemonId={e.pokemonId} name={e.pokemonName} size="sm" />
-              ))}
+              <LinkSprites link={current} />
               <span className="truncate">{linkLabel(current)}</span>
             </>
           ) : (
@@ -95,9 +109,7 @@ function SlotPicker({
                   current?.id === l.id ? "bg-hover font-medium" : ""
                 }`}
               >
-                {l.encounters.map((e) => (
-                  <PokemonSprite key={e.id} pokemonId={e.pokemonId} name={e.pokemonName} size="sm" />
-                ))}
+                <LinkSprites link={l} />
                 <span className="truncate">{linkLabel(l)}</span>
               </button>
             </li>
@@ -132,10 +144,14 @@ export function TeamBar({
   // Only living links can be on the team; dead ones are filtered out here too
   // (defence in depth - markDead already clears their teamPosition).
   const aliveLinks = links.filter((l) => l.status !== LinkStatus.DEAD);
-  const slots: (SoulLinkView | null)[] = Array.from(
-    { length: TEAM_SIZE },
-    (_, i) => aliveLinks.find((l) => l.teamPosition === i) ?? null,
-  );
+  // A card is one fusion group (see links/page.tsx), and a group can hold
+  // more than one slot while one player has more separate Pokémon in it than
+  // the other (see teamSlotsNeeded). Its card sits in its lowest slot; every
+  // further slot points back to it instead of repeating the card.
+  const slots = Array.from({ length: TEAM_SIZE }, (_, i) => {
+    const link = aliveLinks.find((l) => l.teamPositions.includes(i)) ?? null;
+    return { link, primary: link !== null && link.teamPosition === i };
+  });
 
   function handleSelect(position: number, soulLinkId: number | null) {
     startTransition(async () => {
@@ -174,22 +190,26 @@ export function TeamBar({
         <h2 className="text-sm font-semibold uppercase tracking-wide text-ink-muted">
           {t.links.teamHeading}
         </h2>
-        {slots.some((l) => l !== null) && (
+        {slots.some((s) => s.link !== null) && (
           <Button size="sm" loading={pending} onClick={handleClearTeam}>
             {t.links.clearTeam}
           </Button>
         )}
       </div>
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        {slots.map((link, i) => {
+        {slots.map(({ link, primary }, i) => {
           return (
             <div
               key={i}
               className={`flex flex-col rounded-lg border p-4 ${
-                link ? "border-warning-line/50 bg-warning-bg/20" : "border-dashed border-line-strong"
+                link && primary
+                  ? "border-warning-line/50 bg-warning-bg/20"
+                  : link
+                    ? "border-dashed border-warning-line/50"
+                    : "border-dashed border-line-strong"
               }`}
             >
-              {link ? (
+              {link && primary ? (
                 <>
                   <div className="mb-3 flex items-start justify-between gap-2">
                     <div className="min-w-0">
@@ -277,11 +297,22 @@ export function TeamBar({
                         encounter={e}
                         isDead={false}
                         isClassic={isClassic}
+                        showRoute={link.linkIds.length > 1}
                         lang={lang}
                       />
                     ))}
                   </div>
                 </>
+              ) : link ? (
+                <div className="flex flex-1 flex-col items-center justify-center gap-2 py-6 text-center">
+                  <span className="flex items-center gap-1">
+                    <LinkSprites link={link} />
+                  </span>
+                  <span className="text-sm font-medium text-ink">
+                    {t.links.slotTakenBy(link.routeName)}
+                  </span>
+                  <span className="max-w-xs text-xs text-ink-subtle">{t.links.slotTakenHint}</span>
+                </div>
               ) : (
                 <div className="flex flex-1 flex-col items-center justify-center py-10 text-ink-subtle">
                   <span className="text-3xl leading-none">+</span>

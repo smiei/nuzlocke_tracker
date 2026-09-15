@@ -25,8 +25,13 @@ export const GEN3_TYPES = [
 // Gen 1 lacks Dark and Steel.
 export const GEN1_TYPES = GEN3_TYPES.filter((t) => t !== "dark" && t !== "steel");
 
+// Fairy, added in Gen 6 - see effectiveness-gen6.json and getEffectiveness().
+export const GEN6_TYPES = [...GEN3_TYPES, "fairy"];
+
 export function getTypesForGeneration(generation: number): string[] {
-  return generation === 1 ? GEN1_TYPES : GEN3_TYPES;
+  if (generation === 1) return GEN1_TYPES;
+  if (generation >= 6) return GEN6_TYPES;
+  return GEN3_TYPES;
 }
 
 // effectiveness.json is keyed by German type names from the defender's

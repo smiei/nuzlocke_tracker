@@ -71,19 +71,39 @@ describe("data/pokemon-history.json", () => {
   it("never lets Fairy reach a game this app ships", () => {
     // The bug that started this: Togekiss showed up as Fee in a HeartGold run.
     // Fairy did not exist before Gen 6 and no pack here is past Gen 5, so the
-    // type must be unreachable for every single game.
-    const generations = games.map((id) => {
+    // type must be unreachable for every single game - but only within that
+    // game's OWN dexLimit. data/pokemon.json now also carries species up to
+    // #800 (added for Infinite Fusion, which - unlike every other pack - DOES
+    // reach Gen 6+ via dataGeneration, see gameData.ts), including natively
+    // Fairy-typed Gen 6+ species (Flabébé #669 and kin) that have no
+    // past_types to roll back because they never existed pre-Fairy at all.
+    // Those are correctly excluded from every Gen 1-5 pack by dexLimit, not
+    // by a pokemon-history.json entry - checking the unfiltered list here
+    // would fail on species none of these nine packs can ever show.
+    const packs = games.map((id) => {
       const game = JSON.parse(
         readFileSync(path.join(root, "data", "games", id, "game.json"), "utf-8"),
-      ) as { generation: number };
-      return game.generation;
+      ) as { generation: number; dexLimit: number };
+      return { generation: game.generation, dexLimit: game.dexLimit };
     });
-    for (const generation of new Set(generations)) {
+    for (const { generation, dexLimit } of packs) {
       for (const entry of pokemon) {
+        if (entry.id > dexLimit) continue;
         const corrected = pokemonForGeneration(history, entry, generation);
         expect(corrected.types, `#${entry.id} in gen ${generation}`).not.toContain("fairy");
       }
     }
+  });
+
+  it("still shows a natively Fairy species as Fairy once a pack DOES reach Gen 6+", () => {
+    // The mirror case of the test above: Flabébé (#669) has no past_types to
+    // roll back (it never existed pre-Fairy), so it is untouched by history
+    // corrections at any generation - reachable only once a pack's dexLimit
+    // actually includes it (Infinite Fusion, via dataGeneration - see
+    // gameData.ts and effectivenessGen6.test.ts).
+    const flabebe = pokemon.find((p) => p.id === 669);
+    expect(flabebe?.types).toEqual(["fairy"]);
+    expect(pokemonForGeneration(history, flabebe!, 7).types).toEqual(["fairy"]);
   });
 
   it("keeps the Rotom formes Electric/Ghost in Gen 4", () => {

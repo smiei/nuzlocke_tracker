@@ -1,18 +1,23 @@
 import {
-  getEffectiveness,
   getGameOrDefault,
-  getPokemonById,
-  getPokemonList,
   getEvolutionById,
   getEvolutions,
-  getMoves,
   getMoveTypeHistory,
   getMoveset,
   getLevelCaps,
-  getPokemonForms,
 } from "@/lib/data";
+import {
+  getEffectivenessForGame,
+  getPokemonByIdForGame,
+  getPokemonListForGame,
+  getPokemonFormsForGame,
+  getMovesForGame,
+  getDataGenerationForGame,
+  getFusionSpriteConfigForGame,
+  isInDex,
+} from "@/lib/gameData";
 import { getRoutesForRun } from "@/lib/runRoutes";
-import { EncounterStatus, Player, RunMode } from "@/generated/prisma/client";
+import { EncounterStatus, LinkStatus, Player, RunMode } from "@/generated/prisma/client";
 import { SpriteSetProvider } from "@/components/SpriteSetProvider";
 import { CanonicalRun } from "@/components/CanonicalRun";
 import { BlindflugProvider } from "@/components/BlindflugProvider";
@@ -20,7 +25,6 @@ import { PageHeader } from "@/components/ui/Page";
 import { PokemonDetailProvider } from "@/components/PokemonDetailProvider";
 import { PlayerNamesProvider } from "@/components/PlayerNamesProvider";
 import { computePokemonRanks, rankForSumme } from "@/lib/ranking";
-import { maxEvolvedSumme } from "@/lib/evolutions";
 import { displayNameWithForm, formLabel, formsOfSpecies } from "@/lib/forms";
 import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
@@ -29,7 +33,9 @@ import { translations } from "@/lib/i18n/dictionary";
 import { routeName, pokemonName } from "@/lib/i18n/localize";
 import { formatEvolutionMethod } from "@/lib/evolutionMethods";
 import { LinksView } from "@/components/LinksView";
-import type { SoulLinkView } from "@/lib/types";
+import { resolveEncounterMon } from "@/lib/encounterMon";
+import { groupSoulLinks, isFoldedDonor, teamSlotsNeeded } from "@/lib/fusionGroups";
+import type { SoulLinkView, FusableEncounter, EvolutionOptions } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
@@ -71,20 +77,26 @@ export default async function LinksPage({
         )
       : new Set<number>();
 
-  const soulLinks = (
-    await prisma.soulLink.findMany({
-      where: { runId },
-      include: { encounters: true },
-    })
-  ).filter((link) => !failedRouteIds.has(link.routeId));
+  const rawSoulLinks = await prisma.soulLink.findMany({
+    where: { runId },
+    include: { encounters: true },
+  });
+  const soulLinks = rawSoulLinks.filter((link) => !failedRouteIds.has(link.routeId));
+  // Infinite Fusion: host encounter id -> its donor (the fusion's body).
+  const donorByHostId = new Map(
+    rawSoulLinks
+      .flatMap((link) => link.encounters)
+      .filter((e) => e.fusedIntoId !== null)
+      .map((e) => [e.fusedIntoId as number, e]),
+  );
   // Ranks are computed within the game's dex, so "Rang #X" means the same
   // thing the Pokédex tab shows for that game.
   const game = getGameOrDefault(gameId);
-  const pokemonList = getPokemonList(game.dexLimit, game.generation);
+  const pokemonList = getPokemonListForGame(game);
   // Alternate formes are NOT part of pokemonList (ids 10001+ are outside the
   // dex limit by construction) - they're a state a caught Pokémon switches
   // into, never something the Pokédex lists.
-  const formEntries = getPokemonForms(game.dexLimit, game.generation);
+  const formEntries = getPokemonFormsForGame(game);
   const ranks = computePokemonRanks(pokemonList);
 
   // Current level cap = the LAST DEFEATED Journey milestone with a cap (the
@@ -103,66 +115,35 @@ export default async function LinksPage({
   // the run's own added routes as well as the pack's.
   const routes = await getRoutesForRun(runId, gameId);
   const routeById = new Map(routes.map((route) => [route.id, route]));
+  const routeNameOf = (routeId: number) => {
+    const route = routeById.get(routeId);
+    return route ? routeName(route, lang) : `Route #${routeId}`;
+  };
+  // Encounter order = the position in routes.json, NOT the route id. Ids are
+  // frozen forever while the array order is the display order and gets
+  // reshuffled (FireRed's list was reordered), so sorting by id replays
+  // whatever order the pack happened to have when the ids were handed out.
+  // Routes no longer in the pack sort last rather than to the front.
+  const routeOrder = new Map(routes.map((r, i) => [r.id, i]));
+  const orderOfRoute = (routeId: number) => routeOrder.get(routeId) ?? Number.MAX_SAFE_INTEGER;
 
-  const views: SoulLinkView[] = soulLinks.map((link) => ({
-    id: link.id,
-    routeId: link.routeId,
-    routeName: (() => {
-      const route = routeById.get(link.routeId);
-      return route ? routeName(route, lang) : `Route #${link.routeId}`;
-    })(),
-    status: link.status,
-    teamPosition: link.teamPosition,
-    deathPlayer: link.deathPlayer,
-    deathCause: link.deathCause,
-    // Within a tile always show Player 1 above Player 2, never by strength.
-    encounters: [...link.encounters]
-      .sort((a, b) => (a.player === Player.PLAYER1 ? -1 : 1) - (b.player === Player.PLAYER1 ? -1 : 1))
-      .map((e) => {
-      // Links shows the current (possibly evolved) form - pokemonId (what was
-      // actually caught) is what the Tracker tab shows and never changes here.
-      const pokemon = getPokemonById(e.currentPokemonId, game.generation);
-      const evo = getEvolutionById(e.currentPokemonId, evoOptions);
-      // Alternate formes of whatever it currently is (base included), so the
-      // picker can switch both ways. Empty for the vast majority of species.
-      const speciesId = pokemon ? pokemon.baseId ?? pokemon.id : e.currentPokemonId;
-      return {
-        id: e.id,
-        player: e.player,
-        pokemonId: e.currentPokemonId,
-        pokemonName: pokemon
-          ? displayNameWithForm(pokemon, lang)
-          : `#${e.currentPokemonId}`,
-        formOptions: formsOfSpecies(speciesId, pokemonList, formEntries).map((f) => ({
-          id: f.id,
-          label: formLabel(f, lang),
-          summe: f.stats.Summe,
-        })),
-        // Gated here so display components stay settings-agnostic.
-        nickname: settings.nicknames ? e.nickname : null,
-        types: pokemon?.types ?? [],
-        summe: pokemon?.stats.Summe ?? 0,
-        // Best BST the caught form could still reach by evolving in this game.
-        summeMax: maxEvolvedSumme(
-          e.currentPokemonId,
-          (id) => getEvolutionById(id, evoOptions)?.evolvesTo ?? [],
-          (id) => getPokemonById(id, game.generation)?.stats.Summe ?? 0,
-          game.dexLimit,
-        ),
-        // A forme isn't in the ranked pool (that would shift every species'
-        // rank); rank it against the species by its own BST instead.
-        rang:
-          ranks.get(e.currentPokemonId) ??
-          (pokemon ? rankForSumme(pokemonList, pokemon.stats.Summe) : 0),
-        status: e.status,
-        isStatic: e.isStatic,
-        shiny: e.shiny,
-        // Evolutions beyond the game's dex (e.g. Crobat in Gen 1, Magnezone
-        // in Gen 3) don't exist in that game - filter them out entirely.
-        evolvesTo: (evo?.evolvesTo ?? [])
-          .filter((id) => id <= game.dexLimit)
-          .map((id) => {
-          const p = getPokemonById(id, game.generation);
+  // Shared by a host row and its donor's body sub-object - see EvolutionOptions.
+  function buildEvolutionOptions(currentPokemonId: number): EvolutionOptions {
+    const pokemon = getPokemonByIdForGame(game, currentPokemonId);
+    const evo = getEvolutionById(currentPokemonId, evoOptions);
+    const speciesId = pokemon ? pokemon.baseId ?? pokemon.id : currentPokemonId;
+    return {
+      formOptions: formsOfSpecies(speciesId, pokemonList, formEntries).map((f) => ({
+        id: f.id,
+        label: formLabel(f, lang),
+        summe: f.stats.Summe,
+      })),
+      // Evolutions beyond the game's dex (e.g. Crobat in Gen 1, Magnezone in
+      // Gen 3) don't exist in that game - filter them out entirely.
+      evolvesTo: (evo?.evolvesTo ?? [])
+        .filter((id) => isInDex(game, id))
+        .map((id) => {
+          const p = getPokemonByIdForGame(game, id);
           const targetEvo = getEvolutionById(id, evoOptions);
           const method = targetEvo?.method ?? null;
           return {
@@ -174,30 +155,155 @@ export default async function LinksPage({
             available: method?.kind === "level" && method.level <= allowedLevel,
           };
         }),
-        evolvesFrom: (() => {
-          // Pre-evos introduced later (e.g. Pichu for Pikachu) don't exist
-          // in older games either.
-          if (!evo?.evolvesFrom || evo.evolvesFrom > game.dexLimit) return null;
-          const p = getPokemonById(evo.evolvesFrom, game.generation);
-          return { id: evo.evolvesFrom, name: p ? pokemonName(p, lang) : `#${evo.evolvesFrom}` };
-        })(),
-      };
-    }),
-  }));
+      evolvesFrom: (() => {
+        // Pre-evos introduced later (e.g. Pichu for Pikachu) don't exist in
+        // older games either.
+        if (!evo?.evolvesFrom || !isInDex(game, evo.evolvesFrom)) return null;
+        const p = getPokemonByIdForGame(game, evo.evolvesFrom);
+        return { id: evo.evolvesFrom, name: p ? pokemonName(p, lang) : `#${evo.evolvesFrom}` };
+      })(),
+    };
+  }
 
-  // Encounter order = the position in routes.json, NOT the route id. Ids are
-  // frozen forever while the array order is the display order and gets
-  // reshuffled (FireRed's list was reordered), so sorting by id replays
-  // whatever order the pack happened to have when the ids were handed out.
-  // Routes no longer in the pack sort last rather than to the front.
-  const routeOrder = new Map(routes.map((r, i) => [r.id, i]));
+  const encounterMonDeps = {
+    pokemonById: (id: number) => getPokemonByIdForGame(game, id),
+    evolvesTo: (id: number) => getEvolutionById(id, evoOptions)?.evolvesTo ?? [],
+    inDex: (id: number) => isInDex(game, id),
+    lang,
+  };
+
+  // One card per fusion GROUP, not per route (see src/lib/fusionGroups.ts):
+  // once a fusion joins two routes, a per-route card pairs one player's fusion
+  // with the other player's leftover donor. Inside a group every player's
+  // battle units are listed - a donor is folded into its host's tile as the
+  // body, never a tile of its own. Without fusions every group is exactly one
+  // link, which is the old one-card-per-route view unchanged.
+  const orderedLinks = [...soulLinks].sort((a, b) => orderOfRoute(a.routeId) - orderOfRoute(b.routeId));
+  const linkById = new Map(orderedLinks.map((link) => [link.id, link]));
+  const groups = groupSoulLinks(
+    orderedLinks.map((link) => link.id),
+    orderedLinks.flatMap((link) => link.encounters),
+  );
+
+  const views: SoulLinkView[] = groups.map((linkIds) => {
+    const members = linkIds.map((id) => linkById.get(id)!);
+    const first = members[0];
+    const groupEncounters = members.flatMap((link) => link.encounters);
+    const groupEncounterIds = new Set(groupEncounters.map((e) => e.id));
+    // markDead/markAlive propagate across the whole group, so its links share
+    // one status; "every link dead" is only the defensive reading of it.
+    const deadMember = members.find((link) => link.status === LinkStatus.DEAD);
+    // Capped at what the group needs: a run fused before group slot
+    // bookkeeping existed can still hold a surplus slot, which is shown (and
+    // treated by setTeamSlot) as free.
+    const teamPositions = members
+      .flatMap((link) => (link.teamPosition === null ? [] : [link.teamPosition]))
+      .sort((a, b) => a - b)
+      .slice(0, teamSlotsNeeded(groupEncounters));
+    // Player 1 above Player 2, never by strength; within a player, route order.
+    const units = groupEncounters
+      .filter((e) => !isFoldedDonor(e, groupEncounterIds))
+      .sort((a, b) =>
+        a.player !== b.player
+          ? a.player === Player.PLAYER1
+            ? -1
+            : 1
+          : orderOfRoute(a.routeId) - orderOfRoute(b.routeId),
+      );
+
+    return {
+      id: first.id,
+      linkIds,
+      routeId: first.routeId,
+      routeName: members.map((link) => routeNameOf(link.routeId)).join(" + "),
+      status: members.every((link) => link.status === LinkStatus.DEAD) ? LinkStatus.DEAD : LinkStatus.ALIVE,
+      teamPosition: teamPositions[0] ?? null,
+      teamPositions,
+      deathPlayer: deadMember?.deathPlayer ?? null,
+      deathCause: deadMember?.deathCause ?? null,
+      encounters: units.map((e) => {
+        // Links shows the current (possibly evolved) form - pokemonId (what
+        // was actually caught) is what the Tracker tab shows and never
+        // changes here.
+        const donor = donorByHostId.get(e.id);
+        const effective = resolveEncounterMon(e.currentPokemonId, donor?.currentPokemonId, encounterMonDeps);
+        const pokemon = getPokemonByIdForGame(game, e.currentPokemonId);
+        return {
+          id: e.id,
+          player: e.player,
+          routeName: routeNameOf(e.routeId),
+          pokemonId: e.currentPokemonId,
+          pokemonName: effective?.name ?? `#${e.currentPokemonId}`,
+          // Gated here so display components stay settings-agnostic.
+          nickname: settings.nicknames ? e.nickname : null,
+          types: effective?.types ?? [],
+          summe: effective?.stats.Summe ?? 0,
+          summeMax: effective?.summeMax ?? 0,
+          // A forme isn't in the ranked pool (that would shift every
+          // species' rank); rank it against the species by its own BST
+          // instead. No rank at all for a fusion - see CLAUDE.md.
+          rang: donor
+            ? 0
+            : (ranks.get(e.currentPokemonId) ??
+              (pokemon ? rankForSumme(pokemonList, pokemon.stats.Summe) : 0)),
+          status: e.status,
+          isStatic: e.isStatic,
+          shiny: e.shiny,
+          body: donor
+            ? (() => {
+                const bodyPokemon = getPokemonByIdForGame(game, donor.currentPokemonId);
+                return {
+                  encounterId: donor.id,
+                  pokemonId: donor.currentPokemonId,
+                  pokemonName: bodyPokemon
+                    ? displayNameWithForm(bodyPokemon, lang)
+                    : `#${donor.currentPokemonId}`,
+                  routeName: routeNameOf(donor.routeId),
+                  ...buildEvolutionOptions(donor.currentPokemonId),
+                };
+              })()
+            : null,
+          ...buildEvolutionOptions(e.currentPokemonId),
+        };
+      }),
+    };
+  });
+
+  // Dead cards last; otherwise the order of each card's first route.
   views.sort((a, b) => {
     if (a.status !== b.status) return a.status === "DEAD" ? 1 : -1;
-    return (
-      (routeOrder.get(a.routeId) ?? Number.MAX_SAFE_INTEGER) -
-      (routeOrder.get(b.routeId) ?? Number.MAX_SAFE_INTEGER)
-    );
+    return orderOfRoute(a.routeId) - orderOfRoute(b.routeId);
   });
+
+  // Infinite Fusion: every catch that could be used as either side of a new
+  // fusion - CAUGHT, its link ALIVE and actually formed (a boxed catch of a
+  // never-formed pair isn't usable), not already a donor, and not already a
+  // host. Flat, run-wide list for the fuse dialog's picker (mirrors
+  // pokemonList/teamLinks), not per-card.
+  const hostIds = new Set(donorByHostId.keys());
+  const fusableEncounters: FusableEncounter[] = game.fusion
+    ? soulLinks
+        .filter((link) => link.status !== LinkStatus.DEAD)
+        .flatMap((link) =>
+          link.encounters
+            .filter(
+              (e) =>
+                e.status === EncounterStatus.CAUGHT &&
+                e.fusedIntoId === null &&
+                !hostIds.has(e.id),
+            )
+            .map((e) => {
+              const pokemon = getPokemonByIdForGame(game, e.currentPokemonId);
+              return {
+                id: e.id,
+                player: e.player,
+                pokemonId: e.currentPokemonId,
+                routeName: routeNameOf(link.routeId),
+                pokemonName: pokemon ? displayNameWithForm(pokemon, lang) : `#${e.currentPokemonId}`,
+              };
+            }),
+        )
+    : [];
 
   const heading = translations[lang].nav.links;
 
@@ -206,19 +312,19 @@ export default async function LinksPage({
     <div>
       <CanonicalRun runId={runId} />
       <PageHeader title={heading} />
-      <SpriteSetProvider spriteSet={game.spriteSet}>
+      <SpriteSetProvider spriteSet={game.spriteSet} fusion={getFusionSpriteConfigForGame(game)}>
         <PlayerNamesProvider names={settings.playerNames} lang={lang}>
           <PokemonDetailProvider
             pokemonList={pokemonList}
-            forms={getPokemonForms(game.dexLimit, game.generation)}
+            forms={getPokemonFormsForGame(game)}
             evolutions={getEvolutions(evoOptions)}
             moveData={{
               movesets: getMoveset(game.versionGroup),
-              moves: getMoves(lang, game.generation),
+              moves: getMovesForGame(game, lang),
             }}
             moveTypeHistory={getMoveTypeHistory()}
-            effectiveness={getEffectiveness(game.generation)}
-            generation={game.generation}
+            effectiveness={getEffectivenessForGame(game)}
+            generation={getDataGenerationForGame(game)}
             dexLimit={game.dexLimit}
             lang={lang}
           >
@@ -229,6 +335,9 @@ export default async function LinksPage({
               soulLinks={views}
               freeTeam={settings.freeTeam}
               pokemonList={pokemonList}
+              fusionEnabled={Boolean(game.fusion)}
+              fusableEncounters={fusableEncounters}
+              customSpritesOnly={settings.customSpritesOnly}
             />
           </PokemonDetailProvider>
         </PlayerNamesProvider>

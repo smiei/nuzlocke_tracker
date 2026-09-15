@@ -33,6 +33,11 @@ describe("parseRunSettings", () => {
     const s = parseRunSettings('{"playerNames":{"PLAYER1": 42}}');
     expect(s.playerNames).toEqual({ PLAYER1: "", PLAYER2: "" });
   });
+
+  it("defaults customSpritesOnly to off and parses it like any other toggle", () => {
+    expect(DEFAULT_RUN_SETTINGS.customSpritesOnly).toBe(false);
+    expect(parseRunSettings('{"customSpritesOnly": true}').customSpritesOnly).toBe(true);
+  });
 });
 
 describe("serializePresetSettings", () => {

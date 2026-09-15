@@ -10,7 +10,8 @@ import { MoveDetailPanel } from "@/components/MoveDetailPanel";
 import type { EffectivenessTable } from "@/lib/effectiveness";
 import { getTypesForGeneration } from "@/lib/effectiveness";
 import { computePokemonRanks, rankForSumme } from "@/lib/ranking";
-import { baseSpeciesId, formLabel, formsOfSpecies, movepoolId } from "@/lib/forms";
+import { baseSpeciesId, displayNameWithForm, formLabel, formsOfSpecies, movepoolId } from "@/lib/forms";
+import { computeFusionStats, computeFusionTypes } from "@/lib/fusion";
 import type { Lang } from "@/lib/i18n/dictionary";
 import { translations } from "@/lib/i18n/dictionary";
 import { pokemonName } from "@/lib/i18n/localize";
@@ -120,8 +121,12 @@ export function PokemonDetailModal({
   lang,
   onSelect,
   onClose,
+  body = null,
 }: {
   pokemon: Pokemon;
+  // Infinite Fusion: set when this is a fusion's card - `pokemon` is then the
+  // head and `body` the body.
+  body?: Pokemon | null;
   allPokemon: Pokemon[];
   forms?: Pokemon[];
   evolutions: EvolutionEntry[];
@@ -160,7 +165,20 @@ export function PokemonDetailModal({
   const runParam = searchParams.get("run");
   const analyzeHref = `/typen?${runParam ? `run=${runParam}&` : ""}pokemon=${pokemon.id}`;
 
-  const types = pokemon.types;
+  // Infinite Fusion: a fusion's card shows the fused sheet - name, sprite,
+  // types, matchups and stats of the pair - and its two components, each of
+  // which opens its own single-species card. Rank, formes, the evolution tree
+  // and the move list are per-species, so they stay off a fusion's card.
+  const fusion = body
+    ? {
+        name: `${displayNameWithForm(pokemon, lang)} / ${displayNameWithForm(body, lang)}`,
+        types: [...new Set(computeFusionTypes(pokemon, body))],
+        stats: computeFusionStats(pokemon, body),
+      }
+    : null;
+  const displayName = fusion?.name ?? pokemonName(pokemon, lang);
+  const types = fusion?.types ?? pokemon.types;
+  const stats = fusion?.stats ?? pokemon.stats;
   // The evolution tree is keyed by SPECIES, so a forme resolves to its base.
   // The MOVEPOOL is not: Deoxys/Wormadam/Shaymin learn different moves per
   // forme, so prefer the forme's own rows and fall back only when it has none.
@@ -253,7 +271,7 @@ export function PokemonDetailModal({
     <Modal
       open
       onClose={onClose}
-      title={pokemonName(pokemon, lang)}
+      title={displayName}
       titleHidden
       closeLabel={t.dialog.cancel}
       size="md"
@@ -268,8 +286,13 @@ export function PokemonDetailModal({
               shrink-0 keeps it at its natural width so the evolution tree
               beside it takes the remaining space. */}
           <div className="flex shrink-0 flex-col items-center text-center">
-            <h2 className="text-lg font-semibold text-ink">{pokemonName(pokemon, lang)}</h2>
-            <PokemonSprite pokemonId={pokemon.id} name={pokemonName(pokemon, lang)} size="xl" />
+            <h2 className="text-lg font-semibold text-ink">{displayName}</h2>
+            <PokemonSprite
+              pokemonId={pokemon.id}
+              bodyId={body?.id ?? null}
+              name={displayName}
+              size="xl"
+            />
             <div className="mt-1.5 flex flex-wrap justify-center gap-1">
               {types.map((type) => (
                 <TypeBadge key={type} type={type} lang={lang} />
@@ -279,7 +302,27 @@ export function PokemonDetailModal({
           {/* Right column: the evolution family, centred against the sprite.
               pr-10 keeps it clear of the pinned close button. */}
           <div className="flex min-w-0 flex-1 self-center flex-col gap-0.5 pr-10">
-            {!familyHasEvolution ? (
+            {fusion && body ? (
+              <div className="flex flex-wrap justify-center gap-1">
+                {[
+                  { role: td.fusionHead, mon: pokemon },
+                  { role: td.fusionBody, mon: body },
+                ].map(({ role, mon }) => (
+                  <button
+                    key={role}
+                    type="button"
+                    onClick={() => onSelect(mon.id)}
+                    className="flex w-[5.5rem] shrink-0 flex-col items-center rounded-md px-1 py-1 text-center text-ink-muted transition-colors hover:bg-hover hover:text-ink"
+                  >
+                    <span className="text-xs uppercase tracking-wide text-ink-subtle">{role}</span>
+                    <PokemonSprite pokemonId={mon.id} name={displayNameWithForm(mon, lang)} size="md" />
+                    <span className="max-w-full truncate text-xs leading-tight">
+                      {displayNameWithForm(mon, lang)}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            ) : !familyHasEvolution ? (
               <p className="text-xs text-ink-subtle">{td.noEvolution}</p>
             ) : (
               evoStages.map((ids, stage) => (
@@ -296,19 +339,26 @@ export function PokemonDetailModal({
             of loose label: value lines. */}
         <div className="mb-4 space-y-2">
           <div className="grid grid-cols-4 gap-1.5">
-            <MetaTile label={td.rank} value={`#${rank}`} />
-            <MetaTile label={td.dexNo} value={`#${String(pokemon.id).padStart(3, "0")}`} />
-            <MetaTile label={t.pokedex.columns.summe} value={String(pokemon.stats.Summe)} />
+            <MetaTile label={td.rank} value={fusion ? "—" : `#${rank}`} />
+            <MetaTile
+              label={td.dexNo}
+              value={
+                body
+                  ? `#${String(pokemon.id).padStart(3, "0")}/${String(body.id).padStart(3, "0")}`
+                  : `#${String(pokemon.id).padStart(3, "0")}`
+              }
+            />
+            <MetaTile label={t.pokedex.columns.summe} value={String(stats.Summe)} />
             <MetaTile
               label={td.weight}
               value={
-                pokemon.weight != null
+                !fusion && pokemon.weight != null
                   ? `${pokemon.weight.toLocaleString(lang, { maximumFractionDigits: 1 })} kg`
                   : "—"
               }
             />
           </div>
-          {formOptions.length > 1 && (
+          {!fusion && formOptions.length > 1 && (
             <div>
               <div className="mb-1 text-xs uppercase tracking-wide text-ink-subtle">
                 {td.forms}
@@ -332,13 +382,17 @@ export function PokemonDetailModal({
               </div>
             </div>
           )}
-          <Link
-            href={analyzeHref}
-            onClick={onClose}
-            className="flex h-10 items-center justify-center gap-1.5 rounded-md border border-line px-3 text-sm font-medium text-ink-muted transition-colors hover:bg-hover hover:text-ink"
-          >
-            {td.openInAnalyze} <span aria-hidden>→</span>
-          </Link>
+          {/* Kampf & Fang has no body picker yet, so it could only show the
+              head - see CLAUDE.md's Known gaps. */}
+          {!fusion && (
+            <Link
+              href={analyzeHref}
+              onClick={onClose}
+              className="flex h-10 items-center justify-center gap-1.5 rounded-md border border-line px-3 text-sm font-medium text-ink-muted transition-colors hover:bg-hover hover:text-ink"
+            >
+              {td.openInAnalyze} <span aria-hidden>→</span>
+            </Link>
+          )}
           {!blindflug && types.length > 0 && (
             <div className="pt-1">
               <h3 className="mb-1 text-xs font-semibold uppercase tracking-wide text-ink-muted">
@@ -359,8 +413,8 @@ export function PokemonDetailModal({
           {td.stats}
         </h3>
         <div className="mb-4 space-y-1">
-          {(pokemon.stats.Spezial !== undefined ? STAT_ROWS_GEN1 : STAT_ROWS).map(({ key, labelKey }) => {
-            const value = pokemon.stats[key] ?? 0;
+          {(stats.Spezial !== undefined ? STAT_ROWS_GEN1 : STAT_ROWS).map(({ key, labelKey }) => {
+            const value = stats[key] ?? 0;
             return (
               <div key={key} className="flex items-center gap-2">
                 <span className="w-14 shrink-0 text-xs text-ink-muted">
@@ -383,13 +437,13 @@ export function PokemonDetailModal({
               {t.pokedex.columns.summe}
             </span>
             <span className="w-8 shrink-0 text-right text-xs font-bold tabular-nums">
-              {pokemon.stats.Summe}
+              {stats.Summe}
             </span>
             {/* BST scaled to the generation's cap (720 from Gen 4, else 680). */}
             <span className="h-2 flex-1 overflow-hidden rounded-full bg-sunken">
               <span
                 className="block h-full rounded-full bg-ink-muted"
-                style={{ width: `${Math.min(100, (pokemon.stats.Summe / maxBST) * 100)}%` }}
+                style={{ width: `${Math.min(100, (stats.Summe / maxBST) * 100)}%` }}
               />
             </span>
           </div>
@@ -398,7 +452,7 @@ export function PokemonDetailModal({
         {/* Full level-up move list (bottom). Under Blindflug the heading stays
             and only the list goes: the heading is what names the thing that is
             missing, and without it the notice is a riddle. */}
-        {(blindflug || moveList.length > 0) && (
+        {!fusion && (blindflug || moveList.length > 0) && (
           <div>
             <h3 className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-ink-muted">
               {td.moves}
