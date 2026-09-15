@@ -44,8 +44,9 @@ export type OverviewMemorialEntry = {
   soulLinkId: number;
   routeName: string;
   // name = nickname when set (else species); species carries the species name
-  // in parentheses when a nickname is shown.
-  pokemon: { id: number; name: string; species: string | null }[];
+  // in parentheses when a nickname is shown. Infinite Fusion: bodyId is set
+  // for a fusion, whose name/species are then "Head / Body".
+  pokemon: { id: number; bodyId: number | null; name: string; species: string | null }[];
   deathPlayer: Player | null;
   deathCause: string | null;
   // Journey milestone the run had reached when this died, plus its label.
@@ -377,7 +378,12 @@ export function OverviewView({
                     // the sprite does on the Team/Encounter tabs.
                     const body = (
                       <>
-                        <PokemonSprite pokemonId={p.id} name={p.species ?? p.name} size="sm" />
+                        <PokemonSprite
+                          pokemonId={p.id}
+                          bodyId={p.bodyId}
+                          name={p.species ?? p.name}
+                          size="sm"
+                        />
                         <span className="text-sm text-ink">
                           {p.name}
                           {p.species && <span className="text-ink-subtle"> ({p.species})</span>}
@@ -388,7 +394,7 @@ export function OverviewView({
                       <button
                         key={i}
                         type="button"
-                        onClick={() => detail.open(p.id)}
+                        onClick={() => detail.open(p.id, p.bodyId)}
                         title={p.species ?? p.name}
                         className="flex min-h-10 cursor-pointer items-center gap-1 rounded-md transition-opacity hover:opacity-70"
                       >

@@ -21,7 +21,7 @@ import {
 import { teamOffensiveCoverage } from "@/lib/effectiveness";
 import { attackTypesAtLevel } from "@/lib/learnset";
 import { resolveEncounterMon } from "@/lib/encounterMon";
-import { isFoldedDonor, teamLinkIds } from "@/lib/fusionGroups";
+import { groupSoulLinks, isFoldedDonor, teamLinkIds } from "@/lib/fusionGroups";
 import { computeLevelCapProgress, computeRouteProgress, eliteFourIndex } from "@/lib/progress";
 import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
@@ -226,50 +226,89 @@ export default async function OverviewPage({
   let teamSummeMax = 0;
   const memorial: OverviewMemorialEntry[] = [];
 
-  for (const link of soulLinks) {
-    const isDead = link.status === LinkStatus.DEAD;
-    if (isDead) {
-      totalDeaths++;
-      // Death-tally scoreboard: only pairs that actually formed (both
-      // players caught) count, same as the Journey tab's version did.
-      if (link.encounters.length >= 2) {
-        if (link.deathPlayer) caused.set(link.deathPlayer, (caused.get(link.deathPlayer) ?? 0) + 1);
-        else unattributedDeaths++;
-      }
-      const route = routeById.get(link.routeId);
-      memorial.push({
-        soulLinkId: link.id,
-        routeName: route ? routeName(route, lang) : `Route #${link.routeId}`,
-        pokemon: link.encounters.map((e) => {
-          const p = getPokemonByIdForGame(game, e.currentPokemonId);
-          const species = p ? pokemonName(p, lang) : `#${e.currentPokemonId}`;
-          const nick = settings.nicknames && e.nickname ? e.nickname : null;
-          return { id: e.currentPokemonId, name: nick ?? species, species: nick ? species : null };
-        }),
-        deathPlayer: link.deathPlayer,
-        deathCause: link.deathCause,
-        deathLevelCapId: link.deathLevelCapId,
-        deathPointLabel:
-          link.deathLevelCapId !== null
-            ? (() => {
-                const cap = levelCapItems.find((c) => c.id === link.deathLevelCapId);
-                return cap ? `${localizeName(cap.names, lang)} · ${localizeName(cap.location, lang)}` : null;
-              })()
-            : null,
-        // null = predates death-point tracking; those park at the top until
-        // edited. A recorded death with no cap yet has diedAt set and sorts
-        // ahead of every cap instead.
-        recorded: link.diedAt !== null,
-        sortIndex:
-          link.diedAt === null
-            ? -Infinity
-            : link.deathLevelCapId === null
-              ? -1
-              : (capOrder.get(link.deathLevelCapId) ?? Number.MAX_SAFE_INTEGER),
-        diedAt: link.diedAt?.getTime() ?? null,
-      });
+  // Deaths and the Memorial count fusion GROUPS (see src/lib/fusionGroups.ts),
+  // the unit markDead kills in one go and the Team tab shows as one dead card:
+  // a dead fusion is one death with both players' fused Pokémon, not one entry
+  // per route with the body listed as a Pokémon of its own. Without fusions
+  // every group is one link - the old one-entry-per-link Memorial.
+  const deadLinks = soulLinks.filter((link) => link.status === LinkStatus.DEAD);
+  const deadLinkById = new Map(deadLinks.map((link) => [link.id, link]));
+  const routeNameOf = (routeId: number) => {
+    const route = routeById.get(routeId);
+    return route ? routeName(route, lang) : `Route #${routeId}`;
+  };
+  for (const group of groupSoulLinks(
+    deadLinks.map((link) => link.id),
+    deadLinks.flatMap((link) => link.encounters),
+  )) {
+    const members = group.map((id) => deadLinkById.get(id)!);
+    // markDead/setDeathPoint write the same death to every link of a group.
+    const first = members[0];
+    const groupEncounters = members.flatMap((link) => link.encounters);
+    const groupEncounterIds = new Set(groupEncounters.map((e) => e.id));
+    totalDeaths++;
+    // Death-tally scoreboard: only pairs that actually formed (both
+    // players caught) count, same as the Journey tab's version did.
+    if (members.every((link) => link.encounters.length >= 2)) {
+      if (first.deathPlayer) caused.set(first.deathPlayer, (caused.get(first.deathPlayer) ?? 0) + 1);
+      else unattributedDeaths++;
     }
-    if (isDead) continue;
+    memorial.push({
+      soulLinkId: first.id,
+      routeName: members.map((link) => routeNameOf(link.routeId)).join(" + "),
+      // Player 1 above Player 2, then route order - same as the Team tab.
+      pokemon: groupEncounters
+        .filter((e) => !isFoldedDonor(e, groupEncounterIds))
+        .sort(
+          (a, b) =>
+            (a.player === b.player ? 0 : a.player === Player.PLAYER1 ? -1 : 1) ||
+            (routeOrder.get(a.routeId) ?? Number.MAX_SAFE_INTEGER) -
+              (routeOrder.get(b.routeId) ?? Number.MAX_SAFE_INTEGER),
+        )
+        .map((e) => {
+          const donor = donorByHostId.get(e.id);
+          const body = donor && groupEncounterIds.has(donor.id) ? donor : undefined;
+          const head = getPokemonByIdForGame(game, e.currentPokemonId);
+          const bodyPokemon = body ? getPokemonByIdForGame(game, body.currentPokemonId) : undefined;
+          const species = head
+            ? bodyPokemon
+              ? `${pokemonName(head, lang)} / ${pokemonName(bodyPokemon, lang)}`
+              : pokemonName(head, lang)
+            : `#${e.currentPokemonId}`;
+          const nick = settings.nicknames && e.nickname ? e.nickname : null;
+          return {
+            id: e.currentPokemonId,
+            bodyId: body?.currentPokemonId ?? null,
+            name: nick ?? species,
+            species: nick ? species : null,
+          };
+        }),
+      deathPlayer: first.deathPlayer,
+      deathCause: first.deathCause,
+      deathLevelCapId: first.deathLevelCapId,
+      deathPointLabel:
+        first.deathLevelCapId !== null
+          ? (() => {
+              const cap = levelCapItems.find((c) => c.id === first.deathLevelCapId);
+              return cap ? `${localizeName(cap.names, lang)} · ${localizeName(cap.location, lang)}` : null;
+            })()
+          : null,
+      // null = predates death-point tracking; those park at the top until
+      // edited. A recorded death with no cap yet has diedAt set and sorts
+      // ahead of every cap instead.
+      recorded: first.diedAt !== null,
+      sortIndex:
+        first.diedAt === null
+          ? -Infinity
+          : first.deathLevelCapId === null
+            ? -1
+            : (capOrder.get(first.deathLevelCapId) ?? Number.MAX_SAFE_INTEGER),
+      diedAt: first.diedAt?.getTime() ?? null,
+    });
+  }
+
+  for (const link of soulLinks) {
+    if (link.status === LinkStatus.DEAD) continue;
     for (const e of link.encounters) {
       if (e.status !== EncounterStatus.CAUGHT) continue;
       caught.set(e.player, (caught.get(e.player) ?? 0) + 1);

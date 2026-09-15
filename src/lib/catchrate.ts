@@ -217,7 +217,6 @@ const CONDITIONAL_BALLS = new Set<BallId>([
   "repeat",
   "dive",
   "dusk",
-  "level",
   "lure",
   "moon",
   "love",
@@ -231,11 +230,23 @@ const CONDITIONAL_BALLS_INFINITE_FUSION = new Set<BallId>([
   "repeat",
   "dive",
   "dusk",
-  "level",
   "lure",
   "moon",
   "love",
 ]);
+
+// The Level Ball compares YOUR active Pokémon's level against the wild one's
+// (both entered on the card, so it needs no checkbox): ×8 at four times the
+// level or more, ×4 at twice or more, ×2 when higher at all, else ×1 - the
+// same steps in Gold/Silver/Crystal, HeartGold/SoulSilver and Infinite Fusion.
+// Without an own level it gives nothing.
+export function levelBallMultiplier(ownLevel: number | undefined, wildLevel: number): number {
+  if (ownLevel === undefined) return 1;
+  if (ownLevel >= wildLevel * 4) return 8;
+  if (ownLevel >= wildLevel * 2) return 4;
+  if (ownLevel > wildLevel) return 2;
+  return 1;
+}
 
 export function ballHasCondition(ball: BallId, versionGroup?: string): boolean {
   return versionGroup === INFINITE_FUSION_VERSION_GROUP
@@ -266,7 +277,7 @@ const STATUS_MULTIPLIERS_GEN5: Record<StatusId, number> = {
 // carries over, so this only overrides what differs.
 function ballMultiplierGen5(
   ball: BallId,
-  ctx: { types: string[]; level: number; turn: number },
+  ctx: { types: string[]; level: number; ownLevel?: number; turn: number },
 ): number {
   switch (ball) {
     case "quick":
@@ -283,7 +294,7 @@ function ballMultiplierGen5(
 
 function ballMultiplierGen34(
   ball: BallId,
-  ctx: { types: string[]; level: number; turn: number },
+  ctx: { types: string[]; level: number; ownLevel?: number; turn: number },
 ): number {
   switch (ball) {
     case "great":
@@ -305,6 +316,18 @@ function ballMultiplierGen34(
       return ctx.turn === 1 ? 4 : 1;
     case "dusk":
       return 3.5;
+    // HeartGold/SoulSilver's Apricorn balls, the only Gen 4 games with them.
+    // They used to fall through to ×1 here while their notes promised the
+    // bonus; lure/moon/fast/love still sit behind the condition checkbox.
+    case "level":
+      return levelBallMultiplier(ctx.ownLevel, ctx.level);
+    case "lure":
+      return 3;
+    case "moon":
+    case "fast":
+      return 4;
+    case "love":
+      return 8;
     // heavy shifts the catch rate itself (see effectiveBaseRate), sport is a
     // plain ball; poke, master (guaranteed), luxury, premier, heal likewise.
     default:
@@ -314,7 +337,7 @@ function ballMultiplierGen34(
 
 // Gen 2 multipliers; the conditional balls assume a favorable condition
 // (noted in the UI). Friend Ball has no catch bonus at all.
-function ballMultiplierGen2(ball: BallId): number {
+function ballMultiplierGen2(ball: BallId, ctx: { level: number; ownLevel?: number }): number {
   switch (ball) {
     case "great":
     case "park":
@@ -324,6 +347,7 @@ function ballMultiplierGen2(ball: BallId): number {
     case "lure":
       return 3;
     case "level":
+      return levelBallMultiplier(ctx.ownLevel, ctx.level);
     case "moon":
     case "fast":
       return 4;
@@ -363,6 +387,9 @@ export type CatchInput = {
   status: StatusId;
   types: string[];
   turn: number; // battle turn (Timer/Quick Ball)
+  // Your own active Pokémon's level - only the Level Ball uses it (`level` is
+  // the wild Pokémon's).
+  ownLevel?: number;
   // Infinite Fusion only: the target is a fusion (Fusion Ball) and its base
   // Speed (Fast Ball).
   isFusion?: boolean;
@@ -409,7 +436,14 @@ function computeGen2(input: CatchInput): CatchResult {
   }
   const hpFrac = Math.min(100, Math.max(1, input.hpPercent)) / 100;
   const conditionOff = ballHasCondition(input.ball) && input.conditionMet === false;
-  const mult = conditionOff ? 1 : ballMultiplierGen2(input.ball);
+  const mult = conditionOff ? 1 : ballMultiplierGen2(input.ball, input);
+  // Gold/Silver/Crystal's Level Ball skips the HP factor and the status bonus
+  // altogether (a cartridge bug, per Bulbapedia's Level Ball page): only the
+  // level-scaled rate counts.
+  if (input.ball === "level") {
+    const levelValue = Math.min(255, Math.max(1, Math.floor(effectiveBaseRate(input) * mult)));
+    return { guaranteed: false, chance: levelValue / 256, ballText: `×${mult}`, statusText: "+0" };
+  }
   const bonus = input.status === "sleep" || input.status === "freeze" ? 10 : 0;
   const value = Math.min(
     255,
@@ -431,6 +465,7 @@ function computeGen34(input: CatchInput): CatchResult {
     : ballMultiplierGen34(input.ball, {
         types: input.types,
         level: input.level,
+        ownLevel: input.ownLevel,
         turn: input.turn,
       });
   const statusBonus = STATUS_MULTIPLIERS[input.status];
@@ -463,6 +498,7 @@ function computeGen5(input: CatchInput): CatchResult {
     : ballMultiplierGen5(input.ball, {
         types: input.types,
         level: input.level,
+        ownLevel: input.ownLevel,
         turn: input.turn,
       });
   const statusBonus = STATUS_MULTIPLIERS_GEN5[input.status];
@@ -558,8 +594,8 @@ function modifiedRateInfiniteFusion(input: CatchInput): { rate: number; ballText
     case "fast":
       return times((input.baseSpeed ?? 0) >= 100 ? 4 : 1, true);
     case "level":
-      // ×2/×4/×8 by the level ratio; ×4 assumed, like the other games.
-      return times(conditionOff ? 1 : 4, true);
+      // The game compares the highest level on your side of the field.
+      return times(levelBallMultiplier(input.ownLevel, input.level), true);
     case "lure":
       return times(conditionOff ? 1 : 3, true);
     case "love":

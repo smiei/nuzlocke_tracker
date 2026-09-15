@@ -490,14 +490,25 @@ export async function setDeathPoint(
     return { success: false, error: { key: "unknownLevelCap", id: levelCapId } };
   }
 
-  await prisma.soulLink.update({
-    where: { id: soulLinkId },
-    data: {
-      deathLevelCapId: levelCapId,
-      // Setting a point marks it as recorded; clearing sends it back to the
-      // unknown group.
-      diedAt: levelCapId === null ? null : soulLink.diedAt ?? new Date(),
-    },
+  // Infinite Fusion: a fusion group died as one (markDead) and is one Memorial
+  // entry, so its death point belongs to every link of the group. A plain
+  // link is a group of one.
+  await prisma.$transaction(async (tx) => {
+    const groupLinks = await tx.soulLink.findMany({
+      where: { id: { in: await fusionGroupLinkIds(tx, runId, soulLinkId) } },
+    });
+    const now = new Date();
+    for (const link of groupLinks) {
+      await tx.soulLink.update({
+        where: { id: link.id },
+        data: {
+          deathLevelCapId: levelCapId,
+          // Setting a point marks it as recorded; clearing sends it back to
+          // the unknown group.
+          diedAt: levelCapId === null ? null : link.diedAt ?? now,
+        },
+      });
+    }
   });
 
   revalidatePath("/overview");

@@ -140,14 +140,26 @@ export type CatchSharedProps = {
 export type CatchBodyState = {
   ball: BallId;
   hpPercent: number;
+  // The wild Pokémon's level (Nest and Level Ball).
   level: number;
+  // Your own active Pokémon's level (Level Ball). Optional so card sets
+  // stored before it existed still load.
+  ownLevel?: number;
   status: StatusId;
   turn: number;
   conditionMet: boolean;
 };
 
 export function newCatchBody(): CatchBodyState {
-  return { ball: "poke", hpPercent: 100, level: 50, status: "none", turn: 1, conditionMet: true };
+  return {
+    ball: "poke",
+    hpPercent: 100,
+    level: 50,
+    ownLevel: 50,
+    status: "none",
+    turn: 1,
+    conditionMet: true,
+  };
 }
 
 // A module-scope component (not an inline closure like the old
@@ -282,6 +294,8 @@ export function CatchCardBody({
   const [caughtMsg, setCaughtMsg] = useState<string | null>(null);
   const [catching, startCatch] = useTransition();
   const levelInput = useClampedIntInput(level, 1, 100, 50, (n) => onChange({ level: n }));
+  const ownLevel = state.ownLevel ?? 50;
+  const ownLevelInput = useClampedIntInput(ownLevel, 1, 100, 50, (n) => onChange({ ownLevel: n }));
   const turnInput = useClampedIntInput(turn, 1, 99, 1, (n) => onChange({ turn: n }));
 
   const selected = pokemonList.find((p) => p.id === selectedId) ?? null;
@@ -332,6 +346,7 @@ export function CatchCardBody({
             weight,
             hpPercent,
             level,
+            ownLevel,
             ball,
             conditionMet,
             status,
@@ -436,7 +451,7 @@ export function CatchCardBody({
           </div>
         </div>
 
-        {ball === "nest" && (
+        {(ball === "nest" || ball === "level") && (
           <div className="col-span-2 sm:col-span-1">
             <label className={labelClass}>{t.levelLabel}</label>
             <div className="flex items-center gap-1">
@@ -454,6 +469,13 @@ export function CatchCardBody({
                 100
               </button>
             </div>
+          </div>
+        )}
+
+        {ball === "level" && (
+          <div className="col-span-2 sm:col-span-1">
+            <label className={labelClass}>{t.ownLevelLabel}</label>
+            <input type="text" inputMode="numeric" {...ownLevelInput} className={inputClass} />
           </div>
         )}
 
