@@ -189,6 +189,26 @@ body {
   font-family: var(--font-sans), system-ui, sans-serif;
 }
 
+/* The strip Android 15 draws its transparent status bar over on an installed
+   PWA - see the comment on the <div> in layout.tsx and on `viewportFit` in
+   the viewport export. Deliberately keyed off the raw OS media query, NOT
+   `.dark` / `@custom-variant dark`: Android chooses the glyph colour from the
+   PHONE's system setting regardless of what theme is active inside the app,
+   so a user who pins Light in-app while their phone is system-dark still
+   needs a dark strip here, or the (light) glyphs the OS insists on drawing
+   go invisible on it - the exact bug this exists to fix. Same two colours as
+   ThemeColorSync's THEME_COLORS / --canvas, kept in step by hand as usual. */
+.safe-area-top {
+  height: env(safe-area-inset-top, 0px);
+  background: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  .safe-area-top {
+    background: #09090b;
+  }
+}
+
 /* One focus ring for every interactive element. There were none at all before,
    and 17 `outline-none` declarations removing the browser default. */
 @layer base {

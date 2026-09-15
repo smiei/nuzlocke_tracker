@@ -61,12 +61,16 @@ export const viewport: Viewport = {
     { media: "(prefers-color-scheme: light)", color: "#ffffff" },
     { media: "(prefers-color-scheme: dark)", color: "#09090b" },
   ],
-  // Deliberately NOT setting viewportFit: "cover" or disabling zoom. The tab
-  // strip is sticky now (see StickyNav), but with the default fit iOS lays the
-  // standalone viewport out BELOW the status bar, so `sticky top-0` pins under
-  // it rather than behind it and there is still nothing to inset. Switching to
-  // "cover" would create that work rather than solve it.
+  // "cover": since Android 15, an installed standalone PWA is drawn
+  // edge-to-edge with a TRANSPARENT status bar - the clock/battery glyphs sit
+  // directly on the app's own pixels, coloured by the PHONE's system light/
+  // dark setting, never by this page's theme-color or `dark` class. Without
+  // "cover" the env(safe-area-inset-top) values below stay 0 and there is no
+  // way to paint that strip at all, which is what left it showing the app's
+  // own (possibly wrong-contrast) background - see .safe-area-top in
+  // globals.css and the <div> it's applied to in this file.
   // Pinch-zoom stays on - it matters on these dense tables.
+  viewportFit: "cover",
 };
 
 export default async function RootLayout({
@@ -84,6 +88,16 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
+        {/* Reserves and colours exactly the strip Android 15 draws its own
+            status-bar glyphs over. Their colour follows the PHONE's system
+            scheme, not this app's theme - so this div is deliberately styled
+            with a raw `prefers-color-scheme` media query in globals.css,
+            never the `dark` class next-themes toggles. Zero height (and so
+            invisible) anywhere env(safe-area-inset-top) is 0, which is every
+            non-edge-to-edge context: desktop, a plain browser tab, iOS unless
+            it turns out to need the same treatment (unverified - there is no
+            device to check that on from here). */}
+        <div aria-hidden className="safe-area-top" />
         {/* Hand-written instead of the app/manifest.ts file convention, and
             this is load-bearing: Next only ever puts crossOrigin on its
             auto-injected manifest link when VERCEL_ENV === "preview" (see
