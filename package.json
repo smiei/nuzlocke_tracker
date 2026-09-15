@@ -14,6 +14,7 @@
     "generate:evolutions": "node scripts/generate-evolutions.mjs",
     "generate:names": "node scripts/generate-names.mjs",
     "generate:learnsets": "node scripts/generate-learnsets.mjs",
+    "generate:if-species": "node scripts/generate-infinite-fusion-species.mjs",
     "download:sprites": "node scripts/download-sprites.mjs",
     "download:catchrates": "node scripts/download-catchrates.mjs",
     "download:badges": "node scripts/download-badges.mjs"
@@ -31,6 +32,7 @@
     "sharp": "^0.34.5"
   },
   "devDependencies": {
+    "@hyrious/marshal": "^0.3.4",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

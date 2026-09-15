@@ -559,8 +559,10 @@ const de = {
       rocket: "Rocket Ball: kein Fangbonus.",
       fusion: "Fusion Ball: ×3 gegen Fusionen (wird automatisch berücksichtigt, sobald ein Körper gewählt ist).",
     },
-    lastBallNote:
-      "Nicht berücksichtigt: Der letzte Ball seiner Sorte im Beutel kann einen kritischen Fang auslösen.",
+    lastBallLabel: "Letzter Ball dieser Sorte im Beutel",
+    lastBallHint: "Dann ist ein kritischer Fang möglich: ein einziger Schüttel-Check statt vier.",
+    dexOwnedLabel: "Gefangene Arten im Pokédex",
+    dexOwnedOptions: ["bis 300", "301–450", "451–600", "über 600"],
     caughtNoFusion:
       "Fusionen lassen sich hier nicht eintragen – den Kopf im Encounter-Tab eintragen und im Team-Tab fusionieren.",
   },
@@ -1221,7 +1223,10 @@ const en: Dictionary = {
       rocket: "Rocket Ball: no catch bonus.",
       fusion: "Fusion Ball: ×3 against fusions (applied automatically once a body is picked).",
     },
-    lastBallNote: "Not included: the last ball of its kind in your bag can trigger a critical capture.",
+    lastBallLabel: "Last ball of its kind in the bag",
+    lastBallHint: "Then a critical capture can happen: a single shake check instead of four.",
+    dexOwnedLabel: "Species caught in the Pokédex",
+    dexOwnedOptions: ["up to 300", "301–450", "451–600", "over 600"],
     caughtNoFusion:
       "Fusions can't be recorded here – record the head as an encounter, then fuse it on the Team tab.",
   },
@@ -1885,8 +1890,10 @@ const fr: Dictionary = {
       rocket: "Rocket Ball : aucun bonus de capture.",
       fusion: "Fusion Ball : ×3 contre les fusions (appliqué automatiquement dès qu'un corps est choisi).",
     },
-    lastBallNote:
-      "Non pris en compte : la dernière Ball de ce type dans le sac peut déclencher une capture critique.",
+    lastBallLabel: "Dernière Ball de ce type dans le sac",
+    lastBallHint: "Une capture critique devient possible : un seul contrôle de secousse au lieu de quatre.",
+    dexOwnedLabel: "Espèces capturées dans le Pokédex",
+    dexOwnedOptions: ["jusqu'à 300", "301–450", "451–600", "plus de 600"],
     caughtNoFusion:
       "Les fusions ne peuvent pas être enregistrées ici – enregistre la tête comme rencontre, puis fusionne-la depuis l'équipe.",
   },
@@ -2550,8 +2557,10 @@ const es: Dictionary = {
       rocket: "Rocket Ball: sin bonus de captura.",
       fusion: "Fusion Ball: ×3 contra fusiones (se aplica automáticamente al elegir un cuerpo).",
     },
-    lastBallNote:
-      "No incluido: la última Ball de su tipo en la mochila puede provocar una captura crítica.",
+    lastBallLabel: "Última Ball de su tipo en la mochila",
+    lastBallHint: "Entonces es posible una captura crítica: una sola comprobación de sacudida en lugar de cuatro.",
+    dexOwnedLabel: "Especies capturadas en la Pokédex",
+    dexOwnedOptions: ["hasta 300", "301–450", "451–600", "más de 600"],
     caughtNoFusion:
       "Aquí no se pueden registrar fusiones: registra la cabeza como encuentro y fusiónala desde el equipo.",
   },
@@ -3215,8 +3224,10 @@ const it: Dictionary = {
       rocket: "Rocket Ball: nessun bonus di cattura.",
       fusion: "Fusion Ball: ×3 contro le fusioni (applicato automaticamente quando scegli un corpo).",
     },
-    lastBallNote:
-      "Non considerato: l'ultima Ball del suo tipo nella borsa può provocare una cattura critica.",
+    lastBallLabel: "Ultima Ball del suo tipo nella borsa",
+    lastBallHint: "Allora è possibile una cattura critica: un solo controllo di scossa invece di quattro.",
+    dexOwnedLabel: "Specie catturate nel Pokédex",
+    dexOwnedOptions: ["fino a 300", "301–450", "451–600", "oltre 600"],
     caughtNoFusion:
       "Qui non si possono registrare fusioni: registra la testa come incontro e fondila dalla squadra.",
   },

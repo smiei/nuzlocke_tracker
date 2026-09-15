@@ -107,6 +107,17 @@ describe("Infinite Fusion capture formula", () => {
     expect(throwBall({ ball: "ability" }).chance).toBe(throwBall({ baseRate: 27 }).chance);
   });
 
+  it("adds the last-ball critical capture, scaled by the dex's caught count", () => {
+    // x = 15 -> y = 38527; c = floor(15 * n / 12) for n = 2..5; a critical
+    // capture needs one shake check instead of four.
+    expect(throwBall({ lastBall: true }).chance).toBeCloseTo(0.1230973, 6);
+    expect(throwBall({ lastBall: true, dexOwned: 301 }).chance).toBeCloseTo(0.1249271, 6);
+    expect(throwBall({ lastBall: true, dexOwned: 451 }).chance).toBeCloseTo(0.1285868, 6);
+    expect(throwBall({ lastBall: true, dexOwned: 601 }).chance).toBeCloseTo(0.1304166, 6);
+    expect(throwBall({ lastBall: false, dexOwned: 601 }).chance).toBeCloseTo(0.1194376, 6);
+    expect(throwBall({ lastBall: true, ball: "master" }).guaranteed).toBe(true);
+  });
+
   it("drops a conditional ball's bonus when its condition is unticked", () => {
     expect(throwBall({ ball: "dusk", conditionMet: false }).chance).toBe(throwBall({}).chance);
     expect(throwBall({ ball: "dusk" }).ballText).toBe("×3.5");

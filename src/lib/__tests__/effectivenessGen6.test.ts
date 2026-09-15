@@ -2,15 +2,12 @@ import { describe, it, expect } from "vitest";
 import { getEffectiveness } from "@/lib/data";
 import { getTypesForGeneration, singleTypeMultiplier } from "@/lib/effectiveness";
 
-// data/effectiveness-gen6.json exists for Infinite Fusion (no real pack here
-// uses generation/dataGeneration >= 6 yet - see gameData.ts). It is
-// deliberately NOT the real modern type chart: see the long comment at the
-// top of that file and in getEffectiveness() for why the Steel<->Fairy cell
-// in particular is a best-effort default (sourced from a wiki count of
-// Steel's resistances, "11 types", which only matches if Steel does NOT
-// additionally resist Fairy) pending an in-game check, rather than a
-// guaranteed fact - these tests pin the current values so a correction is a
-// one-line diff away.
+// data/effectiveness-gen6.json exists for Infinite Fusion (no other pack here
+// uses generation/dataGeneration >= 6 - see gameData.ts). Its 18x18 chart was
+// verified cell by cell against the game's own Data/types.dat (version 6.2.4
+// of github.com/infinitefusion/infinitefusion-e18): exactly three cells
+// differed from the first, wiki-derived version of this file and were
+// corrected, so the table is now the real modern Gen 6+ chart.
 
 describe("effectiveness-gen6.json (Fairy added to the pre-Fairy chart)", () => {
   const table = getEffectiveness(6);
@@ -33,22 +30,21 @@ describe("effectiveness-gen6.json (Fairy added to the pre-Fairy chart)", () => {
     expect(singleTypeMultiplier(table, "dragon", "fairy")).toBe(0);
   });
 
-  it("keeps every pre-Fairy Steel resistance untouched, Ghost and Dark included", () => {
-    expect(singleTypeMultiplier(table, "ghost", "steel")).toBe(0.5);
-    expect(singleTypeMultiplier(table, "dark", "steel")).toBe(0.5);
+  it("drops Steel's Ghost and Dark resistances, exactly like the game's types.dat", () => {
+    expect(singleTypeMultiplier(table, "ghost", "steel")).toBe(1);
+    expect(singleTypeMultiplier(table, "dark", "steel")).toBe(1);
     expect(singleTypeMultiplier(table, "poison", "steel")).toBe(0);
   });
 
-  it("does NOT give Steel a Fairy resistance - the one deliberate deviation from Gen 6+", () => {
-    // Real cartridges resist here (0.5x); this pack's wiki-sourced "resistant
-    // to 11 types" count for Steel only adds up without a Fairy entry.
-    expect(singleTypeMultiplier(table, "fairy", "steel")).toBe(1);
+  it("gives Steel its Fairy resistance", () => {
+    expect(singleTypeMultiplier(table, "fairy", "steel")).toBe(0.5);
   });
 
-  it("still resists exactly 11 types plus the Poison immunity", () => {
+  it("resists exactly 10 types plus the Poison immunity", () => {
+    // The wiki's "Steel resists 11 types" counts the Poison immunity as one.
     const resists = Object.entries(table.Stahl).filter(([, v]) => v === 0.5).length;
     const immunities = Object.entries(table.Stahl).filter(([, v]) => v === 0).length;
-    expect(resists).toBe(11);
+    expect(resists).toBe(10);
     expect(immunities).toBe(1);
   });
 });

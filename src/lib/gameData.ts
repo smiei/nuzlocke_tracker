@@ -16,10 +16,12 @@ import {
   getEffectiveness,
   getCatchRates,
   getMoves,
+  getSpeciesData,
   getSpeciesList,
   type GameInfo,
   type Pokemon,
   type CatchRateEntry,
+  type SpeciesDataEntry,
 } from "@/lib/data";
 import { getTypesForGeneration, type EffectivenessTable } from "@/lib/effectiveness";
 import { LANGS, type Lang } from "@/lib/i18n/dictionary";
@@ -62,18 +64,47 @@ function applyNameLang(game: GameInfo, pokemon: Pokemon): Pokemon {
   };
 }
 
+// GameInfo.speciesData: the pack's source game ships its own species table.
+// Read once per file name - getSpeciesData hits the disk, and these functions
+// run per page render.
+const speciesDataCache = new Map<string, Map<number, SpeciesDataEntry>>();
+
+function speciesData(game: GameInfo): Map<number, SpeciesDataEntry> | undefined {
+  if (!game.speciesData) return undefined;
+  const cached = speciesDataCache.get(game.speciesData);
+  if (cached) return cached;
+  const byId = new Map(getSpeciesData(game.speciesData).map((entry) => [entry.id, entry]));
+  speciesDataCache.set(game.speciesData, byId);
+  return byId;
+}
+
+// The game's own values win over the shared pokemon.json - including over the
+// pokemon-history era corrections applied before this, which describe the
+// REAL games' history and have nothing to say about a fan game's table.
+function applySpeciesData(game: GameInfo, pokemon: Pokemon): Pokemon {
+  const entry = speciesData(game)?.get(pokemon.id);
+  if (!entry) return pokemon;
+  return { ...pokemon, types: entry.types, stats: entry.stats, weight: entry.weight };
+}
+
+// Both pack-scoped rewrites in the order they must happen (species data first,
+// names last - they touch different fields, but this keeps one call site).
+function forGame(game: GameInfo, pokemon: Pokemon): Pokemon {
+  return applyNameLang(game, applySpeciesData(game, pokemon));
+}
+
 export function getPokemonListForGame(game: GameInfo): Pokemon[] {
   const generation = dataGeneration(game);
   const allowed = speciesAllowlist(game);
   const list = allowed
     ? getPokemonList(undefined, generation).filter((p) => allowed.has(p.id))
     : getPokemonList(game.dexLimit, generation);
-  return game.nameLang ? list.map((p) => applyNameLang(game, p)) : list;
+  return game.nameLang || game.speciesData ? list.map((p) => forGame(game, p)) : list;
 }
 
 export function getPokemonByIdForGame(game: GameInfo, id: number): Pokemon | undefined {
   const pokemon = getPokemonById(id, dataGeneration(game));
-  return pokemon && game.nameLang ? applyNameLang(game, pokemon) : pokemon;
+  return pokemon ? forGame(game, pokemon) : pokemon;
 }
 
 export function getPokemonFormsForGame(game: GameInfo): Pokemon[] {
@@ -84,7 +115,7 @@ export function getPokemonFormsForGame(game: GameInfo): Pokemon[] {
         (p) => p.baseId !== undefined && allowed.has(p.baseId),
       )
     : getPokemonForms(game.dexLimit, generation);
-  return game.nameLang ? forms.map((p) => applyNameLang(game, p)) : forms;
+  return game.nameLang || game.speciesData ? forms.map((p) => forGame(game, p)) : forms;
 }
 
 export function getEffectivenessForGame(game: GameInfo): EffectivenessTable {
@@ -92,7 +123,19 @@ export function getEffectivenessForGame(game: GameInfo): EffectivenessTable {
 }
 
 export function getCatchRatesForGame(game: GameInfo): CatchRateEntry[] {
-  return getCatchRates(dataGeneration(game));
+  const rates = getCatchRates(dataGeneration(game));
+  const own = speciesData(game);
+  if (!own) return rates;
+  // The game's own rates win, and a species this app has no rate for at all
+  // still gets one.
+  const seen = new Set(rates.map((rate) => rate.id));
+  const merged = rates.map((rate) =>
+    own.has(rate.id) ? { ...rate, catch_rate: own.get(rate.id)!.catchRate } : rate,
+  );
+  for (const entry of own.values()) {
+    if (!seen.has(entry.id)) merged.push({ id: entry.id, catch_rate: entry.catchRate });
+  }
+  return merged;
 }
 
 export function getMovesForGame(game: GameInfo, lang: Lang): MovesTable {

@@ -394,6 +394,11 @@ export type CatchInput = {
   // Speed (Fast Ball).
   isFusion?: boolean;
   baseSpeed?: number;
+  // Infinite Fusion only: this is the last ball of its kind in the bag, which
+  // makes a critical capture possible, and how many species the Pokédex has
+  // registered as caught, which scales that chance.
+  lastBall?: boolean;
+  dexOwned?: number;
 };
 
 export type CatchResult = {
@@ -658,7 +663,26 @@ function computeInfiniteFusion(input: CatchInput): CatchResult {
   }
 
   const y = Math.floor(65536 / Math.pow(255 / x, 0.1875));
-  return { guaranteed: false, chance: Math.pow(y / 65536, 4), ballText, statusText };
+  const allFourShakes = Math.pow(y / 65536, 4);
+  if (!input.lastBall) {
+    return { guaranteed: false, chance: allFourShakes, ballText, statusText };
+  }
+
+  // Critical capture - the game's own rule, not ENABLE_CRITICAL_CAPTURES
+  // (which it leaves off): only when the thrown ball was the last of its kind
+  // in the bag. A roll of pbRandom(256) < c, with c = x * n / 12 in integer
+  // arithmetic and n = 2..5 by the dex's caught count, turns the throw into a
+  // single shake check instead of four.
+  const owned = input.dexOwned ?? 0;
+  const n = owned > 600 ? 5 : owned > 450 ? 4 : owned > 300 ? 3 : 2;
+  const c = Math.floor((x * n) / 12);
+  const critical = Math.min(c, 256) / 256;
+  return {
+    guaranteed: false,
+    chance: critical * (y / 65536) + (1 - critical) * allFourShakes,
+    ballText,
+    statusText,
+  };
 }
 
 // `versionGroup` only matters for Infinite Fusion, whose capture code is its

@@ -22,7 +22,7 @@
       "es": "Boulder Badge",
       "it": "Boulder Badge"
     },
-    "max_level": null
+    "max_level": 12
   },
   {
     "id": 2,
@@ -47,7 +47,7 @@
       "es": "Cascade Badge",
       "it": "Cascade Badge"
     },
-    "max_level": null
+    "max_level": 22
   },
   {
     "id": 3,
@@ -72,7 +72,7 @@
       "es": "Thunder Badge",
       "it": "Thunder Badge"
     },
-    "max_level": null
+    "max_level": 26
   },
   {
     "id": 4,
@@ -97,7 +97,7 @@
       "es": "Rainbow Badge",
       "it": "Rainbow Badge"
     },
-    "max_level": null
+    "max_level": 35
   },
   {
     "id": 5,
@@ -122,7 +122,7 @@
       "es": "Soul Badge",
       "it": "Soul Badge"
     },
-    "max_level": null
+    "max_level": 38
   },
   {
     "id": 6,
@@ -147,7 +147,7 @@
       "es": "Marsh Badge",
       "it": "Marsh Badge"
     },
-    "max_level": null
+    "max_level": 45
   },
   {
     "id": 7,
@@ -172,7 +172,7 @@
       "es": "Volcano Badge",
       "it": "Volcano Badge"
     },
-    "max_level": null
+    "max_level": 51
   },
   {
     "id": 8,
@@ -197,7 +197,7 @@
       "es": "Earth Badge",
       "it": "Earth Badge"
     },
-    "max_level": null
+    "max_level": 54
   },
   {
     "id": 9,
@@ -222,7 +222,7 @@
       "es": "Zephyr Badge",
       "it": "Zephyr Badge"
     },
-    "max_level": null
+    "max_level": 63
   },
   {
     "id": 10,
@@ -247,7 +247,7 @@
       "es": "Hive Badge",
       "it": "Hive Badge"
     },
-    "max_level": null
+    "max_level": 62
   },
   {
     "id": 11,
@@ -272,7 +272,7 @@
       "es": "Plain Badge",
       "it": "Plain Badge"
     },
-    "max_level": null
+    "max_level": 58
   },
   {
     "id": 12,
@@ -297,7 +297,7 @@
       "es": "Fog Badge",
       "it": "Fog Badge"
     },
-    "max_level": null
+    "max_level": 67
   },
   {
     "id": 13,
@@ -322,7 +322,7 @@
       "es": "Storm Badge",
       "it": "Storm Badge"
     },
-    "max_level": null
+    "max_level": 64
   },
   {
     "id": 14,
@@ -347,7 +347,7 @@
       "es": "Mineral Badge",
       "it": "Mineral Badge"
     },
-    "max_level": null
+    "max_level": 68
   },
   {
     "id": 15,
@@ -372,7 +372,7 @@
       "es": "Glacier Badge",
       "it": "Glacier Badge"
     },
-    "max_level": null
+    "max_level": 65
   },
   {
     "id": 16,
@@ -397,7 +397,7 @@
       "es": "Rising Badge",
       "it": "Rising Badge"
     },
-    "max_level": null
+    "max_level": 66
   },
   {
     "id": 17,
@@ -416,7 +416,7 @@
       "it": "Elite Four"
     },
     "badge": null,
-    "max_level": null
+    "max_level": 57
   },
   {
     "id": 18,
@@ -435,7 +435,7 @@
       "it": "Elite Four"
     },
     "badge": null,
-    "max_level": null
+    "max_level": 57
   },
   {
     "id": 19,
@@ -454,7 +454,7 @@
       "it": "Elite Four"
     },
     "badge": null,
-    "max_level": null
+    "max_level": 58
   },
   {
     "id": 20,
@@ -473,7 +473,7 @@
       "it": "Elite Four"
     },
     "badge": null,
-    "max_level": null
+    "max_level": 59
   },
   {
     "id": 21,
@@ -492,7 +492,7 @@
       "it": "Elite Four"
     },
     "badge": null,
-    "max_level": null,
+    "max_level": 64,
     "sprite": "champ"
   }
 ]

@@ -145,6 +145,10 @@ export type CatchBodyState = {
   // Your own active Pokémon's level (Level Ball). Optional so card sets
   // stored before it existed still load.
   ownLevel?: number;
+  // Infinite Fusion's critical capture: last ball of its kind in the bag, and
+  // the Pokédex's caught count (0 / 301 / 451 / 601 - the game's brackets).
+  lastBall?: boolean;
+  dexOwned?: number;
   status: StatusId;
   turn: number;
   conditionMet: boolean;
@@ -295,6 +299,8 @@ export function CatchCardBody({
   const [catching, startCatch] = useTransition();
   const levelInput = useClampedIntInput(level, 1, 100, 50, (n) => onChange({ level: n }));
   const ownLevel = state.ownLevel ?? 50;
+  const lastBall = state.lastBall ?? false;
+  const dexOwned = state.dexOwned ?? 0;
   const ownLevelInput = useClampedIntInput(ownLevel, 1, 100, 50, (n) => onChange({ ownLevel: n }));
   const turnInput = useClampedIntInput(turn, 1, 99, 1, (n) => onChange({ turn: n }));
 
@@ -354,6 +360,8 @@ export function CatchCardBody({
             turn,
             isFusion: body !== null,
             baseSpeed,
+            lastBall: isInfiniteFusion && lastBall,
+            dexOwned,
           },
           versionGroup,
         )
@@ -511,6 +519,41 @@ export function CatchCardBody({
         <p className="mt-3 text-xs text-ink-subtle">{ballNote}</p>
       )}
 
+      {/* Infinite Fusion's critical capture only exists for the last ball of
+          its kind in the bag - see computeInfiniteFusion. */}
+      {isInfiniteFusion && (
+        <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">
+          <label className="flex cursor-pointer items-start gap-2">
+            <input
+              type="checkbox"
+              checked={lastBall}
+              onChange={(e) => onChange({ lastBall: e.target.checked })}
+              className="mt-0.5 accent-success"
+            />
+            <span className="text-xs text-ink-muted">
+              <span className="font-medium">{t.lastBallLabel}</span>
+              <span className="block text-ink-subtle">{t.lastBallHint}</span>
+            </span>
+          </label>
+          {lastBall && (
+            <label className="flex items-center gap-2 text-xs text-ink-muted">
+              {t.dexOwnedLabel}
+              <select
+                value={dexOwned}
+                onChange={(e) => onChange({ dexOwned: Number(e.target.value) })}
+                className="h-10 rounded-md border border-line-strong bg-panel px-3 text-sm text-ink"
+              >
+                {[0, 301, 451, 601].map((value, i) => (
+                  <option key={value} value={value}>
+                    {t.dexOwnedOptions[i]}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
+        </div>
+      )}
+
       {/* Result */}
       <div className="mt-4">
         {result === null || selected === null ? (
@@ -558,9 +601,6 @@ export function CatchCardBody({
                 <div className="mt-1 text-xs text-ink-subtle">
                   {t.details(baseRate ?? 0, result.ballText, result.statusText)}
                 </div>
-                {isInfiniteFusion && (
-                  <div className="mt-1 text-xs text-ink-subtle">{t.lastBallNote}</div>
-                )}
               </div>
             </div>
           </div>

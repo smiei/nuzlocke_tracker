@@ -5,6 +5,7 @@
   "dataGeneration": 7,
   "species": true,
   "nameLang": "en",
+  "speciesData": "infinite-fusion",
   "dexLimit": 800,
   "spriteSet": "black-white",
   "versionGroup": "infinite-fusion",
