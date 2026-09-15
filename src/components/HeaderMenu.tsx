@@ -12,7 +12,7 @@ import { useDialog } from "@/components/DialogProvider";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import { useInstallPrompt } from "@/lib/useInstallPrompt";
 import { LANGS, translations } from "@/lib/i18n/dictionary";
-import type { RunSummary } from "@/lib/types";
+import type { GameSummary, RunSummary } from "@/lib/types";
 import { RenameRunDialog } from "@/components/RenameRunDialog";
 import { ImportBackupDialog } from "@/components/ImportBackupDialog";
 import { TabOrderDialog } from "@/components/TabOrderDialog";
@@ -92,7 +92,13 @@ function MenuItem({
 
 // Gear menu bundling the rarely-needed header actions (backup/import, tab
 // order, language, run rename/delete) so the top bar stays compact on phones.
-export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
+export function HeaderMenu({
+  runs,
+  games = [],
+}: {
+  runs: RunSummary[];
+  games?: GameSummary[];
+}) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -114,6 +120,9 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
 
   const activeId = Number(searchParams.get("run")) || runs[0]?.id;
   const activeRun = runs.find((r) => r.id === activeId);
+  // Infinite Fusion hotlinks community sprites and builds on outside data -
+  // credited in the menu while such a run is open.
+  const activeGameHasFusion = games.find((g) => g.id === activeRun?.gameId)?.fusion ?? false;
 
   function handleBackupRun() {
     setOpen(false);
@@ -380,6 +389,46 @@ export function HeaderMenu({ runs }: { runs: RunSummary[] }) {
             {t.runSwitcher.deleteButton}
           </button>
           <div className="my-1 border-t border-line" />
+          {activeGameHasFusion && (
+            <div className="space-y-0.5 px-3 py-1.5 text-xs text-ink-subtle">
+              <div className="font-medium text-ink-muted">{t.menu.credits}</div>
+              <p>
+                {t.menu.creditsSprites}: {t.menu.creditsSpritesSource}
+              </p>
+              <p>
+                {t.menu.creditsData}:{" "}
+                <a
+                  href="https://github.com/fbosch/infinite-fusion-nuzlocke"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="underline underline-offset-2 hover:text-ink"
+                >
+                  fbosch/infinite-fusion-nuzlocke
+                </a>{" "}
+                (MIT),{" "}
+                <a
+                  href="https://infinitefusion.fandom.com/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="underline underline-offset-2 hover:text-ink"
+                >
+                  Infinite Fusion Wiki
+                </a>{" "}
+                (CC BY-SA)
+              </p>
+              <p>
+                {t.menu.creditsMechanics}:{" "}
+                <a
+                  href="https://github.com/infinitefusion/infinitefusion-e18"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="underline underline-offset-2 hover:text-ink"
+                >
+                  infinitefusion-e18
+                </a>
+              </p>
+            </div>
+          )}
           {/* Baked in at image build time (Dockerfile ARG APP_VERSION,
               inlined into the client bundle since it's NEXT_PUBLIC_*) - not
               runtime-readable, so this is only ever what the image itself

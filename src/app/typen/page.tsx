@@ -1,4 +1,11 @@
-import { getEvolutions, getGameOrDefault, getLearnset, getMoveTypeHistory, getMoveset } from "@/lib/data";
+import {
+  getEvolutionById,
+  getEvolutions,
+  getGameOrDefault,
+  getLearnset,
+  getMoveTypeHistory,
+  getMoveset,
+} from "@/lib/data";
 import {
   getCatchRatesForGame,
   getEffectivenessForGame,
@@ -9,6 +16,7 @@ import {
   getAttackTypesForGame,
   getDataGenerationForGame,
   getFusionSpriteConfigForGame,
+  isInDex,
 } from "@/lib/gameData";
 import { explosiveMove } from "@/lib/learnset";
 import { prisma } from "@/lib/prisma";
@@ -16,7 +24,9 @@ import { resolveRunId } from "@/lib/runs";
 import { getRoutesForRun } from "@/lib/runRoutes";
 import { getLang } from "@/lib/i18n/getLang";
 import { routeName } from "@/lib/i18n/localize";
-import { displayNameWithForm, movepoolId } from "@/lib/forms";
+import { movepoolId } from "@/lib/forms";
+import { resolveEncounterMon } from "@/lib/encounterMon";
+import { groupTeamPositions, isFoldedDonor } from "@/lib/fusionGroups";
 import { EncounterStatus, LinkStatus, Player, RunMode } from "@/generated/prisma/client";
 import type { TeamMember } from "@/components/TeamWeaknessesView";
 import { CanonicalRun } from "@/components/CanonicalRun";
@@ -52,6 +62,12 @@ export default async function AnalyzePage({
   const pickableList = [...pokemonList, ...formEntries];
   const moveset = getMoveset(game.versionGroup);
   const moves = getMovesForGame(game, lang);
+  const evoOptions = {
+    gameId,
+    impossible: settings.evolutionOverridesImpossible,
+    easier: settings.evolutionOverridesEasier,
+    timeBased: settings.evolutionOverridesTimeBased,
+  };
 
   const catchRates = Object.fromEntries(
     getCatchRatesForGame(game).map((entry) => [entry.id, entry.catch_rate]),
@@ -96,40 +112,64 @@ export default async function AnalyzePage({
   const failedRouteIds =
     mode === RunMode.SOULLINK
       ? new Set(
-          (
-            await prisma.encounter.findMany({
-              where: {
-                runId,
-                status: { in: [EncounterStatus.FLED, EncounterStatus.KILLED] },
-              },
-              select: { routeId: true },
-            })
-          ).map((e) => e.routeId),
+          encounters
+            .filter((e) => e.status === EncounterStatus.FLED || e.status === EncounterStatus.KILLED)
+            .map((e) => e.routeId),
         )
       : new Set<number>();
-  const teamLinks = (
+  const aliveLinks = (
     await prisma.soulLink.findMany({
-      where: { runId, teamPosition: { not: null }, status: LinkStatus.ALIVE },
+      where: { runId, status: LinkStatus.ALIVE },
       include: { encounters: true },
-      orderBy: { teamPosition: "asc" },
     })
   ).filter((link) => !failedRouteIds.has(link.routeId));
+  // Infinite Fusion: "on the team" is asked of the fusion group, whose slot
+  // can sit on either route's link; a donor is folded into its host, and a
+  // host's name/types are the fused ones - see src/lib/fusionGroups.ts.
+  // Without fusions every group is one link and this is its own teamPosition.
+  const groupPositions = groupTeamPositions(aliveLinks);
+  const teamLinks = aliveLinks
+    .filter((link) => groupPositions.get(link.id) != null)
+    .sort(
+      (a, b) =>
+        (groupPositions.get(a.id) ?? 0) - (groupPositions.get(b.id) ?? 0) ||
+        (a.teamPosition ?? Number.MAX_SAFE_INTEGER) - (b.teamPosition ?? Number.MAX_SAFE_INTEGER),
+    );
+  const visibleEncounterIds = new Set(aliveLinks.flatMap((link) => link.encounters.map((e) => e.id)));
+  const donorByHostId = new Map(
+    encounters.filter((e) => e.fusedIntoId !== null).map((e) => [e.fusedIntoId as number, e]),
+  );
+  const encounterMonDeps = {
+    pokemonById: (id: number) => getPokemonByIdForGame(game, id),
+    evolvesTo: (id: number) => getEvolutionById(id, evoOptions)?.evolvesTo ?? [],
+    inDex: (id: number) => isInDex(game, id),
+    lang,
+  };
+  const movepoolOf = (pokemonId: number) => {
+    const pokemon = getPokemonByIdForGame(game, pokemonId);
+    return pokemon ? movepoolId(pokemon, (id) => learnsetTable[String(id)] !== undefined) : pokemonId;
+  };
   const byPlayer = new Map<Player, TeamMember[]>([
     [Player.PLAYER1, []],
     [Player.PLAYER2, []],
   ]);
   for (const link of teamLinks) {
     for (const e of link.encounters) {
-      // Infinite Fusion: a donor is represented by its host's fusion card.
-      if (e.fusedIntoId !== null) continue;
-      const pokemon = getPokemonByIdForGame(game, e.currentPokemonId);
-      if (!pokemon) continue;
+      if (isFoldedDonor(e, visibleEncounterIds)) continue;
+      const mon = resolveEncounterMon(
+        e.currentPokemonId,
+        donorByHostId.get(e.id)?.currentPokemonId,
+        encounterMonDeps,
+      );
+      if (!mon) continue;
       byPlayer.get(e.player)?.push({
         encounterId: e.id,
         pokemonId: e.currentPokemonId,
-        speciesId: movepoolId(pokemon, (id) => learnsetTable[String(id)] !== undefined),
-        name: displayNameWithForm(pokemon, lang),
-        types: pokemon.types,
+        speciesId: movepoolOf(e.currentPokemonId),
+        name: mon.name,
+        types: mon.types,
+        bodyId: mon.bodyId,
+        bodySpeciesId: mon.bodyId !== null ? movepoolOf(mon.bodyId) : null,
       });
     }
   }
@@ -152,12 +192,7 @@ export default async function AnalyzePage({
         <PokemonDetailProvider
           pokemonList={pokemonList}
           forms={formEntries}
-          evolutions={getEvolutions({
-            gameId,
-            impossible: settings.evolutionOverridesImpossible,
-            easier: settings.evolutionOverridesEasier,
-            timeBased: settings.evolutionOverridesTimeBased,
-          })}
+          evolutions={getEvolutions(evoOptions)}
           moveData={{ movesets: moveset, moves }}
           moveTypeHistory={getMoveTypeHistory()}
           effectiveness={effectiveness}
@@ -182,6 +217,7 @@ export default async function AnalyzePage({
             teams={teams}
             explosiveMap={explosiveMap}
             settings={settings}
+            fusionEnabled={Boolean(game.fusion)}
           />
         </PokemonDetailProvider>
       </PlayerNamesProvider>

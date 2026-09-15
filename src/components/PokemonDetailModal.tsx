@@ -163,7 +163,11 @@ export function PokemonDetailModal({
   // Jump to the Battle & Catch tab with this Pokémon already picked (see the
   // ?pokemon= handling in AnalyzeView), carrying the current run along.
   const runParam = searchParams.get("run");
-  const analyzeHref = `/typen?${runParam ? `run=${runParam}&` : ""}pokemon=${pokemon.id}`;
+  // A fusion's card carries its body along, which Kampf & Fang's body picker
+  // takes over.
+  const analyzeHref = `/typen?${runParam ? `run=${runParam}&` : ""}pokemon=${pokemon.id}${
+    body ? `&body=${body.id}` : ""
+  }`;
 
   // Infinite Fusion: a fusion's card shows the fused sheet - name, sprite,
   // types, matchups and stats of the pair - and its two components, each of
@@ -192,6 +196,9 @@ export function PokemonDetailModal({
     generation,
     moveTypeHistory,
   );
+  // Infinite Fusion ships no moveset file at all - the card says so rather
+  // than silently dropping the section.
+  const gameHasMoveData = Object.keys(movesets).length > 0;
   const maxBST = generation >= 4 ? 720 : 680;
   // A forme is ranked against the species by its own BST rather than joining
   // the pool - see rankForSumme.
@@ -382,17 +389,13 @@ export function PokemonDetailModal({
               </div>
             </div>
           )}
-          {/* Kampf & Fang has no body picker yet, so it could only show the
-              head - see CLAUDE.md's Known gaps. */}
-          {!fusion && (
-            <Link
-              href={analyzeHref}
-              onClick={onClose}
-              className="flex h-10 items-center justify-center gap-1.5 rounded-md border border-line px-3 text-sm font-medium text-ink-muted transition-colors hover:bg-hover hover:text-ink"
-            >
-              {td.openInAnalyze} <span aria-hidden>→</span>
-            </Link>
-          )}
+          <Link
+            href={analyzeHref}
+            onClick={onClose}
+            className="flex h-10 items-center justify-center gap-1.5 rounded-md border border-line px-3 text-sm font-medium text-ink-muted transition-colors hover:bg-hover hover:text-ink"
+          >
+            {td.openInAnalyze} <span aria-hidden>→</span>
+          </Link>
           {!blindflug && types.length > 0 && (
             <div className="pt-1">
               <h3 className="mb-1 text-xs font-semibold uppercase tracking-wide text-ink-muted">
@@ -452,13 +455,15 @@ export function PokemonDetailModal({
         {/* Full level-up move list (bottom). Under Blindflug the heading stays
             and only the list goes: the heading is what names the thing that is
             missing, and without it the notice is a riddle. */}
-        {!fusion && (blindflug || moveList.length > 0) && (
+        {!fusion && (blindflug || moveList.length > 0 || !gameHasMoveData) && (
           <div>
             <h3 className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-ink-muted">
               {td.moves}
             </h3>
             {blindflug ? (
               <BlindflugNotice />
+            ) : !gameHasMoveData ? (
+              <p className="text-xs text-ink-subtle">{td.noMoveData}</p>
             ) : (
               <div className="divide-y divide-line">
                 {moveList.map((mv, i) => (

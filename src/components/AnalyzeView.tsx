@@ -36,6 +36,10 @@ type SubView = "wild" | "trainer";
 type AnalyzeCardState = {
   id: number;
   selectedId: number | null;
+  // Infinite Fusion only: the optional body of the Pokémon picked above, so
+  // the card analyses the fusion. Optional so card sets stored before it
+  // existed load unchanged.
+  bodyId?: number | null;
   view: SubView;
   wild: CatchBodyState;
   battleLevel: number;
@@ -48,12 +52,14 @@ function newAnalyzeCard(id: number): AnalyzeCardState {
 function AnalyzeCard({
   catchShared,
   battleShared,
+  fusionEnabled,
   state,
   onChange,
   onRemove,
 }: {
   catchShared: CatchSharedProps;
   battleShared: BattleSharedProps;
+  fusionEnabled: boolean;
   state: AnalyzeCardState;
   onChange: (patch: Partial<AnalyzeCardState>) => void;
   onRemove?: () => void;
@@ -63,14 +69,21 @@ function AnalyzeCard({
   const tCatch = translations[lang].catchrate;
   const blindflug = useBlindflug();
   const { selectedId, view, battleLevel } = state;
+  // A body stored on a card is ignored in a game without fusions.
+  const bodyId = fusionEnabled ? (state.bodyId ?? null) : null;
 
   const selected = catchShared.pokemonList.find((p) => p.id === selectedId) ?? null;
-  const isLocked = selected ? catchShared.lockedFamilies.has(selected.family_id) : false;
+  const body =
+    bodyId !== null ? (catchShared.pokemonList.find((p) => p.id === bodyId) ?? null) : null;
+  const components = [selected, body].filter((p): p is Pokemon => p !== null);
+  const isLocked = components.some((p) => catchShared.lockedFamilies.has(p.family_id));
   // Shown regardless of Wild/Trainer sub-view, since it matters for a wild
-  // catch too (it can blow up before you land the ball).
-  const explosive = selected
-    ? battleShared.explosiveMap[baseSpeciesId(selected)] ?? null
-    : null;
+  // catch too (it can blow up before you land the ball). A fusion can use
+  // either component's moves.
+  const explosive =
+    components
+      .map((p) => battleShared.explosiveMap[baseSpeciesId(p)])
+      .find((boom) => boom !== undefined) ?? null;
 
   return (
     <Card className="relative">
@@ -110,6 +123,24 @@ function AnalyzeCard({
         </div>
         <PokemonInfoButton pokemonId={selectedId} label={selected ? pokemonName(selected, lang) : ""} />
       </div>
+      {/* Infinite Fusion: opposing trainers field fusions, and a wild fusion
+          catches differently - the picker above is then the head. */}
+      {fusionEnabled && (
+        <div className="mb-3 flex items-end gap-2 pr-12">
+          <div className="min-w-0 flex-1">
+            <span className="mb-1 block text-xs font-medium text-ink-muted">{t.bodyPickerLabel}</span>
+            <PokemonCombobox
+              lang={lang}
+              pokemonList={catchShared.pokemonList}
+              selectedId={bodyId}
+              onSelect={(id) => onChange({ bodyId: id })}
+              onClear={() => onChange({ bodyId: null })}
+              lockedFamilyIds={catchShared.lockedFamilies}
+            />
+          </div>
+          <PokemonInfoButton pokemonId={bodyId} label={body ? pokemonName(body, lang) : ""} />
+        </div>
+      )}
       {isLocked && (
         <p className="mb-3 text-xs text-warning">⚠ {tCatch.lockWarning}</p>
       )}
@@ -149,6 +180,7 @@ function AnalyzeCard({
         <CatchCardBody
           shared={catchShared}
           selectedId={selectedId}
+          bodyId={bodyId}
           state={state.wild}
           onChange={(patch) => onChange({ wild: { ...state.wild, ...patch } })}
         />
@@ -156,6 +188,7 @@ function AnalyzeCard({
         <BattleCardBody
           shared={battleShared}
           selectedId={selectedId}
+          bodyId={bodyId}
           level={state.battleLevel}
           onChange={(patch) => onChange({ battleLevel: patch.level })}
         />
@@ -181,6 +214,7 @@ export function AnalyzeView({
   teams,
   explosiveMap,
   settings,
+  fusionEnabled = false,
 }: {
   runId: number;
   mode: RunMode;
@@ -196,6 +230,8 @@ export function AnalyzeView({
   teams: { player: Player; members: TeamMember[] }[];
   explosiveMap: Record<number, { name: string; level: number }>;
   settings: RunSettings;
+  // The run's game pack has fusions (Infinite Fusion): offers a body picker.
+  fusionEnabled?: boolean;
 }) {
   const { lang } = useLanguage();
   const t = translations[lang].typen;
@@ -229,25 +265,30 @@ export function AnalyzeView({
   ]);
 
   // Arriving from a Pokédex info card's "Im Kampf & Fang öffnen" link:
-  // ?pokemon=<id> drops that species into the first card (resetting the catch
-  // inputs exactly like picking it by hand would) and is then stripped from
-  // the URL, so a later manual change isn't undone by a refresh.
+  // ?pokemon=<id> (plus &body=<id> from a fusion's card) drops that selection
+  // into the first card (resetting the catch inputs exactly like picking it by
+  // hand would) and is then stripped from the URL, so a later manual change
+  // isn't undone by a refresh.
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const pokemonParam = searchParams.get("pokemon");
+  const bodyParam = searchParams.get("body");
 
   useEffect(() => {
     if (!pokemonParam) return;
     const id = Number(pokemonParam);
+    const bodyNumber = Number(bodyParam);
+    const bodyId = Number.isFinite(bodyNumber) && bodyNumber > 0 ? bodyNumber : null;
     if (Number.isFinite(id) && id > 0) {
       setCards((cs) => {
         const [first, ...rest] = cs.length > 0 ? cs : [newAnalyzeCard(0)];
-        if (first.selectedId === id) return cs;
+        if (first.selectedId === id && (first.bodyId ?? null) === bodyId) return cs;
         return [
           {
             ...first,
             selectedId: id,
+            bodyId,
             wild: { ...first.wild, ball: "poke", status: "none", hpPercent: 100 },
           },
           ...rest,
@@ -256,7 +297,7 @@ export function AnalyzeView({
     }
     const run = searchParams.get("run");
     router.replace(run ? `${pathname}?run=${run}` : pathname, { scroll: false });
-  }, [pokemonParam, pathname, router, searchParams, setCards]);
+  }, [pokemonParam, bodyParam, pathname, router, searchParams, setCards]);
 
   return (
     <div>
@@ -267,6 +308,7 @@ export function AnalyzeView({
             key={card.id}
             catchShared={catchShared}
             battleShared={battleShared}
+            fusionEnabled={fusionEnabled}
             state={card}
             onChange={(patch) =>
               setCards((cs) => cs.map((c) => (c.id === card.id ? { ...c, ...patch } : c)))

@@ -19,6 +19,10 @@ export type TeamMember = {
   speciesId: number;
   name: string;
   types: string[];
+  // Infinite Fusion: set when the member is a fusion - the body's display id
+  // and movepool species. `name`/`types` are then already the fused ones.
+  bodyId?: number | null;
+  bodySpeciesId?: number | null;
 };
 
 // Defender's view: taking more damage is bad (red/orange), resisting is good
@@ -124,12 +128,13 @@ function TeamTable({
                 {detail ? (
                   <button
                     type="button"
-                    onClick={() => detail.open(m.pokemonId)}
+                    onClick={() => detail.open(m.pokemonId, m.bodyId ?? null)}
                     aria-label={m.name}
                     className="mx-auto block cursor-pointer rounded transition-opacity hover:opacity-80"
                   >
                     <PokemonSprite
                       pokemonId={m.pokemonId}
+                      bodyId={m.bodyId ?? null}
                       name={m.name}
                       size="md"
                       className="mx-auto h-8 w-8 sm:h-12 sm:w-12"
@@ -138,6 +143,7 @@ function TeamTable({
                 ) : (
                   <PokemonSprite
                     pokemonId={m.pokemonId}
+                    bodyId={m.bodyId ?? null}
                     name={m.name}
                     size="md"
                     className="mx-auto h-8 w-8 sm:h-12 sm:w-12"

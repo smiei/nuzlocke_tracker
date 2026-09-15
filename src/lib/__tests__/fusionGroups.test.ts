@@ -1,5 +1,40 @@
 import { describe, it, expect } from "vitest";
-import { groupSoulLinks, isFoldedDonor, teamSlotsNeeded, type GroupableEncounter } from "@/lib/fusionGroups";
+import {
+  groupSoulLinks,
+  groupTeamPositions,
+  isFoldedDonor,
+  teamLinkIds,
+  teamSlotsNeeded,
+  type GroupableEncounter,
+} from "@/lib/fusionGroups";
+
+describe("teamLinkIds", () => {
+  it("counts both routes of a crosswise fusion even though only one holds the slot", () => {
+    const links = [
+      { id: 132, teamPosition: 0, encounters: [enc(246, 132, "P1"), enc(249, 132, "P2", 248)] },
+      { id: 133, teamPosition: null, encounters: [enc(247, 133, "P1", 246), enc(248, 133, "P2")] },
+      { id: 134, teamPosition: null, encounters: [enc(250, 134, "P1"), enc(251, 134, "P2")] },
+    ];
+    expect([...teamLinkIds(links)].sort()).toEqual([132, 133]);
+  });
+
+  it("gives every link of a group the group's lowest slot", () => {
+    const links = [
+      { id: 10, teamPosition: 4, encounters: [enc(1, 10, "P1")] },
+      { id: 20, teamPosition: 2, encounters: [enc(2, 20, "P1", 1)] },
+      { id: 30, teamPosition: null, encounters: [enc(3, 30, "P1")] },
+    ];
+    expect(Object.fromEntries(groupTeamPositions(links))).toEqual({ 10: 2, 20: 2, 30: null });
+  });
+
+  it("is just the links with a slot when nothing is fused", () => {
+    const links = [
+      { id: 1, teamPosition: 3, encounters: [enc(1, 1, "P1")] },
+      { id: 2, teamPosition: null, encounters: [enc(2, 2, "P1")] },
+    ];
+    expect([...teamLinkIds(links)]).toEqual([1]);
+  });
+});
 
 const enc = (
   id: number,

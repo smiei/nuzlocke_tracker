@@ -7,6 +7,7 @@ import type { Learnset } from "@/lib/learnset";
 import { attackTypesAtLevel } from "@/lib/learnset";
 import { BlindflugNotice, useBlindflug } from "@/components/BlindflugProvider";
 import { movepoolId } from "@/lib/forms";
+import { computeFusionTypes } from "@/lib/fusion";
 import { TYPE_COLORS, TYPE_LABELS } from "@/lib/pokemonTypes";
 import { useClampedIntInput } from "@/lib/useClampedIntInput";
 import type { Player, RunMode } from "@/generated/prisma/client";
@@ -95,11 +96,17 @@ function TeamMatchup({
               <th key={m.encounterId} className="p-0 pb-1 text-center" title={m.name}>
                 <button
                   type="button"
-                  onClick={() => detail?.open(m.pokemonId)}
+                  onClick={() => detail?.open(m.pokemonId, m.bodyId ?? null)}
                   className="cursor-pointer rounded transition-opacity hover:opacity-80"
                   title={m.name}
                 >
-                  <PokemonSprite pokemonId={m.pokemonId} name={m.name} size="md" className="mx-auto h-8 w-8 sm:h-11 sm:w-11" />
+                  <PokemonSprite
+                    pokemonId={m.pokemonId}
+                    bodyId={m.bodyId ?? null}
+                    name={m.name}
+                    size="md"
+                    className="mx-auto h-8 w-8 sm:h-11 sm:w-11"
+                  />
                 </button>
               </th>
             ))}
@@ -135,6 +142,20 @@ function TeamMatchup({
   );
 }
 
+// One component's list unchanged; for a fusion (two lists), each attack type
+// once, at the lower of the levels either component learns it.
+function mergeAttackTypes<T extends { type: string; level: number }>(lists: T[][]): T[] {
+  if (lists.length <= 1) return lists[0] ?? [];
+  const best = new Map<string, T>();
+  for (const list of lists) {
+    for (const attack of list) {
+      const seen = best.get(attack.type);
+      if (!seen || attack.level < seen.level) best.set(attack.type, attack);
+    }
+  }
+  return [...best.values()].sort((a, b) => a.level - b.level);
+}
+
 export type BattleSharedProps = {
   pokemonList: Pokemon[];
   table: EffectivenessTable;
@@ -154,11 +175,14 @@ export type BattleSharedProps = {
 export function BattleCardBody({
   shared,
   selectedId,
+  bodyId = null,
   level,
   onChange,
 }: {
   shared: BattleSharedProps;
   selectedId: number | null;
+  // Infinite Fusion only: the optional body picked in the card header.
+  bodyId?: number | null;
   level: number;
   onChange: (patch: { level: number }) => void;
 }) {
@@ -170,20 +194,33 @@ export function BattleCardBody({
   const levelInput = useClampedIntInput(level, 1, 100, 100, (n) => onChange({ level: n }));
 
   const selectedRaw = pokemonList.find((p) => p.id === selectedId) ?? null;
+  // Infinite Fusion: trainers there field fusions, and the matchup only
+  // needs the fused typing.
+  const bodyRaw =
+    selectedRaw && bodyId != null ? (pokemonList.find((p) => p.id === bodyId) ?? null) : null;
   const opponentTypes = selectedRaw
-    ? selectedRaw.types
+    ? bodyRaw
+      ? [...new Set(computeFusionTypes(selectedRaw, bodyRaw))]
+      : selectedRaw.types
     : [];
   // Stats card lists ALL damaging attack types (every level), independent of
   // the entered level. The team matchup below only counts types reachable by
   // the entered level.
   // Formes with their own movepool (Deoxys, Wormadam, Shaymin) get their own
-  // learnset rows; the rest fall back to their species.
-  const learnsetId = selectedRaw
-    ? movepoolId(selectedRaw, (id) => learnset[String(id)] !== undefined)
-    : 0;
-  const allAttacks = selectedRaw ? attackTypesAtLevel(learnset, learnsetId, 100) : [];
-  const opponentAttacks = selectedRaw ? attackTypesAtLevel(learnset, learnsetId, level) : [];
+  // learnset rows; the rest fall back to their species. A fusion can use what
+  // either of its components learns.
+  const components = [selectedRaw, bodyRaw].filter((p): p is Pokemon => p !== null);
+  const attacksAt = (atLevel: number) =>
+    mergeAttackTypes(
+      components.map((p) =>
+        attackTypesAtLevel(learnset, movepoolId(p, (id) => learnset[String(id)] !== undefined), atLevel),
+      ),
+    );
+  const allAttacks = attacksAt(100);
+  const opponentAttacks = attacksAt(level);
   const opponentAttackTypes = opponentAttacks.map((a) => a.type);
+  // Infinite Fusion ships no learnset data at all - say so rather than "—".
+  const hasMoveData = Object.keys(learnset).length > 0;
 
   const multipliers = selectedRaw ? computeDefenseMultipliers(table, opponentTypes, attackTypes) : null;
   const groupLabels: Record<(typeof MULTIPLIER_GROUPS)[number], string> = {
@@ -244,6 +281,8 @@ export function BattleCardBody({
               </div>
               {blindflug ? (
                 <BlindflugNotice />
+              ) : !hasMoveData ? (
+                <p className="text-xs text-ink-subtle">{t.noMoveData}</p>
               ) : allAttacks.length === 0 ? (
                 <p className="text-xs text-ink-subtle">—</p>
               ) : (

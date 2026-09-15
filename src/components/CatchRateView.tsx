@@ -6,7 +6,14 @@ import { useDropdown } from "@/lib/useDropdown";
 import { useRouter } from "next/navigation";
 import type { Pokemon } from "@/lib/data";
 import type { BallId, StatusId } from "@/lib/catchrate";
-import { ballHasCondition, getBallIdsForGeneration, STATUS_IDS, computeCatchChance } from "@/lib/catchrate";
+import {
+  ballHasCondition,
+  getBallIdsForGeneration,
+  INFINITE_FUSION_VERSION_GROUP,
+  STATUS_IDS,
+  computeCatchChance,
+} from "@/lib/catchrate";
+import { computeFusionStats, computeFusionTypes, fusionCatchBaseRate } from "@/lib/fusion";
 import type { EffectivenessTable } from "@/lib/effectiveness";
 import { quickCatch } from "@/lib/actions";
 import { formatActionError } from "@/lib/actionErrors";
@@ -248,11 +255,14 @@ function QuickCatchPanel({
 export function CatchCardBody({
   shared,
   selectedId,
+  bodyId = null,
   state,
   onChange,
 }: {
   shared: CatchSharedProps;
   selectedId: number | null;
+  // Infinite Fusion only: the optional body picked in the card header.
+  bodyId?: number | null;
   state: CatchBodyState;
   onChange: (patch: Partial<CatchBodyState>) => void;
 }) {
@@ -266,6 +276,7 @@ export function CatchCardBody({
   const toast = useToast();
   const detail = usePokemonDetail();
   const ballIds = getBallIdsForGeneration(generation, versionGroup);
+  const isInfiniteFusion = versionGroup === INFINITE_FUSION_VERSION_GROUP;
 
   const { ball, hpPercent, level, status, turn, conditionMet } = state;
   const [caughtMsg, setCaughtMsg] = useState<string | null>(null);
@@ -274,30 +285,72 @@ export function CatchCardBody({
   const turnInput = useClampedIntInput(turn, 1, 99, 1, (n) => onChange({ turn: n }));
 
   const selected = pokemonList.find((p) => p.id === selectedId) ?? null;
+  const body =
+    selected && bodyId != null ? (pokemonList.find((p) => p.id === bodyId) ?? null) : null;
   // Catch rate, learnsets and movesets are all keyed by SPECIES: an
   // alternate forme (id 10001+) has no row of its own and inherits its
   // species' values.
-  const baseRate = selected ? catchRates[baseSpeciesId(selected)] : undefined;
-  const selectedTypes = selected ? selected.types : [];
+  const headRate = selected ? catchRates[baseSpeciesId(selected)] : undefined;
+  const bodyRate = body ? catchRates[baseSpeciesId(body)] : undefined;
+  // A fusion catches at the lower of its two rates, weighs the average of
+  // both, and has the fused typing and Speed (the game's FusedSpecies.rb).
+  const baseRate =
+    headRate === undefined || !body
+      ? headRate
+      : bodyRate === undefined
+        ? undefined
+        : fusionCatchBaseRate(headRate, bodyRate);
+  const selectedTypes = selected
+    ? body
+      ? [...new Set(computeFusionTypes(selected, body))]
+      : selected.types
+    : [];
+  const weight =
+    selected && body
+      ? selected.weight !== undefined && body.weight !== undefined
+        ? (selected.weight + body.weight) / 2
+        : undefined
+      : selected?.weight;
+  const baseSpeed = selected
+    ? body
+      ? computeFusionStats(selected, body)["Init."]
+      : selected.stats["Init."]
+    : undefined;
+  const displayName = selected
+    ? body
+      ? `${pokemonName(selected, lang)} / ${pokemonName(body, lang)}`
+      : pokemonName(selected, lang)
+    : "";
 
   const result =
     selected && baseRate !== undefined
-      ? computeCatchChance(generation, {
-          baseRate,
-          // Only the Heavy Ball uses it, but it must reach the formula.
-          weight: selected?.weight,
-          hpPercent,
-          level,
-          ball,
-          conditionMet,
-          status,
-          types: selectedTypes,
-          turn,
-        })
+      ? computeCatchChance(
+          generation,
+          {
+            baseRate,
+            // Only the Heavy Ball uses it, but it must reach the formula.
+            weight,
+            hpPercent,
+            level,
+            ball,
+            conditionMet,
+            status,
+            types: selectedTypes,
+            turn,
+            isFusion: body !== null,
+            baseSpeed,
+          },
+          versionGroup,
+        )
       : null;
 
-  const ballNote = (t.ballNotes as Partial<Record<BallId, string>>)[ball];
-  const hasCondition = ballHasCondition(ball);
+  // Infinite Fusion's own code differs from the real games for several balls,
+  // so its notes win where it has one.
+  const ballNote =
+    (isInfiniteFusion
+      ? (t.ballNotesInfiniteFusion as Partial<Record<BallId, string>>)[ball]
+      : undefined) ?? (t.ballNotes as Partial<Record<BallId, string>>)[ball];
+  const hasCondition = ballHasCondition(ball, versionGroup);
 
   function handleQuickCatch(
     routeId: number,
@@ -446,18 +499,28 @@ export function CatchCardBody({
               {detail ? (
                 <button
                   type="button"
-                  onClick={() => detail.open(selected.id)}
-                  aria-label={pokemonName(selected, lang)}
+                  onClick={() => detail.open(selected.id, body?.id ?? null)}
+                  aria-label={displayName}
                   className="shrink-0 cursor-pointer rounded transition-opacity hover:opacity-80"
                 >
-                  <PokemonSprite pokemonId={selected.id} name={pokemonName(selected, lang)} size="lg" />
+                  <PokemonSprite
+                    pokemonId={selected.id}
+                    bodyId={body?.id ?? null}
+                    name={displayName}
+                    size="lg"
+                  />
                 </button>
               ) : (
-                <PokemonSprite pokemonId={selected.id} name={pokemonName(selected, lang)} size="lg" />
+                <PokemonSprite
+                  pokemonId={selected.id}
+                  bodyId={body?.id ?? null}
+                  name={displayName}
+                  size="lg"
+                />
               )}
               <div>
-                <div className="mb-1 flex items-center gap-2">
-                  <span className="font-medium">{pokemonName(selected, lang)}</span>
+                <div className="mb-1 flex flex-wrap items-center gap-2">
+                  <span className="font-medium">{displayName}</span>
                   {selectedTypes.map((type) => (
                     <TypeBadge key={type} type={type} lang={lang} />
                   ))}
@@ -473,6 +536,9 @@ export function CatchCardBody({
                 <div className="mt-1 text-xs text-ink-subtle">
                   {t.details(baseRate ?? 0, result.ballText, result.statusText)}
                 </div>
+                {isInfiniteFusion && (
+                  <div className="mt-1 text-xs text-ink-subtle">{t.lastBallNote}</div>
+                )}
               </div>
             </div>
           </div>
@@ -498,6 +564,9 @@ export function CatchCardBody({
         <h3 className="mb-2 text-sm font-semibold">{t.caughtHeading}</h3>
         {selectedId === null ? (
           <p className="text-xs text-ink-subtle">{t.caughtNeedSelection}</p>
+        ) : body ? (
+          // An Encounter row is one species; a fusion is built on the Team tab.
+          <p className="text-xs text-ink-subtle">{t.caughtNoFusion}</p>
         ) : openSlots.length === 0 ? (
           <p className="text-xs text-ink-subtle">{t.caughtNoRoutes}</p>
         ) : isSoulLink ? (

@@ -60,6 +60,42 @@ export function groupSoulLinks(linkIds: number[], encounters: GroupableEncounter
   return [...groups.values()];
 }
 
+export type GroupableLink = {
+  id: number;
+  teamPosition: number | null;
+  encounters: GroupableEncounter[];
+};
+
+// Every link whose fusion group holds a team slot. A group's slots sit on only
+// some of its links (rebalanceTeamSlots), so "does this link have a
+// teamPosition" is the wrong question once fusions exist: after a crosswise
+// fusion the second route holds no slot, yet player 2's fusion lives there
+// and is just as much on the team.
+export function teamLinkIds(links: GroupableLink[]): Set<number> {
+  return new Set(
+    [...groupTeamPositions(links)].filter(([, position]) => position !== null).map(([id]) => id),
+  );
+}
+
+// Each link's GROUP team position: the lowest slot any link of its fusion
+// group holds, or null when the group is off the team. What to sort team
+// members by, for the same reason as teamLinkIds.
+export function groupTeamPositions(links: GroupableLink[]): Map<number, number | null> {
+  const byId = new Map(links.map((link) => [link.id, link]));
+  const positions = new Map<number, number | null>();
+  for (const group of groupSoulLinks(
+    links.map((link) => link.id),
+    links.flatMap((link) => link.encounters),
+  )) {
+    const held = group
+      .map((id) => byId.get(id)?.teamPosition)
+      .filter((position): position is number => position != null);
+    const lowest = held.length > 0 ? Math.min(...held) : null;
+    for (const id of group) positions.set(id, lowest);
+  }
+  return positions;
+}
+
 // Whether `e` is folded into another encounter of the same group - i.e. shown
 // as the body of its host's tile rather than as a unit of its own. A donor
 // whose host lies outside the group (filtered out) still counts as a unit, so

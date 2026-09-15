@@ -55,6 +55,7 @@ export function TmCompatView({
   movesTable,
   generation,
   moveTypeHistory,
+  hasMoveData = true,
 }: {
   lang: Lang;
   mode: RunMode;
@@ -65,6 +66,8 @@ export function TmCompatView({
   movesTable: MovesTable;
   generation: number;
   moveTypeHistory: MoveTypeHistoryEntry[];
+  // False for a game pack without any TM/tutor or level-up move data.
+  hasMoveData?: boolean;
 }) {
   const t = translations[lang].tms;
   const blindflug = useBlindflug();
@@ -105,6 +108,17 @@ export function TmCompatView({
   );
 
   const hasAnyMember = teams.some((tm) => tm.members.length > 0);
+
+  // Without data the move search would only ever find nothing; the tab stays
+  // in the navigation and explains why instead.
+  if (!hasMoveData) {
+    return (
+      <div>
+        <PageHeader title={t.heading} />
+        <EmptyState title={t.noMoveData} />
+      </div>
+    );
+  }
 
   return (
     <div>

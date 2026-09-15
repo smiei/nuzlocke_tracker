@@ -79,7 +79,11 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const runs = await prisma.run.findMany({ orderBy: { createdAt: "asc" } });
-  const games = getGames().map((game) => ({ id: game.id, names: game.names }));
+  const games = getGames().map((game) => ({
+    id: game.id,
+    names: game.names,
+    fusion: Boolean(game.fusion),
+  }));
 
   return (
     <html
@@ -159,7 +163,7 @@ export default async function RootLayout({
                       <RunSwitcher runs={runs} games={games} />
                     </Suspense>
                     <Suspense fallback={<div className="h-9 w-9 rounded-md border border-line" />}>
-                      <HeaderMenu runs={runs} />
+                      <HeaderMenu runs={runs} games={games} />
                     </Suspense>
                     <ThemeToggle />
                     {/* Suspense because it reads ?run= via useSearchParams,

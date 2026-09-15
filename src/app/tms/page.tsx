@@ -12,6 +12,7 @@ import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
 import { getLang } from "@/lib/i18n/getLang";
 import { displayNameWithForm, movepoolId } from "@/lib/forms";
+import { teamLinkIds } from "@/lib/fusionGroups";
 import { EncounterStatus, LinkStatus, Player, RunMode } from "@/generated/prisma/client";
 import { SpriteSetProvider } from "@/components/SpriteSetProvider";
 import { CanonicalRun } from "@/components/CanonicalRun";
@@ -44,6 +45,12 @@ export default async function TmsPage({
     include: { soulLink: true },
     orderBy: { id: "asc" },
   });
+  // "On the team" is asked of the encounter's fusion group, not of its own
+  // link (see src/lib/fusionGroups.ts) - the same as link.teamPosition in any
+  // run without fusions.
+  const onTeamLinkIds = teamLinkIds(
+    await prisma.soulLink.findMany({ where: { runId }, include: { encounters: true } }),
+  );
   const byPlayer = new Map<Player, TmTeamMember[]>([
     [Player.PLAYER1, []],
     [Player.PLAYER2, []],
@@ -56,7 +63,7 @@ export default async function TmsPage({
     if (e.soulLink?.status === LinkStatus.DEAD) continue;
     const pokemon = getPokemonByIdForGame(game, e.currentPokemonId);
     if (!pokemon) continue;
-    const onTeam = e.soulLink?.teamPosition != null;
+    const onTeam = e.soulLinkId !== null && onTeamLinkIds.has(e.soulLinkId);
     const members = byPlayer.get(e.player);
     if (seen.get(e.player)?.has(e.currentPokemonId)) {
       // Same species caught twice: it counts as "on the team" if ANY of them
@@ -129,6 +136,8 @@ export default async function TmsPage({
             movesTable={movesTable}
             generation={getDataGenerationForGame(game)}
             moveTypeHistory={moveTypeHistory}
+            // Infinite Fusion ships neither (see CLAUDE.md).
+            hasMoveData={Object.keys(tmCompat).length > 0 || Object.keys(moveset).length > 0}
           />
         </PokemonDetailProvider>
       </PlayerNamesProvider>

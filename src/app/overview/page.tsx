@@ -20,14 +20,15 @@ import {
 } from "@/lib/gameData";
 import { teamOffensiveCoverage } from "@/lib/effectiveness";
 import { attackTypesAtLevel } from "@/lib/learnset";
-import { maxEvolvedSumme } from "@/lib/evolutions";
+import { resolveEncounterMon } from "@/lib/encounterMon";
+import { isFoldedDonor, teamLinkIds } from "@/lib/fusionGroups";
 import { computeLevelCapProgress, computeRouteProgress, eliteFourIndex } from "@/lib/progress";
 import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
 import { getRoutesForRun } from "@/lib/runRoutes";
 import { getLang } from "@/lib/i18n/getLang";
 import { localizeName, pokemonName, routeName } from "@/lib/i18n/localize";
-import { displayNameWithForm, movepoolId } from "@/lib/forms";
+import { movepoolId } from "@/lib/forms";
 import { EncounterStatus, LinkStatus, Player, RunMode } from "@/generated/prisma/client";
 import { SpriteSetProvider } from "@/components/SpriteSetProvider";
 import { CanonicalRun } from "@/components/CanonicalRun";
@@ -111,22 +112,48 @@ export default async function OverviewPage({
   // movepool or falls back to its species.
   const learnset = getLearnset(game.versionGroup);
 
+  // Infinite Fusion: a fusion is two encounters, and its group's team slot can
+  // sit on either route's link (see src/lib/fusionGroups.ts) - so "on the
+  // team" is asked of the group, a donor is folded into its host, and a host's
+  // name/types/BST are the fused ones. All of this is a no-op without fusions.
+  const encounterMonDeps = {
+    pokemonById: (id: number) => getPokemonByIdForGame(game, id),
+    evolvesTo: (id: number) => getEvolutionById(id, evoOptions)?.evolvesTo ?? [],
+    inDex: (id: number) => isInDex(game, id),
+    lang,
+  };
+  const aliveLinks = soulLinks.filter((link) => link.status !== LinkStatus.DEAD);
+  const onTeamLinkIds = teamLinkIds(aliveLinks);
+  const visibleEncounterIds = new Set(soulLinks.flatMap((link) => link.encounters.map((e) => e.id)));
+  const donorByHostId = new Map(
+    allEncounters.filter((e) => e.fusedIntoId !== null).map((e) => [e.fusedIntoId as number, e]),
+  );
+  const movepoolOf = (pokemonId: number) => {
+    const pokemon = getPokemonByIdForGame(game, pokemonId);
+    // Formes with their own movepool keep it; the rest fall back.
+    return pokemon ? movepoolId(pokemon, (id) => learnset[String(id)] !== undefined) : pokemonId;
+  };
+
   // --- Team (alive + on a slot) per player: defensive + offensive coverage.
   const teamByPlayer = new Map<Player, TeamMember[]>(PLAYERS.map((p) => [p, []]));
-  for (const link of soulLinks) {
-    if (link.status === LinkStatus.DEAD || link.teamPosition === null) continue;
+  for (const link of aliveLinks) {
+    if (!onTeamLinkIds.has(link.id)) continue;
     for (const e of link.encounters) {
-      // Infinite Fusion: a donor is represented by its host's fusion card.
-      if (e.fusedIntoId !== null) continue;
-      const pokemon = getPokemonByIdForGame(game, e.currentPokemonId);
-      if (!pokemon) continue;
+      if (isFoldedDonor(e, visibleEncounterIds)) continue;
+      const mon = resolveEncounterMon(
+        e.currentPokemonId,
+        donorByHostId.get(e.id)?.currentPokemonId,
+        encounterMonDeps,
+      );
+      if (!mon) continue;
       teamByPlayer.get(e.player)?.push({
         encounterId: e.id,
         pokemonId: e.currentPokemonId,
-        // Formes with their own movepool keep it; the rest fall back.
-        speciesId: movepoolId(pokemon, (id) => learnset[String(id)] !== undefined),
-        name: displayNameWithForm(pokemon, lang),
-        types: pokemon.types,
+        speciesId: movepoolOf(e.currentPokemonId),
+        name: mon.name,
+        types: mon.types,
+        bodyId: mon.bodyId,
+        bodySpeciesId: mon.bodyId !== null ? movepoolOf(mon.bodyId) : null,
       });
     }
   }
@@ -173,7 +200,11 @@ export default async function OverviewPage({
   const offensiveGaps = teams.map(({ player, members }) => {
     const atkTypes = new Set<string>();
     for (const m of members) {
-      for (const a of attackTypesAtLevel(learnset, m.speciesId, coverageLevel)) atkTypes.add(a.type);
+      // A fusion can use what either component learns.
+      for (const speciesId of [m.speciesId, m.bodySpeciesId ?? null]) {
+        if (speciesId === null) continue;
+        for (const a of attackTypesAtLevel(learnset, speciesId, coverageLevel)) atkTypes.add(a.type);
+      }
     }
     return { player, gaps: teamOffensiveCoverage(table, [...atkTypes], defenderTypes).gaps };
   });
@@ -242,18 +273,19 @@ export default async function OverviewPage({
     for (const e of link.encounters) {
       if (e.status !== EncounterStatus.CAUGHT) continue;
       caught.set(e.player, (caught.get(e.player) ?? 0) + 1);
-      // Infinite Fusion: a donor is represented by its host's fusion card,
-      // not independently - it must count towards neither team nor bank BST
-      // (it still counts as "caught" above, which is a historical tally).
-      if (e.fusedIntoId !== null) continue;
-      const summe = getPokemonByIdForGame(game, e.currentPokemonId)?.stats.Summe ?? 0;
-      const summeMax = maxEvolvedSumme(
+      // Infinite Fusion: a donor is represented by its host's fusion, not
+      // independently - it counts towards neither team nor bank BST (it still
+      // counts as "caught" above, which is a historical tally), and the host
+      // counts with the fused BST.
+      if (isFoldedDonor(e, visibleEncounterIds)) continue;
+      const mon = resolveEncounterMon(
         e.currentPokemonId,
-        (id) => getEvolutionById(id, evoOptions)?.evolvesTo ?? [],
-        (id) => getPokemonByIdForGame(game, id)?.stats.Summe ?? 0,
-        (id) => isInDex(game, id),
+        donorByHostId.get(e.id)?.currentPokemonId,
+        encounterMonDeps,
       );
-      if (link.teamPosition !== null) {
+      const summe = mon?.stats.Summe ?? 0;
+      const summeMax = mon?.summeMax ?? 0;
+      if (onTeamLinkIds.has(link.id)) {
         teamSumme += summe;
         teamSummeMax += summeMax;
         teamSummePlayer.set(e.player, (teamSummePlayer.get(e.player) ?? 0) + summe);
@@ -328,6 +360,7 @@ export default async function OverviewPage({
             attackTypes={defenderTypes}
             offensiveGaps={offensiveGaps}
             coverageLevel={coverageLevel}
+            hasMoveData={Object.keys(learnset).length > 0}
             stats={stats}
             deathTally={deathTally}
             memorial={memorial}

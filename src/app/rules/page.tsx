@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
+import { getGameOrDefault } from "@/lib/data";
 import { getLang } from "@/lib/i18n/getLang";
 import { DEFAULT_RULES } from "@/lib/defaultRules";
 import { RulesView } from "@/components/RulesView";
@@ -13,7 +14,7 @@ export default async function RulesPage({
   searchParams: Promise<{ run?: string }>;
 }) {
   const { run } = await searchParams;
-  const { runId, mode, settings } = await resolveRunId(run);
+  const { runId, mode, gameId, settings } = await resolveRunId(run);
 
   const lang = await getLang();
 
@@ -41,6 +42,7 @@ export default async function RulesPage({
         defaultMarkdown={defaultMarkdown}
         settings={settings}
         presets={presets}
+        fusionEnabled={Boolean(getGameOrDefault(gameId).fusion)}
       />
     </>
   );

@@ -33,7 +33,26 @@ export type BallId =
   | "heal"
   | "dream"
   | "heavy"
-  | "sport";
+  | "sport"
+  // Pokémon Infinite Fusion only (see BALLS_INFINITE_FUSION): one more real
+  // ball, then the game's own inventions. "boost" and "glitter" are the
+  // game's TRADEBALL and SHINYBALL, named after what the game displays.
+  | "cherish"
+  | "gender"
+  | "boost"
+  | "ability"
+  | "virus"
+  | "glitter"
+  | "perfect"
+  | "toxic"
+  | "spark"
+  | "scorch"
+  | "frost"
+  | "pure"
+  | "status"
+  | "candy"
+  | "rocket"
+  | "fusion";
 
 export type StatusId = "none" | "sleep" | "freeze" | "paralysis" | "poison" | "burn";
 
@@ -123,7 +142,61 @@ const BALLS_GEN4_HGSS: BallId[] = [
   "sport",
 ];
 
+// The version group of both Infinite Fusion packs - selects the game's own
+// ball list and capture code (computeInfiniteFusion) instead of a generation.
+export const INFINITE_FUSION_VERSION_GROUP = "infinite-fusion";
+
+// Every ball in Infinite Fusion's own $BallTypes table
+// (Data/Scripts/011_Battle/005_BallHandlers_PokeBallEffects.rb in
+// github.com/infinitefusion/infinitefusion-e18), in that order: 25 real-game
+// balls, then the game's 15 own. Left out: FIRECRACKER (listed there, but it
+// only damages the target and never catches) and the Invisiball (an item that
+// is not in the table and not obtainable).
+const BALLS_INFINITE_FUSION: BallId[] = [
+  "poke",
+  "great",
+  "safari",
+  "ultra",
+  "master",
+  "net",
+  "dive",
+  "nest",
+  "repeat",
+  "timer",
+  "luxury",
+  "premier",
+  "dusk",
+  "heal",
+  "quick",
+  "cherish",
+  "fast",
+  "level",
+  "lure",
+  "heavy",
+  "love",
+  "friend",
+  "moon",
+  "sport",
+  "dream",
+  "gender",
+  "boost",
+  "ability",
+  "virus",
+  "glitter",
+  "perfect",
+  "toxic",
+  "spark",
+  "scorch",
+  "frost",
+  "pure",
+  "status",
+  "candy",
+  "rocket",
+  "fusion",
+];
+
 export function getBallIdsForGeneration(generation: number, versionGroup?: string): BallId[] {
+  if (versionGroup === INFINITE_FUSION_VERSION_GROUP) return BALLS_INFINITE_FUSION;
   if (generation === 1) return BALLS_GEN1;
   if (generation === 2) return BALLS_GEN2;
   if (generation >= 5) return BALLS_GEN5;
@@ -152,8 +225,22 @@ const CONDITIONAL_BALLS = new Set<BallId>([
   "park",
 ]);
 
-export function ballHasCondition(ball: BallId): boolean {
-  return CONDITIONAL_BALLS.has(ball);
+// Infinite Fusion computes the Fast Ball from the target's base Speed instead
+// of a flee-prone species list, so it needs no checkbox there.
+const CONDITIONAL_BALLS_INFINITE_FUSION = new Set<BallId>([
+  "repeat",
+  "dive",
+  "dusk",
+  "level",
+  "lure",
+  "moon",
+  "love",
+]);
+
+export function ballHasCondition(ball: BallId, versionGroup?: string): boolean {
+  return versionGroup === INFINITE_FUSION_VERSION_GROUP
+    ? CONDITIONAL_BALLS_INFINITE_FUSION.has(ball)
+    : CONDITIONAL_BALLS.has(ball);
 }
 
 const STATUS_MULTIPLIERS: Record<StatusId, number> = {
@@ -276,6 +363,10 @@ export type CatchInput = {
   status: StatusId;
   types: string[];
   turn: number; // battle turn (Timer/Quick Ball)
+  // Infinite Fusion only: the target is a fusion (Fusion Ball) and its base
+  // Speed (Fast Ball).
+  isFusion?: boolean;
+  baseSpeed?: number;
 };
 
 export type CatchResult = {
@@ -393,7 +484,155 @@ function computeGen5(input: CatchInput): CatchResult {
   return { guaranteed: false, chance, ballText, statusText };
 }
 
-export function computeCatchChance(generation: number, input: CatchInput): CatchResult {
+// ---------------------------------------------------------------------------
+// Pokémon Infinite Fusion runs on Pokémon Essentials v18 with its own capture
+// code, read from github.com/infinitefusion/infinitefusion-e18:
+// pbCaptureCalc (011_Battle/003_Battle/001_PokeBattle_BattleCommon.rb), the
+// ball handlers (011_Battle/005_BallHandlers_PokeBallEffects.rb) and the
+// game's own balls (052_AddOns/New Balls.rb, which also REPLACES the Dream
+// Ball's handler - it loads later). It is none of the real generations:
+//   - the modified rate is floored after the status bonus, then the shake
+//     value uses Gen 5's exponent 3/16 but makes FOUR checks, not three;
+//   - NEW_POKE_BALL_CATCH_RATES is off (MECHANICS_GENERATION = 5), so Net,
+//     Repeat and Lure are ×3, Dusk ×3.5, and the Heavy Ball uses the old
+//     weight brackets with no neutral step;
+//   - the "last ball in the bag" critical capture is not modelled (it depends
+//     on the bag contents and the dex count, not on the throw).
+// ---------------------------------------------------------------------------
+
+// Balls that give the target a status as they are thrown, before the status
+// bonus is read - so e.g. a Frost Ball earns the ×2.5 freeze bonus.
+const STATUS_BALLS_INFINITE_FUSION: Partial<Record<BallId, StatusId>> = {
+  dream: "sleep",
+  toxic: "poison",
+  spark: "paralysis",
+  scorch: "burn",
+  frost: "freeze",
+};
+
+// Weights are compared in hectograms there; below 204.8 kg is always -20.
+export function heavyBallModifierInfiniteFusion(weightKg: number | undefined): number {
+  if (weightKg === undefined) return 0;
+  const hectograms = weightKg * 10;
+  if (hectograms >= 4096) return 40;
+  if (hectograms >= 3072) return 30;
+  if (hectograms >= 2048) return 20;
+  return -20;
+}
+
+// Ruby's Float#floor(1), which several of the game's own balls use.
+const floorToTenth = (n: number) => Math.floor(n * 10) / 10;
+const multiplierText = (m: number) => `×${Number(m.toFixed(2))}`;
+
+function modifiedRateInfiniteFusion(input: CatchInput): { rate: number; ballText: string } {
+  const rate = input.baseRate;
+  const conditionOff =
+    ballHasCondition(input.ball, INFINITE_FUSION_VERSION_GROUP) && input.conditionMet === false;
+  // `capped`: the handlers that clamp their own result to 255.
+  const times = (m: number, capped = false) => ({
+    rate: capped ? Math.min(255, rate * m) : rate * m,
+    ballText: multiplierText(m),
+  });
+  switch (input.ball) {
+    case "great":
+    case "safari":
+    case "sport":
+      return times(1.5);
+    case "ultra":
+      return times(2);
+    case "net":
+      return times(input.types.includes("water") || input.types.includes("bug") ? 3 : 1);
+    case "dive":
+      return times(conditionOff ? 1 : 3.5);
+    case "nest":
+      return times(input.level <= 30 ? Math.max((41 - input.level) / 10, 1) : 1);
+    case "repeat":
+      return times(conditionOff ? 1 : 3);
+    case "timer":
+      // turnCount is 0 on the first turn.
+      return times(Math.min(1 + 0.3 * (input.turn - 1), 4));
+    case "dusk":
+      return times(conditionOff ? 1 : 3.5);
+    case "quick":
+      return times(input.turn === 1 ? 5 : 1);
+    case "fast":
+      return times((input.baseSpeed ?? 0) >= 100 ? 4 : 1, true);
+    case "level":
+      // ×2/×4/×8 by the level ratio; ×4 assumed, like the other games.
+      return times(conditionOff ? 1 : 4, true);
+    case "lure":
+      return times(conditionOff ? 1 : 3, true);
+    case "love":
+      return times(conditionOff ? 1 : 8, true);
+    case "moon":
+      return times(conditionOff ? 1 : 4, true);
+    case "heavy": {
+      if (rate === 0) return { rate: 0, ballText: "+0" };
+      const modifier = heavyBallModifierInfiniteFusion(input.weight);
+      return {
+        rate: Math.min(255, Math.max(1, rate + modifier)),
+        ballText: modifier >= 0 ? `+${modifier}` : `${modifier}`,
+      };
+    }
+    case "boost":
+      return { rate: floorToTenth(rate * 0.8), ballText: "×0.8" };
+    case "ability":
+      return { rate: floorToTenth(rate * 0.6), ballText: "×0.6" };
+    case "virus":
+      return { rate: floorToTenth(rate * 0.4), ballText: "×0.4" };
+    case "glitter":
+      return { rate: floorToTenth(rate * 0.2), ballText: "×0.2" };
+    case "perfect":
+      return { rate: floorToTenth(rate * 0.1), ballText: "×0.1" };
+    case "candy":
+      return { rate: Math.floor(rate * 0.8), ballText: "×0.8" };
+    // The game's Pure and Status Balls compare the battler's status against
+    // the integer 0, but statuses are symbols (:NONE) there - so the Pure
+    // Ball's "no status" bonus never applies and the Status Ball's "any
+    // status" bonus always does. Modelled as the game behaves, not as the
+    // ball descriptions intend.
+    case "pure":
+      return times(1);
+    case "status":
+      return { rate: Math.floor((rate * 5) / 2), ballText: "×2.5" };
+    case "fusion":
+      return times(input.isFusion ? 3 : 1);
+    // poke, luxury, premier, heal, cherish, friend, gender, rocket, and the
+    // status-inflicting balls: no rate change of their own.
+    default:
+      return times(1);
+  }
+}
+
+function computeInfiniteFusion(input: CatchInput): CatchResult {
+  const { rate, ballText } = modifiedRateInfiniteFusion(input);
+  const status = STATUS_BALLS_INFINITE_FUSION[input.ball] ?? input.status;
+  const statusBonus =
+    status === "sleep" || status === "freeze" ? 2.5 : status === "none" ? 1 : 1.5;
+  const statusText = `×${statusBonus}`;
+
+  if (input.ball === "master") {
+    return { guaranteed: true, chance: 1, ballText: "×1", statusText };
+  }
+
+  const hpFrac = Math.min(100, Math.max(1, input.hpPercent)) / 100;
+  const x = Math.max(1, Math.floor(((3 - 2 * hpFrac) / 3) * rate * statusBonus));
+  if (x >= 255) {
+    return { guaranteed: true, chance: 1, ballText, statusText };
+  }
+
+  const y = Math.floor(65536 / Math.pow(255 / x, 0.1875));
+  return { guaranteed: false, chance: Math.pow(y / 65536, 4), ballText, statusText };
+}
+
+// `versionGroup` only matters for Infinite Fusion, whose capture code is its
+// own rather than a generation's.
+export function computeCatchChance(
+  generation: number,
+  input: CatchInput,
+  versionGroup?: string,
+): CatchResult {
+  if (versionGroup === INFINITE_FUSION_VERSION_GROUP) return computeInfiniteFusion(input);
   if (generation === 1) return computeGen1(input);
   if (generation === 2) return computeGen2(input);
   if (generation >= 5) return computeGen5(input);

@@ -13,6 +13,9 @@ export type RunSummary = {
 export type GameSummary = {
   id: string;
   names: LocalizedNames;
+  // The pack has fusions (Infinite Fusion) - the gear menu credits its
+  // outside sources while such a run is open.
+  fusion?: boolean;
 };
 
 // Shared by a fusion's host row and its body sub-object - the evolution

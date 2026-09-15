@@ -140,6 +140,7 @@ export function OverviewView({
   levelCapMarkerAt,
   badges,
   deathPointOptions,
+  hasMoveData = true,
 }: {
   runId: number;
   lang: Lang;
@@ -157,6 +158,9 @@ export function OverviewView({
   levelCapMarkerAt: number | null;
   badges: OverviewBadge[];
   deathPointOptions: DeathPointOption[];
+  // False for a game pack without learnset data (Infinite Fusion): every
+  // type would otherwise read as an offensive gap.
+  hasMoveData?: boolean;
 }) {
   const t = translations[lang].overview;
   const blindflug = useBlindflug();
@@ -307,7 +311,11 @@ export function OverviewView({
                           i
                         </span>
                       </h3>
-                      {o.gaps.length === 0 ? (
+                      {!hasMoveData ? (
+                        <p className="text-xs text-ink-subtle">
+                          {translations[lang].typen.noMoveData}
+                        </p>
+                      ) : o.gaps.length === 0 ? (
                         <p className="text-sm text-success">{t.noGaps}</p>
                       ) : (
                         <div className="flex flex-wrap gap-1">
@@ -318,7 +326,9 @@ export function OverviewView({
                           ))}
                         </div>
                       )}
-                      <p className="mt-2 text-xs text-ink-subtle">{t.offensiveHint}</p>
+                      {hasMoveData && (
+                        <p className="mt-2 text-xs text-ink-subtle">{t.offensiveHint}</p>
+                      )}
                     </Card>
                   ),
               )}

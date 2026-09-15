@@ -76,6 +76,9 @@ const TOGGLE_ORDER: BooleanSettingKey[] = [
   "evolutionOverridesEasier",
   "evolutionOverridesTimeBased",
   "statics",
+  // Infinite Fusion only - filtered out below for every other pack, where
+  // there is nothing to fuse.
+  "customSpritesOnly",
 ];
 
 // One switch row, shared by the rule toggles and the debug switch below them.
@@ -143,6 +146,7 @@ export function RulesView({
   defaultMarkdown,
   settings,
   presets,
+  fusionEnabled = false,
 }: {
   runId: number;
   lang: Lang;
@@ -150,6 +154,9 @@ export function RulesView({
   markdown: string;
   defaultMarkdown: string;
   settings: RunSettings;
+  // The run's game pack has fusions (Infinite Fusion) - gates the toggles
+  // that only mean something there.
+  fusionEnabled?: boolean;
   // App-wide, not run-scoped - the same list appears in every run.
   presets: RulePresetSummary[];
 }) {
@@ -322,7 +329,9 @@ export function RulesView({
         <div>
           <Section title={t.settingsHeading}>
             <Card padding="none" className="divide-y divide-line overflow-hidden">
-              {TOGGLE_ORDER.map(renderToggle)}
+              {TOGGLE_ORDER.filter((key) => fusionEnabled || key !== "customSpritesOnly").map(
+                renderToggle,
+              )}
             </Card>
           </Section>
 

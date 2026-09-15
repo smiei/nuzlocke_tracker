@@ -65,7 +65,29 @@ const BALLS = [
   "dream",
   "heavy",
   "sport",
+  "cherish",
 ];
+
+// Pokémon Infinite Fusion's own balls have no PokeAPI sprite: their icons come
+// from the game's own repository (Graphics/Items), downloaded here like every
+// other sprite and never committed. Local ball id -> file name in that folder.
+const INFINITE_FUSION_BALLS = {
+  gender: "GENDERBALL",
+  boost: "TRADEBALL",
+  ability: "ABILITYBALL",
+  virus: "VIRUSBALL",
+  glitter: "SHINYBALL",
+  perfect: "PERFECTBALL",
+  toxic: "TOXICBALL",
+  spark: "SPARKBALL",
+  scorch: "SCORCHBALL",
+  frost: "FROSTBALL",
+  pure: "PUREBALL",
+  status: "STATUSBALL",
+  candy: "CANDYBALL",
+  rocket: "ROCKETBALL",
+  fusion: "FUSIONBALL",
+};
 
 async function download(url, target) {
   const res = await fetch(url);
@@ -196,6 +218,24 @@ async function main() {
     ),
   );
   console.log(`ball sprites: ${missingBalls.length} downloaded, ${BALLS.length} total`);
+
+  // allSettled: a missing icon only costs that one ball its picture (the
+  // picker falls back to a blank square), never the rest of the run.
+  const missingFusionBalls = Object.entries(INFINITE_FUSION_BALLS).filter(
+    ([id]) => !existsSync(path.join(ballOutDir, `${id}.png`)),
+  );
+  const fusionResults = await Promise.allSettled(
+    missingFusionBalls.map(([id, file]) =>
+      download(
+        `https://raw.githubusercontent.com/infinitefusion/infinitefusion-e18/HEAD/Graphics/Items/${file}.png`,
+        path.join(ballOutDir, `${id}.png`),
+      ),
+    ),
+  );
+  const failedFusionBalls = fusionResults.filter((r) => r.status === "rejected").length;
+  console.log(
+    `Infinite Fusion ball sprites: ${missingFusionBalls.length - failedFusionBalls} downloaded, ${failedFusionBalls} failed`,
+  );
 }
 
 main().catch((err) => {
