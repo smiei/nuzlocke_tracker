@@ -44,8 +44,25 @@ describe("public/manifest.webmanifest", () => {
     start_url: string;
     scope: string;
     display: string;
+    theme_color: string;
+    background_color: string;
     icons: { src: string; sizes: string; purpose: string }[];
   };
+
+  it("pins theme_color dark, matching background_color", () => {
+    // An installed Chrome WebAPK reads ONLY this static value, baked in at
+    // install time - never the live <meta name="theme-color"> ThemeColorSync
+    // writes, light or dark. Android also chooses the status-bar glyph
+    // colour (light/dark icons) from the PHONE's own system setting, not
+    // from this value's luminance, so there is no single colour that reads
+    // correctly against both possible glyph colours: "#ffffff" here left the
+    // battery/clock icons invisible for any user whose phone was in system
+    // dark mode, which is the common case for this app. Pinning dark instead
+    // of mirroring globals.css's light/dark pair is a deliberate, asymmetric
+    // trade-off - see the "Android PWA status-bar bug" note in CLAUDE.md.
+    expect(manifest.theme_color).toBe(manifest.background_color);
+    expect(manifest.theme_color).toBe("#09090b");
+  });
 
   it("sets an explicit id", () => {
     // Without one the id defaults to start_url, so changing start_url later

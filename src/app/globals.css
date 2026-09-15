@@ -178,8 +178,9 @@
   --font-mono: var(--font-geist-mono);
 }
 
-/* The two canvas values also appear in public/manifest.webmanifest and in
-   ThemeColorSync.tsx - change all three together. */
+/* The two canvas values also appear in ThemeColorSync.tsx - change both
+   together. manifest.webmanifest's theme_color is DELIBERATELY NOT this pair:
+   see the comment on that field for why it pins dark unconditionally. */
 body {
   background: var(--canvas);
   color: var(--ink);
