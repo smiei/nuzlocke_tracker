@@ -167,6 +167,7 @@ export async function saveEncounter(
       }
       if (isDonor) {
         await tx.encounter.update({ where: { id: existing.id }, data: { fusedIntoId: null } });
+        await deleteBodyPointedInto(tx, runId, existing.fusedIntoId);
       }
       if (isHost) {
         // A wild-caught body exists only because of THIS catch - re-declaring
@@ -471,6 +472,7 @@ export async function clearEncounter(
       where: { fusedIntoId: existing.id, isFusionBody: true },
     });
     if (body) await deleteFusionBody(tx, runId, body);
+    await deleteBodyPointedInto(tx, runId, existing.fusedIntoId);
     await tx.encounter.delete({ where: { id: existing.id } });
     if (soulLinkId !== null) {
       const remaining = await tx.encounter.count({ where: { soulLinkId } });
@@ -735,6 +737,21 @@ async function deleteFusionBody(
   await tx.customRoute.deleteMany({ where: { runId, routeId: body.routeId } });
 }
 
+// The other orientation: a catch fused INTO a wild-caught body. swapFusion used
+// to flip a wild fusion's rows, which left exactly this behind - a body that
+// became the head, invisible on every tab because it has no link. Clearing or
+// re-declaring the catch removes it too, so such a pair can be fixed from the
+// Encounter tab.
+async function deleteBodyPointedInto(
+  tx: Prisma.TransactionClient,
+  runId: number,
+  fusedIntoId: number | null,
+): Promise<void> {
+  if (fusedIntoId === null) return;
+  const into = await tx.encounter.findUnique({ where: { id: fusedIntoId } });
+  if (into?.isFusionBody) await deleteFusionBody(tx, runId, into);
+}
+
 export type SetEncounterBodyResult = { success: true } | { success: false; error: ActionError };
 
 // Infinite Fusion: the catch on this route was ALREADY a fusion (the game's
@@ -854,12 +871,15 @@ export async function unfuseEncounter(runId: number, hostId: number): Promise<Fu
   }
   // Splitting a WILD-caught fusion turns one catch into two Pokémon, which is
   // what the game does - but a run can rule that out (wildFusionSplit).
+  let hostRouteName: string | null = null;
   if (donor.isFusionBody) {
     const run = await prisma.run.findUnique({ where: { id: runId } });
     if (!run) return { success: false, error: { key: "runNotFound", id: runId } };
     if (!parseRunSettings(run.settingsJson).wildFusionSplit) {
       return { success: false, error: { key: "fusionSplitDisabled" } };
     }
+    const hostRoute = await getRouteForRun(runId, run.gameId, host.routeId);
+    hostRouteName = hostRoute ? localizeName(hostRoute.names, "en") : null;
   }
 
   await prisma.$transaction(async (tx) => {
@@ -868,14 +888,41 @@ export async function unfuseEncounter(runId: number, hostId: number): Promise<Fu
     const groupBefore = await fusionGroupLinkIds(tx, runId, host.soulLinkId);
     const wasOnTeam =
       (await tx.soulLink.count({ where: { id: { in: groupBefore }, teamPosition: { not: null } } })) > 0;
-    // Once split, a wild-caught body is a Pokémon of its own: it keeps its
-    // hidden route but stops being "part of that catch" (Species Clause,
-    // clearing the head's row).
+    let splitLinkId: number | null = null;
+    if (donor.isFusionBody) {
+      // Once split, a wild-caught body is a Pokémon of its own: it stops being
+      // "part of that catch" (Species Clause, clearing the head's row) and
+      // gets the SoulLink it never had - every tab reaches a Pokémon through
+      // a link, so without one it would simply vanish from the Team tab. Its
+      // own link, not the head's: a link holds ONE team slot, and the head's
+      // player now carries two Pokémon from that route. Its hidden route is
+      // still no place, so it takes the head route's name for the card title.
+      const link = await tx.soulLink.upsert({
+        where: { runId_routeId: { runId, routeId: donor.routeId } },
+        create: { runId, routeId: donor.routeId },
+        update: {},
+      });
+      splitLinkId = link.id;
+      if (hostRouteName) {
+        await tx.customRoute.updateMany({
+          where: { runId, routeId: donor.routeId },
+          data: { name: hostRouteName.slice(0, CUSTOM_ROUTE_NAME_MAX) },
+        });
+      }
+    }
     await tx.encounter.update({
       where: { id: donor.id },
-      data: { fusedIntoId: null, isFusionBody: false },
+      data: {
+        fusedIntoId: null,
+        isFusionBody: false,
+        ...(splitLinkId !== null ? { soulLinkId: splitLinkId } : {}),
+      },
     });
-    await rebalanceTeamSlots(tx, runId, wasOnTeam ? groupBefore : []);
+    await rebalanceTeamSlots(
+      tx,
+      runId,
+      wasOnTeam ? [...groupBefore, ...(splitLinkId !== null ? [splitLinkId] : [])] : [],
+    );
   });
 
   revalidatePath("/links");
@@ -886,7 +933,8 @@ export async function unfuseEncounter(runId: number, hostId: number): Promise<Fu
 // The DNA Reverser: swaps which of the pair is head and which is body. hostId
 // is the CURRENT head - after this call the current donor is the head
 // instead, so a caller tracking "the fusion at hostId" must switch to
-// tracking the (former) donor's id.
+// tracking the (former) donor's id. Except for a wild-caught fusion, whose
+// rows keep their roles and swap species (see below).
 export async function swapFusion(runId: number, hostId: number): Promise<FuseResult> {
   const host = await prisma.encounter.findUnique({
     where: { id: hostId },
@@ -904,6 +952,27 @@ export async function swapFusion(runId: number, hostId: number): Promise<FuseRes
   }
   if (host.soulLink?.status === LinkStatus.DEAD || donor.soulLink?.status === LinkStatus.DEAD) {
     return { success: false, error: { key: "fusionDead" } };
+  }
+
+  // A wild-caught body is only half of its head's catch: it has no SoulLink
+  // and lives on a hidden route, so it can never be the host - every tab
+  // reaches a fusion through its host's link. Swapping one swaps the SPECIES
+  // between the two rows instead, which keeps the head on the route (with its
+  // link, team slot, nickname and shiny flag) and the body where it was.
+  if (donor.isFusionBody) {
+    const species = (e: { pokemonId: number; currentPokemonId: number; familyId: number }) => ({
+      pokemonId: e.pokemonId,
+      currentPokemonId: e.currentPokemonId,
+      familyId: e.familyId,
+    });
+    await prisma.$transaction([
+      prisma.encounter.update({ where: { id: hostId }, data: species(donor) }),
+      prisma.encounter.update({ where: { id: donor.id }, data: species(host) }),
+    ]);
+    revalidatePath("/tracker");
+    revalidatePath("/links");
+    publishChange(runId);
+    return { success: true };
   }
 
   await prisma.$transaction(async (tx) => {

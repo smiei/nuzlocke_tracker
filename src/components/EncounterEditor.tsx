@@ -154,6 +154,10 @@ export function EncounterEditor({
   const [shiny, setShiny] = useState(current?.shiny ?? false);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+  // Infinite Fusion: the body picker stays out of the way until the catch is
+  // declared a fusion. A saved body always shows it, on every device.
+  const [caughtAsFusion, setCaughtAsFusion] = useState(false);
+  const bodyShown = caughtAsFusion || Boolean(body?.isFusionBody);
 
   const selectedName = (() => {
     const p = selectedId != null ? pokemonList.find((x) => x.id === selectedId) : null;
@@ -233,9 +237,11 @@ export function EncounterEditor({
     setSelectedId(pokemonId);
     if (pokemonId !== current?.pokemonId) {
       // A different species = a different individual - its nickname and shiny
-      // flag don't carry over. Re-picking the same species keeps them.
+      // flag don't carry over, and neither does a body (the server deletes
+      // it). Re-picking the same species keeps them.
       setNickname("");
       setShiny(false);
+      setCaughtAsFusion(false);
       persist({ pokemonId, status, nickname: null, shiny: false });
     } else {
       persist({ pokemonId, status });
@@ -264,6 +270,12 @@ export function EncounterEditor({
   }
 
 
+  function handleCaughtAsFusion(next: boolean) {
+    setCaughtAsFusion(next);
+    // Unticking undoes the fusion, the same as clearing the picker.
+    if (!next && body?.isFusionBody) handleBody(null);
+  }
+
   function handleBody(bodyPokemonId: number | null) {
     setError(null);
     onTouched(routeId);
@@ -286,6 +298,7 @@ export function EncounterEditor({
         setSelectedId(null);
         setStatus(EncounterStatus.CAUGHT);
         setNickname("");
+        setCaughtAsFusion(false);
         router.refresh();
       } else {
         setError(formatActionError(result.error, lang));
@@ -315,31 +328,49 @@ export function EncounterEditor({
           )}
         </span>
       )}
-      {fusionEnabled && current && !host && status === EncounterStatus.CAUGHT && (
-        <div className="flex flex-col gap-1">
-          <span className="text-xs font-medium text-ink-muted">{t.links.bodyLabel}</span>
-          {body && !body.isFusionBody ? (
-            // Fused in on the Team tab: a catch of its own, so this row only
-            // names it - splitting it is the Team tab's job.
-            <div className="rounded-md border border-line bg-sunken px-3 py-2">
-              <p className="text-sm text-ink">
-                {speciesName(body.currentPokemonId)} ({placeName(body, encounters, routes, lang)})
-              </p>
-              <p className="text-xs text-ink-subtle">{t.tracker.fusedOnTeamTab}</p>
-            </div>
-          ) : (
-            <PokemonCombobox
-              lang={lang}
-              pokemonList={pokemonList}
-              selectedId={body?.pokemonId ?? null}
-              onSelect={handleBody}
-              onClear={() => handleBody(null)}
-              lockedFamilyIds={lockedFamilyIds}
-              disabled={pending}
-            />
+      {/* Fused in on the Team tab: a catch of its own, so this row only names
+          it - splitting and swapping are the Team tab's job. */}
+      {fusionEnabled && body && !body.isFusionBody && (
+        <span className="text-xs text-ink-subtle">
+          {t.tracker.fusedWith(
+            speciesName(body.currentPokemonId),
+            placeName(body, encounters, routes, lang),
           )}
-        </div>
+        </span>
       )}
+      {fusionEnabled &&
+        current &&
+        !host &&
+        !(body && !body.isFusionBody) &&
+        status === EncounterStatus.CAUGHT && (
+          <div className="flex flex-col gap-1">
+            <label className="flex h-10 cursor-pointer items-center gap-2 self-start">
+              <input
+                type="checkbox"
+                checked={bodyShown}
+                disabled={pending}
+                onChange={(e) => handleCaughtAsFusion(e.target.checked)}
+                className="accent-success"
+              />
+              <span className="text-xs text-ink-muted">{t.tracker.caughtAsFusion}</span>
+            </label>
+            {bodyShown && (
+              <PokemonCombobox
+                lang={lang}
+                pokemonList={pokemonList}
+                selectedId={body?.pokemonId ?? null}
+                onSelect={handleBody}
+                onClear={() => {
+                  // Clearing the field is not unticking: keep it open.
+                  setCaughtAsFusion(true);
+                  handleBody(null);
+                }}
+                lockedFamilyIds={lockedFamilyIds}
+                disabled={pending}
+              />
+            )}
+          </div>
+        )}
       {selectedId !== null && (
         <div className="flex flex-wrap items-center gap-2 text-xs">
           <PokemonInfoButton pokemonId={selectedId} label={selectedName} />

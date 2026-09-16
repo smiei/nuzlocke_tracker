@@ -121,6 +121,12 @@ export default async function LinksPage({
     const route = routeById.get(routeId);
     return route ? routeName(route, lang) : `Route #${routeId}`;
   };
+  // A hidden route is not a place, so a Pokémon on one is named by the route
+  // it is tied to instead: a wild-caught fusion's body by its head's route, a
+  // split-off body by the link it joined. A free-team slot is tied to nothing
+  // else and keeps its own name.
+  const placeOf = (routeId: number, tiedToRouteId: number) =>
+    routeNameOf(routeById.get(routeId)?.hidden ? tiedToRouteId : routeId);
   // Encounter order = the position in routes.json, NOT the route id. Ids are
   // frozen forever while the array order is the display order and gets
   // reshuffled (FireRed's list was reordered), so sorting by id replays
@@ -241,7 +247,10 @@ export default async function LinksPage({
         return {
           id: e.id,
           player: e.player,
-          routeName: routeNameOf(e.routeId),
+          routeName: placeOf(
+            e.routeId,
+            e.soulLinkId !== null ? (linkById.get(e.soulLinkId)?.routeId ?? e.routeId) : e.routeId,
+          ),
           pokemonId: e.currentPokemonId,
           pokemonName: effective?.name ?? `#${e.currentPokemonId}`,
           // Gated here so display components stay settings-agnostic.
@@ -268,7 +277,7 @@ export default async function LinksPage({
                   pokemonName: bodyPokemon
                     ? displayNameWithForm(bodyPokemon, lang)
                     : `#${donor.currentPokemonId}`,
-                  routeName: routeNameOf(donor.routeId),
+                  routeName: placeOf(donor.routeId, e.routeId),
                   ...buildEvolutionOptions(donor.currentPokemonId),
                 };
               })()
