@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { getPokemonSpriteUrl } from "@/lib/sprites";
+import { getPokemonSpriteUrls } from "@/lib/sprites";
 import { useSpriteSet, useFusionSprites, type FusionSpriteConfig } from "@/components/SpriteSetProvider";
 
 const SIZES = {
@@ -36,7 +36,7 @@ function spriteCandidates(
       candidates.push(`${fusion.spriteBase}/${fusion.customPath}/${headIf}.png`);
     }
   }
-  candidates.push(getPokemonSpriteUrl(pokemonId, spriteSet));
+  candidates.push(...getPokemonSpriteUrls(pokemonId, spriteSet));
   return candidates;
 }
 

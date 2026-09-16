@@ -16,6 +16,7 @@ import {
 import { computeFusionStats, computeFusionTypes, fusionCatchBaseRate } from "@/lib/fusion";
 import type { EffectivenessTable } from "@/lib/effectiveness";
 import { quickCatch } from "@/lib/actions";
+import { getBallSpriteUrl } from "@/lib/sprites";
 import { formatActionError } from "@/lib/actionErrors";
 import { useToast } from "@/components/ui/ToastProvider";
 import { useClampedIntInput } from "@/lib/useClampedIntInput";
@@ -48,15 +49,15 @@ function hpBarColor(hpPercent: number): string {
   return "bg-danger-solid";
 }
 
-// Item sprites live in /public/ball-sprites (downloaded via
-// scripts/download-sprites.mjs, kept out of repo/image like all artwork).
+// Item sprites: locally served (self-hosted, see scripts/download-sprites.mjs)
+// or hotlinked (public instance) - see src/lib/sprites.ts.
 function BallSprite({ ball, size = 24 }: { ball: BallId; size?: number }) {
   const [failed, setFailed] = useState(false);
   if (failed) return <span style={{ width: size, height: size }} className="inline-block shrink-0" />;
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      src={`/ball-sprites/${ball}.png`}
+      src={getBallSpriteUrl(ball)}
       alt=""
       width={size}
       height={size}

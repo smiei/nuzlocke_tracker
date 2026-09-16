@@ -16,6 +16,7 @@ import { teamLinkIds } from "@/lib/fusionGroups";
 import { EncounterStatus, LinkStatus, Player } from "@/generated/prisma/client";
 import { SpriteSetProvider } from "@/components/SpriteSetProvider";
 import { CanonicalRun } from "@/components/CanonicalRun";
+import { RunLanding } from "@/components/RunLanding";
 import { BlindflugProvider } from "@/components/BlindflugProvider";
 import { PlayerNamesProvider } from "@/components/PlayerNamesProvider";
 import { PokemonDetailProvider } from "@/components/PokemonDetailProvider";
@@ -30,7 +31,9 @@ export default async function TmsPage({
   searchParams: Promise<{ run?: string }>;
 }) {
   const { run } = await searchParams;
-  const { runId, runKey, mode, players, gameId, settings } = await resolveRunId(run);
+  const resolvedRun = await resolveRunId(run);
+  if (!resolvedRun) return <RunLanding />;
+  const { runId, runKey, version, mode, players, gameId, settings } = resolvedRun;
   const game = getGameOrDefault(gameId);
   const lang = await getLang();
 
@@ -96,7 +99,7 @@ export default async function TmsPage({
   return (
     <BlindflugProvider on={settings.blindflug}>
     <SpriteSetProvider spriteSet={game.spriteSet} fusion={getFusionSpriteConfigForGame(game)}>
-      <CanonicalRun runKey={runKey} />
+      <CanonicalRun runKey={runKey} version={version} />
       <PlayerNamesProvider names={settings.playerNames} lang={lang}>
         <PokemonDetailProvider
           pokemonList={getPokemonListForGame(game)}

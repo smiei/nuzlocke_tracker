@@ -1,0 +1,81 @@
+{
+  "//": "Where every sprite comes from. scripts/download-sprites.mjs downloads from these into public/ on a self-hosted instance; a public instance (src/lib/sprites.ts) links to the same files directly.",
+  "pokeApiBase": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites",
+  "infiniteFusionItemsBase": "https://raw.githubusercontent.com/infinitefusion/infinitefusion-e18/HEAD/Graphics/Items",
+  "sets": {
+    "red-blue": {
+      "path": "versions/generation-i/red-blue/transparent",
+      "maxId": 151
+    },
+    "crystal": {
+      "path": "versions/generation-ii/crystal/transparent",
+      "maxId": 251
+    },
+    "emerald": {
+      "path": "versions/generation-iii/emerald",
+      "maxId": 386,
+      "formFallbackPath": "versions/generation-iii/firered-leafgreen"
+    },
+    "firered-leafgreen": {
+      "path": "versions/generation-iii/firered-leafgreen",
+      "maxId": 386
+    },
+    "platinum": {
+      "path": "versions/generation-iv/platinum",
+      "maxId": 493
+    },
+    "black-white": {
+      "path": "versions/generation-v/black-white",
+      "maxId": 649
+    },
+    "heartgold-soulsilver": {
+      "path": "versions/generation-iv/heartgold-soulsilver",
+      "maxId": 493
+    }
+  },
+  "balls": [
+    "poke",
+    "great",
+    "ultra",
+    "master",
+    "safari",
+    "net",
+    "nest",
+    "dive",
+    "repeat",
+    "timer",
+    "luxury",
+    "premier",
+    "level",
+    "lure",
+    "moon",
+    "friend",
+    "love",
+    "fast",
+    "park",
+    "quick",
+    "dusk",
+    "heal",
+    "dream",
+    "heavy",
+    "sport",
+    "cherish"
+  ],
+  "infiniteFusionBalls": {
+    "gender": "GENDERBALL",
+    "boost": "TRADEBALL",
+    "ability": "ABILITYBALL",
+    "virus": "VIRUSBALL",
+    "glitter": "SHINYBALL",
+    "perfect": "PERFECTBALL",
+    "toxic": "TOXICBALL",
+    "spark": "SPARKBALL",
+    "scorch": "SCORCHBALL",
+    "frost": "FROSTBALL",
+    "pure": "PUREBALL",
+    "status": "STATUSBALL",
+    "candy": "CANDYBALL",
+    "rocket": "ROCKETBALL",
+    "fusion": "FUSIONBALL"
+  }
+}

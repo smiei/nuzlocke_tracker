@@ -20,6 +20,7 @@ import { getRoutesForRun } from "@/lib/runRoutes";
 import { EncounterStatus, LinkStatus, RunMode } from "@/generated/prisma/client";
 import { SpriteSetProvider } from "@/components/SpriteSetProvider";
 import { CanonicalRun } from "@/components/CanonicalRun";
+import { RunLanding } from "@/components/RunLanding";
 import { BlindflugProvider } from "@/components/BlindflugProvider";
 import { PageHeader } from "@/components/ui/Page";
 import { PokemonDetailProvider } from "@/components/PokemonDetailProvider";
@@ -46,7 +47,9 @@ export default async function LinksPage({
   searchParams: Promise<{ run?: string }>;
 }) {
   const { run } = await searchParams;
-  const { runId, runKey, mode, players, gameId, settings } = await resolveRunId(run);
+  const resolvedRun = await resolveRunId(run);
+  if (!resolvedRun) return <RunLanding />;
+  const { runId, runKey, version, mode, players, gameId, settings } = resolvedRun;
   // The two randomizer rules decide which override categories from the game
   // pack's evolution-overrides.json apply (vs. vanilla methods).
   const evoOptions = {
@@ -329,7 +332,7 @@ export default async function LinksPage({
   return (
     <BlindflugProvider on={settings.blindflug}>
     <div>
-      <CanonicalRun runKey={runKey} />
+      <CanonicalRun runKey={runKey} version={version} />
       <PageHeader title={heading} />
       <SpriteSetProvider spriteSet={game.spriteSet} fusion={getFusionSpriteConfigForGame(game)}>
         <PlayerNamesProvider names={settings.playerNames} lang={lang}>

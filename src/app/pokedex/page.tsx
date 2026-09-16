@@ -14,6 +14,7 @@ import { getLang } from "@/lib/i18n/getLang";
 import { translations } from "@/lib/i18n/dictionary";
 import { PokedexTable } from "@/components/PokedexTable";
 import { CanonicalRun } from "@/components/CanonicalRun";
+import { RunLanding } from "@/components/RunLanding";
 import { BlindflugProvider } from "@/components/BlindflugProvider";
 import { PokemonDetailProvider } from "@/components/PokemonDetailProvider";
 import { SpriteSetProvider } from "@/components/SpriteSetProvider";
@@ -29,7 +30,9 @@ export default async function PokedexPage({
   searchParams: Promise<{ run?: string }>;
 }) {
   const { run } = await searchParams;
-  const { runId, runKey, players, gameId, settings } = await resolveRunId(run);
+  const resolvedRun = await resolveRunId(run);
+  if (!resolvedRun) return <RunLanding />;
+  const { runId, runKey, version, players, gameId, settings } = resolvedRun;
 
   const lang = await getLang();
   const game = getGameOrDefault(gameId);
@@ -56,7 +59,7 @@ export default async function PokedexPage({
   return (
     <BlindflugProvider on={settings.blindflug}>
     <SpriteSetProvider spriteSet={game.spriteSet} fusion={getFusionSpriteConfigForGame(game)}>
-      <CanonicalRun runKey={runKey} />
+      <CanonicalRun runKey={runKey} version={version} />
       <PokemonDetailProvider
         pokemonList={pokemon}
         forms={getPokemonFormsForGame(game)}

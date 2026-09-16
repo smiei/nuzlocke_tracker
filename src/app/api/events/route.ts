@@ -1,4 +1,5 @@
 import { subscribe } from "@/lib/liveBus";
+import { IS_PUBLIC_INSTANCE } from "@/lib/instance";
 
 export const dynamic = "force-dynamic";
 
@@ -7,6 +8,10 @@ export const dynamic = "force-dynamic";
 // publishChange calls in src/lib/actions.ts). The client then refreshes its
 // current view, so two players see each other's edits live.
 export async function GET(request: Request) {
+  // A serverless host runs many short-lived instances: the stream would stay
+  // open on one while changes are published on another, and bill the open
+  // connection the whole time. Public instances poll Run.version instead.
+  if (IS_PUBLIC_INSTANCE) return new Response(null, { status: 404 });
   const encoder = new TextEncoder();
 
   const stream = new ReadableStream({

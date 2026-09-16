@@ -110,7 +110,7 @@ export function DialogProvider({ children }: { children: React.ReactNode }) {
           </>
         }
       >
-        <p className="whitespace-pre-line text-sm text-ink-muted">{dialog?.options.message}</p>
+        <p className="whitespace-pre-line break-words text-sm text-ink-muted">{dialog?.options.message}</p>
       </Modal>
     </DialogContext.Provider>
   );

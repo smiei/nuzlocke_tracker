@@ -9,6 +9,7 @@ import {
   type PokemonHistoryEntry,
 } from "@/lib/pokemonHistory";
 import type { LocalizedNames } from "@/lib/i18n/localize";
+import type { GameSummary } from "@/lib/types";
 import {
   historicalMoveNames,
   type Learnset,
@@ -210,6 +211,11 @@ export function getGames(): GameInfo[] {
         ) as GameInfo,
     )
     .sort((a, b) => a.sort - b.sort);
+}
+
+// The client-safe slice the header and the new-run dialog need.
+export function getGameSummaries(): GameSummary[] {
+  return getGames().map((game) => ({ id: game.id, names: game.names, fusion: Boolean(game.fusion) }));
 }
 
 export function getGameById(gameId: string): GameInfo | undefined {

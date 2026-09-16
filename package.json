@@ -7,6 +7,7 @@
     "dev": "next dev",
     "prebuild": "npm run generate:icons",
     "build": "next build",
+    "build:public": "npm run download:badges && next build",
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",

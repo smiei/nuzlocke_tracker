@@ -6,6 +6,7 @@ import { translations } from "@/lib/i18n/dictionary";
 import { computeLevelCapProgress, eliteFourIndex } from "@/lib/progress";
 import { LevelCapsView } from "@/components/LevelCapsView";
 import { CanonicalRun } from "@/components/CanonicalRun";
+import { RunLanding } from "@/components/RunLanding";
 import { ProgressBar } from "@/components/ProgressBar";
 import { PageHeader } from "@/components/ui/Page";
 
@@ -17,7 +18,9 @@ export default async function LevelCapsPage({
   searchParams: Promise<{ run?: string }>;
 }) {
   const { run } = await searchParams;
-  const { runId, runKey, gameId } = await resolveRunId(run);
+  const resolvedRun = await resolveRunId(run);
+  if (!resolvedRun) return <RunLanding />;
+  const { runId, runKey, version, gameId } = resolvedRun;
 
   const lang = await getLang();
   const t = translations[lang].levelcaps;
@@ -33,7 +36,7 @@ export default async function LevelCapsPage({
 
   return (
     <div>
-      <CanonicalRun runKey={runKey} />
+      <CanonicalRun runKey={runKey} version={version} />
       <PageHeader title={t.heading}>
         <ProgressBar
           done={progress.done}

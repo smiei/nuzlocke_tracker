@@ -3,6 +3,17 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { isSessionExpired } from "@/lib/sessionProbe";
+import { IS_PUBLIC_INSTANCE } from "@/lib/instance";
+import { subscribeRenderedRun } from "@/lib/runVersionStore";
+import { forgetRun } from "@/lib/visitedRuns";
+
+// Keeps every device looking at a run up to date with the others. A private
+// instance is one long-running process and pushes changes over SSE
+// (EventStreamRefresh); a public one polls the run's version number
+// (VersionPolling), see src/lib/instance.ts.
+export function LiveRefresh() {
+  return IS_PUBLIC_INSTANCE ? <VersionPolling /> : <EventStreamRefresh />;
+}
 
 // Listens to the /api/events SSE stream and refreshes the current view when
 // another client changes run data - so both players see edits live without
@@ -37,7 +48,7 @@ const FAILURES_BEFORE_SESSION_CHECK = 3;
 const SILENCE_LIMIT_MS = 70_000;
 const WATCHDOG_INTERVAL_MS = 15_000;
 
-export function LiveRefresh() {
+function EventStreamRefresh() {
   const router = useRouter();
 
   useEffect(() => {
@@ -118,6 +129,125 @@ export function LiveRefresh() {
       clearInterval(watchdog);
       document.removeEventListener("visibilitychange", onVisible);
       current?.close();
+    };
+  }, [router]);
+
+  return null;
+}
+
+// Public instances: ask the server for the run's version number (one indexed
+// row, see /api/runs/[key]/version) and re-render only when it moved.
+//
+// Every poll is a billed function invocation, so the cadence is the budget:
+// fast right after a change (the other players are active), easing off while
+// nothing happens, nothing at all while the tab is hidden, and a full pause
+// after a long stretch without anybody touching this device. Coming back -
+// tab visible again, a tap, back online - checks at once.
+//
+// The versions a page was RENDERED with count as seen (CanonicalRun reports
+// them), so a player's own edit, which refreshes itself, does not trigger a
+// second refresh from the poll that notices it.
+const POLL_FAST_MS = 5_000;
+const POLL_SLOW_MS = 30_000;
+const POLL_BACKOFF = 1.5;
+const POLL_IDLE_PAUSE_MS = 10 * 60_000;
+
+function VersionPolling() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const seen = new Map<string, number>();
+    let activeKey: string | null = null;
+    let delay = POLL_FAST_MS;
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    let inFlight = false;
+    let lastInteraction = Date.now();
+    let stopped = false;
+
+    function schedule(ms: number) {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(poll, ms);
+    }
+
+    async function poll() {
+      timer = null;
+      if (stopped || inFlight || activeKey === null) return;
+      // Both resume through their own listeners below.
+      if (document.visibilityState !== "visible") return;
+      if (Date.now() - lastInteraction > POLL_IDLE_PAUSE_MS) return;
+
+      const key = activeKey;
+      inFlight = true;
+      try {
+        const response = await fetch(`/api/runs/${key}/version`, { cache: "no-store" });
+        if (response.status === 404) {
+          // Deleted by another device. Let the server decide what this
+          // browser opens instead - its next visited run, or the landing page.
+          seen.delete(key);
+          forgetRun(key);
+          router.refresh();
+          return;
+        }
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const { version } = (await response.json()) as { version: number };
+        if (version > (seen.get(key) ?? -1)) {
+          seen.set(key, version);
+          delay = POLL_FAST_MS;
+          router.refresh();
+        } else {
+          delay = Math.min(delay * POLL_BACKOFF, POLL_SLOW_MS);
+        }
+      } catch {
+        delay = Math.min(delay * 2, POLL_SLOW_MS);
+      } finally {
+        inFlight = false;
+      }
+      if (!stopped && activeKey !== null) schedule(delay);
+    }
+
+    const unsubscribe = subscribeRenderedRun((run) => {
+      if (run === null) {
+        activeKey = null;
+        return;
+      }
+      seen.set(run.key, Math.max(seen.get(run.key) ?? -1, run.version));
+      if (activeKey !== run.key) {
+        activeKey = run.key;
+        delay = POLL_FAST_MS;
+        schedule(delay);
+      } else if (timer === null && !inFlight) {
+        schedule(delay);
+      }
+    });
+
+    function checkNow() {
+      delay = POLL_FAST_MS;
+      schedule(0);
+    }
+    function onVisibility() {
+      if (document.visibilityState !== "visible") return;
+      lastInteraction = Date.now();
+      checkNow();
+    }
+    function onInteraction() {
+      const wasIdle = Date.now() - lastInteraction > POLL_IDLE_PAUSE_MS;
+      lastInteraction = Date.now();
+      if (wasIdle) checkNow();
+    }
+
+    document.addEventListener("visibilitychange", onVisibility);
+    window.addEventListener("online", checkNow);
+    window.addEventListener("pointerdown", onInteraction);
+    window.addEventListener("keydown", onInteraction);
+
+    return () => {
+      stopped = true;
+      if (timer) clearTimeout(timer);
+      unsubscribe();
+      document.removeEventListener("visibilitychange", onVisibility);
+      window.removeEventListener("online", checkNow);
+      window.removeEventListener("pointerdown", onInteraction);
+      window.removeEventListener("keydown", onInteraction);
     };
   }, [router]);
 

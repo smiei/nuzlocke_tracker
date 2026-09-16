@@ -17,8 +17,9 @@ import { ThemeColorSync } from "@/components/ThemeColorSync";
 import { SessionWatch } from "@/components/SessionWatch";
 import { TabOrderProvider } from "@/components/TabOrderProvider";
 import { LanguageProvider } from "@/lib/i18n/LanguageProvider";
-import { prisma } from "@/lib/prisma";
-import { getGames } from "@/lib/data";
+import { listRunsForHeader } from "@/lib/runs";
+import { IS_PUBLIC_INSTANCE } from "@/lib/instance";
+import { getGameSummaries } from "@/lib/data";
 import { uiScaleBootScript } from "@/lib/uiScale";
 import "./globals.css";
 
@@ -78,12 +79,8 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const runs = await prisma.run.findMany({ orderBy: { createdAt: "asc" } });
-  const games = getGames().map((game) => ({
-    id: game.id,
-    names: game.names,
-    fusion: Boolean(game.fusion),
-  }));
+  const runs = await listRunsForHeader();
+  const games = getGameSummaries();
 
   return (
     <html
@@ -191,7 +188,9 @@ export default async function RootLayout({
               <LiveRefresh />
               <ThemeColorSync />
               <ServiceWorkerRegistrar />
-              <SessionWatch />
+              {/* Watches a Cloudflare Access session, which only a private
+                  instance sits behind. */}
+              {!IS_PUBLIC_INSTANCE && <SessionWatch />}
             </TabOrderProvider>
             </DialogProvider>
             </ToastProvider>

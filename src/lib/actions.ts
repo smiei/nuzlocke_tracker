@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { publishChange } from "@/lib/liveBus";
 import { prisma } from "@/lib/prisma";
 import { findRunByKey, markRunChanged } from "@/lib/runAccess";
+import { IS_PUBLIC_INSTANCE } from "@/lib/instance";
 import {
   DEFAULT_GAME_ID,
   getGameById,
@@ -34,6 +35,10 @@ import type { Lang } from "@/lib/i18n/dictionary";
 // Every run-scoped action takes the run's access key, never its numeric id
 // (see src/lib/runKey.ts), and answers an unknown key with this.
 const RUN_NOT_FOUND = { success: false, error: { key: "runNotFound" } } as const;
+
+// What a public instance answers for the few actions that reach beyond one
+// run (see src/lib/instance.ts).
+const NOT_ON_PUBLIC_INSTANCE = { success: false, error: { key: "notOnPublicInstance" } } as const;
 
 // The tabs whose rendering depends on the run's route list or rule toggles.
 // Spelled out once instead of at each call site, which is how the list drifted
@@ -1313,9 +1318,11 @@ export async function createRun(
   // createdAt: rows backfilled by hand-written migrations store createdAt as
   // TEXT while Prisma writes numbers, and SQLite sorts TEXT above all
   // numbers - id is monotonic and immune to that.
+  // A public instance only copies from a run the caller holds the key to -
+  // "the most recent run" would be a stranger's, player names included.
   const source =
     (sourceRunKey != null ? await findRunByKey(sourceRunKey) : null) ??
-    (await prisma.run.findFirst({ orderBy: { id: "desc" } }));
+    (IS_PUBLIC_INSTANCE ? null : await prisma.run.findFirst({ orderBy: { id: "desc" } }));
   const rulesMarkdown = source?.rulesMarkdown.trim()
     ? source.rulesMarkdown
     : DEFAULT_RULES[lang ?? "de"];
@@ -1695,6 +1702,9 @@ export async function saveRulePreset(
   name: string,
   lang: Lang,
 ): Promise<SaveRulePresetResult> {
+  // Presets are shared by every run of the instance - on a public one that
+  // would be everybody's.
+  if (IS_PUBLIC_INSTANCE) return NOT_ON_PUBLIC_INSTANCE;
   const trimmed = name.trim().slice(0, PRESET_NAME_MAX);
   if (!trimmed) {
     return { success: false, error: { key: "nameRequired" } };
@@ -1728,6 +1738,7 @@ export async function applyRulePreset(
   runKey: string,
   presetId: number,
 ): Promise<ApplyRulePresetResult> {
+  if (IS_PUBLIC_INSTANCE) return NOT_ON_PUBLIC_INSTANCE;
   const run = await findRunByKey(runKey);
   if (!run) return RUN_NOT_FOUND;
   const runId = run.id;
@@ -1766,6 +1777,7 @@ export type DeleteRulePresetResult = { success: true } | { success: false; error
 // App-wide, so this removes it from every run's list. Runs that had it applied
 // keep their rules - a preset is a template, not a live link.
 export async function deleteRulePreset(presetId: number): Promise<DeleteRulePresetResult> {
+  if (IS_PUBLIC_INSTANCE) return NOT_ON_PUBLIC_INSTANCE;
   const preset = await prisma.rulePreset.findUnique({ where: { id: presetId } });
   if (!preset) {
     return { success: false, error: { key: "presetNotFound", id: presetId } };
@@ -1810,12 +1822,14 @@ export type BackupZipResult =
 // One JSON file per run, zipped - each entry is independently importable
 // (same shape a single-run export produces), instead of one combined JSON.
 export async function exportAllBackup(): Promise<BackupZipResult> {
+  // Every run in the database - on a public instance, everybody's.
+  if (IS_PUBLIC_INSTANCE) return NOT_ON_PUBLIC_INSTANCE;
   const { filename, data } = await buildBackupZip();
   return { success: true, filename, zipBase64: Buffer.from(data).toString("base64") };
 }
 
 export type ImportBackupResult =
-  | { success: true; runCount: number }
+  | { success: true; runKeys: string[] }
   | { success: false; error: ActionError };
 
 // Non-destructive: imported runs are ADDED as new runs, existing data is never
@@ -1840,9 +1854,9 @@ export async function importBackup(json: string, names?: string[]): Promise<Impo
 
   // Catch unexpected failures (e.g. filesystem/permission problems) so the
   // user gets a dialog message instead of a crashed error page.
-  let runCount: number;
+  let runKeys: string[];
   try {
-    runCount = await applyBackup(parsed);
+    runKeys = await applyBackup(parsed);
   } catch (error) {
     console.error("importBackup failed:", error);
     return { success: false, error: { key: "unexpected" } };
@@ -1850,5 +1864,5 @@ export async function importBackup(json: string, names?: string[]): Promise<Impo
   revalidatePath("/", "layout");
   // Imports add whole runs - no single runId; 0 = "anything changed".
   publishChange(0);
-  return { success: true, runCount };
+  return { success: true, runKeys };
 }

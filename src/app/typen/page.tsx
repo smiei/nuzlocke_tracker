@@ -31,6 +31,7 @@ import { formedLinks, groupTeamPositions, isFoldedDonor } from "@/lib/fusionGrou
 import { EncounterStatus, LinkStatus, Player, RunMode } from "@/generated/prisma/client";
 import type { TeamMember } from "@/components/TeamWeaknessesView";
 import { CanonicalRun } from "@/components/CanonicalRun";
+import { RunLanding } from "@/components/RunLanding";
 import { BlindflugProvider } from "@/components/BlindflugProvider";
 import type { OpenSlot } from "@/components/CatchRateView";
 import { AnalyzeView } from "@/components/AnalyzeView";
@@ -49,7 +50,9 @@ export default async function AnalyzePage({
   searchParams: Promise<{ run?: string }>;
 }) {
   const { run } = await searchParams;
-  const { runId, runKey, mode, players, gameId, settings } = await resolveRunId(run);
+  const resolvedRun = await resolveRunId(run);
+  if (!resolvedRun) return <RunLanding />;
+  const { runId, runKey, version, mode, players, gameId, settings } = resolvedRun;
 
   const lang = await getLang();
   const game = getGameOrDefault(gameId);
@@ -187,7 +190,7 @@ export default async function AnalyzePage({
   return (
     <BlindflugProvider on={settings.blindflug}>
     <SpriteSetProvider spriteSet={game.spriteSet} fusion={getFusionSpriteConfigForGame(game)}>
-      <CanonicalRun runKey={runKey} />
+      <CanonicalRun runKey={runKey} version={version} />
       <PlayerNamesProvider names={settings.playerNames} lang={lang}>
         <PokemonDetailProvider
           pokemonList={pokemonList}

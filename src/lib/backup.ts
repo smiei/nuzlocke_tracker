@@ -133,7 +133,9 @@ export async function buildBackupZip(): Promise<{ filename: string; data: Uint8A
 // Inserts every run in the backup as a NEW run (fresh ids), leaving existing
 // runs untouched. updatedAt fields are managed by Prisma (@updatedAt) so they
 // aren't restored; createdAt is preserved to keep run/encounter ordering.
-export async function applyBackup(backup: BackupFile): Promise<number> {
+// Returns the new runs' access keys, in backup order.
+export async function applyBackup(backup: BackupFile): Promise<string[]> {
+  const runKeys: string[] = [];
   await prisma.$transaction(
     async (tx) => {
       for (const run of backup.runs) {
@@ -148,6 +150,7 @@ export async function applyBackup(backup: BackupFile): Promise<number> {
             createdAt: new Date(run.createdAt),
           },
         });
+        runKeys.push(createdRun.accessKey);
 
         // Before the encounters, so their negative routeIds resolve to a
         // route that exists in the restored run.
@@ -253,7 +256,7 @@ export async function applyBackup(backup: BackupFile): Promise<number> {
     },
     { timeout: 30000, maxWait: 10000 },
   );
-  return backup.runs.length;
+  return runKeys;
 }
 
 export function backupFilename(runLabel: string, ext: "json" | "zip" = "json"): string {

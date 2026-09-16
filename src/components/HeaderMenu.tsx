@@ -7,6 +7,8 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { unzipSync } from "fflate";
 import { deleteRun, exportAllBackup, exportRunBackup, importBackup, renameRun } from "@/lib/actions";
 import { pickActiveRun } from "@/lib/runKey";
+import { IS_PUBLIC_INSTANCE } from "@/lib/instance";
+import { forgetRun, rememberRun } from "@/lib/visitedRuns";
 import { formatActionError } from "@/lib/actionErrors";
 import { BACKUP_FORMAT, BACKUP_VERSION, parseBackup, type BackupFile } from "@/lib/backupParse";
 import { useDialog } from "@/components/DialogProvider";
@@ -221,12 +223,33 @@ export function HeaderMenu({
       const result = await importBackup(importState.json, names);
       if (result.success) {
         setImportState(null);
-        router.refresh();
-        toast.success(t.backup.importSuccess(result.runCount));
+        if (IS_PUBLIC_INSTANCE && result.runKeys.length > 0) {
+          // Nothing lists every run here, so an imported run this browser does
+          // not remember would be unreachable. Remember all, open the first.
+          for (const key of [...result.runKeys].reverse()) rememberRun(key);
+          router.push(`${pathname}?run=${result.runKeys[0]}`);
+        } else {
+          router.refresh();
+        }
+        toast.success(t.backup.importSuccess(result.runKeys.length));
       } else {
         toast.error(formatActionError(result.error, lang));
       }
     });
+  }
+
+  // A public run is reached only through its link, and an installed app has no
+  // address bar to copy it from.
+  async function handleCopyLink() {
+    setOpen(false);
+    if (!activeRun) return;
+    const url = `${window.location.origin}/tracker?run=${activeRun.accessKey}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success(t.menu.runLinkCopied);
+    } catch {
+      void alert({ message: t.menu.runLinkManual(url) });
+    }
   }
 
   function handleRename(name: string) {
@@ -261,6 +284,8 @@ export function HeaderMenu({
       const result = await deleteRun(activeRun.accessKey);
       setBusy(null);
       if (result.success) {
+        // The bare URL below then opens the next run this browser visited.
+        if (IS_PUBLIC_INSTANCE) forgetRun(activeRun.accessKey);
         toast.success(t.runSwitcher.deleteButton);
         router.push(pathname);
       } else {
@@ -317,9 +342,11 @@ export function HeaderMenu({
           <MenuItem onClick={handleBackupRun} busy={busy === "backupRun"} disabled={busy !== null}>
             {t.backup.backupRun}
           </MenuItem>
-          <MenuItem onClick={handleBackupAll} busy={busy === "backupAll"} disabled={busy !== null}>
-            {t.backup.backupAll}
-          </MenuItem>
+          {!IS_PUBLIC_INSTANCE && (
+            <MenuItem onClick={handleBackupAll} busy={busy === "backupAll"} disabled={busy !== null}>
+              {t.backup.backupAll}
+            </MenuItem>
+          )}
           <MenuItem onClick={handleImportClick} disabled={busy !== null}>
             {t.backup.import}
           </MenuItem>
@@ -369,6 +396,11 @@ export function HeaderMenu({
             </div>
           </div>
           <div className="my-1 border-t border-line" />
+          {IS_PUBLIC_INSTANCE && (
+            <MenuItem onClick={handleCopyLink} disabled={!activeRun}>
+              {t.menu.copyRunLink}
+            </MenuItem>
+          )}
           <button
             type="button"
             disabled={!activeRun}

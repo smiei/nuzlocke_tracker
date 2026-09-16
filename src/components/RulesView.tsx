@@ -17,6 +17,7 @@ import { Card } from "@/components/ui/Card";
 import { Input, Select, Textarea } from "@/components/ui/Input";
 import { RulePresetDialog, type RulePresetSummary } from "@/components/RulePresetDialog";
 import { PageHeader, Section } from "@/components/ui/Page";
+import { IS_PUBLIC_INSTANCE } from "@/lib/instance";
 
 // The boolean rule toggles (playerNames is handled separately).
 type BooleanSettingKey = Exclude<keyof RunSettings, "playerNames">;
@@ -316,44 +317,48 @@ export function RulesView({
   return (
     <div>
       <PageHeader title={t.heading}>
-        <div className="flex flex-wrap items-center gap-2">
-          <Select
-            size="sm"
-            aria-label={t.presets.label}
-            // Always the placeholder: see handleApplyPreset.
-            value=""
-            // While the notes editor is open the two halves of the tab
-            // disagree - the draft on screen is not what a preset would
-            // replace - so both controls stand down until it is saved.
-            disabled={pending || editing || presets.length === 0}
-            onChange={(event) => handleApplyPreset(Number(event.target.value))}
-            className="w-auto max-w-52"
-          >
-            <option value="">{t.presets.placeholder}</option>
-            {presets.map((preset) => (
-              <option key={preset.id} value={preset.id}>
-                {preset.name}
-              </option>
-            ))}
-          </Select>
-          <Button
-            size="sm"
-            disabled={pending || editing}
-            title={editing ? t.presets.editingHint : undefined}
-            onClick={() => setPresetDialogOpen(true)}
-          >
-            {t.presets.manage}
-          </Button>
-        </div>
+        {!IS_PUBLIC_INSTANCE && (
+          <div className="flex flex-wrap items-center gap-2">
+            <Select
+              size="sm"
+              aria-label={t.presets.label}
+              // Always the placeholder: see handleApplyPreset.
+              value=""
+              // While the notes editor is open the two halves of the tab
+              // disagree - the draft on screen is not what a preset would
+              // replace - so both controls stand down until it is saved.
+              disabled={pending || editing || presets.length === 0}
+              onChange={(event) => handleApplyPreset(Number(event.target.value))}
+              className="w-auto max-w-52"
+            >
+              <option value="">{t.presets.placeholder}</option>
+              {presets.map((preset) => (
+                <option key={preset.id} value={preset.id}>
+                  {preset.name}
+                </option>
+              ))}
+            </Select>
+            <Button
+              size="sm"
+              disabled={pending || editing}
+              title={editing ? t.presets.editingHint : undefined}
+              onClick={() => setPresetDialogOpen(true)}
+            >
+              {t.presets.manage}
+            </Button>
+          </div>
+        )}
       </PageHeader>
 
-      <RulePresetDialog
-        open={presetDialogOpen}
-        onClose={() => setPresetDialogOpen(false)}
-        runKey={runKey}
-        lang={lang}
-        presets={presets}
-      />
+      {!IS_PUBLIC_INSTANCE && (
+        <RulePresetDialog
+          open={presetDialogOpen}
+          onClose={() => setPresetDialogOpen(false)}
+          runKey={runKey}
+          lang={lang}
+          presets={presets}
+        />
+      )}
 
       {/* Two columns from lg up. Everything here used to be capped at
           max-w-3xl inside a max-w-6xl main, so switching to this tab visibly

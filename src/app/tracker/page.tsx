@@ -14,6 +14,7 @@ import { getRoutesForRun } from "@/lib/runRoutes";
 import { getLang } from "@/lib/i18n/getLang";
 import { TrackerView } from "@/components/TrackerView";
 import { CanonicalRun } from "@/components/CanonicalRun";
+import { RunLanding } from "@/components/RunLanding";
 import { BlindflugProvider } from "@/components/BlindflugProvider";
 import { SpriteSetProvider } from "@/components/SpriteSetProvider";
 import { PokemonDetailProvider } from "@/components/PokemonDetailProvider";
@@ -29,7 +30,9 @@ export default async function TrackerPage({
   searchParams: Promise<{ run?: string }>;
 }) {
   const { run } = await searchParams;
-  const { runId, runKey, players, gameId, settings } = await resolveRunId(run);
+  const resolvedRun = await resolveRunId(run);
+  if (!resolvedRun) return <RunLanding />;
+  const { runId, runKey, version, players, gameId, settings } = resolvedRun;
 
   const lang = await getLang();
   const game = getGameOrDefault(gameId);
@@ -45,7 +48,7 @@ export default async function TrackerPage({
   return (
     <BlindflugProvider on={settings.blindflug}>
     <div>
-      <CanonicalRun runKey={runKey} />
+      <CanonicalRun runKey={runKey} version={version} />
       <SpriteSetProvider spriteSet={game.spriteSet} fusion={getFusionSpriteConfigForGame(game)}>
         <PlayerNamesProvider names={settings.playerNames} lang={lang}>
           <PokemonDetailProvider
