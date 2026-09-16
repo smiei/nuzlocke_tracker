@@ -34,6 +34,6 @@ export function uiScaleBootScript(): string {
     JSON.stringify(UI_SCALE_KEY) +
     "));var s=" +
     JSON.stringify(UI_SCALE_STEPS) +
-    ');if(typeof v==="number"&&s[v])document.documentElement.style.fontSize=s[v]}catch(e){}})();'
+    ';if(typeof v==="number"&&s[v])document.documentElement.style.fontSize=s[v]}catch(e){}})();'
   );
 }
