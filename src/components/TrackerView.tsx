@@ -35,6 +35,7 @@ const EDITOR_GRID: Record<number, string> = {
 export function TrackerView({
   runId,
   players,
+  boundRoutes,
   lang,
   settings,
   routes,
@@ -45,6 +46,9 @@ export function TrackerView({
   runId: number;
   // The run's players in order - one in Classic, 2-4 in SoulLink.
   players: Player[];
+  // Hidden route -> the route it belongs to (split-off fusion bodies), for
+  // the Species Clause - see boundRouteMap in src/lib/speciesClause.ts.
+  boundRoutes: [number, number][];
   lang: Lang;
   settings: RunSettings;
   routes: Route[];
@@ -179,6 +183,8 @@ export function TrackerView({
               pokemonList={pokemonList}
               encounters={encounters}
               fusionEnabled={fusionEnabled}
+              players={players}
+              boundRoutes={boundRoutes}
               onTouched={setLastTouchedRouteId}
             />
           ) : (
@@ -202,6 +208,8 @@ export function TrackerView({
                     pokemonList={pokemonList}
                     encounters={encounters}
                     fusionEnabled={fusionEnabled}
+                    players={players}
+                    boundRoutes={boundRoutes}
                     onTouched={setLastTouchedRouteId}
                   />
                 </div>

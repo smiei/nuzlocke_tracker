@@ -210,6 +210,7 @@ export function AnalyzeView({
   attackTypes,
   catchRates,
   lockedFamilyIds,
+  lockedFamilyIdsByPlayer,
   openSlots,
   learnset,
   teams,
@@ -228,6 +229,8 @@ export function AnalyzeView({
   attackTypes: string[];
   catchRates: Record<number, number>;
   lockedFamilyIds: number[];
+  // Per player: what that player may not catch (see src/lib/speciesClause.ts).
+  lockedFamilyIdsByPlayer: Partial<Record<Player, number[]>>;
   openSlots: OpenSlot[];
   learnset: Learnset;
   teams: { player: Player; members: TeamMember[] }[];
@@ -239,6 +242,13 @@ export function AnalyzeView({
   const { lang } = useLanguage();
   const t = translations[lang].typen;
   const lockedFamilies = useMemo(() => new Set(lockedFamilyIds), [lockedFamilyIds]);
+  const lockedFamiliesByPlayer = useMemo(
+    () =>
+      new Map(
+        Object.entries(lockedFamilyIdsByPlayer).map(([player, ids]) => [player as Player, new Set(ids)]),
+      ),
+    [lockedFamilyIdsByPlayer],
+  );
 
   const catchShared: CatchSharedProps = {
     runId,
@@ -247,6 +257,7 @@ export function AnalyzeView({
     pokemonList,
     catchRates,
     lockedFamilies,
+    lockedFamiliesByPlayer,
     generation,
     versionGroup,
     openSlots,

@@ -396,6 +396,16 @@ const de = {
         description:
           "Für Runs mit der Randomizer-Option „Fuse everything“: Jedes wilde Pokémon ist schon eine Fusion, deshalb steht im Encounter-Tab das Körperfeld sofort offen, ohne Häkchen. Bleibt es leer, ist der Fang keine Fusion.",
       },
+      speciesClausePerPlayer: {
+        label: "Species Clause pro Spieler",
+        description:
+          "Jeder Spieler hat seine eigene Species Clause: Ein Encounter sperrt die Familie nur für den Spieler, der ihn hatte – egal ob gefangen, entkommen oder besiegt.",
+      },
+      speciesClauseLinkedLocksAll: {
+        label: "Gefangene Links sperren für alle",
+        description:
+          "Nur mit „pro Spieler“: Kommt ein Link zustande, weil alle Spieler auf der Route fangen, ist die Familie für alle Spieler verbraucht. Entkommene oder besiegte Pokémon sperren weiter nur den eigenen Spieler.",
+      },
       wildFusionSplit: {
         label: "Wilde Fusionen dürfen getrennt werden",
         description:
@@ -462,6 +472,7 @@ const de = {
     heading: "Catchrate",
     hint: "Wähle ein Pokémon, um die Fangchance zu berechnen.",
     lockWarning: "Dieses Pokémon ist in diesem Run durch die Species Clause gesperrt.",
+    lockWarningPlayer: "Für diesen Spieler durch die Species Clause gesperrt.",
     caughtHeading: "Pokémon gefangen?",
     caughtNeedSelection: "Erst oben ein Pokémon auswählen.",
     caughtNoRoutes: "Keine offenen Routen mehr.",
@@ -1088,6 +1099,16 @@ const en: Dictionary = {
         description:
           "For runs with the randomizer’s “Fuse everything” option: every wild Pokémon is already a fusion, so the Encounter tab shows the body field right away, without the checkbox. Left empty, the catch is not a fusion.",
       },
+      speciesClausePerPlayer: {
+        label: "Species Clause per player",
+        description:
+          "Each player has their own Species Clause: an encounter locks the family only for the player who had it – caught, fled or defeated alike.",
+      },
+      speciesClauseLinkedLocksAll: {
+        label: "Caught links lock for everyone",
+        description:
+          "Only with “per player”: once a link forms because every player caught on the route, the family is used up for all players. Fled or defeated Pokémon still lock only their own player.",
+      },
       wildFusionSplit: {
         label: "Wild fusions may be split",
         description:
@@ -1154,6 +1175,7 @@ const en: Dictionary = {
     heading: "Catchrate",
     hint: "Select a Pokémon to calculate the catch chance.",
     lockWarning: "This Pokémon is locked by the Species Clause in this run.",
+    lockWarningPlayer: "Locked by the Species Clause for this player.",
     caughtHeading: "Pokémon caught?",
     caughtNeedSelection: "Select a Pokémon above first.",
     caughtNoRoutes: "No open routes left.",
@@ -1778,6 +1800,16 @@ const fr: Dictionary = {
         description:
           "Pour les parties avec l’option « Fuse everything » du randomizer : chaque Pokémon sauvage est déjà une fusion, l’onglet Rencontres affiche donc directement le champ du corps, sans case à cocher. Laissé vide, la capture n’est pas une fusion.",
       },
+      speciesClausePerPlayer: {
+        label: "Species Clause par joueur",
+        description:
+          "Chaque joueur a sa propre Species Clause : une rencontre bloque la famille uniquement pour le joueur qui l'a eue – capturée, en fuite ou vaincue.",
+      },
+      speciesClauseLinkedLocksAll: {
+        label: "Les liens capturés bloquent pour tous",
+        description:
+          "Uniquement avec « par joueur » : dès qu'un lien se forme parce que tous les joueurs ont capturé sur la route, la famille est épuisée pour tous. Les Pokémon en fuite ou vaincus ne bloquent toujours que leur propre joueur.",
+      },
       wildFusionSplit: {
         label: "Les fusions sauvages peuvent être séparées",
         description:
@@ -1844,6 +1876,7 @@ const fr: Dictionary = {
     heading: "Taux de capture",
     hint: "Choisis un Pokémon pour calculer la chance de capture.",
     lockWarning: "Ce Pokémon est bloqué par la Species Clause dans ce run.",
+    lockWarningPlayer: "Bloqué par la Species Clause pour ce joueur.",
     caughtHeading: "Pokémon capturé ?",
     caughtNeedSelection: "Choisis d'abord un Pokémon ci-dessus.",
     caughtNoRoutes: "Plus de routes ouvertes.",
@@ -2469,6 +2502,16 @@ const es: Dictionary = {
         description:
           "Para partidas con la opción «Fuse everything» del randomizer: cada Pokémon salvaje ya es una fusión, así que la pestaña Encuentros muestra el campo del cuerpo directamente, sin casilla. Si se deja vacío, la captura no es una fusión.",
       },
+      speciesClausePerPlayer: {
+        label: "Species Clause por jugador",
+        description:
+          "Cada jugador tiene su propia Species Clause: un encuentro bloquea la familia solo para el jugador que lo tuvo, ya sea capturado, huido o derrotado.",
+      },
+      speciesClauseLinkedLocksAll: {
+        label: "Los enlaces capturados bloquean para todos",
+        description:
+          "Solo con «por jugador»: en cuanto se forma un enlace porque todos los jugadores capturaron en la ruta, la familia queda agotada para todos. Los Pokémon que huyeron o fueron derrotados siguen bloqueando solo a su propio jugador.",
+      },
       wildFusionSplit: {
         label: "Las fusiones salvajes se pueden separar",
         description:
@@ -2535,6 +2578,7 @@ const es: Dictionary = {
     heading: "Ratio de captura",
     hint: "Elige un Pokémon para calcular la probabilidad de captura.",
     lockWarning: "Este Pokémon está bloqueado por la Species Clause en este run.",
+    lockWarningPlayer: "Bloqueado por la Species Clause para este jugador.",
     caughtHeading: "¿Pokémon capturado?",
     caughtNeedSelection: "Elige primero un Pokémon arriba.",
     caughtNoRoutes: "No quedan rutas abiertas.",
@@ -3160,6 +3204,16 @@ const it: Dictionary = {
         description:
           "Per le partite con l’opzione «Fuse everything» del randomizer: ogni Pokémon selvatico è già una fusione, quindi la scheda Incontri mostra subito il campo del corpo, senza casella. Se resta vuoto, la cattura non è una fusione.",
       },
+      speciesClausePerPlayer: {
+        label: "Species Clause per giocatore",
+        description:
+          "Ogni giocatore ha la propria Species Clause: un incontro blocca la famiglia solo per il giocatore che l'ha avuto, che sia catturato, fuggito o sconfitto.",
+      },
+      speciesClauseLinkedLocksAll: {
+        label: "I link catturati bloccano per tutti",
+        description:
+          "Solo con «per giocatore»: quando si forma un link perché tutti i giocatori hanno catturato nel percorso, la famiglia è esaurita per tutti. I Pokémon fuggiti o sconfitti bloccano ancora solo il proprio giocatore.",
+      },
       wildFusionSplit: {
         label: "Le fusioni selvatiche possono essere separate",
         description:
@@ -3226,6 +3280,7 @@ const it: Dictionary = {
     heading: "Tasso di cattura",
     hint: "Scegli un Pokémon per calcolare la probabilità di cattura.",
     lockWarning: "Questo Pokémon è bloccato dalla Species Clause in questo run.",
+    lockWarningPlayer: "Bloccato dalla Species Clause per questo giocatore.",
     caughtHeading: "Pokémon catturato?",
     caughtNeedSelection: "Scegli prima un Pokémon qui sopra.",
     caughtNoRoutes: "Nessun percorso aperto rimasto.",

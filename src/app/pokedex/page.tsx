@@ -9,6 +9,7 @@ import {
 } from "@/lib/gameData";
 import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
+import { boundRouteMap, clauseView } from "@/lib/speciesClause";
 import { getLang } from "@/lib/i18n/getLang";
 import { translations } from "@/lib/i18n/dictionary";
 import { PokedexTable } from "@/components/PokedexTable";
@@ -28,7 +29,7 @@ export default async function PokedexPage({
   searchParams: Promise<{ run?: string }>;
 }) {
   const { run } = await searchParams;
-  const { runId, gameId, settings } = await resolveRunId(run);
+  const { runId, players, gameId, settings } = await resolveRunId(run);
 
   const lang = await getLang();
   const game = getGameOrDefault(gameId);
@@ -39,13 +40,18 @@ export default async function PokedexPage({
     easier: settings.evolutionOverridesEasier,
     timeBased: settings.evolutionOverridesTimeBased,
   });
-  // Evolution families already used in this run (Species Clause) - for the
-  // Pokédex availability filter.
-  const encounters = await prisma.encounter.findMany({
-    where: { runId },
-    select: { familyId: true },
-  });
-  const lockedFamilyIds = [...new Set(encounters.map((e) => e.familyId))];
+  // Evolution families the Species Clause has used up (src/lib/speciesClause.ts),
+  // for the availability filter. The Pokédex belongs to no player, so a family
+  // only counts once no player may catch it any more.
+  const lockedFamilyIds = [
+    ...clauseView(await prisma.encounter.findMany({ where: { runId } }), {
+      rules: settings,
+      players,
+      boundRouteOf: boundRouteMap(
+        await prisma.soulLink.findMany({ where: { runId }, select: { id: true, routeId: true, boundToId: true } }),
+      ),
+    }).lockedForAll(),
+  ];
 
   return (
     <BlindflugProvider on={settings.blindflug}>

@@ -15,6 +15,7 @@ import { pokemonName, routeName } from "@/lib/i18n/localize";
 import { PokemonCombobox } from "@/components/PokemonCombobox";
 import { PokemonInfoButton } from "@/components/PokemonDetailProvider";
 import type { RunSettings } from "@/lib/runSettings";
+import { clauseView } from "@/lib/speciesClause";
 import { Input } from "@/components/ui/Input";
 
 // In-game nicknames are capped at 10 characters; the input enforces this and
@@ -33,7 +34,12 @@ const STATUS_STYLES: Record<EncounterStatus, string> = {
 
 // Where an encounter sits, for messages. A wild-caught fusion's body has no
 // place of its own (its route is hidden), so it is named by its head's route.
-function placeName(e: Encounter, encounters: Encounter[], routes: Route[], lang: Lang): string {
+function placeName(
+  e: Pick<Encounter, "routeId" | "isFusionBody" | "fusedIntoId">,
+  encounters: Encounter[],
+  routes: Route[],
+  lang: Lang,
+): string {
   const shown =
     e.isFusionBody && e.fusedIntoId !== null
       ? (encounters.find((x) => x.id === e.fusedIntoId) ?? e)
@@ -52,6 +58,8 @@ export function EncounterEditor({
   pokemonList,
   encounters,
   fusionEnabled = false,
+  players,
+  boundRoutes,
   onTouched,
 }: {
   runId: number;
@@ -65,6 +73,10 @@ export function EncounterEditor({
   // Infinite Fusion: this catch can already BE a fusion, so the row offers a
   // second species. See setEncounterBody.
   fusionEnabled?: boolean;
+  // The run's players (src/lib/players.ts) and its bound routes (hidden route
+  // -> route, see boundRouteMap) - both only feed the Species Clause.
+  players: Player[];
+  boundRoutes: [number, number][];
   // Reports which route was last edited, so the Tracker's "open only" filter
   // can keep it on screen while the rest of the row is filled in.
   onTouched: (routeId: number) => void;
@@ -94,37 +106,30 @@ export function EncounterEditor({
     [encounters, current],
   );
 
-  // The encounters that count against the Species Clause from this slot:
-  // EVERY encounter elsewhere - static or not, regardless of outcome
-  // (caught/killed/fled). The slot itself never does, so re-saving the same
-  // pick doesn't mark itself - and neither does a body caught with it, which
-  // is the same catch.
+  // The encounters that count against the Species Clause for this player
+  // (src/lib/speciesClause.ts: the clause itself, Shiny Clause, fusion bodies,
+  // per-player variants) - static or not, regardless of outcome. The slot
+  // itself never does, so re-saving the same pick doesn't mark itself - and
+  // neither does a body caught with it, which is the same catch.
+  const boundRouteOf = useMemo(() => new Map(boundRoutes), [boundRoutes]);
   const clauseEncounters = useMemo(
     () =>
-      encounters.filter((e) => {
-        if (e.routeId === routeId && e.player === player) return false;
-        if (body?.isFusionBody && e.id === body.id) return false;
-        // A wild-caught fusion's body is half of one catch; a run can rule
-        // that it doesn't lock a family of its own (fusionLocksBothFamilies).
-        if (e.isFusionBody && !settings.fusionLocksBothFamilies) return false;
-        return true;
-      }),
-    [encounters, routeId, player, body, settings.fusionLocksBothFamilies],
+      clauseView(encounters, { rules: settings, players, boundRouteOf }).lockingEncounters(
+        player,
+        (e) =>
+          (e.routeId === routeId && e.player === player) ||
+          (body?.isFusionBody === true && e.id === body.id),
+      ),
+    [encounters, settings, players, boundRouteOf, player, routeId, body],
   );
 
   // Locked families are marked in the dropdown on every route, including
   // static ones (static only means "safe to pick anyway", not "not locked").
   // With the Species Clause rule off, nothing is marked at all.
-  const lockedFamilyIds = useMemo(() => {
-    const set = new Set<number>();
-    if (!settings.speciesClause) return set;
-    for (const e of clauseEncounters) {
-      // Shiny Clause: a shiny catch is exempt and doesn't lock its family.
-      if (settings.shinyClause && e.shiny) continue;
-      set.add(e.familyId);
-    }
-    return set;
-  }, [settings.speciesClause, settings.shinyClause, clauseEncounters]);
+  const lockedFamilyIds = useMemo(
+    () => new Set(clauseEncounters.map((e) => e.familyId)),
+    [clauseEncounters],
+  );
 
   const speciesName = (id: number) => {
     const p = pokemonList.find((x) => x.id === id);

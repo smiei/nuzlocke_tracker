@@ -9,6 +9,7 @@ import {
 } from "@/lib/gameData";
 import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
+import { boundRouteMap } from "@/lib/speciesClause";
 import { getRoutesForRun } from "@/lib/runRoutes";
 import { getLang } from "@/lib/i18n/getLang";
 import { TrackerView } from "@/components/TrackerView";
@@ -35,6 +36,11 @@ export default async function TrackerPage({
   const routes = await getRoutesForRun(runId, gameId);
   const pokemonList = getPokemonListForGame(game);
   const encounters = await prisma.encounter.findMany({ where: { runId } });
+  const boundRoutes = [
+    ...boundRouteMap(
+      await prisma.soulLink.findMany({ where: { runId }, select: { id: true, routeId: true, boundToId: true } }),
+    ),
+  ];
 
   return (
     <BlindflugProvider on={settings.blindflug}>
@@ -64,6 +70,7 @@ export default async function TrackerPage({
             <TrackerView
               runId={runId}
               players={players}
+              boundRoutes={boundRoutes}
               lang={lang}
               settings={settings}
               routes={routes}

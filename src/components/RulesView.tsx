@@ -63,12 +63,15 @@ const markdownComponents = {
   hr: () => <hr className="my-4 border-line" />,
 };
 
-// Display order; staticsExemptFromClause is rendered as an indented child of
-// speciesClause and greyed out while the clause itself is off.
+// Display order. Some toggles are children of another one (CLAUSE_PARENTS):
+// indented under it and greyed out while any parent is off.
 const TOGGLE_ORDER: BooleanSettingKey[] = [
   "freeTeam",
   "blindflug",
   "speciesClause",
+  // SoulLink only: the per-player variants of the clause.
+  "speciesClausePerPlayer",
+  "speciesClauseLinkedLocksAll",
   "staticsExemptFromClause",
   // Infinite Fusion only, and a child of the clause like the line above it.
   "fusionLocksBothFamilies",
@@ -86,6 +89,20 @@ const TOGGLE_ORDER: BooleanSettingKey[] = [
   "customSpritesOnly",
 ];
 
+// A toggle's parents, nearest last. The depth of the chain is its indentation.
+const CLAUSE_PARENTS: Partial<Record<BooleanSettingKey, BooleanSettingKey[]>> = {
+  speciesClausePerPlayer: ["speciesClause"],
+  speciesClauseLinkedLocksAll: ["speciesClause", "speciesClausePerPlayer"],
+  staticsExemptFromClause: ["speciesClause"],
+  fusionLocksBothFamilies: ["speciesClause"],
+};
+
+// Toggles that only mean something with more than one player.
+const SOULLINK_ONLY_TOGGLES = new Set<BooleanSettingKey>([
+  "speciesClausePerPlayer",
+  "speciesClauseLinkedLocksAll",
+]);
+
 // Toggles that only mean something in a pack with fusions.
 const FUSION_ONLY_TOGGLES = new Set<BooleanSettingKey>([
   "customSpritesOnly",
@@ -102,14 +119,15 @@ function ToggleRow({
   description,
   on,
   disabled = false,
-  indent = false,
+  depth = 0,
   onToggle,
 }: {
   label: string;
   description: string;
   on: boolean;
   disabled?: boolean;
-  indent?: boolean;
+  // 0 = a rule of its own, 1-2 = nested under the toggle(s) it refines.
+  depth?: number;
   onToggle: () => void;
 }) {
   return (
@@ -120,7 +138,7 @@ function ToggleRow({
       disabled={disabled}
       onClick={onToggle}
       className={`flex w-full items-center justify-between gap-4 px-4 py-3 text-left transition-colors hover:bg-hover disabled:cursor-not-allowed ${
-        indent ? "pl-8" : ""
+        depth === 2 ? "pl-12" : depth === 1 ? "pl-8" : ""
       } ${disabled ? "opacity-50" : ""}`}
     >
       <span className="min-w-0">
@@ -256,16 +274,15 @@ export function RulesView({
   }
 
   function renderToggle(key: BooleanSettingKey) {
-    const isClauseChild =
-      key === "staticsExemptFromClause" || key === "fusionLocksBothFamilies";
+    const parents = CLAUSE_PARENTS[key] ?? [];
     return (
       <ToggleRow
         key={key}
         label={t.toggles[key].label}
         description={t.toggles[key].description}
         on={local[key]}
-        disabled={pending || (isClauseChild && !local.speciesClause)}
-        indent={isClauseChild}
+        disabled={pending || parents.some((parent) => !local[parent])}
+        depth={parents.length}
         onToggle={() => handleToggle(key)}
       />
     );
@@ -346,9 +363,11 @@ export function RulesView({
         <div>
           <Section title={t.settingsHeading}>
             <Card padding="none" className="divide-y divide-line overflow-hidden">
-              {TOGGLE_ORDER.filter((key) => fusionEnabled || !FUSION_ONLY_TOGGLES.has(key)).map(
-                renderToggle,
-              )}
+              {TOGGLE_ORDER.filter(
+                (key) =>
+                  (fusionEnabled || !FUSION_ONLY_TOGGLES.has(key)) &&
+                  (players.length > 1 || !SOULLINK_ONLY_TOGGLES.has(key)),
+              ).map(renderToggle)}
             </Card>
           </Section>
 

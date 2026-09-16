@@ -12,6 +12,11 @@ export const PLAYER_NAME_MAX = 20;
 export type RunSettings = {
   // Show Species Clause warnings/lock markers (never blocks saving).
   speciesClause: boolean;
+  // SoulLink only, children of speciesClause (see src/lib/speciesClause.ts):
+  // each player has a clause of their own, and - on top of that - a link that
+  // formed (every player caught on the route) uses its families up for all.
+  speciesClausePerPlayer: boolean;
+  speciesClauseLinkedLocksAll: boolean;
   // Shiny Clause: an encounter marked shiny is exempt from the Species Clause
   // (its own warning is suppressed and it doesn't lock the family for others).
   // Off = the shiny flag has no effect on the clause.
@@ -73,6 +78,8 @@ export type RunSettings = {
 // (settingsJson '{}') keep working exactly as they did.
 export const DEFAULT_RUN_SETTINGS: RunSettings = {
   speciesClause: true,
+  speciesClausePerPlayer: false,
+  speciesClauseLinkedLocksAll: false,
   shinyClause: true,
   nicknames: true,
   evolutionOverridesImpossible: true,

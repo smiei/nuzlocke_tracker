@@ -126,6 +126,7 @@ export type CatchSharedProps = {
   pokemonList: Pokemon[];
   catchRates: Record<number, number>;
   lockedFamilies: Set<number>;
+  lockedFamiliesByPlayer: Map<Player, Set<number>>;
   generation: number;
   // Which Gen 4 game: only HeartGold/SoulSilver sell the Apricorn balls.
   versionGroup: string;
@@ -283,7 +284,7 @@ export function CatchCardBody({
   state: CatchBodyState;
   onChange: (patch: Partial<CatchBodyState>) => void;
 }) {
-  const { runId, players, pokemonList, catchRates, generation, versionGroup, openSlots, effectiveness, attackTypes, settings } =
+  const { runId, players, pokemonList, catchRates, lockedFamilies, lockedFamiliesByPlayer, generation, versionGroup, openSlots, effectiveness, attackTypes, settings } =
     shared;
   const router = useRouter();
   const { lang } = useLanguage();
@@ -401,15 +402,26 @@ export function CatchCardBody({
 
   const renderQuickCatchPanel = (player: Player) => {
     const slots = openSlots.filter((s) => s.player === player);
+    // Locked for everyone is said once, above the card; this is the case the
+    // per-player Species Clause adds - free for some players, not this one.
+    const lockedForThisPlayer =
+      selected !== null &&
+      !lockedFamilies.has(selected.family_id) &&
+      (lockedFamiliesByPlayer.get(player)?.has(selected.family_id) ?? false);
     return (
-      <QuickCatchPanel
-        slots={slots}
-        disabled={selectedId === null}
-        pending={catching}
-        nicknamesEnabled={settings.nicknames}
-        shinyClauseEnabled={settings.shinyClause}
-        onConfirm={(routeId, extra) => handleQuickCatch(routeId, player, extra)}
-      />
+      <>
+        {lockedForThisPlayer && (
+          <p className="mb-1 text-xs text-warning">⚠ {t.lockWarningPlayer}</p>
+        )}
+        <QuickCatchPanel
+          slots={slots}
+          disabled={selectedId === null}
+          pending={catching}
+          nicknamesEnabled={settings.nicknames}
+          shinyClauseEnabled={settings.shinyClause}
+          onConfirm={(routeId, extra) => handleQuickCatch(routeId, player, extra)}
+        />
+      </>
     );
   };
 

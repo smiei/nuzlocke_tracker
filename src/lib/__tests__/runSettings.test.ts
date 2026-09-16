@@ -44,6 +44,14 @@ describe("parseRunSettings", () => {
     expect(parseRunSettings('{"customSpritesOnly": true}').customSpritesOnly).toBe(true);
   });
 
+  it("keeps the run-wide Species Clause unless a variant is switched on", () => {
+    expect(DEFAULT_RUN_SETTINGS.speciesClausePerPlayer).toBe(false);
+    expect(DEFAULT_RUN_SETTINGS.speciesClauseLinkedLocksAll).toBe(false);
+    const s = parseRunSettings('{"speciesClausePerPlayer": true, "speciesClauseLinkedLocksAll": true}');
+    const back = parseRunSettings(serializePresetSettings(s));
+    expect([back.speciesClausePerPlayer, back.speciesClauseLinkedLocksAll]).toEqual([true, true]);
+  });
+
   it("defaults the Infinite Fusion fusion rules to the game's own behaviour", () => {
     // Splitting and locking both families is what the game and a self-made
     // fusion do; a randomizer fusing everything is an opt-in per run.

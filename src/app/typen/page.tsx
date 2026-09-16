@@ -21,6 +21,7 @@ import {
 import { explosiveMove } from "@/lib/learnset";
 import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
+import { boundRouteMap, clauseView } from "@/lib/speciesClause";
 import { getRoutesForRun } from "@/lib/runRoutes";
 import { getLang } from "@/lib/i18n/getLang";
 import { routeName } from "@/lib/i18n/localize";
@@ -75,12 +76,20 @@ export default async function AnalyzePage({
 
   const encounters = await prisma.encounter.findMany({ where: { runId } });
 
-  // Families already used by ANY encounter in this run are locked by the
-  // Species Clause - the calculator only warns, never blocks. Clause off -> no
-  // marks at all.
-  const lockedFamilyIds = settings.speciesClause
-    ? [...new Set(encounters.map((e) => e.familyId))]
-    : [];
+  // Species Clause (src/lib/speciesClause.ts) - the calculator only warns,
+  // never blocks. The picker belongs to no player, so it marks what nobody may
+  // catch any more; each quick-catch panel warns for its own player on top.
+  const clause = clauseView(encounters, {
+    rules: settings,
+    players,
+    boundRouteOf: boundRouteMap(
+      await prisma.soulLink.findMany({ where: { runId }, select: { id: true, routeId: true, boundToId: true } }),
+    ),
+  });
+  const lockedFamilyIds = [...clause.lockedForAll()];
+  const lockedFamilyIdsByPlayer = Object.fromEntries(
+    players.map((player) => [player, [...clause.lockedFamilies(player)]]),
+  );
 
   // Open (route, player) slots for the quick-catch dropdown: pairs without an
   // encounter yet. Statics honor the run's "statics" rule; Classic lists only
@@ -204,6 +213,7 @@ export default async function AnalyzePage({
             attackTypes={attackTypes}
             catchRates={catchRates}
             lockedFamilyIds={lockedFamilyIds}
+            lockedFamilyIdsByPlayer={lockedFamilyIdsByPlayer}
             openSlots={openSlots}
             learnset={learnsetTable}
             teams={teams}
