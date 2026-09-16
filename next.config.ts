@@ -1,6 +1,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // src/lib/data.ts reads the game data from disk at request time, with paths
+  // built per game (data/games/<gameId>/...), which file tracing cannot follow.
+  // The Docker image copies data/ by hand; a host that bundles each route from
+  // its trace (Vercel) would ship every page without it.
+  outputFileTracingIncludes: {
+    "/*": ["./data/**/*"],
+  },
   async headers() {
     return [
       {

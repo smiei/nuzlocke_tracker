@@ -121,13 +121,13 @@ function SlotPicker({
 }
 
 export function TeamBar({
-  runId,
+  runKey,
   mode,
   players,
   lang,
   links,
 }: {
-  runId: number;
+  runKey: string;
   mode: RunMode;
   players: Player[];
   lang: Lang;
@@ -157,7 +157,7 @@ export function TeamBar({
 
   function handleSelect(position: number, soulLinkId: number | null) {
     startTransition(async () => {
-      const result = await setTeamSlot(runId, position, soulLinkId);
+      const result = await setTeamSlot(runKey, position, soulLinkId);
       if (!result.success) toast.error(formatActionError(result.error, lang));
       router.refresh();
     });
@@ -169,7 +169,7 @@ export function TeamBar({
   async function handleClearTeam() {
     if (!(await confirm({ message: t.links.clearTeamConfirm, danger: true }))) return;
     startTransition(async () => {
-      const result = await clearTeam(runId);
+      const result = await clearTeam(runKey);
       if (!result.success) toast.error(formatActionError(result.error, lang));
       router.refresh();
     });
@@ -180,7 +180,7 @@ export function TeamBar({
     const cause = deadCause;
     setDeadCause("");
     startTransition(async () => {
-      const result = await markDead(runId, soulLinkId, deathPlayer ?? null, cause);
+      const result = await markDead(runKey, soulLinkId, deathPlayer ?? null, cause);
       if (!result.success) toast.error(formatActionError(result.error, lang));
       router.refresh();
     });

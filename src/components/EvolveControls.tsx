@@ -11,12 +11,12 @@ import { translations } from "@/lib/i18n/dictionary";
 import { PokemonSprite } from "@/components/PokemonSprite";
 
 export function EvolveButton({
-  runId,
+  runKey,
   lang,
   encounterId,
   targets,
 }: {
-  runId: number;
+  runKey: string;
   lang: Lang;
   encounterId: number;
   targets: { id: number; name: string; method: string | null; available: boolean }[];
@@ -32,7 +32,7 @@ export function EvolveButton({
   function handlePick(targetId: number) {
     setError(null);
     startTransition(async () => {
-      const result = await evolveEncounter(runId, encounterId, targetId);
+      const result = await evolveEncounter(runKey, encounterId, targetId);
       if (result.success) {
         setOpen(false);
         router.refresh();
@@ -103,11 +103,11 @@ export function EvolveButton({
 }
 
 export function RevertButton({
-  runId,
+  runKey,
   lang,
   encounterId,
 }: {
-  runId: number;
+  runKey: string;
   lang: Lang;
   encounterId: number;
 }) {
@@ -119,7 +119,7 @@ export function RevertButton({
   function handleClick() {
     setError(null);
     startTransition(async () => {
-      const result = await revertEvolution(runId, encounterId);
+      const result = await revertEvolution(runKey, encounterId);
       if (result.success) {
         router.refresh();
       } else {

@@ -18,13 +18,13 @@ export type FormOption = { id: number; label: string; summe: number };
 // a progression: it can be changed back and forth freely, and the list comes
 // from the species rather than from the evolution chain.
 export function FormPicker({
-  runId,
+  runKey,
   lang,
   encounterId,
   currentId,
   options,
 }: {
-  runId: number;
+  runKey: string;
   lang: Lang;
   encounterId: number;
   currentId: number;
@@ -45,7 +45,7 @@ export function FormPicker({
       return;
     }
     startTransition(async () => {
-      const result = await setPokemonForm(runId, encounterId, targetId);
+      const result = await setPokemonForm(runKey, encounterId, targetId);
       if (result.success) {
         setOpen(false);
         router.refresh();

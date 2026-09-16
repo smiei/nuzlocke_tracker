@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { Button } from "@/components/ui/Button";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { createRun } from "@/lib/actions";
+import { pickActiveRun } from "@/lib/runKey";
 import { formatActionError } from "@/lib/actionErrors";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import { translations } from "@/lib/i18n/dictionary";
@@ -25,8 +26,7 @@ export function RunSwitcher({ runs, games }: { runs: RunSummary[]; games: GameSu
   const toast = useToast();
   const t = translations[lang].runSwitcher;
 
-  const activeId = Number(searchParams.get("run")) || runs[0]?.id;
-  const activeRun = runs.find((r) => r.id === activeId);
+  const activeRun = pickActiveRun(runs, searchParams.get("run"));
   // games[0] is the default pack - only non-default games get a suffix in
   // the dropdown, so the common case stays short.
   const defaultGameId = games[0]?.id;
@@ -45,10 +45,10 @@ export function RunSwitcher({ runs, games }: { runs: RunSummary[]; games: GameSu
     startTransition(async () => {
       // Inherit ruleset + rule toggles from the run that's on screen right
       // now, then land on the Rules tab so they can be reviewed first.
-      const result = await createRun(name, mode, activeId ?? null, gameId, lang, playerCount);
+      const result = await createRun(name, mode, activeRun?.accessKey ?? null, gameId, lang, playerCount);
       if (result.success) {
         setDialogOpen(false);
-        router.push(`/rules?run=${result.runId}`);
+        router.push(`/rules?run=${result.runKey}`);
       } else {
         toast.error(formatActionError(result.error, lang));
       }
@@ -58,13 +58,13 @@ export function RunSwitcher({ runs, games }: { runs: RunSummary[]; games: GameSu
   return (
     <div className="flex items-center gap-1.5">
       <select
-        value={activeId ? String(activeId) : ""}
+        value={activeRun?.accessKey ?? ""}
         disabled={pending}
         onChange={(e) => handleChange(e.target.value)}
         className="h-10 max-w-40 rounded-md border border-line-strong bg-panel px-2 text-sm text-ink disabled:cursor-not-allowed disabled:opacity-50 sm:max-w-56"
       >
         {runs.map((run) => (
-          <option key={run.id} value={run.id}>
+          <option key={run.id} value={run.accessKey}>
             {run.name}
             {run.mode === RunMode.CLASSIC
               ? t.soloSuffix

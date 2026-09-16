@@ -46,7 +46,7 @@ export default async function LinksPage({
   searchParams: Promise<{ run?: string }>;
 }) {
   const { run } = await searchParams;
-  const { runId, mode, players, gameId, settings } = await resolveRunId(run);
+  const { runId, runKey, mode, players, gameId, settings } = await resolveRunId(run);
   // The two randomizer rules decide which override categories from the game
   // pack's evolution-overrides.json apply (vs. vanilla methods).
   const evoOptions = {
@@ -329,7 +329,7 @@ export default async function LinksPage({
   return (
     <BlindflugProvider on={settings.blindflug}>
     <div>
-      <CanonicalRun runId={runId} />
+      <CanonicalRun runKey={runKey} />
       <PageHeader title={heading} />
       <SpriteSetProvider spriteSet={game.spriteSet} fusion={getFusionSpriteConfigForGame(game)}>
         <PlayerNamesProvider names={settings.playerNames} lang={lang}>
@@ -348,7 +348,7 @@ export default async function LinksPage({
             lang={lang}
           >
             <LinksView
-              runId={runId}
+              runKey={runKey}
               mode={mode}
               players={players}
               lang={lang}

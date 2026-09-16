@@ -26,14 +26,14 @@ const NO_LOCKS = new Set<number>();
 export function FreeTeamDialog({
   open,
   onClose,
-  runId,
+  runKey,
   players,
   lang,
   pokemonList,
 }: {
   open: boolean;
   onClose: () => void;
-  runId: number;
+  runKey: string;
   // The run's players in order (src/lib/players.ts).
   players: Player[];
   lang: Lang;
@@ -59,7 +59,7 @@ export function FreeTeamDialog({
     const label = picked ? pokemonName(picked, lang) : String(pokemonId);
     startTransition(async () => {
       const result = await addFreeTeamMember(
-        runId,
+        runKey,
         pokemonId,
         isSoulLink ? player : Player.PLAYER1,
         nickname.trim() || undefined,

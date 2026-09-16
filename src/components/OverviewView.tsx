@@ -126,7 +126,7 @@ function CapValue({ level, emphasize = false }: { level: number | null; emphasiz
 }
 
 export function OverviewView({
-  runId,
+  runKey,
   lang,
   mode,
   teams,
@@ -144,7 +144,7 @@ export function OverviewView({
   deathPointOptions,
   hasMoveData = true,
 }: {
-  runId: number;
+  runKey: string;
   lang: Lang;
   mode: RunMode;
   teams: { player: Player; members: TeamMember[] }[];
@@ -417,7 +417,7 @@ export function OverviewView({
                 )}
                 <div className="mt-1.5">
                   <DeathPointPicker
-                    runId={runId}
+                    runKey={runKey}
                     lang={lang}
                     soulLinkId={m.soulLinkId}
                     current={m.deathLevelCapId}

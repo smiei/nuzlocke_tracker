@@ -3,6 +3,8 @@ import type { LocalizedNames } from "@/lib/i18n/localize";
 
 export type RunSummary = {
   id: number;
+  // What ?run= carries and every action takes - see src/lib/runKey.ts.
+  accessKey: string;
   name: string;
   mode: RunMode;
   // SoulLink players (2-4); meaningless for Classic.

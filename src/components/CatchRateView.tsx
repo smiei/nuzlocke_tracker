@@ -120,7 +120,7 @@ function BallPicker({
 }
 
 export type CatchSharedProps = {
-  runId: number;
+  runKey: string;
   mode: RunMode;
   players: Player[];
   pokemonList: Pokemon[];
@@ -284,7 +284,7 @@ export function CatchCardBody({
   state: CatchBodyState;
   onChange: (patch: Partial<CatchBodyState>) => void;
 }) {
-  const { runId, players, pokemonList, catchRates, lockedFamilies, lockedFamiliesByPlayer, generation, versionGroup, openSlots, effectiveness, attackTypes, settings } =
+  const { runKey, players, pokemonList, catchRates, lockedFamilies, lockedFamiliesByPlayer, generation, versionGroup, openSlots, effectiveness, attackTypes, settings } =
     shared;
   const router = useRouter();
   const { lang } = useLanguage();
@@ -388,7 +388,7 @@ export function CatchCardBody({
     const name = pokemonName(selected, lang);
     setCaughtMsg(null);
     startCatch(async () => {
-      const res = await quickCatch(runId, routeId, player, selected.id, extra);
+      const res = await quickCatch(runKey, routeId, player, selected.id, extra);
       if (res.success) {
         setCaughtMsg(t.caughtDone(name, slot.routeName));
         router.refresh();

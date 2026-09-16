@@ -34,7 +34,7 @@ const SORT_MODE_KEY = "nuzlocke:linksSortMode";
 type SortMode = "default" | "summe" | "summeMax";
 
 export function LinksView({
-  runId,
+  runKey,
   freeTeam,
   pokemonList,
   mode,
@@ -45,7 +45,7 @@ export function LinksView({
   fusableEncounters = [],
   customSpritesOnly = false,
 }: {
-  runId: number;
+  runKey: string;
   // Free-team run: the Team tab is the way in, not the Encounter tab.
   freeTeam: boolean;
   pokemonList: Pokemon[];
@@ -155,7 +155,7 @@ export function LinksView({
     const cause = deadCause;
     setDeadCause("");
     startTransition(async () => {
-      const result = await markDead(runId, id, deathPlayer ?? null, cause);
+      const result = await markDead(runKey, id, deathPlayer ?? null, cause);
       if (!result.success) toast.error(formatActionError(result.error, lang));
       router.refresh();
       setPendingId(null);
@@ -165,7 +165,7 @@ export function LinksView({
   function handleMarkAlive(id: number) {
     setPendingId(id);
     startTransition(async () => {
-      const result = await markAlive(runId, id);
+      const result = await markAlive(runKey, id);
       if (!result.success) toast.error(formatActionError(result.error, lang));
       router.refresh();
       setPendingId(null);
@@ -175,7 +175,7 @@ export function LinksView({
   function handleSwap(hostEncounterId: number) {
     setPendingId(hostEncounterId);
     startTransition(async () => {
-      const result = await swapFusion(runId, hostEncounterId);
+      const result = await swapFusion(runKey, hostEncounterId);
       if (!result.success) toast.error(formatActionError(result.error, lang));
       router.refresh();
       setPendingId(null);
@@ -186,7 +186,7 @@ export function LinksView({
     if (!(await confirm({ message: t.links.unfuseConfirm, danger: true }))) return;
     setPendingId(hostEncounterId);
     startTransition(async () => {
-      const result = await unfuseEncounter(runId, hostEncounterId);
+      const result = await unfuseEncounter(runKey, hostEncounterId);
       if (!result.success) toast.error(formatActionError(result.error, lang));
       router.refresh();
       setPendingId(null);
@@ -202,7 +202,7 @@ export function LinksView({
     <FreeTeamDialog
       open={freeOpen}
       onClose={() => setFreeOpen(false)}
-      runId={runId}
+      runKey={runKey}
       players={players}
       lang={lang}
       pokemonList={pokemonList}
@@ -230,7 +230,7 @@ export function LinksView({
         <FuseDialog
           open={fuseHost !== null}
           onClose={() => setFuseHost(null)}
-          runId={runId}
+          runKey={runKey}
           hostEncounterId={fuseHost?.id ?? 0}
           hostPokemonId={fuseHost?.pokemonId ?? 0}
           hostPlayer={fuseHost?.player ?? Player.PLAYER1}
@@ -239,7 +239,7 @@ export function LinksView({
           customSpritesOnly={customSpritesOnly}
         />
       )}
-      <TeamBar runId={runId} mode={mode} players={players} lang={lang} links={soulLinks} />
+      <TeamBar runKey={runKey} mode={mode} players={players} lang={lang} links={soulLinks} />
       <div className="mb-6 flex flex-wrap items-center gap-2">
         <label htmlFor="links-sort" className="text-sm font-medium text-ink-muted">
           {t.links.sortLabel}
@@ -378,7 +378,7 @@ export function LinksView({
                     <div className="flex items-center gap-1.5">
                       {!onTeam && (
                         <AddToTeamButton
-                          runId={runId}
+                          runKey={runKey}
                           lang={lang}
                           linkId={link.id}
                           teamLinks={teamLinks}
@@ -473,20 +473,20 @@ export function LinksView({
                       {!isDead && (
                         <div className="mt-1 flex flex-wrap gap-1.5">
                           <EvolveButton
-                            runId={runId}
+                            runKey={runKey}
                             lang={lang}
                             encounterId={e.id}
                             targets={e.evolvesTo}
                           />
                           <FormPicker
-                            runId={runId}
+                            runKey={runKey}
                             lang={lang}
                             encounterId={e.id}
                             currentId={e.pokemonId}
                             options={e.formOptions}
                           />
                           {e.evolvesFrom && (
-                            <RevertButton runId={runId} lang={lang} encounterId={e.id} />
+                            <RevertButton runKey={runKey} lang={lang} encounterId={e.id} />
                           )}
                           {fusionEnabled && !e.body && (
                             <Button
@@ -529,20 +529,20 @@ export function LinksView({
                           {!isDead && (
                             <div className="flex flex-wrap gap-1.5">
                               <EvolveButton
-                                runId={runId}
+                                runKey={runKey}
                                 lang={lang}
                                 encounterId={e.body.encounterId}
                                 targets={e.body.evolvesTo}
                               />
                               <FormPicker
-                                runId={runId}
+                                runKey={runKey}
                                 lang={lang}
                                 encounterId={e.body.encounterId}
                                 currentId={e.body.pokemonId}
                                 options={e.body.formOptions}
                               />
                               {e.body.evolvesFrom && (
-                                <RevertButton runId={runId} lang={lang} encounterId={e.body.encounterId} />
+                                <RevertButton runKey={runKey} lang={lang} encounterId={e.body.encounterId} />
                               )}
                             </div>
                           )}

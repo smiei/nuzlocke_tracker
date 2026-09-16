@@ -200,7 +200,7 @@ function AnalyzeCard({
 // The combined "Kampf & Fang" tab: several cards, each analysing one Pokémon as
 // a wild catch or a trainer battle. Card set persists per client (never synced).
 export function AnalyzeView({
-  runId,
+  runKey,
   mode,
   players,
   pokemonList,
@@ -218,7 +218,7 @@ export function AnalyzeView({
   settings,
   fusionEnabled = false,
 }: {
-  runId: number;
+  runKey: string;
   mode: RunMode;
   // The run's players in order (src/lib/players.ts).
   players: Player[];
@@ -251,7 +251,7 @@ export function AnalyzeView({
   );
 
   const catchShared: CatchSharedProps = {
-    runId,
+    runKey,
     mode,
     players,
     pokemonList,

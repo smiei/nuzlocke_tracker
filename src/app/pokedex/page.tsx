@@ -29,7 +29,7 @@ export default async function PokedexPage({
   searchParams: Promise<{ run?: string }>;
 }) {
   const { run } = await searchParams;
-  const { runId, players, gameId, settings } = await resolveRunId(run);
+  const { runId, runKey, players, gameId, settings } = await resolveRunId(run);
 
   const lang = await getLang();
   const game = getGameOrDefault(gameId);
@@ -56,7 +56,7 @@ export default async function PokedexPage({
   return (
     <BlindflugProvider on={settings.blindflug}>
     <SpriteSetProvider spriteSet={game.spriteSet} fusion={getFusionSpriteConfigForGame(game)}>
-      <CanonicalRun runId={runId} />
+      <CanonicalRun runKey={runKey} />
       <PokemonDetailProvider
         pokemonList={pokemon}
         forms={getPokemonFormsForGame(game)}

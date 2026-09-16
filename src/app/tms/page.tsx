@@ -30,7 +30,7 @@ export default async function TmsPage({
   searchParams: Promise<{ run?: string }>;
 }) {
   const { run } = await searchParams;
-  const { runId, mode, players, gameId, settings } = await resolveRunId(run);
+  const { runId, runKey, mode, players, gameId, settings } = await resolveRunId(run);
   const game = getGameOrDefault(gameId);
   const lang = await getLang();
 
@@ -96,7 +96,7 @@ export default async function TmsPage({
   return (
     <BlindflugProvider on={settings.blindflug}>
     <SpriteSetProvider spriteSet={game.spriteSet} fusion={getFusionSpriteConfigForGame(game)}>
-      <CanonicalRun runId={runId} />
+      <CanonicalRun runKey={runKey} />
       <PlayerNamesProvider names={settings.playerNames} lang={lang}>
         <PokemonDetailProvider
           pokemonList={getPokemonListForGame(game)}

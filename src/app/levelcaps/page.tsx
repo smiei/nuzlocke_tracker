@@ -17,7 +17,7 @@ export default async function LevelCapsPage({
   searchParams: Promise<{ run?: string }>;
 }) {
   const { run } = await searchParams;
-  const { runId, gameId } = await resolveRunId(run);
+  const { runId, runKey, gameId } = await resolveRunId(run);
 
   const lang = await getLang();
   const t = translations[lang].levelcaps;
@@ -33,7 +33,7 @@ export default async function LevelCapsPage({
 
   return (
     <div>
-      <CanonicalRun runId={runId} />
+      <CanonicalRun runKey={runKey} />
       <PageHeader title={t.heading}>
         <ProgressBar
           done={progress.done}
@@ -44,7 +44,7 @@ export default async function LevelCapsPage({
           markerTitle={t.eliteFourMarker}
         />
       </PageHeader>
-      <LevelCapsView runId={runId} lang={lang} levelCaps={items} trainerSet={trainerSet} />
+      <LevelCapsView runKey={runKey} lang={lang} levelCaps={items} trainerSet={trainerSet} />
     </div>
   );
 }

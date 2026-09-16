@@ -26,13 +26,13 @@ export type RulePresetSummary = { id: number; name: string };
 export function RulePresetDialog({
   open,
   onClose,
-  runId,
+  runKey,
   lang,
   presets,
 }: {
   open: boolean;
   onClose: () => void;
-  runId: number;
+  runKey: string;
   lang: Lang;
   presets: RulePresetSummary[];
 }) {
@@ -54,7 +54,7 @@ export function RulePresetDialog({
     event.preventDefault();
     if (!trimmed || pending) return;
     startTransition(async () => {
-      const result = await saveRulePreset(runId, trimmed, lang);
+      const result = await saveRulePreset(runKey, trimmed, lang);
       if (result.success) {
         toast.success(t.saved(trimmed));
         setName("");

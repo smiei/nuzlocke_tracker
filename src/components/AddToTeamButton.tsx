@@ -19,12 +19,12 @@ const TEAM_SIZE = 6;
 // the evolve dropdown) listing the current members - choosing one swaps it
 // out for this link.
 export function AddToTeamButton({
-  runId,
+  runKey,
   lang,
   linkId,
   teamLinks,
 }: {
-  runId: number;
+  runKey: string;
   lang: Lang;
   linkId: number;
   teamLinks: SoulLinkView[];
@@ -37,7 +37,7 @@ export function AddToTeamButton({
 
   function assign(position: number) {
     startTransition(async () => {
-      const result = await setTeamSlot(runId, position, linkId);
+      const result = await setTeamSlot(runKey, position, linkId);
       if (result.success) {
         setOpen(false);
         router.refresh();

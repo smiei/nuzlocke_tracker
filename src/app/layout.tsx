@@ -172,7 +172,7 @@ export default async function RootLayout({
                         RunSwitcher and Navigation are wrapped. */}
                     <Suspense fallback={<div className="h-10 w-10 rounded-md border border-line" />}>
                       <BlindflugToggle
-                        runs={runs.map((run) => ({ id: run.id, settingsJson: run.settingsJson }))}
+                        runs={runs.map((run) => ({ id: run.id, accessKey: run.accessKey, settingsJson: run.settingsJson }))}
                       />
                     </Suspense>
                   </div>

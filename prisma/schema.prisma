@@ -43,6 +43,15 @@ enum RunMode {
 // to one Run so multiple playthroughs can coexist in the same database.
 model Run {
   id               Int                @id @default(autoincrement())
+  // The run's address and its only access check: every run-scoped URL (?run=)
+  // and every server action takes this instead of `id`, which is a guessable
+  // counter. Knowing the key is what lets somebody open and edit the run.
+  // Never exported into backups - an imported run gets a fresh one.
+  accessKey        String             @unique @default(nanoid())
+  // Bumped on every change to the run's data (markRunChanged). A client that
+  // cannot hold a live connection polls this one number and only re-renders
+  // when it moved.
+  version          Int                @default(0)
   name             String
   mode             RunMode            @default(SOULLINK)
   // How many players a SOULLINK run has (2-4), fixed at creation like `mode`.

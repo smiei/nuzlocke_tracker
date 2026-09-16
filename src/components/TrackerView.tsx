@@ -33,7 +33,7 @@ const EDITOR_GRID: Record<number, string> = {
 };
 
 export function TrackerView({
-  runId,
+  runKey,
   players,
   boundRoutes,
   lang,
@@ -43,7 +43,7 @@ export function TrackerView({
   encounters,
   fusionEnabled = false,
 }: {
-  runId: number;
+  runKey: string;
   // The run's players in order - one in Classic, 2-4 in SoulLink.
   players: Player[];
   // Hidden route -> the route it belongs to (split-off fusion bodies), for
@@ -86,7 +86,7 @@ export function TrackerView({
   const toast = useToast();
   // Per device: the phone in the same run must not sprout debug controls
   // because the PC switched them on.
-  const [debugMode] = useDebugMode(runId);
+  const [debugMode] = useDebugMode(runKey);
 
   // Every route in display order, for the "insert after" picker - statics
   // included, since an added location may well belong after one, but not the
@@ -106,7 +106,7 @@ export function TrackerView({
 
   function handleExportOrder() {
     startExport(async () => {
-      const result = await exportRouteOrder(runId);
+      const result = await exportRouteOrder(runKey);
       if (result.success) setOrderText(result.text);
       else toast.error(formatActionError(result.error, lang));
     });
@@ -174,7 +174,7 @@ export function TrackerView({
         >
           {isClassic ? (
             <EncounterEditor
-              runId={runId}
+              runKey={runKey}
               lang={lang}
               settings={settings}
               routeId={route.id}
@@ -199,7 +199,7 @@ export function TrackerView({
                     {playerLabel(player)}
                   </span>
                   <EncounterEditor
-                    runId={runId}
+                    runKey={runKey}
                     lang={lang}
                     settings={settings}
                     routeId={route.id}
@@ -254,7 +254,7 @@ export function TrackerView({
       <CustomRoutesDialog
         open={customOpen}
         onClose={() => setCustomOpen(false)}
-        runId={runId}
+        runKey={runKey}
         lang={lang}
         routeOptions={routeOptions}
         customRoutes={customRoutes}
@@ -265,7 +265,7 @@ export function TrackerView({
           onClose={() => setOrderText(null)}
           lang={lang}
           text={orderText}
-          filename={`encounter-order-run-${runId}.txt`}
+          filename={"encounter-order.txt"}
         />
       )}
 

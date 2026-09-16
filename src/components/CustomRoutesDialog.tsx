@@ -25,14 +25,14 @@ export type CustomRouteRow = { id: number; name: string; encounterCount: number 
 export function CustomRoutesDialog({
   open,
   onClose,
-  runId,
+  runKey,
   lang,
   routeOptions,
   customRoutes,
 }: {
   open: boolean;
   onClose: () => void;
-  runId: number;
+  runKey: string;
   lang: Lang;
   routeOptions: RouteOption[];
   customRoutes: CustomRouteRow[];
@@ -60,7 +60,7 @@ export function CustomRoutesDialog({
     if (!trimmed || pending) return;
     startTransition(async () => {
       const result = await addCustomRoute(
-        runId,
+        runKey,
         trimmed,
         type,
         afterValue === "" ? null : Number(afterValue),
@@ -79,7 +79,7 @@ export function CustomRoutesDialog({
 
   function handleDelete(row: CustomRouteRow) {
     startTransition(async () => {
-      const result = await deleteCustomRoute(runId, row.id);
+      const result = await deleteCustomRoute(runKey, row.id);
       if (result.success) {
         setConfirmingId(null);
         toast.success(t.deleted(row.name));

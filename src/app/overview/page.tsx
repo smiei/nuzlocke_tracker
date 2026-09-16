@@ -57,7 +57,7 @@ export default async function OverviewPage({
   searchParams: Promise<{ run?: string }>;
 }) {
   const { run } = await searchParams;
-  const { runId, mode, players, gameId, settings } = await resolveRunId(run);
+  const { runId, runKey, mode, players, gameId, settings } = await resolveRunId(run);
   const game = getGameOrDefault(gameId);
   const lang = await getLang();
 
@@ -377,7 +377,7 @@ export default async function OverviewPage({
   return (
     <BlindflugProvider on={settings.blindflug}>
     <SpriteSetProvider spriteSet={game.spriteSet} fusion={getFusionSpriteConfigForGame(game)}>
-      <CanonicalRun runId={runId} />
+      <CanonicalRun runKey={runKey} />
       <PlayerNamesProvider names={settings.playerNames} lang={lang}>
         <PokemonDetailProvider
           pokemonList={pokemonList}
@@ -405,7 +405,7 @@ export default async function OverviewPage({
             stats={stats}
             deathTally={deathTally}
             memorial={memorial}
-            runId={runId}
+            runKey={runKey}
             deathPointOptions={levelCapItems.map((cap) => ({
               id: cap.id,
               label: `${localizeName(cap.names, lang)} · ${localizeName(cap.location, lang)}`,

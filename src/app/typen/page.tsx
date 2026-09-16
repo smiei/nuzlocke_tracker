@@ -49,7 +49,7 @@ export default async function AnalyzePage({
   searchParams: Promise<{ run?: string }>;
 }) {
   const { run } = await searchParams;
-  const { runId, mode, players, gameId, settings } = await resolveRunId(run);
+  const { runId, runKey, mode, players, gameId, settings } = await resolveRunId(run);
 
   const lang = await getLang();
   const game = getGameOrDefault(gameId);
@@ -187,7 +187,7 @@ export default async function AnalyzePage({
   return (
     <BlindflugProvider on={settings.blindflug}>
     <SpriteSetProvider spriteSet={game.spriteSet} fusion={getFusionSpriteConfigForGame(game)}>
-      <CanonicalRun runId={runId} />
+      <CanonicalRun runKey={runKey} />
       <PlayerNamesProvider names={settings.playerNames} lang={lang}>
         <PokemonDetailProvider
           pokemonList={pokemonList}
@@ -201,7 +201,7 @@ export default async function AnalyzePage({
           lang={lang}
         >
           <AnalyzeView
-            runId={runId}
+            runKey={runKey}
             mode={mode}
             players={players}
             pokemonList={pickableList}

@@ -17,12 +17,12 @@ import { toggleLevelCapDefeated } from "@/lib/actions";
 type LevelCapWithProgress = LevelCap & { defeated: boolean };
 
 export function LevelCapsView({
-  runId,
+  runKey,
   lang,
   levelCaps,
   trainerSet,
 }: {
-  runId: number;
+  runKey: string;
   lang: Lang;
   levelCaps: LevelCapWithProgress[];
   // Folder under public/trainers/ for game-specific avatars (see TrainerSprite).
@@ -40,7 +40,7 @@ export function LevelCapsView({
     setOverrides((prev) => ({ ...prev, [cap.id]: !current }));
     setPendingId(cap.id);
     startTransition(async () => {
-      const result = await toggleLevelCapDefeated(runId, cap.id);
+      const result = await toggleLevelCapDefeated(runKey, cap.id);
       if (result.success) {
         setOverrides((prev) => ({ ...prev, [cap.id]: result.defeated }));
         router.refresh();

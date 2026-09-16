@@ -14,14 +14,14 @@ export type DeathPointOption = { id: number; label: string };
 // this automatically (markDead); this exists for the ones that predate the
 // tracking, so the Memorial can be put in order after the fact.
 export function DeathPointPicker({
-  runId,
+  runKey,
   lang,
   soulLinkId,
   current,
   recorded,
   options,
 }: {
-  runId: number;
+  runKey: string;
   lang: Lang;
   soulLinkId: number;
   current: number | null;
@@ -38,7 +38,7 @@ export function DeathPointPicker({
   function handleChange(value: string) {
     setError(null);
     startTransition(async () => {
-      const result = await setDeathPoint(runId, soulLinkId, value === "" ? null : Number(value));
+      const result = await setDeathPoint(runKey, soulLinkId, value === "" ? null : Number(value));
       if (result.success) router.refresh();
       else setError(formatActionError(result.error, lang));
     });

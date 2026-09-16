@@ -29,7 +29,7 @@ function imageLoads(url: string): Promise<boolean> {
 export function FuseDialog({
   open,
   onClose,
-  runId,
+  runKey,
   hostEncounterId,
   hostPokemonId,
   hostPlayer,
@@ -39,7 +39,7 @@ export function FuseDialog({
 }: {
   open: boolean;
   onClose: () => void;
-  runId: number;
+  runKey: string;
   hostEncounterId: number;
   hostPokemonId: number;
   hostPlayer: Player;
@@ -82,7 +82,7 @@ export function FuseDialog({
         }
       }
 
-      const result = await fuseEncounters(runId, hostEncounterId, donorId);
+      const result = await fuseEncounters(runKey, hostEncounterId, donorId);
       if (result.success) {
         toast.success(t.fuseSuccess);
         setDonorId(null);

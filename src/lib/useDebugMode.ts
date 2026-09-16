@@ -12,25 +12,27 @@ import { usePersistentState } from "@/lib/usePersistentState";
 // treatment as tab order and the Team tab's sort mode.
 //
 // Still scoped per run (the toggle lives on the run-scoped Rules tab), hence a
-// set of run ids rather than one boolean. Changing this key or its shape
-// silently discards whatever a device already stored - treat it as a format.
-const DEBUG_RUNS_KEY = "nuzlocke:debugRuns";
+// set of run access keys rather than one boolean. Changing this key or its
+// shape silently discards whatever a device already stored - treat it as a
+// format. (It held numeric run ids under "nuzlocke:debugRuns" until runs got
+// access keys; that old entry is simply ignored.)
+const DEBUG_RUNS_KEY = "nuzlocke:debugRunKeys";
 
-export function useDebugMode(runId: number): [boolean, (on: boolean) => void] {
+export function useDebugMode(runKey: string): [boolean, (on: boolean) => void] {
   // usePersistentState is SSR-safe (useSyncExternalStore): the server renders
   // "off" and the stored value applies during hydration, with no
   // set-state-in-effect and no flash of the wrong state.
-  const [runIds, setRunIds] = usePersistentState<number[]>(DEBUG_RUNS_KEY, []);
-  const enabled = Array.isArray(runIds) && runIds.includes(runId);
+  const [runKeys, setRunKeys] = usePersistentState<string[]>(DEBUG_RUNS_KEY, []);
+  const enabled = Array.isArray(runKeys) && runKeys.includes(runKey);
 
   const setEnabled = useCallback(
     (on: boolean) => {
-      setRunIds((prev) => {
+      setRunKeys((prev) => {
         const current = Array.isArray(prev) ? prev : [];
-        return on ? [...new Set([...current, runId])] : current.filter((id) => id !== runId);
+        return on ? [...new Set([...current, runKey])] : current.filter((key) => key !== runKey);
       });
     },
-    [setRunIds, runId],
+    [setRunKeys, runKey],
   );
 
   return [enabled, setEnabled];

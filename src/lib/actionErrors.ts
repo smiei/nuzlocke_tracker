@@ -11,7 +11,7 @@ export type ActionError =
   | { key: "playerNotInRun" }
   | { key: "encounterNotFound"; id: number }
   | { key: "soulLinkNotFound"; id: number }
-  | { key: "runNotFound"; id: number }
+  | { key: "runNotFound" }
   | { key: "deadCannotEvolve" }
   | { key: "deadCannotRevert" }
   | { key: "invalidEvolutionTarget" }
@@ -47,7 +47,7 @@ export function formatActionError(error: ActionError, lang: Lang): string {
     case "soulLinkNotFound":
       return t.soulLinkNotFound(error.id);
     case "runNotFound":
-      return t.runNotFound(error.id);
+      return t.runNotFound;
     case "deadCannotEvolve":
       return t.deadCannotEvolve;
     case "deadCannotRevert":

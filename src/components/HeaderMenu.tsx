@@ -6,6 +6,7 @@ import { useDropdown } from "@/lib/useDropdown";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { unzipSync } from "fflate";
 import { deleteRun, exportAllBackup, exportRunBackup, importBackup, renameRun } from "@/lib/actions";
+import { pickActiveRun } from "@/lib/runKey";
 import { formatActionError } from "@/lib/actionErrors";
 import { BACKUP_FORMAT, BACKUP_VERSION, parseBackup, type BackupFile } from "@/lib/backupParse";
 import { useDialog } from "@/components/DialogProvider";
@@ -118,8 +119,7 @@ export function HeaderMenu({
   const { canPrompt, isStandalone, isIos, mounted, promptInstall } = useInstallPrompt();
   const t = translations[lang];
 
-  const activeId = Number(searchParams.get("run")) || runs[0]?.id;
-  const activeRun = runs.find((r) => r.id === activeId);
+  const activeRun = pickActiveRun(runs, searchParams.get("run"));
   // Infinite Fusion hotlinks community sprites and builds on outside data -
   // credited in the menu while such a run is open.
   const activeGameHasFusion = games.find((g) => g.id === activeRun?.gameId)?.fusion ?? false;
@@ -132,7 +132,7 @@ export function HeaderMenu({
     }
     setBusy("backupRun");
     startTransition(async () => {
-      const result = await exportRunBackup(activeRun.id);
+      const result = await exportRunBackup(activeRun.accessKey);
       setBusy(null);
       setOpen(false);
       if (result.success) {
@@ -232,7 +232,7 @@ export function HeaderMenu({
   function handleRename(name: string) {
     if (!activeRun) return;
     startTransition(async () => {
-      const result = await renameRun(activeRun.id, name);
+      const result = await renameRun(activeRun.accessKey, name);
       if (result.success) {
         setRenameOpen(false);
         router.refresh();
@@ -258,7 +258,7 @@ export function HeaderMenu({
 
     setBusy("delete");
     startTransition(async () => {
-      const result = await deleteRun(activeRun.id);
+      const result = await deleteRun(activeRun.accessKey);
       setBusy(null);
       if (result.success) {
         toast.success(t.runSwitcher.deleteButton);

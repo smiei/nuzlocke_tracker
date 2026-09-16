@@ -14,6 +14,6 @@ export const dynamic = "force-dynamic";
 
 export async function GET(request: NextRequest) {
   const run = request.nextUrl.searchParams.get("run") ?? undefined;
-  const { runId } = await resolveRunId(run);
-  return NextResponse.redirect(new URL(`/typen?run=${runId}`, request.nextUrl));
+  const { runKey } = await resolveRunId(run);
+  return NextResponse.redirect(new URL(`/typen?run=${runKey}`, request.nextUrl));
 }

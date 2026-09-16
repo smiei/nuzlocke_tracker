@@ -21,6 +21,7 @@
     "download:badges": "node scripts/download-badges.mjs"
   },
   "dependencies": {
+    "@prisma/adapter-libsql": "^6.19.3",
     "@prisma/client": "^6.19.3",
     "dotenv": "^17.4.2",
     "fflate": "^0.8.3",

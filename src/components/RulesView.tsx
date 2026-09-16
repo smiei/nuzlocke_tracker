@@ -170,7 +170,7 @@ function SwitchTrack({ on }: { on: boolean }) {
 }
 
 export function RulesView({
-  runId,
+  runKey,
   lang,
   mode,
   players,
@@ -180,7 +180,7 @@ export function RulesView({
   presets,
   fusionEnabled = false,
 }: {
-  runId: number;
+  runKey: string;
   lang: Lang;
   mode: RunMode;
   // The run's players in order (src/lib/players.ts).
@@ -202,7 +202,7 @@ export function RulesView({
   const [notesOpen, setNotesOpen] = useState(true);
   const [presetDialogOpen, setPresetDialogOpen] = useState(false);
   // Per device, not per run setting - see useDebugMode.
-  const [debugMode, setDebugMode] = useDebugMode(runId);
+  const [debugMode, setDebugMode] = useDebugMode(runKey);
   const [pending, startTransition] = useTransition();
   // Optimistic toggle state; server state (possibly changed on another
   // device via live sync) wins whenever a refresh delivers new props -
@@ -221,7 +221,7 @@ export function RulesView({
     const next = !local[key];
     setLocal((prev) => ({ ...prev, [key]: next }));
     startTransition(async () => {
-      const result = await updateRunSettings(runId, { [key]: next });
+      const result = await updateRunSettings(runKey, { [key]: next });
       if (result.success) {
         router.refresh();
       } else {
@@ -238,7 +238,7 @@ export function RulesView({
     const nextNames = { ...names, [player]: trimmed };
     setNames(nextNames);
     startTransition(async () => {
-      const result = await updateRunSettings(runId, { playerNames: nextNames });
+      const result = await updateRunSettings(runKey, { playerNames: nextNames });
       if (result.success) {
         // The one action in the app whose effect is invisible where it is
         // triggered: the field is uncontrolled, so it looks identical after a
@@ -263,7 +263,7 @@ export function RulesView({
     if (!preset) return;
     if (!(await confirm({ message: t.presets.applyConfirm(preset.name) }))) return;
     startTransition(async () => {
-      const result = await applyRulePreset(runId, presetId);
+      const result = await applyRulePreset(runKey, presetId);
       if (result.success) {
         toast.success(t.presets.applied(preset.name));
         router.refresh();
@@ -303,7 +303,7 @@ export function RulesView({
 
   function handleSave() {
     startTransition(async () => {
-      const result = await saveRules(runId, draft);
+      const result = await saveRules(runKey, draft);
       if (result.success) {
         setEditing(false);
         router.refresh();
@@ -350,7 +350,7 @@ export function RulesView({
       <RulePresetDialog
         open={presetDialogOpen}
         onClose={() => setPresetDialogOpen(false)}
-        runId={runId}
+        runKey={runKey}
         lang={lang}
         presets={presets}
       />

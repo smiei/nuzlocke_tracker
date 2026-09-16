@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { publishChange } from "@/lib/liveBus";
 import { prisma } from "@/lib/prisma";
+import { findRunByKey, markRunChanged } from "@/lib/runAccess";
 import {
   DEFAULT_GAME_ID,
   getGameById,
@@ -10,7 +11,7 @@ import {
   getEvolutionById,
   getLevelCaps,
 } from "@/lib/data";
-import { EncounterStatus, LinkStatus, Player, RunMode, type Prisma } from "@/generated/prisma/client";
+import { EncounterStatus, LinkStatus, Player, RunMode, type Prisma, type Run } from "@/generated/prisma/client";
 import { getRouteForRun, getRoutesForRun, nextCustomRouteId } from "@/lib/runRoutes";
 import { CUSTOM_ROUTE_NAME_MAX, isCustomRouteId } from "@/lib/customRoutes";
 import { formedLinks, groupSoulLinks, teamSlotsNeeded } from "@/lib/fusionGroups";
@@ -30,6 +31,10 @@ import {
 } from "@/lib/runSettings";
 import type { Lang } from "@/lib/i18n/dictionary";
 
+// Every run-scoped action takes the run's access key, never its numeric id
+// (see src/lib/runKey.ts), and answers an unknown key with this.
+const RUN_NOT_FOUND = { success: false, error: { key: "runNotFound" } } as const;
+
 // The tabs whose rendering depends on the run's route list or rule toggles.
 // Spelled out once instead of at each call site, which is how the list drifted
 // before.
@@ -42,7 +47,7 @@ function revalidateRunViews() {
 }
 
 export type SaveEncounterInput = {
-  runId: number;
+  runKey: string;
   routeId: number;
   player: Player;
   pokemonId: number;
@@ -103,14 +108,26 @@ async function autoAssignTeamSlot(runId: number, routeId: number): Promise<boole
   }
   if (freeSlot === null) return false;
 
-  const assigned = await setTeamSlot(runId, freeSlot, link.id);
+  const assigned = await setTeamSlotInRun(runId, freeSlot, link.id);
   return assigned.success;
 }
 
 export async function saveEncounter(
   input: SaveEncounterInput,
 ): Promise<SaveEncounterResult> {
-  const { runId, routeId, player, pokemonId, status } = input;
+  const run = await findRunByKey(input.runKey);
+  if (!run) return RUN_NOT_FOUND;
+  return saveEncounterInRun(run, input);
+}
+
+// quickCatch and addFreeTeamMember write through here with the run they have
+// already resolved from their own key.
+async function saveEncounterInRun(
+  run: Run,
+  input: Omit<SaveEncounterInput, "runKey">,
+): Promise<SaveEncounterResult> {
+  const runId = run.id;
+  const { routeId, player, pokemonId, status } = input;
   // Normalize once; the in-game nickname limit is 10 characters (enforced in
   // the input too), so cap here as the server-side safety net.
   const nickname =
@@ -122,13 +139,9 @@ export async function saveEncounter(
   if (!pokemon) {
     return { success: false, error: { key: "unknownPokemon", id: pokemonId } };
   }
-  // The run decides which game pack the route id refers to.
-  const run = await prisma.run.findUnique({ where: { id: runId } });
-  if (!run) {
-    return { success: false, error: { key: "runNotFound", id: runId } };
-  }
-  // Resolves the run's own hand-added locations as well - a negative id is a
-  // CustomRoute, not an unknown route.
+  // The run decides which game pack the route id refers to. Resolves the
+  // run's own hand-added locations as well - a negative id is a CustomRoute,
+  // not an unknown route.
   const route = await getRouteForRun(runId, run.gameId, routeId);
   if (!route) {
     return { success: false, error: { key: "unknownRoute", id: routeId } };
@@ -286,7 +299,7 @@ export async function saveEncounter(
 
   revalidatePath("/tracker");
   revalidatePath("/links");
-  publishChange(runId);
+  await markRunChanged(runId);
   return { success: true };
 }
 
@@ -300,14 +313,16 @@ export type QuickCatchResult =
 // into the lowest free team slot (0-5). A full team is not an error - the
 // catch stands, it just doesn't get a slot (addedToTeam: false).
 export async function quickCatch(
-  runId: number,
+  runKey: string,
   routeId: number,
   player: Player,
   pokemonId: number,
   options?: { nickname?: string | null; shiny?: boolean },
 ): Promise<QuickCatchResult> {
-  const saved = await saveEncounter({
-    runId,
+  const run = await findRunByKey(runKey);
+  if (!run) return RUN_NOT_FOUND;
+  const runId = run.id;
+  const saved = await saveEncounterInRun(run, {
     routeId,
     player,
     pokemonId,
@@ -422,11 +437,14 @@ async function linkedSoulLinkIds(
 }
 
 export async function markDead(
-  runId: number,
+  runKey: string,
   soulLinkId: number,
   deathPlayer?: Player | null,
   deathCause?: string | null,
 ): Promise<MarkDeadResult> {
+  const run = await findRunByKey(runKey);
+  if (!run) return RUN_NOT_FOUND;
+  const runId = run.id;
   const soulLink = await prisma.soulLink.findUnique({
     where: { id: soulLinkId },
     include: { encounters: true },
@@ -465,7 +483,7 @@ export async function markDead(
 
   revalidatePath("/tracker");
   revalidatePath("/links");
-  publishChange(runId);
+  await markRunChanged(runId);
   return { success: true };
 }
 
@@ -474,10 +492,13 @@ export type ClearEncounterResult = { success: true } | { success: false; error: 
 // Undo a mistaken encounter: delete the row and clean up an orphaned SoulLink
 // (same invariant as saveEncounter - a link always has >=1 encounter).
 export async function clearEncounter(
-  runId: number,
+  runKey: string,
   routeId: number,
   player: Player,
 ): Promise<ClearEncounterResult> {
+  const run = await findRunByKey(runKey);
+  if (!run) return RUN_NOT_FOUND;
+  const runId = run.id;
   await prisma.$transaction(async (tx) => {
     const existing = await tx.encounter.findUnique({
       where: { runId_routeId_player: { runId, routeId, player } },
@@ -499,7 +520,7 @@ export async function clearEncounter(
 
   revalidatePath("/tracker");
   revalidatePath("/links");
-  publishChange(runId);
+  await markRunChanged(runId);
   return { success: true };
 }
 
@@ -507,16 +528,17 @@ export async function clearEncounter(
 // was tracked. null = back to "unknown", which parks it at the top of the
 // Memorial; any other value must be a level cap of the run's game pack.
 export async function setDeathPoint(
-  runId: number,
+  runKey: string,
   soulLinkId: number,
   levelCapId: number | null,
 ): Promise<MarkDeadResult> {
+  const run = await findRunByKey(runKey);
+  if (!run) return RUN_NOT_FOUND;
+  const runId = run.id;
   const soulLink = await prisma.soulLink.findUnique({ where: { id: soulLinkId } });
   if (!soulLink || soulLink.runId !== runId) {
     return { success: false, error: { key: "soulLinkNotFound", id: soulLinkId } };
   }
-  const run = await prisma.run.findUnique({ where: { id: runId } });
-  if (!run) return { success: false, error: { key: "runNotFound", id: runId } };
   if (levelCapId !== null && !getLevelCaps(run.gameId).some((cap) => cap.id === levelCapId)) {
     return { success: false, error: { key: "unknownLevelCap", id: levelCapId } };
   }
@@ -543,13 +565,16 @@ export async function setDeathPoint(
   });
 
   revalidatePath("/overview");
-  publishChange(runId);
+  await markRunChanged(runId);
   return { success: true };
 }
 
 // Counterpart to markDead - only flips the link's own status back, the
 // encounters' catch status was never touched.
-export async function markAlive(runId: number, soulLinkId: number): Promise<MarkDeadResult> {
+export async function markAlive(runKey: string, soulLinkId: number): Promise<MarkDeadResult> {
+  const run = await findRunByKey(runKey);
+  if (!run) return RUN_NOT_FOUND;
+  const runId = run.id;
   const soulLink = await prisma.soulLink.findUnique({
     where: { id: soulLinkId },
     include: { encounters: true },
@@ -569,7 +594,7 @@ export async function markAlive(runId: number, soulLinkId: number): Promise<Mark
 
   revalidatePath("/tracker");
   revalidatePath("/links");
-  publishChange(runId);
+  await markRunChanged(runId);
   return { success: true };
 }
 
@@ -689,10 +714,13 @@ async function fusionGroupLinkIds(
 // already be part of another fusion, in either role - a donor can't also
 // host, and a host can't also donate elsewhere.
 export async function fuseEncounters(
-  runId: number,
+  runKey: string,
   hostId: number,
   donorId: number,
 ): Promise<FuseResult> {
+  const run = await findRunByKey(runKey);
+  if (!run) return RUN_NOT_FOUND;
+  const runId = run.id;
   if (hostId === donorId) {
     return { success: false, error: { key: "fusionSameEncounter" } };
   }
@@ -740,7 +768,7 @@ export async function fuseEncounters(
   });
 
   revalidatePath("/links");
-  publishChange(runId);
+  await markRunChanged(runId);
   return { success: true };
 }
 
@@ -783,13 +811,14 @@ export type SetEncounterBodyResult = { success: true } | { success: false; error
 // fusion view, evolution action, backup and death rule treats it exactly like
 // a fusion the player built themselves. null removes it again.
 export async function setEncounterBody(
-  runId: number,
+  runKey: string,
   routeId: number,
   player: Player,
   bodyPokemonId: number | null,
 ): Promise<SetEncounterBodyResult> {
-  const run = await prisma.run.findUnique({ where: { id: runId } });
-  if (!run) return { success: false, error: { key: "runNotFound", id: runId } };
+  const run = await findRunByKey(runKey);
+  if (!run) return RUN_NOT_FOUND;
+  const runId = run.id;
   const head = await prisma.encounter.findUnique({
     where: { runId_routeId_player: { runId, routeId, player } },
   });
@@ -810,7 +839,7 @@ export async function setEncounterBody(
     }
     revalidatePath("/tracker");
     revalidatePath("/links");
-    publishChange(runId);
+    await markRunChanged(runId);
     return { success: true };
   }
 
@@ -867,14 +896,17 @@ export async function setEncounterBody(
 
   revalidatePath("/tracker");
   revalidatePath("/links");
-  publishChange(runId);
+  await markRunChanged(runId);
   return { success: true };
 }
 
 // hostId is the fusion's head; its donor (if any) is looked up via
 // fusedIntoId rather than passed in, so the caller only ever needs the one id
 // that stays stable across the fusion's lifetime.
-export async function unfuseEncounter(runId: number, hostId: number): Promise<FuseResult> {
+export async function unfuseEncounter(runKey: string, hostId: number): Promise<FuseResult> {
+  const run = await findRunByKey(runKey);
+  if (!run) return RUN_NOT_FOUND;
+  const runId = run.id;
   const host = await prisma.encounter.findUnique({
     where: { id: hostId },
     include: { soulLink: true },
@@ -896,8 +928,6 @@ export async function unfuseEncounter(runId: number, hostId: number): Promise<Fu
   // what the game does - but a run can rule that out (wildFusionSplit).
   let hostRouteName: string | null = null;
   if (donor.isFusionBody) {
-    const run = await prisma.run.findUnique({ where: { id: runId } });
-    if (!run) return { success: false, error: { key: "runNotFound", id: runId } };
     if (!parseRunSettings(run.settingsJson).wildFusionSplit) {
       return { success: false, error: { key: "fusionSplitDisabled" } };
     }
@@ -951,7 +981,7 @@ export async function unfuseEncounter(runId: number, hostId: number): Promise<Fu
   });
 
   revalidatePath("/links");
-  publishChange(runId);
+  await markRunChanged(runId);
   return { success: true };
 }
 
@@ -960,7 +990,10 @@ export async function unfuseEncounter(runId: number, hostId: number): Promise<Fu
 // instead, so a caller tracking "the fusion at hostId" must switch to
 // tracking the (former) donor's id. Except for a wild-caught fusion, whose
 // rows keep their roles and swap species (see below).
-export async function swapFusion(runId: number, hostId: number): Promise<FuseResult> {
+export async function swapFusion(runKey: string, hostId: number): Promise<FuseResult> {
+  const run = await findRunByKey(runKey);
+  if (!run) return RUN_NOT_FOUND;
+  const runId = run.id;
   const host = await prisma.encounter.findUnique({
     where: { id: hostId },
     include: { soulLink: true },
@@ -996,7 +1029,7 @@ export async function swapFusion(runId: number, hostId: number): Promise<FuseRes
     ]);
     revalidatePath("/tracker");
     revalidatePath("/links");
-    publishChange(runId);
+    await markRunChanged(runId);
     return { success: true };
   }
 
@@ -1011,7 +1044,7 @@ export async function swapFusion(runId: number, hostId: number): Promise<FuseRes
   });
 
   revalidatePath("/links");
-  publishChange(runId);
+  await markRunChanged(runId);
   return { success: true };
 }
 
@@ -1022,10 +1055,13 @@ export type EvolveResult = { success: true } | { success: false; error: ActionEr
 // (what was actually caught on the route, which the Encounter tab shows) - so
 // evolving in the Pokémon tab can never change what the Encounter tab displays.
 export async function evolveEncounter(
-  runId: number,
+  runKey: string,
   encounterId: number,
   targetPokemonId: number,
 ): Promise<EvolveResult> {
+  const run = await findRunByKey(runKey);
+  if (!run) return RUN_NOT_FOUND;
+  const runId = run.id;
   const encounter = await prisma.encounter.findUnique({
     where: { id: encounterId },
     include: { soulLink: true },
@@ -1052,7 +1088,7 @@ export async function evolveEncounter(
   });
 
   revalidatePath("/links");
-  publishChange(runId);
+  await markRunChanged(runId);
   return { success: true };
 }
 
@@ -1063,10 +1099,13 @@ export async function evolveEncounter(
 // must be a forme of the CURRENT species (or that species itself), which also
 // stops a forme swap from doubling as an evolution.
 export async function setPokemonForm(
-  runId: number,
+  runKey: string,
   encounterId: number,
   targetPokemonId: number,
 ): Promise<EvolveResult> {
+  const run = await findRunByKey(runKey);
+  if (!run) return RUN_NOT_FOUND;
+  const runId = run.id;
   const encounter = await prisma.encounter.findUnique({
     where: { id: encounterId },
     include: { soulLink: true },
@@ -1095,11 +1134,14 @@ export async function setPokemonForm(
   });
 
   revalidatePath("/links");
-  publishChange(runId);
+  await markRunChanged(runId);
   return { success: true };
 }
 
-export async function revertEvolution(runId: number, encounterId: number): Promise<EvolveResult> {
+export async function revertEvolution(runKey: string, encounterId: number): Promise<EvolveResult> {
+  const run = await findRunByKey(runKey);
+  if (!run) return RUN_NOT_FOUND;
+  const runId = run.id;
   const encounter = await prisma.encounter.findUnique({
     where: { id: encounterId },
     include: { soulLink: true },
@@ -1122,7 +1164,7 @@ export async function revertEvolution(runId: number, encounterId: number): Promi
   });
 
   revalidatePath("/links");
-  publishChange(runId);
+  await markRunChanged(runId);
   return { success: true };
 }
 
@@ -1131,13 +1173,12 @@ export type ToggleLevelCapResult =
   | { success: false; error: ActionError };
 
 export async function toggleLevelCapDefeated(
-  runId: number,
+  runKey: string,
   levelCapId: number,
 ): Promise<ToggleLevelCapResult> {
-  const run = await prisma.run.findUnique({ where: { id: runId } });
-  if (!run) {
-    return { success: false, error: { key: "runNotFound", id: runId } };
-  }
+  const run = await findRunByKey(runKey);
+  if (!run) return RUN_NOT_FOUND;
+  const runId = run.id;
   if (!getLevelCaps(run.gameId).some((cap) => cap.id === levelCapId)) {
     return { success: false, error: { key: "unknownLevelCap", id: levelCapId } };
   }
@@ -1154,7 +1195,7 @@ export async function toggleLevelCapDefeated(
   });
 
   revalidatePath("/levelcaps");
-  publishChange(runId);
+  await markRunChanged(runId);
   return { success: true, defeated: nextDefeated };
 }
 
@@ -1173,6 +1214,17 @@ export type SetTeamSlotResult = { success: true } | { success: false; error: Act
 // then claims whatever further slots it needs. Every link is its own group in
 // a run without fusions, which makes this exactly the old behaviour there.
 export async function setTeamSlot(
+  runKey: string,
+  position: number,
+  soulLinkId: number | null,
+): Promise<SetTeamSlotResult> {
+  const run = await findRunByKey(runKey);
+  if (!run) return RUN_NOT_FOUND;
+  return setTeamSlotInRun(run.id, position, soulLinkId);
+}
+
+// autoAssignTeamSlot comes through here for a run it already knows.
+async function setTeamSlotInRun(
   runId: number,
   position: number,
   soulLinkId: number | null,
@@ -1213,18 +1265,17 @@ export async function setTeamSlot(
   });
 
   revalidatePath("/links");
-  publishChange(runId);
+  await markRunChanged(runId);
   return { success: true };
 }
 
 // Empties all six team slots at once. Only the slot assignment is cleared -
 // the links themselves (and everything on the Encounter tab) are untouched,
 // exactly like setting each slot to "leer" by hand would.
-export async function clearTeam(runId: number): Promise<SetTeamSlotResult> {
-  const run = await prisma.run.findUnique({ where: { id: runId } });
-  if (!run) {
-    return { success: false, error: { key: "runNotFound", id: runId } };
-  }
+export async function clearTeam(runKey: string): Promise<SetTeamSlotResult> {
+  const run = await findRunByKey(runKey);
+  if (!run) return RUN_NOT_FOUND;
+  const runId = run.id;
 
   await prisma.soulLink.updateMany({
     where: { runId, teamPosition: { not: null } },
@@ -1232,18 +1283,18 @@ export async function clearTeam(runId: number): Promise<SetTeamSlotResult> {
   });
 
   revalidatePath("/links");
-  publishChange(runId);
+  await markRunChanged(runId);
   return { success: true };
 }
 
 export type CreateRunResult =
-  | { success: true; runId: number }
+  | { success: true; runKey: string }
   | { success: false; error: ActionError };
 
 export async function createRun(
   name: string,
   mode: RunMode,
-  sourceRunId?: number | null,
+  sourceRunKey?: string | null,
   gameId?: string,
   lang?: Lang,
   playerCount?: number,
@@ -1263,9 +1314,8 @@ export async function createRun(
   // TEXT while Prisma writes numbers, and SQLite sorts TEXT above all
   // numbers - id is monotonic and immune to that.
   const source =
-    (sourceRunId != null
-      ? await prisma.run.findUnique({ where: { id: sourceRunId } })
-      : null) ?? (await prisma.run.findFirst({ orderBy: { id: "desc" } }));
+    (sourceRunKey != null ? await findRunByKey(sourceRunKey) : null) ??
+    (await prisma.run.findFirst({ orderBy: { id: "desc" } }));
   const rulesMarkdown = source?.rulesMarkdown.trim()
     ? source.rulesMarkdown
     : DEFAULT_RULES[lang ?? "de"];
@@ -1284,25 +1334,24 @@ export async function createRun(
     },
   });
   revalidatePath("/", "layout");
-  publishChange(run.id);
-  return { success: true, runId: run.id };
+  await markRunChanged(run.id);
+  return { success: true, runKey: run.accessKey };
 }
 
 export type RenameRunResult = { success: true } | { success: false; error: ActionError };
 
-export async function renameRun(runId: number, name: string): Promise<RenameRunResult> {
+export async function renameRun(runKey: string, name: string): Promise<RenameRunResult> {
   const trimmed = name.trim();
   if (!trimmed) {
     return { success: false, error: { key: "nameRequired" } };
   }
-  const run = await prisma.run.findUnique({ where: { id: runId } });
-  if (!run) {
-    return { success: false, error: { key: "runNotFound", id: runId } };
-  }
+  const run = await findRunByKey(runKey);
+  if (!run) return RUN_NOT_FOUND;
+  const runId = run.id;
 
   await prisma.run.update({ where: { id: runId }, data: { name: trimmed } });
   revalidatePath("/", "layout");
-  publishChange(runId);
+  await markRunChanged(runId);
   return { success: true };
 }
 
@@ -1312,13 +1361,12 @@ export type UpdateRunSettingsResult = { success: true } | { success: false; erro
 // keys with boolean values are applied - anything else is ignored, matching
 // the tolerant parseRunSettings on the read side.
 export async function updateRunSettings(
-  runId: number,
+  runKey: string,
   changes: Partial<RunSettings>,
 ): Promise<UpdateRunSettingsResult> {
-  const run = await prisma.run.findUnique({ where: { id: runId } });
-  if (!run) {
-    return { success: false, error: { key: "runNotFound", id: runId } };
-  }
+  const run = await findRunByKey(runKey);
+  if (!run) return RUN_NOT_FOUND;
+  const runId = run.id;
 
   const settings = parseRunSettings(run.settingsJson);
   for (const key of RUN_SETTING_KEYS) {
@@ -1342,21 +1390,20 @@ export async function updateRunSettings(
   revalidatePath("/links");
   revalidatePath("/typen");
   revalidatePath("/overview");
-  publishChange(runId);
+  await markRunChanged(runId);
   return { success: true };
 }
 
 export type SaveRulesResult = { success: true } | { success: false; error: ActionError };
 
-export async function saveRules(runId: number, markdown: string): Promise<SaveRulesResult> {
-  const run = await prisma.run.findUnique({ where: { id: runId } });
-  if (!run) {
-    return { success: false, error: { key: "runNotFound", id: runId } };
-  }
+export async function saveRules(runKey: string, markdown: string): Promise<SaveRulesResult> {
+  const run = await findRunByKey(runKey);
+  if (!run) return RUN_NOT_FOUND;
+  const runId = run.id;
 
   await prisma.run.update({ where: { id: runId }, data: { rulesMarkdown: markdown } });
   revalidatePath("/rules");
-  publishChange(runId);
+  await markRunChanged(runId);
   return { success: true };
 }
 
@@ -1372,7 +1419,7 @@ export type AddCustomRouteResult =
   | { success: false; error: ActionError };
 
 export async function addCustomRoute(
-  runId: number,
+  runKey: string,
   name: string,
   type: "route" | "static",
   // Id of the route this one follows in the list; null = at the very top.
@@ -1383,10 +1430,9 @@ export async function addCustomRoute(
     return { success: false, error: { key: "nameRequired" } };
   }
 
-  const run = await prisma.run.findUnique({ where: { id: runId } });
-  if (!run) {
-    return { success: false, error: { key: "runNotFound", id: runId } };
-  }
+  const run = await findRunByKey(runKey);
+  if (!run) return RUN_NOT_FOUND;
+  const runId = run.id;
   // An anchor must be a route this run actually has, or the new entry would
   // silently land at the end of the list instead of where it was asked for.
   if (afterRouteId !== null && !(await getRouteForRun(runId, run.gameId, afterRouteId))) {
@@ -1399,7 +1445,7 @@ export async function addCustomRoute(
   });
 
   revalidateRunViews();
-  publishChange(runId);
+  await markRunChanged(runId);
   return { success: true, routeId };
 }
 
@@ -1410,9 +1456,12 @@ export type DeleteCustomRouteResult = { success: true } | { success: false; erro
 // so the cleanup is explicit. The UI confirms first and says how many
 // encounters are about to go with it.
 export async function deleteCustomRoute(
-  runId: number,
+  runKey: string,
   routeId: number,
 ): Promise<DeleteCustomRouteResult> {
+  const run = await findRunByKey(runKey);
+  if (!run) return RUN_NOT_FOUND;
+  const runId = run.id;
   if (!isCustomRouteId(routeId)) {
     return { success: false, error: { key: "unknownRoute", id: routeId } };
   }
@@ -1437,7 +1486,7 @@ export async function deleteCustomRoute(
   });
 
   revalidateRunViews();
-  publishChange(runId);
+  await markRunChanged(runId);
   return { success: true };
 }
 
@@ -1455,15 +1504,14 @@ export type AddFreeTeamMemberResult =
   | { success: false; error: ActionError };
 
 export async function addFreeTeamMember(
-  runId: number,
+  runKey: string,
   pokemonId: number,
   player: Player,
   nickname?: string,
 ): Promise<AddFreeTeamMemberResult> {
-  const run = await prisma.run.findUnique({ where: { id: runId } });
-  if (!run) {
-    return { success: false, error: { key: "runNotFound", id: runId } };
-  }
+  const run = await findRunByKey(runKey);
+  if (!run) return RUN_NOT_FOUND;
+  const runId = run.id;
   if (!getPokemonById(pokemonId)) {
     return { success: false, error: { key: "unknownPokemon", id: pokemonId } };
   }
@@ -1492,8 +1540,7 @@ export async function addFreeTeamMember(
   // Straight through the normal write path, which creates the SoulLink and
   // calls autoAssignTeamSlot - so the member lands in the first free of the
   // six slots with no extra code here.
-  const saved = await saveEncounter({
-    runId,
+  const saved = await saveEncounterInRun(run, {
     routeId,
     player,
     pokemonId,
@@ -1507,7 +1554,7 @@ export async function addFreeTeamMember(
   }
 
   revalidateRunViews();
-  publishChange(runId);
+  await markRunChanged(runId);
   return { success: true, routeId };
 }
 
@@ -1525,11 +1572,10 @@ function pad(value: string | number, width: number): string {
 // reorder data/games/<gameId>/routes.json. It deliberately carries BOTH
 // lists: a run in progress has only visited part of the map, so the observed
 // order alone would not say where the untouched routes belong.
-export async function exportRouteOrder(runId: number): Promise<ExportRouteOrderResult> {
-  const run = await prisma.run.findUnique({ where: { id: runId } });
-  if (!run) {
-    return { success: false, error: { key: "runNotFound", id: runId } };
-  }
+export async function exportRouteOrder(runKey: string): Promise<ExportRouteOrderResult> {
+  const run = await findRunByKey(runKey);
+  if (!run) return RUN_NOT_FOUND;
+  const runId = run.id;
 
   // Hidden routes are free-team slots, not locations - they would only add
   // noise to a report about the order the map was played in.
@@ -1645,7 +1691,7 @@ export type SaveRulePresetResult =
 // feature has an empty rulesMarkdown and shows the built-in ruleset, so
 // without this fallback its preset would come out blank.
 export async function saveRulePreset(
-  runId: number,
+  runKey: string,
   name: string,
   lang: Lang,
 ): Promise<SaveRulePresetResult> {
@@ -1654,10 +1700,8 @@ export async function saveRulePreset(
     return { success: false, error: { key: "nameRequired" } };
   }
 
-  const run = await prisma.run.findUnique({ where: { id: runId } });
-  if (!run) {
-    return { success: false, error: { key: "runNotFound", id: runId } };
-  }
+  const run = await findRunByKey(runKey);
+  if (!run) return RUN_NOT_FOUND;
 
   const data = {
     settingsJson: serializePresetSettings(parseRunSettings(run.settingsJson)),
@@ -1681,13 +1725,12 @@ export type ApplyRulePresetResult = { success: true } | { success: false; error:
 // own playerNames survive - a preset never carries them (see
 // serializePresetSettings).
 export async function applyRulePreset(
-  runId: number,
+  runKey: string,
   presetId: number,
 ): Promise<ApplyRulePresetResult> {
-  const run = await prisma.run.findUnique({ where: { id: runId } });
-  if (!run) {
-    return { success: false, error: { key: "runNotFound", id: runId } };
-  }
+  const run = await findRunByKey(runKey);
+  if (!run) return RUN_NOT_FOUND;
+  const runId = run.id;
   const preset = await prisma.rulePreset.findUnique({ where: { id: presetId } });
   if (!preset) {
     return { success: false, error: { key: "presetNotFound", id: presetId } };
@@ -1714,7 +1757,7 @@ export async function applyRulePreset(
   revalidatePath("/links");
   revalidatePath("/typen");
   revalidatePath("/overview");
-  publishChange(runId);
+  await markRunChanged(runId);
   return { success: true };
 }
 
@@ -1738,15 +1781,14 @@ export type DeleteRunResult = { success: true } | { success: false; error: Actio
 // Cascades to that run's Encounters, SoulLinks, and LevelCapProgress rows
 // (onDelete: Cascade on the Run relation) - the UI is responsible for
 // confirming with the user before calling this, since it's unrecoverable.
-export async function deleteRun(runId: number): Promise<DeleteRunResult> {
-  const run = await prisma.run.findUnique({ where: { id: runId } });
-  if (!run) {
-    return { success: false, error: { key: "runNotFound", id: runId } };
-  }
+export async function deleteRun(runKey: string): Promise<DeleteRunResult> {
+  const run = await findRunByKey(runKey);
+  if (!run) return RUN_NOT_FOUND;
 
-  await prisma.run.delete({ where: { id: runId } });
+  await prisma.run.delete({ where: { id: run.id } });
   revalidatePath("/", "layout");
-  publishChange(runId);
+  // Nothing left to bump a version on - only the live stream needs to know.
+  publishChange(run.id);
   return { success: true };
 }
 
@@ -1754,12 +1796,10 @@ export type BackupResult =
   | { success: true; backup: BackupFile; filename: string }
   | { success: false; error: ActionError };
 
-export async function exportRunBackup(runId: number): Promise<BackupResult> {
-  const run = await prisma.run.findUnique({ where: { id: runId } });
-  if (!run) {
-    return { success: false, error: { key: "runNotFound", id: runId } };
-  }
-  const backup = await buildBackup([runId]);
+export async function exportRunBackup(runKey: string): Promise<BackupResult> {
+  const run = await findRunByKey(runKey);
+  if (!run) return RUN_NOT_FOUND;
+  const backup = await buildBackup([run.id]);
   return { success: true, backup, filename: backupFilename(run.name) };
 }
 

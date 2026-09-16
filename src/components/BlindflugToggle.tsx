@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { updateRunSettings } from "@/lib/actions";
 import { formatActionError } from "@/lib/actionErrors";
 import { parseRunSettings } from "@/lib/runSettings";
+import { pickActiveRun } from "@/lib/runKey";
 import { useLanguage } from "@/lib/i18n/LanguageProvider";
 import { translations } from "@/lib/i18n/dictionary";
 import { useToast } from "@/components/ui/ToastProvider";
@@ -30,13 +31,13 @@ function BlindfoldIcon({ className }: { className?: string }) {
 // device one: Blindflug is a house rule both players agreed to, so it syncs.
 //
 // The current run is resolved the same way resolveRunId does on the server -
-// ?run= if it names a real run, otherwise the oldest - so the button agrees
-// with the page underneath it even before CanonicalRun has put ?run= on the
-// address bar.
+// ?run= if it names a real run (by key, or a legacy numeric id), otherwise the
+// oldest - so the button agrees with the page underneath it even before
+// CanonicalRun has put ?run= on the address bar.
 export function BlindflugToggle({
   runs,
 }: {
-  runs: { id: number; settingsJson: string }[];
+  runs: { id: number; accessKey: string; settingsJson: string }[];
 }) {
   const router = useRouter();
   const toast = useToast();
@@ -46,8 +47,7 @@ export function BlindflugToggle({
   const [pending, startTransition] = useTransition();
   const [flash, setFlash] = useState(false);
 
-  const requested = Number(searchParams.get("run"));
-  const run = runs.find((r) => r.id === requested) ?? runs[0];
+  const run = pickActiveRun(runs, searchParams.get("run"));
   const on = run ? parseRunSettings(run.settingsJson).blindflug : false;
 
   // Fire the sweep on the TRANSITION into the mode, not in the click handler.
@@ -75,7 +75,7 @@ export function BlindflugToggle({
   function toggle() {
     if (!run) return;
     startTransition(async () => {
-      const result = await updateRunSettings(run.id, { blindflug: !on });
+      const result = await updateRunSettings(run.accessKey, { blindflug: !on });
       if (result.success) router.refresh();
       else toast.error(formatActionError(result.error, lang));
     });

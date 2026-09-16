@@ -14,7 +14,7 @@ export default async function RulesPage({
   searchParams: Promise<{ run?: string }>;
 }) {
   const { run } = await searchParams;
-  const { runId, mode, players, gameId, settings } = await resolveRunId(run);
+  const { runId, runKey, mode, players, gameId, settings } = await resolveRunId(run);
 
   const lang = await getLang();
 
@@ -33,9 +33,9 @@ export default async function RulesPage({
 
   return (
     <>
-      <CanonicalRun runId={runId} />
+      <CanonicalRun runKey={runKey} />
       <RulesView
-        runId={runId}
+        runKey={runKey}
         lang={lang}
         mode={mode}
         players={players}

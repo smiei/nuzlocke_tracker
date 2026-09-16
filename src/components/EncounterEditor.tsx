@@ -49,7 +49,7 @@ function placeName(
 }
 
 export function EncounterEditor({
-  runId,
+  runKey,
   lang,
   settings,
   routeId,
@@ -62,7 +62,7 @@ export function EncounterEditor({
   boundRoutes,
   onTouched,
 }: {
-  runId: number;
+  runKey: string;
   lang: Lang;
   settings: RunSettings;
   routeId: number;
@@ -220,7 +220,7 @@ export function EncounterEditor({
     setError(null);
     onTouched(routeId);
     startTransition(async () => {
-      const result = await saveEncounter({ runId, routeId, player, ...next });
+      const result = await saveEncounter({ runKey, routeId, player, ...next });
       if (result.success) {
         router.refresh();
       } else {
@@ -287,7 +287,7 @@ export function EncounterEditor({
     setError(null);
     onTouched(routeId);
     startTransition(async () => {
-      const result = await setEncounterBody(runId, routeId, player, bodyPokemonId);
+      const result = await setEncounterBody(runKey, routeId, player, bodyPokemonId);
       if (result.success) router.refresh();
       else setError(formatActionError(result.error, lang));
     });
@@ -300,7 +300,7 @@ export function EncounterEditor({
     setError(null);
     if (!(await confirm({ message: t.tracker.clearConfirm, danger: true }))) return;
     startTransition(async () => {
-      const result = await clearEncounter(runId, routeId, player);
+      const result = await clearEncounter(runKey, routeId, player);
       if (result.success) {
         setSelectedId(null);
         setStatus(EncounterStatus.CAUGHT);
