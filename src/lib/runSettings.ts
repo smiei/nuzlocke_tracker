@@ -50,6 +50,12 @@ export type RunSettings = {
   // wild-caught fusion locks BOTH its species' families (it is two catches,
   // same as a self-made fusion). Off = only the head's family is locked.
   fusionLocksBothFamilies: boolean;
+  // Infinite Fusion only: the run uses the game's randomizer with "Fuse
+  // everything", so every wild catch is already a fusion and the Encounter
+  // tab shows the body picker straight away instead of behind "Caught as a
+  // fusion". The randomizer re-rolls its encounter table per save file, which
+  // is why this is a rule on the Classic/Remix packs and not a pack of its own.
+  randomizerFuseEverything: boolean;
   // Custom SoulLink player names (empty = fall back to the localized
   // "Player 1"/"Player 2"). Not a toggle - handled separately from the
   // boolean keys below.
@@ -72,6 +78,7 @@ export const DEFAULT_RUN_SETTINGS: RunSettings = {
   customSpritesOnly: false,
   wildFusionSplit: true,
   fusionLocksBothFamilies: true,
+  randomizerFuseEverything: false,
   playerNames: { PLAYER1: "", PLAYER2: "" },
 };
 

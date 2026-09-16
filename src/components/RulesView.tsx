@@ -77,6 +77,8 @@ const TOGGLE_ORDER: BooleanSettingKey[] = [
   "evolutionOverridesImpossible",
   "evolutionOverridesEasier",
   "evolutionOverridesTimeBased",
+  // Infinite Fusion only, next to the other randomizer rules.
+  "randomizerFuseEverything",
   "statics",
   // Infinite Fusion only - filtered out below for every other pack, where
   // there is nothing to fuse.
@@ -89,6 +91,7 @@ const FUSION_ONLY_TOGGLES = new Set<BooleanSettingKey>([
   "customSpritesOnly",
   "wildFusionSplit",
   "fusionLocksBothFamilies",
+  "randomizerFuseEverything",
 ]);
 
 // One switch row, shared by the rule toggles and the debug switch below them.

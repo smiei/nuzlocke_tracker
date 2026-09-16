@@ -155,9 +155,11 @@ export function EncounterEditor({
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   // Infinite Fusion: the body picker stays out of the way until the catch is
-  // declared a fusion. A saved body always shows it, on every device.
+  // declared a fusion. A saved body always shows it, on every device, and so
+  // does a run whose randomizer fuses every wild Pokémon.
   const [caughtAsFusion, setCaughtAsFusion] = useState(false);
-  const bodyShown = caughtAsFusion || Boolean(body?.isFusionBody);
+  const bodyShown =
+    caughtAsFusion || Boolean(body?.isFusionBody) || settings.randomizerFuseEverything;
 
   const selectedName = (() => {
     const p = selectedId != null ? pokemonList.find((x) => x.id === selectedId) : null;
@@ -344,16 +346,22 @@ export function EncounterEditor({
         !(body && !body.isFusionBody) &&
         status === EncounterStatus.CAUGHT && (
           <div className="flex flex-col gap-1">
-            <label className="flex h-10 cursor-pointer items-center gap-2 self-start">
-              <input
-                type="checkbox"
-                checked={bodyShown}
-                disabled={pending}
-                onChange={(e) => handleCaughtAsFusion(e.target.checked)}
-                className="accent-success"
-              />
-              <span className="text-xs text-ink-muted">{t.tracker.caughtAsFusion}</span>
-            </label>
+            {settings.randomizerFuseEverything ? (
+              // Every wild catch is a fusion in this run - no checkbox to tick
+              // first. An empty field simply means this one was not.
+              <span className="text-xs font-medium text-ink-muted">{t.links.bodyLabel}</span>
+            ) : (
+              <label className="flex h-10 cursor-pointer items-center gap-2 self-start">
+                <input
+                  type="checkbox"
+                  checked={bodyShown}
+                  disabled={pending}
+                  onChange={(e) => handleCaughtAsFusion(e.target.checked)}
+                  className="accent-success"
+                />
+                <span className="text-xs text-ink-muted">{t.tracker.caughtAsFusion}</span>
+              </label>
+            )}
             {bodyShown && (
               <PokemonCombobox
                 lang={lang}

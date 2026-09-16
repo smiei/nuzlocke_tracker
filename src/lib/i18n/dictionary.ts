@@ -387,6 +387,11 @@ const de = {
         description:
           "Beim Fusionieren erscheint eine Warnung, wenn die gewählte Kombination kein handgezeichnetes Sprite hat, nur ein automatisch generiertes. Blockiert das Fusionieren nicht.",
       },
+      randomizerFuseEverything: {
+        label: "Randomizer: Alles fusioniert",
+        description:
+          "Für Runs mit der Randomizer-Option „Fuse everything“: Jedes wilde Pokémon ist schon eine Fusion, deshalb steht im Encounter-Tab das Körperfeld sofort offen, ohne Häkchen. Bleibt es leer, ist der Fang keine Fusion.",
+      },
       wildFusionSplit: {
         label: "Wilde Fusionen dürfen getrennt werden",
         description:
@@ -1070,6 +1075,11 @@ const en: Dictionary = {
         description:
           "Fusing shows a warning when the chosen pair has no hand-drawn sprite, only an auto-generated one. Never blocks the fusion.",
       },
+      randomizerFuseEverything: {
+        label: "Randomizer: Fuse everything",
+        description:
+          "For runs with the randomizer’s “Fuse everything” option: every wild Pokémon is already a fusion, so the Encounter tab shows the body field right away, without the checkbox. Left empty, the catch is not a fusion.",
+      },
       wildFusionSplit: {
         label: "Wild fusions may be split",
         description:
@@ -1750,6 +1760,11 @@ const fr: Dictionary = {
         label: "Sprites dessinés à la main uniquement",
         description:
           "La fusion affiche un avertissement quand la paire choisie n’a pas de sprite dessiné à la main, seulement un généré automatiquement. Ne bloque jamais la fusion.",
+      },
+      randomizerFuseEverything: {
+        label: "Randomizer : tout fusionner",
+        description:
+          "Pour les parties avec l’option « Fuse everything » du randomizer : chaque Pokémon sauvage est déjà une fusion, l’onglet Rencontres affiche donc directement le champ du corps, sans case à cocher. Laissé vide, la capture n’est pas une fusion.",
       },
       wildFusionSplit: {
         label: "Les fusions sauvages peuvent être séparées",
@@ -2433,6 +2448,11 @@ const es: Dictionary = {
         description:
           "Al fusionar aparece un aviso si la combinación elegida no tiene un sprite dibujado a mano, solo uno generado automáticamente. Nunca bloquea la fusión.",
       },
+      randomizerFuseEverything: {
+        label: "Randomizer: fusionar todo",
+        description:
+          "Para partidas con la opción «Fuse everything» del randomizer: cada Pokémon salvaje ya es una fusión, así que la pestaña Encuentros muestra el campo del cuerpo directamente, sin casilla. Si se deja vacío, la captura no es una fusión.",
+      },
       wildFusionSplit: {
         label: "Las fusiones salvajes se pueden separar",
         description:
@@ -3114,6 +3134,11 @@ const it: Dictionary = {
         label: "Solo sprite disegnati a mano",
         description:
           "La fusione mostra un avviso se la coppia scelta non ha uno sprite disegnato a mano, solo uno generato automaticamente. Non blocca mai la fusione.",
+      },
+      randomizerFuseEverything: {
+        label: "Randomizer: fondi tutto",
+        description:
+          "Per le partite con l’opzione «Fuse everything» del randomizer: ogni Pokémon selvatico è già una fusione, quindi la scheda Incontri mostra subito il campo del corpo, senza casella. Se resta vuoto, la cattura non è una fusione.",
       },
       wildFusionSplit: {
         label: "Le fusioni selvatiche possono essere separate",

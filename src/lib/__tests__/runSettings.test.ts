@@ -38,6 +38,17 @@ describe("parseRunSettings", () => {
     expect(DEFAULT_RUN_SETTINGS.customSpritesOnly).toBe(false);
     expect(parseRunSettings('{"customSpritesOnly": true}').customSpritesOnly).toBe(true);
   });
+
+  it("defaults the Infinite Fusion fusion rules to the game's own behaviour", () => {
+    // Splitting and locking both families is what the game and a self-made
+    // fusion do; a randomizer fusing everything is an opt-in per run.
+    expect(DEFAULT_RUN_SETTINGS.wildFusionSplit).toBe(true);
+    expect(DEFAULT_RUN_SETTINGS.fusionLocksBothFamilies).toBe(true);
+    expect(DEFAULT_RUN_SETTINGS.randomizerFuseEverything).toBe(false);
+    const s = parseRunSettings('{"randomizerFuseEverything": true}');
+    expect(s.randomizerFuseEverything).toBe(true);
+    expect(parseRunSettings(serializePresetSettings(s)).randomizerFuseEverything).toBe(true);
+  });
 });
 
 describe("serializePresetSettings", () => {
