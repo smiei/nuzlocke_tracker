@@ -31,6 +31,7 @@ export function TrackerView({
   routes,
   pokemonList,
   encounters,
+  fusionEnabled = false,
 }: {
   runId: number;
   mode: RunMode;
@@ -39,6 +40,9 @@ export function TrackerView({
   routes: Route[];
   pokemonList: Pokemon[];
   encounters: Encounter[];
+  // Infinite Fusion: a catch can already BE a fusion, so each row offers a
+  // second species (the body).
+  fusionEnabled?: boolean;
 }) {
   const playerLabel = usePlayerLabel();
   const tTracker = translations[lang].tracker;
@@ -163,6 +167,7 @@ export function TrackerView({
               routes={routes}
               pokemonList={pokemonList}
               encounters={encounters}
+              fusionEnabled={fusionEnabled}
               onTouched={setLastTouchedRouteId}
             />
           ) : (
@@ -185,6 +190,7 @@ export function TrackerView({
                     routes={routes}
                     pokemonList={pokemonList}
                     encounters={encounters}
+                    fusionEnabled={fusionEnabled}
                     onTouched={setLastTouchedRouteId}
                   />
                 </div>

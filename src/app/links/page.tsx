@@ -82,12 +82,14 @@ export default async function LinksPage({
     include: { encounters: true },
   });
   const soulLinks = rawSoulLinks.filter((link) => !failedRouteIds.has(link.routeId));
-  // Infinite Fusion: host encounter id -> its donor (the fusion's body).
+  // Infinite Fusion: host encounter id -> its donor (the fusion's body). Read
+  // from ALL of the run's encounters, not just the ones hanging off a SoulLink:
+  // a wild-caught fusion's body deliberately has no link of its own.
   const donorByHostId = new Map(
-    rawSoulLinks
-      .flatMap((link) => link.encounters)
-      .filter((e) => e.fusedIntoId !== null)
-      .map((e) => [e.fusedIntoId as number, e]),
+    (await prisma.encounter.findMany({ where: { runId, fusedIntoId: { not: null } } })).map((e) => [
+      e.fusedIntoId as number,
+      e,
+    ]),
   );
   // Ranks are computed within the game's dex, so "Rang #X" means the same
   // thing the Pokédex tab shows for that game.
@@ -215,7 +217,15 @@ export default async function LinksPage({
       id: first.id,
       linkIds,
       routeId: first.routeId,
-      routeName: members.map((link) => routeNameOf(link.routeId)).join(" + "),
+      // Hidden routes (a free-team slot, or the hidden route a wild-caught
+      // fusion's body lives on) are not places - they have no business in a
+      // card's title.
+      routeName: (members.filter((link) => !routeById.get(link.routeId)?.hidden).length > 0
+        ? members.filter((link) => !routeById.get(link.routeId)?.hidden)
+        : members
+      )
+        .map((link) => routeNameOf(link.routeId))
+        .join(" + "),
       status: members.every((link) => link.status === LinkStatus.DEAD) ? LinkStatus.DEAD : LinkStatus.ALIVE,
       teamPosition: teamPositions[0] ?? null,
       teamPositions,

@@ -30,6 +30,7 @@ export type ActionError =
   | { key: "fusionChain" }
   | { key: "fusionNotFound" }
   | { key: "fusionDead" }
+  | { key: "fusionSplitDisabled" }
   | { key: "unexpected" };
 
 export function formatActionError(error: ActionError, lang: Lang): string {
@@ -83,6 +84,8 @@ export function formatActionError(error: ActionError, lang: Lang): string {
       return t.fusionNotFound;
     case "fusionDead":
       return t.fusionDead;
+    case "fusionSplitDisabled":
+      return t.fusionSplitDisabled;
     case "unexpected":
       return t.unexpected;
   }

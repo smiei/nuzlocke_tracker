@@ -52,6 +52,10 @@ export type BackupEncounter = {
   // header. null = not a fusion donor. Resolved in a SECOND pass on import,
   // after every encounter has a fresh id (applyBackup in backup.ts).
   fusedInto: { routeId: number; player: Player } | null;
+  // Added in v3: this encounter is the body of a fusion that was CAUGHT as
+  // one (see setEncounterBody), which is what makes clearing the head take it
+  // along. Missing/false in older files, and on every self-made fusion.
+  isFusionBody: boolean;
   createdAt: string;
   updatedAt: string;
 };
@@ -194,6 +198,7 @@ export function parseBackup(json: string): BackupFile | null {
             soulLinkRouteId:
               typeof e.soulLinkRouteId === "number" ? e.soulLinkRouteId : null,
             fusedInto: fusedIntoRef(e.fusedInto),
+            isFusionBody: e.isFusionBody === true,
             createdAt: isoString(e.createdAt),
             updatedAt: isoString(e.updatedAt),
           }))

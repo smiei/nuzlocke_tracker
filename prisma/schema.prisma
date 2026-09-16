@@ -130,6 +130,14 @@ model Encounter {
   // both encounters belong to the same run and player) live in the
   // fuseEncounters/unfuseEncounter/swapFusion actions, not the schema.
   fusedIntoId      Int?            @unique
+  // Infinite Fusion's Randomized mode catches Pokemon that are ALREADY fused.
+  // Such a catch is still two rows - the body lives on a hidden CustomRoute
+  // (same trick as a free-team member) and is fused into the head - and this
+  // flag marks that body: it exists only because of that one catch, so
+  // clearing or re-declaring the head deletes it, and the Species Clause can
+  // be told to ignore it (fusionLocksBothFamilies). Cleared when the pair is
+  // split, because then it IS a Pokemon of its own.
+  isFusionBody     Boolean         @default(false)
   fusedInto        Encounter?      @relation("EncounterFusion", fields: [fusedIntoId], references: [id], onDelete: SetNull)
   fusionDonor      Encounter?      @relation("EncounterFusion")
   run              Run             @relation(fields: [runId], references: [id], onDelete: Cascade)

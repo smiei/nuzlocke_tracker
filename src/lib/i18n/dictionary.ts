@@ -177,6 +177,8 @@ const de = {
     locked: "gesperrt",
     clearSelection: "Auswahl leeren",
     shinyToggle: "Als Shiny markieren (Shiny Clause)",
+    bodyOfFusion: (head: string, route: string) => `Körper von ${head} (${route})`,
+    fusedOnTeamTab: "Auf dem Team-Tab fusioniert – Trennen und Tauschen dort.",
     typeStatic: "Static",
     openOnly: "Nur offene",
     openOnlyTitle: "Nur Routen ohne vollständigen Eintrag anzeigen",
@@ -383,6 +385,16 @@ const de = {
         label: "Nur handgezeichnete Sprites",
         description:
           "Beim Fusionieren erscheint eine Warnung, wenn die gewählte Kombination kein handgezeichnetes Sprite hat, nur ein automatisch generiertes. Blockiert das Fusionieren nicht.",
+      },
+      wildFusionSplit: {
+        label: "Wilde Fusionen dürfen getrennt werden",
+        description:
+          "Ein Fang, der schon als Fusion gefangen wurde, lässt sich wieder in zwei Pokémon trennen – wie im Spiel. Aus = so ein Fang bleibt dauerhaft eine Einheit. Selbst fusionierte Paare sind davon nicht betroffen.",
+      },
+      fusionLocksBothFamilies: {
+        label: "Wilde Fusionen sperren beide Familien",
+        description:
+          "Eine wild gefangene Fusion sperrt die Evolutionsfamilien beider Arten, so wie zwei einzelne Fänge. Aus = nur der Kopf sperrt.",
       },
       blindflug: {
         label: "Blindflug",
@@ -672,6 +684,8 @@ const de = {
     fusionChain: "Einer der beiden ist bereits Teil einer anderen Fusion.",
     fusionNotFound: "Diese Karte ist keine Fusion.",
     fusionDead: "Eine tote Fusion kann nicht verändert werden.",
+    fusionSplitDisabled:
+      "Die Regel „Wilde Fusionen dürfen getrennt werden“ ist in diesem Run aus.",
     unexpected: "Unerwarteter Fehler - Aktion wurde nicht ausgeführt. Details stehen im Server-Log.",
   },
 };
@@ -847,6 +861,8 @@ const en: Dictionary = {
     locked: "locked",
     clearSelection: "Clear selection",
     shinyToggle: "Mark as shiny (Shiny Clause)",
+    bodyOfFusion: (head: string, route: string) => `Body of ${head} (${route})`,
+    fusedOnTeamTab: "Fused on the Team tab – split or swap it there.",
     typeStatic: "Static",
     openOnly: "Open only",
     openOnlyTitle: "Show only routes without a complete entry",
@@ -1051,6 +1067,16 @@ const en: Dictionary = {
         label: "Hand-drawn sprites only",
         description:
           "Fusing shows a warning when the chosen pair has no hand-drawn sprite, only an auto-generated one. Never blocks the fusion.",
+      },
+      wildFusionSplit: {
+        label: "Wild fusions may be split",
+        description:
+          "A catch that was already a fusion when caught can be split back into two Pokémon, exactly as the game allows. Off = such a catch stays one unit forever. Self-made fusions are unaffected.",
+      },
+      fusionLocksBothFamilies: {
+        label: "Wild fusions lock both families",
+        description:
+          "A wild-caught fusion locks the evolution families of both species, like two separate catches would. Off = only the head locks.",
       },
       blindflug: {
         label: "Blind flight",
@@ -1336,6 +1362,7 @@ const en: Dictionary = {
     fusionChain: "One of the two is already part of another fusion.",
     fusionNotFound: "That card isn't a fusion.",
     fusionDead: "A dead fusion can't be changed.",
+    fusionSplitDisabled: "This run has the \"wild fusions may be split\" rule switched off.",
     unexpected: "Unexpected error - the action was not applied. See the server log for details.",
   },
 };
@@ -1512,6 +1539,8 @@ const fr: Dictionary = {
     locked: "bloqué",
     clearSelection: "Effacer la sélection",
     shinyToggle: "Marquer comme chromatique (Clause Chromatique)",
+    bodyOfFusion: (head: string, route: string) => `Corps de ${head} (${route})`,
+    fusedOnTeamTab: "Fusionné dans l’onglet Équipe – séparer ou échanger là-bas.",
     typeStatic: "Statique",
     openOnly: "Ouvertes",
     openOnlyTitle: "N'afficher que les routes sans entrée complète",
@@ -1718,6 +1747,16 @@ const fr: Dictionary = {
         label: "Sprites dessinés à la main uniquement",
         description:
           "La fusion affiche un avertissement quand la paire choisie n’a pas de sprite dessiné à la main, seulement un généré automatiquement. Ne bloque jamais la fusion.",
+      },
+      wildFusionSplit: {
+        label: "Les fusions sauvages peuvent être séparées",
+        description:
+          "Une capture déjà fusionnée peut être séparée en deux Pokémon, comme dans le jeu. Désactivé = cette capture reste une seule unité. Les fusions faites soi-même ne sont pas concernées.",
+      },
+      fusionLocksBothFamilies: {
+        label: "Les fusions sauvages bloquent les deux familles",
+        description:
+          "Une fusion capturée à l’état sauvage bloque les familles d’évolution des deux espèces, comme deux captures distinctes. Désactivé = seule la tête bloque.",
       },
       blindflug: {
         label: "Vol à l’aveugle",
@@ -2003,6 +2042,8 @@ const fr: Dictionary = {
     fusionChain: "L'un des deux fait déjà partie d'une autre fusion.",
     fusionNotFound: "Cette carte n'est pas une fusion.",
     fusionDead: "Une fusion morte ne peut pas être modifiée.",
+    fusionSplitDisabled:
+      "La règle « les fusions sauvages peuvent être séparées » est désactivée dans ce run.",
     unexpected:
       "Erreur inattendue - l'action n'a pas été appliquée. Voir le journal du serveur.",
   },
@@ -2179,6 +2220,8 @@ const es: Dictionary = {
     locked: "bloqueado",
     clearSelection: "Borrar selección",
     shinyToggle: "Marcar como shiny (Cláusula Shiny)",
+    bodyOfFusion: (head: string, route: string) => `Cuerpo de ${head} (${route})`,
+    fusedOnTeamTab: "Fusionado en la pestaña Equipo: sepáralo o intercámbialo allí.",
     typeStatic: "Estático",
     openOnly: "Solo abiertas",
     openOnlyTitle: "Mostrar solo rutas sin entrada completa",
@@ -2385,6 +2428,16 @@ const es: Dictionary = {
         label: "Solo sprites dibujados a mano",
         description:
           "Al fusionar aparece un aviso si la combinación elegida no tiene un sprite dibujado a mano, solo uno generado automáticamente. Nunca bloquea la fusión.",
+      },
+      wildFusionSplit: {
+        label: "Las fusiones salvajes se pueden separar",
+        description:
+          "Una captura que ya era una fusión puede separarse en dos Pokémon, igual que en el juego. Desactivado = esa captura permanece como una sola unidad. Las fusiones propias no se ven afectadas.",
+      },
+      fusionLocksBothFamilies: {
+        label: "Las fusiones salvajes bloquean ambas familias",
+        description:
+          "Una fusión capturada en estado salvaje bloquea las familias evolutivas de ambas especies, como dos capturas distintas. Desactivado = solo bloquea la cabeza.",
       },
       blindflug: {
         label: "Vuelo a ciegas",
@@ -2670,6 +2723,8 @@ const es: Dictionary = {
     fusionChain: "Uno de los dos ya forma parte de otra fusión.",
     fusionNotFound: "Esa carta no es una fusión.",
     fusionDead: "Una fusión muerta no se puede modificar.",
+    fusionSplitDisabled:
+      "En esta partida la regla «las fusiones salvajes se pueden separar» está desactivada.",
     unexpected:
       "Error inesperado - la acción no se aplicó. Consulta el registro del servidor.",
   },
@@ -2846,6 +2901,8 @@ const it: Dictionary = {
     locked: "bloccato",
     clearSelection: "Cancella selezione",
     shinyToggle: "Contrassegna come shiny (Clausola Shiny)",
+    bodyOfFusion: (head: string, route: string) => `Corpo di ${head} (${route})`,
+    fusedOnTeamTab: "Fuso nella scheda Squadra: dividilo o scambialo lì.",
     typeStatic: "Statico",
     openOnly: "Solo aperti",
     openOnlyTitle: "Mostra solo i percorsi senza voce completa",
@@ -3052,6 +3109,16 @@ const it: Dictionary = {
         label: "Solo sprite disegnati a mano",
         description:
           "La fusione mostra un avviso se la coppia scelta non ha uno sprite disegnato a mano, solo uno generato automaticamente. Non blocca mai la fusione.",
+      },
+      wildFusionSplit: {
+        label: "Le fusioni selvatiche possono essere separate",
+        description:
+          "Una cattura che era già una fusione può essere separata in due Pokémon, proprio come nel gioco. Disattivato = quella cattura resta un'unica unità. Le fusioni fatte da te non sono interessate.",
+      },
+      fusionLocksBothFamilies: {
+        label: "Le fusioni selvatiche bloccano entrambe le famiglie",
+        description:
+          "Una fusione catturata allo stato brado blocca le famiglie evolutive di entrambe le specie, come due catture separate. Disattivato = blocca solo la testa.",
       },
       blindflug: {
         label: "Volo cieco",
@@ -3337,6 +3404,8 @@ const it: Dictionary = {
     fusionChain: "Uno dei due fa già parte di un'altra fusione.",
     fusionNotFound: "Questa carta non è una fusione.",
     fusionDead: "Una fusione morta non può essere modificata.",
+    fusionSplitDisabled:
+      "In questa run la regola «le fusioni selvatiche possono essere separate» è disattivata.",
     unexpected: "Errore imprevisto - l'azione non è stata eseguita. Vedi il log del server.",
   },
 };

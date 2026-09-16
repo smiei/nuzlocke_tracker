@@ -70,6 +70,8 @@ const TOGGLE_ORDER: BooleanSettingKey[] = [
   "blindflug",
   "speciesClause",
   "staticsExemptFromClause",
+  // Infinite Fusion only, and a child of the clause like the line above it.
+  "fusionLocksBothFamilies",
   "shinyClause",
   "nicknames",
   "evolutionOverridesImpossible",
@@ -78,8 +80,16 @@ const TOGGLE_ORDER: BooleanSettingKey[] = [
   "statics",
   // Infinite Fusion only - filtered out below for every other pack, where
   // there is nothing to fuse.
+  "wildFusionSplit",
   "customSpritesOnly",
 ];
+
+// Toggles that only mean something in a pack with fusions.
+const FUSION_ONLY_TOGGLES = new Set<BooleanSettingKey>([
+  "customSpritesOnly",
+  "wildFusionSplit",
+  "fusionLocksBothFamilies",
+]);
 
 // One switch row, shared by the rule toggles and the debug switch below them.
 // The whole row is the control; it used to be a 20x36px target sitting at the
@@ -240,7 +250,8 @@ export function RulesView({
   }
 
   function renderToggle(key: BooleanSettingKey) {
-    const isClauseChild = key === "staticsExemptFromClause";
+    const isClauseChild =
+      key === "staticsExemptFromClause" || key === "fusionLocksBothFamilies";
     return (
       <ToggleRow
         key={key}
@@ -329,7 +340,7 @@ export function RulesView({
         <div>
           <Section title={t.settingsHeading}>
             <Card padding="none" className="divide-y divide-line overflow-hidden">
-              {TOGGLE_ORDER.filter((key) => fusionEnabled || key !== "customSpritesOnly").map(
+              {TOGGLE_ORDER.filter((key) => fusionEnabled || !FUSION_ONLY_TOGGLES.has(key)).map(
                 renderToggle,
               )}
             </Card>

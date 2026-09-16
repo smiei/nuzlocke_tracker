@@ -255,7 +255,13 @@ export default async function OverviewPage({
     }
     memorial.push({
       soulLinkId: first.id,
-      routeName: members.map((link) => routeNameOf(link.routeId)).join(" + "),
+      // Hidden routes aren't places - see the same filter in links/page.tsx.
+      routeName: (members.filter((link) => !routeById.get(link.routeId)?.hidden).length > 0
+        ? members.filter((link) => !routeById.get(link.routeId)?.hidden)
+        : members
+      )
+        .map((link) => routeNameOf(link.routeId))
+        .join(" + "),
       // Player 1 above Player 2, then route order - same as the Team tab.
       pokemon: groupEncounters
         .filter((e) => !isFoldedDonor(e, groupEncounterIds))

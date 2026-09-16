@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import type { Pokemon, Route } from "@/lib/data";
 import type { Encounter } from "@/generated/prisma/client";
 import { EncounterStatus, type Player } from "@/generated/prisma/enums";
-import { saveEncounter, clearEncounter } from "@/lib/actions";
+import { saveEncounter, clearEncounter, setEncounterBody } from "@/lib/actions";
 import { formatActionError } from "@/lib/actionErrors";
 import { useDialog } from "@/components/DialogProvider";
 import type { Lang } from "@/lib/i18n/dictionary";
@@ -31,6 +31,17 @@ const STATUS_STYLES: Record<EncounterStatus, string> = {
   FLED: "border-warning-line bg-warning-bg text-warning",
 };
 
+// Where an encounter sits, for messages. A wild-caught fusion's body has no
+// place of its own (its route is hidden), so it is named by its head's route.
+function placeName(e: Encounter, encounters: Encounter[], routes: Route[], lang: Lang): string {
+  const shown =
+    e.isFusionBody && e.fusedIntoId !== null
+      ? (encounters.find((x) => x.id === e.fusedIntoId) ?? e)
+      : e;
+  const route = routes.find((r) => r.id === shown.routeId);
+  return route ? routeName(route, lang) : `Route #${shown.routeId}`;
+}
+
 export function EncounterEditor({
   runId,
   lang,
@@ -40,6 +51,7 @@ export function EncounterEditor({
   routes,
   pokemonList,
   encounters,
+  fusionEnabled = false,
   onTouched,
 }: {
   runId: number;
@@ -50,6 +62,9 @@ export function EncounterEditor({
   routes: Route[];
   pokemonList: Pokemon[];
   encounters: Encounter[];
+  // Infinite Fusion: this catch can already BE a fusion, so the row offers a
+  // second species. See setEncounterBody.
+  fusionEnabled?: boolean;
   // Reports which route was last edited, so the Tracker's "open only" filter
   // can keep it on screen while the rest of the row is filled in.
   onTouched: (routeId: number) => void;
@@ -63,23 +78,58 @@ export function EncounterEditor({
     [encounters, routeId, player],
   );
 
+  // Infinite Fusion: whatever is fused into this catch - a body it was caught
+  // with (isFusionBody, editable here) or another catch fused in on the Team
+  // tab (a real encounter on its own route, shown but not editable here).
+  const body = useMemo(
+    () => (current ? (encounters.find((e) => e.fusedIntoId === current.id) ?? null) : null),
+    [encounters, current],
+  );
+  // ...and the other way round: the head this catch is the body of.
+  const host = useMemo(
+    () =>
+      current?.fusedIntoId != null
+        ? (encounters.find((e) => e.id === current.fusedIntoId) ?? null)
+        : null,
+    [encounters, current],
+  );
+
+  // The encounters that count against the Species Clause from this slot:
   // EVERY encounter elsewhere - static or not, regardless of outcome
-  // (caught/killed/fled) - "uses up" its family_id. Only this exact slot is
-  // excluded, so re-saving the same pick doesn't mark itself. Locked families
-  // are marked in the dropdown on every route, including static ones (static
-  // only means "safe to pick anyway", not "not locked"). With the Species
-  // Clause rule off, nothing is marked at all.
+  // (caught/killed/fled). The slot itself never does, so re-saving the same
+  // pick doesn't mark itself - and neither does a body caught with it, which
+  // is the same catch.
+  const clauseEncounters = useMemo(
+    () =>
+      encounters.filter((e) => {
+        if (e.routeId === routeId && e.player === player) return false;
+        if (body?.isFusionBody && e.id === body.id) return false;
+        // A wild-caught fusion's body is half of one catch; a run can rule
+        // that it doesn't lock a family of its own (fusionLocksBothFamilies).
+        if (e.isFusionBody && !settings.fusionLocksBothFamilies) return false;
+        return true;
+      }),
+    [encounters, routeId, player, body, settings.fusionLocksBothFamilies],
+  );
+
+  // Locked families are marked in the dropdown on every route, including
+  // static ones (static only means "safe to pick anyway", not "not locked").
+  // With the Species Clause rule off, nothing is marked at all.
   const lockedFamilyIds = useMemo(() => {
     const set = new Set<number>();
     if (!settings.speciesClause) return set;
-    for (const e of encounters) {
-      if (e.routeId === routeId && e.player === player) continue;
+    for (const e of clauseEncounters) {
       // Shiny Clause: a shiny catch is exempt and doesn't lock its family.
       if (settings.shinyClause && e.shiny) continue;
       set.add(e.familyId);
     }
     return set;
-  }, [settings.speciesClause, settings.shinyClause, encounters, routeId, player]);
+  }, [settings.speciesClause, settings.shinyClause, clauseEncounters]);
+
+  const speciesName = (id: number) => {
+    const p = pokemonList.find((x) => x.id === id);
+    return p ? pokemonName(p, lang) : `#${id}`;
+  };
 
   // Tracker always shows what was actually caught (pokemonId); if it has
   // since been evolved in the Links tab (currentPokemonId), name that form
@@ -141,17 +191,14 @@ export function EncounterEditor({
     if (routeIsStatic && settings.staticsExemptFromClause) return null;
     const picked = pokemonList.find((p) => p.id === selectedId);
     if (!picked) return null;
-    const conflict = encounters.find(
-      (e) => e.familyId === picked.family_id && !(e.routeId === routeId && e.player === player),
-    );
+    const conflict = clauseEncounters.find((e) => e.familyId === picked.family_id);
     if (!conflict) return null;
-    const conflictRoute = routes.find((r) => r.id === conflict.routeId);
     return t.actions.speciesLocked(
       pokemonName(picked, lang),
       t.player[conflict.player],
-      conflictRoute ? routeName(conflictRoute, lang) : `Route #${conflict.routeId}`,
+      placeName(conflict, encounters, routes, lang),
     );
-  }, [settings, shiny, selectedId, routeIsStatic, encounters, routeId, player, pokemonList, routes, lang, t]);
+  }, [settings, shiny, selectedId, routeIsStatic, clauseEncounters, encounters, pokemonList, routes, lang, t]);
 
   function persist(next: {
     pokemonId: number;
@@ -217,6 +264,16 @@ export function EncounterEditor({
   }
 
 
+  function handleBody(bodyPokemonId: number | null) {
+    setError(null);
+    onTouched(routeId);
+    startTransition(async () => {
+      const result = await setEncounterBody(runId, routeId, player, bodyPokemonId);
+      if (result.success) router.refresh();
+      else setError(formatActionError(result.error, lang));
+    });
+  }
+
   // Undo a mistaken entry: remove the encounter entirely. The confirm() must
   // run OUTSIDE startTransition - awaiting a dialog inside a transition keeps
   // it pending on its own show/resolve update and deadlocks the page.
@@ -247,6 +304,42 @@ export function EncounterEditor({
         disabled={pending}
       />
       {evolvedName && <span className="text-xs text-ink-subtle">({evolvedName})</span>}
+      {/* Infinite Fusion: a catch that was already a fusion. The body is a
+          second species on the same catch - stored as its own row, which is
+          why every other tab shows it without knowing about this field. */}
+      {fusionEnabled && host && (
+        <span className="text-xs text-ink-subtle">
+          {t.tracker.bodyOfFusion(
+            speciesName(host.currentPokemonId),
+            placeName(host, encounters, routes, lang),
+          )}
+        </span>
+      )}
+      {fusionEnabled && current && !host && status === EncounterStatus.CAUGHT && (
+        <div className="flex flex-col gap-1">
+          <span className="text-xs font-medium text-ink-muted">{t.links.bodyLabel}</span>
+          {body && !body.isFusionBody ? (
+            // Fused in on the Team tab: a catch of its own, so this row only
+            // names it - splitting it is the Team tab's job.
+            <div className="rounded-md border border-line bg-sunken px-3 py-2">
+              <p className="text-sm text-ink">
+                {speciesName(body.currentPokemonId)} ({placeName(body, encounters, routes, lang)})
+              </p>
+              <p className="text-xs text-ink-subtle">{t.tracker.fusedOnTeamTab}</p>
+            </div>
+          ) : (
+            <PokemonCombobox
+              lang={lang}
+              pokemonList={pokemonList}
+              selectedId={body?.pokemonId ?? null}
+              onSelect={handleBody}
+              onClear={() => handleBody(null)}
+              lockedFamilyIds={lockedFamilyIds}
+              disabled={pending}
+            />
+          )}
+        </div>
+      )}
       {selectedId !== null && (
         <div className="flex flex-wrap items-center gap-2 text-xs">
           <PokemonInfoButton pokemonId={selectedId} label={selectedName} />

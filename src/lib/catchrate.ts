@@ -537,8 +537,9 @@ function computeGen5(input: CatchInput): CatchResult {
 //   - NEW_POKE_BALL_CATCH_RATES is off (MECHANICS_GENERATION = 5), so Net,
 //     Repeat and Lure are ×3, Dusk ×3.5, and the Heavy Ball uses the old
 //     weight brackets with no neutral step;
-//   - the "last ball in the bag" critical capture is not modelled (it depends
-//     on the bag contents and the dex count, not on the throw).
+//   - critical captures only happen with the last ball of its kind in the bag,
+//     scaled by the dex's caught count - both entered on the card (lastBall,
+//     dexOwned), since neither follows from the throw itself.
 // ---------------------------------------------------------------------------
 
 // Balls that give the target a status as they are thrown, before the status

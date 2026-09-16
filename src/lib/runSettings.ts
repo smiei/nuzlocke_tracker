@@ -41,6 +41,15 @@ export type RunSettings = {
   // warns when a chosen pair has none - it never blocks the save, same spirit
   // as every other toggle here.
   customSpritesOnly: boolean;
+  // Infinite Fusion only: a catch that was ALREADY a fusion when it was caught
+  // (Randomized mode) may be split into its two Pokemon again, exactly as the
+  // game allows. Off = that catch stays one unit forever, so one encounter
+  // stays one Pokemon. Self-made fusions are unaffected either way.
+  wildFusionSplit: boolean;
+  // Infinite Fusion only, and only meaningful while speciesClause is on: a
+  // wild-caught fusion locks BOTH its species' families (it is two catches,
+  // same as a self-made fusion). Off = only the head's family is locked.
+  fusionLocksBothFamilies: boolean;
   // Custom SoulLink player names (empty = fall back to the localized
   // "Player 1"/"Player 2"). Not a toggle - handled separately from the
   // boolean keys below.
@@ -61,6 +70,8 @@ export const DEFAULT_RUN_SETTINGS: RunSettings = {
   blindflug: false,
   freeTeam: false,
   customSpritesOnly: false,
+  wildFusionSplit: true,
+  fusionLocksBothFamilies: true,
   playerNames: { PLAYER1: "", PLAYER2: "" },
 };
 

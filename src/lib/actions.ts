@@ -169,6 +169,13 @@ export async function saveEncounter(
         await tx.encounter.update({ where: { id: existing.id }, data: { fusedIntoId: null } });
       }
       if (isHost) {
+        // A wild-caught body exists only because of THIS catch - re-declaring
+        // the species or losing the encounter takes it with it, rather than
+        // leaving a loose Pokémon on a hidden route.
+        const body = await tx.encounter.findFirst({
+          where: { fusedIntoId: existing.id, isFusionBody: true },
+        });
+        if (body) await deleteFusionBody(tx, runId, body);
         await tx.encounter.updateMany({
           where: { fusedIntoId: existing.id },
           data: { fusedIntoId: null },
@@ -459,6 +466,11 @@ export async function clearEncounter(
     });
     if (!existing || existing.runId !== runId) return;
     const soulLinkId = existing.soulLinkId;
+    // Its wild-caught fusion body goes too - it was part of this one catch.
+    const body = await tx.encounter.findFirst({
+      where: { fusedIntoId: existing.id, isFusionBody: true },
+    });
+    if (body) await deleteFusionBody(tx, runId, body);
     await tx.encounter.delete({ where: { id: existing.id } });
     if (soulLinkId !== null) {
       const remaining = await tx.encounter.count({ where: { soulLinkId } });
@@ -707,6 +719,118 @@ export async function fuseEncounters(
   return { success: true };
 }
 
+// A wild-caught fusion's body: an ordinary Encounter on a hidden CustomRoute
+// (the free-team trick) marked `isFusionBody`, deliberately WITHOUT a SoulLink
+// - it is not a team unit of its own, never a Memorial entry, and must not
+// join its head's fusion group as a second link. Deleting it takes the hidden
+// route with it, since that route exists only for this one body.
+async function deleteFusionBody(
+  tx: Prisma.TransactionClient,
+  runId: number,
+  body: { id: number; routeId: number },
+): Promise<void> {
+  await tx.encounter.delete({ where: { id: body.id } });
+  await tx.routeEntry.deleteMany({ where: { runId, routeId: body.routeId } });
+  await tx.soulLink.deleteMany({ where: { runId, routeId: body.routeId } });
+  await tx.customRoute.deleteMany({ where: { runId, routeId: body.routeId } });
+}
+
+export type SetEncounterBodyResult = { success: true } | { success: false; error: ActionError };
+
+// Infinite Fusion: the catch on this route was ALREADY a fusion (the game's
+// Randomized mode does that, and a house rule can want it anywhere). The body
+// is stored as a second Encounter - see deleteFusionBody above - so every
+// fusion view, evolution action, backup and death rule treats it exactly like
+// a fusion the player built themselves. null removes it again.
+export async function setEncounterBody(
+  runId: number,
+  routeId: number,
+  player: Player,
+  bodyPokemonId: number | null,
+): Promise<SetEncounterBodyResult> {
+  const run = await prisma.run.findUnique({ where: { id: runId } });
+  if (!run) return { success: false, error: { key: "runNotFound", id: runId } };
+  const head = await prisma.encounter.findUnique({
+    where: { runId_routeId_player: { runId, routeId, player } },
+  });
+  if (!head) return { success: false, error: { key: "encounterNotFound", id: routeId } };
+  const existing = await prisma.encounter.findUnique({ where: { fusedIntoId: head.id } });
+  // A donor the player fused in themselves is a real catch on a real route -
+  // it is removed by unfusing, never by editing the head's row.
+  if (existing && !existing.isFusionBody) {
+    return { success: false, error: { key: "fusionChain" } };
+  }
+
+  if (bodyPokemonId === null) {
+    if (existing) {
+      await prisma.$transaction(async (tx) => {
+        await deleteFusionBody(tx, runId, existing);
+        await rebalanceTeamSlots(tx, runId);
+      });
+    }
+    revalidatePath("/tracker");
+    revalidatePath("/links");
+    publishChange(runId);
+    return { success: true };
+  }
+
+  const pokemon = getPokemonById(bodyPokemonId);
+  if (!pokemon) return { success: false, error: { key: "unknownPokemon", id: bodyPokemonId } };
+  if (head.status !== EncounterStatus.CAUGHT) {
+    return { success: false, error: { key: "fusionNotCaught" } };
+  }
+  // No chains, same rule the fuse action enforces.
+  if (head.fusedIntoId !== null) return { success: false, error: { key: "fusionChain" } };
+
+  if (existing) {
+    await prisma.encounter.update({
+      where: { id: existing.id },
+      data: {
+        pokemonId: bodyPokemonId,
+        currentPokemonId: bodyPokemonId,
+        familyId: pokemon.family_id,
+      },
+    });
+  } else {
+    const bodyRouteId = await nextCustomRouteId(runId);
+    await prisma.$transaction(async (tx) => {
+      await tx.customRoute.create({
+        data: {
+          runId,
+          routeId: bodyRouteId,
+          // Language-neutral, and never shown: hidden routes are filtered out
+          // of the Encounter tab, the progress bars and every card title.
+          name: `Fusion body ${Math.abs(bodyRouteId)}`,
+          type: "route",
+          afterRouteId: routeId > 0 ? routeId : null,
+          hidden: true,
+        },
+      });
+      await tx.encounter.create({
+        data: {
+          runId,
+          routeId: bodyRouteId,
+          player,
+          pokemonId: bodyPokemonId,
+          currentPokemonId: bodyPokemonId,
+          familyId: pokemon.family_id,
+          status: EncounterStatus.CAUGHT,
+          isStatic: false,
+          shiny: false,
+          soulLinkId: null,
+          fusedIntoId: head.id,
+          isFusionBody: true,
+        },
+      });
+    });
+  }
+
+  revalidatePath("/tracker");
+  revalidatePath("/links");
+  publishChange(runId);
+  return { success: true };
+}
+
 // hostId is the fusion's head; its donor (if any) is looked up via
 // fusedIntoId rather than passed in, so the caller only ever needs the one id
 // that stays stable across the fusion's lifetime.
@@ -728,6 +852,15 @@ export async function unfuseEncounter(runId: number, hostId: number): Promise<Fu
   if (host.soulLink?.status === LinkStatus.DEAD || donor.soulLink?.status === LinkStatus.DEAD) {
     return { success: false, error: { key: "fusionDead" } };
   }
+  // Splitting a WILD-caught fusion turns one catch into two Pokémon, which is
+  // what the game does - but a run can rule that out (wildFusionSplit).
+  if (donor.isFusionBody) {
+    const run = await prisma.run.findUnique({ where: { id: runId } });
+    if (!run) return { success: false, error: { key: "runNotFound", id: runId } };
+    if (!parseRunSettings(run.settingsJson).wildFusionSplit) {
+      return { success: false, error: { key: "fusionSplitDisabled" } };
+    }
+  }
 
   await prisma.$transaction(async (tx) => {
     // Unfusing can split the group in two; whichever half held no slot must
@@ -735,7 +868,13 @@ export async function unfuseEncounter(runId: number, hostId: number): Promise<Fu
     const groupBefore = await fusionGroupLinkIds(tx, runId, host.soulLinkId);
     const wasOnTeam =
       (await tx.soulLink.count({ where: { id: { in: groupBefore }, teamPosition: { not: null } } })) > 0;
-    await tx.encounter.update({ where: { id: donor.id }, data: { fusedIntoId: null } });
+    // Once split, a wild-caught body is a Pokémon of its own: it keeps its
+    // hidden route but stops being "part of that catch" (Species Clause,
+    // clearing the head's row).
+    await tx.encounter.update({
+      where: { id: donor.id },
+      data: { fusedIntoId: null, isFusionBody: false },
+    });
     await rebalanceTeamSlots(tx, runId, wasOnTeam ? groupBefore : []);
   });
 

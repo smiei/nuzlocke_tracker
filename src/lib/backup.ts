@@ -57,6 +57,7 @@ function runToBackupRun(run: RunWithRelations): BackupRun {
       shiny: e.shiny,
       soulLinkRouteId: e.soulLinkId !== null ? routeBySoulLinkId.get(e.soulLinkId) ?? null : null,
       fusedInto: e.fusedIntoId !== null ? routeAndPlayerByEncounterId.get(e.fusedIntoId) ?? null : null,
+      isFusionBody: e.isFusionBody,
       createdAt: e.createdAt.toISOString(),
       updatedAt: e.updatedAt.toISOString(),
     })),
@@ -201,6 +202,7 @@ export async function applyBackup(backup: BackupFile): Promise<number> {
                 e.soulLinkRouteId !== null
                   ? soulLinkIdByRoute.get(e.soulLinkRouteId) ?? null
                   : null,
+              isFusionBody: e.isFusionBody,
               createdAt: new Date(e.createdAt),
             },
           });

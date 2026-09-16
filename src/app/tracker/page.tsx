@@ -69,6 +69,7 @@ export default async function TrackerPage({
               routes={routes}
               pokemonList={pokemonList}
               encounters={encounters}
+              fusionEnabled={Boolean(game.fusion)}
             />
           </PokemonDetailProvider>
         </PlayerNamesProvider>
