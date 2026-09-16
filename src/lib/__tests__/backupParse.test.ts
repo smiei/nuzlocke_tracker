@@ -86,3 +86,30 @@ describe("parseBackup v3 fields", () => {
     expect(parsed.runs[0].encounters[0].fusedInto).toBeNull();
   });
 });
+
+describe("parseBackup v4 fields", () => {
+  const run = (soulLinks: unknown[]) => ({
+    name: "Run",
+    mode: "SOULLINK",
+    gameId: "infinite-fusion-classic",
+    rulesMarkdown: "",
+    settingsJson: "{}",
+    createdAt: "2026-01-01T00:00:00.000Z",
+    soulLinks,
+    encounters: [],
+  });
+
+  it("reads a link's bond by the route it is bound to", () => {
+    const parsed = parseBackup(
+      envelope([run([{ routeId: 5, status: "ALIVE" }, { routeId: -1, status: "ALIVE", boundToRouteId: 5 }])]),
+    )!;
+    expect(parsed.runs[0].soulLinks.map((sl) => sl.boundToRouteId)).toEqual([null, 5]);
+  });
+
+  it("leaves every link unbound in an older (v3) file or a malformed one", () => {
+    const parsed = parseBackup(
+      envelope([run([{ routeId: 5, status: "ALIVE" }, { routeId: -1, status: "ALIVE", boundToRouteId: "5" }])], 3),
+    )!;
+    expect(parsed.runs[0].soulLinks.map((sl) => sl.boundToRouteId)).toEqual([null, null]);
+  });
+});

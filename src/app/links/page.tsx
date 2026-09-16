@@ -34,7 +34,7 @@ import { routeName, pokemonName } from "@/lib/i18n/localize";
 import { formatEvolutionMethod } from "@/lib/evolutionMethods";
 import { LinksView } from "@/components/LinksView";
 import { resolveEncounterMon } from "@/lib/encounterMon";
-import { groupSoulLinks, isFoldedDonor, teamSlotsNeeded } from "@/lib/fusionGroups";
+import { formedLinks, groupSoulLinks, isFoldedDonor, teamSlotsNeeded } from "@/lib/fusionGroups";
 import type { SoulLinkView, FusableEncounter, EvolutionOptions } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -81,7 +81,8 @@ export default async function LinksPage({
     where: { runId },
     include: { encounters: true },
   });
-  const soulLinks = rawSoulLinks.filter((link) => !failedRouteIds.has(link.routeId));
+  // ...and a link bound to such a route (a split-off wild body) is boxed with it.
+  const soulLinks = formedLinks(rawSoulLinks, failedRouteIds);
   // Infinite Fusion: host encounter id -> its donor (the fusion's body). Read
   // from ALL of the run's encounters, not just the ones hanging off a SoulLink:
   // a wild-caught fusion's body deliberately has no link of its own.
@@ -191,6 +192,7 @@ export default async function LinksPage({
   const groups = groupSoulLinks(
     orderedLinks.map((link) => link.id),
     orderedLinks.flatMap((link) => link.encounters),
+    orderedLinks,
   );
 
   const views: SoulLinkView[] = groups.map((linkIds) => {

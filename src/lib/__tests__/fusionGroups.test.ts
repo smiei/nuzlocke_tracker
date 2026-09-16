@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import {
+  formedLinks,
   groupSoulLinks,
   groupTeamPositions,
   isFoldedDonor,
@@ -84,6 +85,46 @@ describe("groupSoulLinks", () => {
   it("ignores a fusion edge to a link that isn't in the list", () => {
     const encounters = [enc(1, 10, "P1"), enc(2, 99, "P1", 1)];
     expect(groupSoulLinks([10], encounters)).toEqual([[10]]);
+  });
+
+  it("joins a split-off wild body's link to the route it is bound to", () => {
+    // Route 5: P1's head (1) and P2's catch (2); the split body (3) holds its
+    // own link -1, bound to route 5's link 50.
+    const encounters = [enc(1, 50, "P1"), enc(2, 50, "P2"), enc(3, -1, "P1"), enc(4, 60, "P1")];
+    const bonds = [{ id: -1, boundToId: 50 }, { id: 60, boundToId: null }];
+    expect(groupSoulLinks([50, 60, -1], encounters, bonds)).toEqual([[50, -1], [60]]);
+    expect(groupSoulLinks([50, 60, -1], encounters)).toEqual([[50], [60], [-1]]);
+  });
+});
+
+describe("bonds in the team helpers", () => {
+  it("puts a bound link on the team with its route and needs a slot per Pokémon of the busier player", () => {
+    const links = [
+      { id: 50, teamPosition: 1, encounters: [enc(1, 50, "P1"), enc(2, 50, "P2")] },
+      { id: 51, teamPosition: null, boundToId: 50, encounters: [enc(3, 51, "P1")] },
+    ];
+    expect([...teamLinkIds(links)].sort()).toEqual([50, 51]);
+    expect(teamSlotsNeeded(links.flatMap((link) => link.encounters))).toBe(2);
+  });
+});
+
+describe("formedLinks", () => {
+  const links = [
+    { id: 50, routeId: 5, boundToId: null },
+    { id: 51, routeId: -1, boundToId: 50 },
+    { id: 60, routeId: 6, boundToId: null },
+  ];
+
+  it("keeps everything while every pair formed", () => {
+    expect(formedLinks(links, new Set()).map((l) => l.id)).toEqual([50, 51, 60]);
+  });
+
+  it("boxes a bound link together with its never-formed route", () => {
+    expect(formedLinks(links, new Set([5])).map((l) => l.id)).toEqual([60]);
+  });
+
+  it("does not judge a bond to a link it was not given", () => {
+    expect(formedLinks([links[1]], new Set([5])).map((l) => l.id)).toEqual([51]);
   });
 });
 

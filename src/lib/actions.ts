@@ -13,7 +13,7 @@ import {
 import { EncounterStatus, LinkStatus, Player, RunMode, type Prisma } from "@/generated/prisma/client";
 import { getRouteForRun, getRoutesForRun, nextCustomRouteId } from "@/lib/runRoutes";
 import { CUSTOM_ROUTE_NAME_MAX, isCustomRouteId } from "@/lib/customRoutes";
-import { groupSoulLinks, teamSlotsNeeded } from "@/lib/fusionGroups";
+import { formedLinks, groupSoulLinks, teamSlotsNeeded } from "@/lib/fusionGroups";
 import { localizeName } from "@/lib/i18n/localize";
 import type { ActionError } from "@/lib/actionErrors";
 import type { BackupFile } from "@/lib/backup";
@@ -269,8 +269,9 @@ export async function saveEncounter(
     // already sit on a team slot from when the route still looked complete -
     // release it, otherwise it lingers as a team member the Team tab doesn't
     // even show.
+    // A link bound to this route's (a split-off wild body) is boxed with it.
     await prisma.soulLink.updateMany({
-      where: { runId, routeId, teamPosition: { not: null } },
+      where: { runId, teamPosition: { not: null }, OR: [{ routeId }, { boundTo: { routeId } }] },
       data: { teamPosition: null },
     });
   }
@@ -361,7 +362,8 @@ export type MarkDeadResult = { success: true } | { success: false; error: Action
 // into route 4, reach route 4 too. Missing this direction is exactly the bug
 // a first version of this function had - it only ever looked from a link's
 // encounters to their DONORS, never to the HOST a link's own encounter might
-// itself be donated into.
+// itself be donated into. Bonds (SoulLink.boundToId) are followed the same
+// way, which is what makes a split-off wild body die with its route.
 async function linkedSoulLinkIds(
   tx: Prisma.TransactionClient,
   runId: number,
@@ -383,22 +385,33 @@ async function linkedSoulLinkIds(
   const donorByHostId = new Map(
     allEncounters.filter((e) => e.fusedIntoId !== null).map((e) => [e.fusedIntoId as number, e]),
   );
+  // Bonds (SoulLink.boundToId, a split-off wild body's link -> its route's
+  // link) tie fates the same way, in both directions.
+  const bondedLinkIds = new Map<number, number[]>();
+  for (const link of await tx.soulLink.findMany({
+    where: { runId, boundToId: { not: null } },
+    select: { id: true, boundToId: true },
+  })) {
+    const other = link.boundToId as number;
+    bondedLinkIds.set(link.id, [...(bondedLinkIds.get(link.id) ?? []), other]);
+    bondedLinkIds.set(other, [...(bondedLinkIds.get(other) ?? []), link.id]);
+  }
 
   const visited = new Set<number>([startSoulLinkId]);
   const queue = [startSoulLinkId];
+  const visit = (id: number | null) => {
+    if (id !== null && !visited.has(id)) {
+      visited.add(id);
+      queue.push(id);
+    }
+  };
   while (queue.length > 0) {
     const current = queue.pop() as number;
     for (const e of bySoulLink.get(current) ?? []) {
-      const hostSoulLinkId =
-        e.fusedIntoId !== null ? (encounterById.get(e.fusedIntoId)?.soulLinkId ?? null) : null;
-      const donorSoulLinkId = donorByHostId.get(e.id)?.soulLinkId ?? null;
-      for (const id of [hostSoulLinkId, donorSoulLinkId]) {
-        if (id !== null && !visited.has(id)) {
-          visited.add(id);
-          queue.push(id);
-        }
-      }
+      visit(e.fusedIntoId !== null ? (encounterById.get(e.fusedIntoId)?.soulLinkId ?? null) : null);
+      visit(donorByHostId.get(e.id)?.soulLinkId ?? null);
     }
+    for (const id of bondedLinkIds.get(current) ?? []) visit(id);
   }
   visited.delete(startSoulLinkId);
   return [...visited];
@@ -594,20 +607,26 @@ async function rebalanceTeamSlots(
   const run = await tx.run.findUnique({ where: { id: runId }, select: { mode: true } });
   const links = await tx.soulLink.findMany({
     where: { runId },
-    select: { id: true, routeId: true, status: true, teamPosition: true },
+    select: { id: true, routeId: true, status: true, teamPosition: true, boundToId: true },
     orderBy: { id: "asc" },
   });
   const encounters = await tx.encounter.findMany({
     where: { runId },
     select: { id: true, soulLinkId: true, player: true, fusedIntoId: true, routeId: true, status: true },
   });
-  // A never-formed pair must not hold a slot (same rule as autoAssignTeamSlot).
-  const failedRouteIds = new Set(
-    run?.mode === RunMode.SOULLINK
-      ? encounters
-          .filter((e) => e.status === EncounterStatus.FLED || e.status === EncounterStatus.KILLED)
-          .map((e) => e.routeId)
-      : [],
+  // A never-formed pair must not hold a slot (same rule as autoAssignTeamSlot),
+  // nor may a link bound to one.
+  const formedLinkIds = new Set(
+    formedLinks(
+      links,
+      new Set(
+        run?.mode === RunMode.SOULLINK
+          ? encounters
+              .filter((e) => e.status === EncounterStatus.FLED || e.status === EncounterStatus.KILLED)
+              .map((e) => e.routeId)
+          : [],
+      ),
+    ).map((l) => l.id),
   );
   const linkById = new Map(links.map((l) => [l.id, l]));
   const keep = new Set(keepOnTeam);
@@ -615,7 +634,7 @@ async function rebalanceTeamSlots(
   const releases: number[] = [];
   const fills: number[] = [];
 
-  for (const group of groupSoulLinks(links.map((l) => l.id), encounters)) {
+  for (const group of groupSoulLinks(links.map((l) => l.id), encounters, links)) {
     const members = group.map((id) => linkById.get(id)!);
     if (members.some((l) => l.status === LinkStatus.DEAD)) continue;
     const onTeam = members
@@ -631,7 +650,7 @@ async function rebalanceTeamSlots(
     } else if (fill && onTeam.length < need) {
       fills.push(
         ...members
-          .filter((l) => l.teamPosition === null && !failedRouteIds.has(l.routeId))
+          .filter((l) => l.teamPosition === null && formedLinkIds.has(l.id))
           .slice(0, need - onTeam.length)
           .map((l) => l.id),
       );
@@ -895,12 +914,14 @@ export async function unfuseEncounter(runId: number, hostId: number): Promise<Fu
       // gets the SoulLink it never had - every tab reaches a Pokémon through
       // a link, so without one it would simply vanish from the Team tab. Its
       // own link, not the head's: a link holds ONE team slot, and the head's
-      // player now carries two Pokémon from that route. Its hidden route is
-      // still no place, so it takes the head route's name for the card title.
+      // player now carries two Pokémon from that route. That link is BOUND to
+      // the head's (boundToId): caught on that route, it shares that route's
+      // pairing - fate, card and team slots - like a fusion group. Its hidden
+      // route is still no place, so it takes the head route's name.
       const link = await tx.soulLink.upsert({
         where: { runId_routeId: { runId, routeId: donor.routeId } },
-        create: { runId, routeId: donor.routeId },
-        update: {},
+        create: { runId, routeId: donor.routeId, boundToId: host.soulLinkId },
+        update: { boundToId: host.soulLinkId },
       });
       splitLinkId = link.id;
       if (hostRouteName) {

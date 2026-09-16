@@ -17,8 +17,9 @@ export const BACKUP_FORMAT = "nuzlocke-tracker-backup";
 // CLAUDE.md). A v1/v2 file still imports - the new fields default to null/
 // empty - and importBackup() warns when a file's OWN version is newer than
 // this constant (an older build reading a newer backup would silently drop
-// fields it doesn't know about, fusions included).
-export const BACKUP_VERSION = 3;
+// fields it doesn't know about, fusions included). 4 added `boundToRouteId` on
+// SoulLink (a split-off wild fusion body's link bound to its route's link).
+export const BACKUP_VERSION = 4;
 
 export type BackupSoulLink = {
   routeId: number;
@@ -31,6 +32,11 @@ export type BackupSoulLink = {
   // which just means it parks at the top of the Memorial until edited).
   deathLevelCapId: number | null;
   diedAt: string | null;
+  // Added in v4: the routeId of the link this one is bound to (SoulLink
+  // .boundToId), which like soulLinkRouteId is unique per run and needs no
+  // id. null = not bound, and in every older file. Resolved in a second pass
+  // on import, once every link exists.
+  boundToRouteId: number | null;
   createdAt: string;
   updatedAt: string;
 };
@@ -180,6 +186,7 @@ export function parseBackup(json: string): BackupFile | null {
             deathCause: typeof sl.deathCause === "string" ? sl.deathCause : null,
             deathLevelCapId: typeof sl.deathLevelCapId === "number" ? sl.deathLevelCapId : null,
             diedAt: isoStringOrNull(sl.diedAt),
+            boundToRouteId: typeof sl.boundToRouteId === "number" ? sl.boundToRouteId : null,
             createdAt: isoString(sl.createdAt),
             updatedAt: isoString(sl.updatedAt),
           }))

@@ -87,6 +87,17 @@ model SoulLink {
   // links that died before this was tracked have null here and sort ahead of
   // everything else in the Memorial until edited.
   diedAt       DateTime?
+  // Infinite Fusion: this link belongs to another route's pairing. Set on the
+  // link a split-off wild-caught fusion body gets (unfuseEncounter) - the body
+  // was caught on the head's route, and a SoulLink pairing is about the route,
+  // so it shares that link's fate (markDead/markAlive), card and team-slot
+  // bookkeeping exactly like a fusion group (src/lib/fusionGroups.ts). It needs
+  // a link of its own at all only because a link holds ONE team slot, and the
+  // head's player now carries two Pokémon from that route. Null everywhere
+  // else; SetNull when the route's link goes, which leaves the body on its own.
+  boundToId    Int?
+  boundTo      SoulLink?   @relation("SoulLinkBond", fields: [boundToId], references: [id], onDelete: SetNull)
+  boundLinks   SoulLink[]  @relation("SoulLinkBond")
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
   run        Run         @relation(fields: [runId], references: [id], onDelete: Cascade)

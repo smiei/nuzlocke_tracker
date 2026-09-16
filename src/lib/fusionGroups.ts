@@ -12,6 +12,11 @@
 // "players are paired wrong" mess. The group of links a fusion touches is
 // also the unit that dies together (markDead's linkedSoulLinkIds), so a card
 // per group shows the pairing that actually has consequences.
+//
+// A second kind of edge joins links the same way: a BOND (SoulLink.boundToId),
+// which a split-off wild-caught fusion body's own link carries to the link of
+// the route it was caught on. It is a link of its own only because a link holds
+// one team slot; its fate, card and slots are that route's.
 
 export type GroupableEncounter = {
   id: number;
@@ -20,12 +25,19 @@ export type GroupableEncounter = {
   fusedIntoId: number | null;
 };
 
+export type BondableLink = { id: number; boundToId?: number | null };
+
 // Connected components of `linkIds` under fusion edges (donor's link <->
-// host's link). Groups come back in the order their first link appears in
-// `linkIds`, and each group's ids keep that order too - pass the ids already
-// sorted the way they should be displayed. A fusion edge to a link outside
-// `linkIds` is ignored (e.g. a link the Team tab filters out).
-export function groupSoulLinks(linkIds: number[], encounters: GroupableEncounter[]): number[][] {
+// host's link) and bonds (a link <-> the link it is bound to, from `bonds`).
+// Groups come back in the order their first link appears in `linkIds`, and
+// each group's ids keep that order too - pass the ids already sorted the way
+// they should be displayed. An edge to a link outside `linkIds` is ignored
+// (e.g. a link the Team tab filters out).
+export function groupSoulLinks(
+  linkIds: number[],
+  encounters: GroupableEncounter[],
+  bonds: BondableLink[] = [],
+): number[][] {
   const index = new Map(linkIds.map((id, i) => [id, i]));
   const parent = linkIds.map((_, i) => i);
   const find = (i: number): number => {
@@ -36,18 +48,24 @@ export function groupSoulLinks(linkIds: number[], encounters: GroupableEncounter
     return i;
   };
 
-  const byId = new Map(encounters.map((e) => [e.id, e]));
-  for (const donor of encounters) {
-    if (donor.fusedIntoId === null || donor.soulLinkId === null) continue;
-    const hostLinkId = byId.get(donor.fusedIntoId)?.soulLinkId ?? null;
-    if (hostLinkId === null) continue;
-    const a = index.get(donor.soulLinkId);
-    const b = index.get(hostLinkId);
-    if (a === undefined || b === undefined) continue;
+  const join = (linkA: number, linkB: number) => {
+    const a = index.get(linkA);
+    const b = index.get(linkB);
+    if (a === undefined || b === undefined) return;
     const ra = find(a);
     const rb = find(b);
     // Keep the root at the earlier position so group order stays stable.
     if (ra !== rb) parent[Math.max(ra, rb)] = Math.min(ra, rb);
+  };
+
+  const byId = new Map(encounters.map((e) => [e.id, e]));
+  for (const donor of encounters) {
+    if (donor.fusedIntoId === null || donor.soulLinkId === null) continue;
+    const hostLinkId = byId.get(donor.fusedIntoId)?.soulLinkId ?? null;
+    if (hostLinkId !== null) join(donor.soulLinkId, hostLinkId);
+  }
+  for (const link of bonds) {
+    if (link.boundToId != null) join(link.id, link.boundToId);
   }
 
   const groups = new Map<number, number[]>();
@@ -63,6 +81,7 @@ export function groupSoulLinks(linkIds: number[], encounters: GroupableEncounter
 export type GroupableLink = {
   id: number;
   teamPosition: number | null;
+  boundToId?: number | null;
   encounters: GroupableEncounter[];
 };
 
@@ -86,6 +105,7 @@ export function groupTeamPositions(links: GroupableLink[]): Map<number, number |
   for (const group of groupSoulLinks(
     links.map((link) => link.id),
     links.flatMap((link) => link.encounters),
+    links,
   )) {
     const held = group
       .map((id) => byId.get(id)?.teamPosition)
@@ -116,4 +136,22 @@ export function teamSlotsNeeded(groupEncounters: GroupableEncounter[]): number {
     units.set(e.player, (units.get(e.player) ?? 0) + 1);
   }
   return Math.max(1, ...units.values());
+}
+
+// The links a team view may show: a SoulLink pair only forms when both players
+// catch, so a route with a Fled/Killed encounter (`failedRouteIds`, empty in
+// Classic) keeps its surviving catch boxed. A link BOUND to such a route's link
+// came out of that same catch and is boxed with it. A bond to a link that is
+// not in `links` at all (e.g. a query for living links only) is not judged.
+export function formedLinks<T extends { id: number; routeId: number; boundToId?: number | null }>(
+  links: T[],
+  failedRouteIds: Set<number>,
+): T[] {
+  const routeIdOf = new Map(links.map((link) => [link.id, link.routeId]));
+  return links.filter((link) => {
+    if (failedRouteIds.has(link.routeId)) return false;
+    if (link.boundToId == null) return true;
+    const boundRouteId = routeIdOf.get(link.boundToId);
+    return boundRouteId === undefined || !failedRouteIds.has(boundRouteId);
+  });
 }

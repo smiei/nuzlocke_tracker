@@ -26,7 +26,7 @@ import { getLang } from "@/lib/i18n/getLang";
 import { routeName } from "@/lib/i18n/localize";
 import { movepoolId } from "@/lib/forms";
 import { resolveEncounterMon } from "@/lib/encounterMon";
-import { groupTeamPositions, isFoldedDonor } from "@/lib/fusionGroups";
+import { formedLinks, groupTeamPositions, isFoldedDonor } from "@/lib/fusionGroups";
 import { EncounterStatus, LinkStatus, Player, RunMode } from "@/generated/prisma/client";
 import type { TeamMember } from "@/components/TeamWeaknessesView";
 import { CanonicalRun } from "@/components/CanonicalRun";
@@ -117,12 +117,13 @@ export default async function AnalyzePage({
             .map((e) => e.routeId),
         )
       : new Set<number>();
-  const aliveLinks = (
+  const aliveLinks = formedLinks(
     await prisma.soulLink.findMany({
       where: { runId, status: LinkStatus.ALIVE },
       include: { encounters: true },
-    })
-  ).filter((link) => !failedRouteIds.has(link.routeId));
+    }),
+    failedRouteIds,
+  );
   // Infinite Fusion: "on the team" is asked of the fusion group, whose slot
   // can sit on either route's link; a donor is folded into its host, and a
   // host's name/types are the fused ones - see src/lib/fusionGroups.ts.

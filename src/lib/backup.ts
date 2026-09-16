@@ -42,6 +42,7 @@ function runToBackupRun(run: RunWithRelations): BackupRun {
       deathCause: sl.deathCause,
       deathLevelCapId: sl.deathLevelCapId,
       diedAt: sl.diedAt?.toISOString() ?? null,
+      boundToRouteId: sl.boundToId !== null ? routeBySoulLinkId.get(sl.boundToId) ?? null : null,
       createdAt: sl.createdAt.toISOString(),
       updatedAt: sl.updatedAt.toISOString(),
     })),
@@ -178,6 +179,15 @@ export async function applyBackup(backup: BackupFile): Promise<number> {
             },
           });
           soulLinkIdByRoute.set(sl.routeId, created.id);
+        }
+        // Bonds point at another link of the same run, which may only have
+        // been created further down the list - hence a second pass.
+        for (const sl of run.soulLinks) {
+          if (sl.boundToRouteId === null) continue;
+          const id = soulLinkIdByRoute.get(sl.routeId);
+          const boundToId = soulLinkIdByRoute.get(sl.boundToRouteId);
+          if (id === undefined || boundToId === undefined) continue;
+          await tx.soulLink.update({ where: { id }, data: { boundToId } });
         }
 
         // Keyed by (routeId, player) rather than id - ids aren't exported and

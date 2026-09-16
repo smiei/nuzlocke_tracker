@@ -21,7 +21,7 @@ import {
 import { teamOffensiveCoverage } from "@/lib/effectiveness";
 import { attackTypesAtLevel } from "@/lib/learnset";
 import { resolveEncounterMon } from "@/lib/encounterMon";
-import { groupSoulLinks, isFoldedDonor, teamLinkIds } from "@/lib/fusionGroups";
+import { formedLinks, groupSoulLinks, isFoldedDonor, teamLinkIds } from "@/lib/fusionGroups";
 import { computeLevelCapProgress, computeRouteProgress, eliteFourIndex } from "@/lib/progress";
 import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
@@ -84,18 +84,17 @@ export default async function OverviewPage({
   const routes = await getRoutesForRun(runId, gameId);
   const routeById = new Map(routes.map((route) => [route.id, route]));
   const routeOrder = new Map(routes.map((r, i) => [r.id, i]));
-  const soulLinks = (
+  const soulLinks = formedLinks(
     await prisma.soulLink.findMany({
       where: { runId },
       include: { encounters: true },
-    })
-  )
-    .filter((link) => !failedRouteIds.has(link.routeId))
-    .sort(
-      (a, b) =>
-        (routeOrder.get(a.routeId) ?? Number.MAX_SAFE_INTEGER) -
-        (routeOrder.get(b.routeId) ?? Number.MAX_SAFE_INTEGER),
-    );
+    }),
+    failedRouteIds,
+  ).sort(
+    (a, b) =>
+      (routeOrder.get(a.routeId) ?? Number.MAX_SAFE_INTEGER) -
+      (routeOrder.get(b.routeId) ?? Number.MAX_SAFE_INTEGER),
+  );
   // Unfiltered (any status, both players) - the route-progress bar counts a
   // route "done" once every player slot has an entry at all, same as the
   // Tracker tab, regardless of whether a pair ever formed.
@@ -240,6 +239,7 @@ export default async function OverviewPage({
   for (const group of groupSoulLinks(
     deadLinks.map((link) => link.id),
     deadLinks.flatMap((link) => link.encounters),
+    deadLinks,
   )) {
     const members = group.map((id) => deadLinkById.get(id)!);
     // markDead/setDeathPoint write the same death to every link of a group.
@@ -248,8 +248,10 @@ export default async function OverviewPage({
     const groupEncounterIds = new Set(groupEncounters.map((e) => e.id));
     totalDeaths++;
     // Death-tally scoreboard: only pairs that actually formed (both
-    // players caught) count, same as the Journey tab's version did.
-    if (members.every((link) => link.encounters.length >= 2)) {
+    // players caught) count, same as the Journey tab's version did. A bound
+    // link (a split-off wild body) holds one Pokémon by design - its route's
+    // own link is what tells whether the pair formed.
+    if (members.every((link) => link.boundToId !== null || link.encounters.length >= 2)) {
       if (first.deathPlayer) caused.set(first.deathPlayer, (caused.get(first.deathPlayer) ?? 0) + 1);
       else unattributedDeaths++;
     }
