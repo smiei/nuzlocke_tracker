@@ -9,16 +9,16 @@ const de = `# 🔗 SoulLink Nuzlocke Spickzettel (Feuerrot)
 ## 💀 1. Grundregeln
 * **Permadeath:** Fällt ein Pokémon auf 0 KP, ist es tot. (Dauerhaft in die Box oder freilassen).
 * **Set-Modus:** In den Optionen "Kampfstil: Folge" einstellen (kein kostenloser Wechsel nach einem K.O.).
-* **Spitznamen-Pflicht:** Jedes Pokémon braucht einen Namen. **Wichtig:** Der *andere* Spieler sucht den Namen aus!
+* **Spitznamen-Pflicht:** Jedes Pokémon braucht einen Namen. **Wichtig:** Ein *anderer* Spieler sucht den Namen aus!
 
 ## 🤝 2. SoulLink Mechanik
-* **Seelenpartner:** Fänge beider Spieler auf derselben Route sind fest miteinander verlinkt.
-* **Gemeinsames Schicksal:** Stirbt ein Partner, stirbt auch der andere. Beide fliegen aus dem Team.
-* **Team-Paarung:** Ein Pokémon darf *nur* im Team sein, wenn sein Link-Partner beim anderen Spieler ebenfalls im Team ist.
+* **Seelenpartner:** Die Fänge aller Spieler auf derselben Route sind fest miteinander verlinkt.
+* **Gemeinsames Schicksal:** Stirbt ein Partner, sterben alle anderen mit. Alle fliegen aus dem Team.
+* **Team-Paarung:** Ein Pokémon darf *nur* im Team sein, wenn seine Link-Partner bei allen anderen Spielern ebenfalls im Team sind.
 
 ## 🎯 3. Begegnungen & Fangen
 * **Ein Fang pro Route:** Nur das *erste* wilde Pokémon pro Gebiet darf gefangen werden (entwischt oder besiegt = keine zweite Chance).
-* **Shared Species / Dupes Clause:** Jede Entwicklungsreihe darf im gesamten Run über *beide* Spieler hinweg nur **einmal** existieren.
+* **Shared Species / Dupes Clause:** Jede Entwicklungsreihe darf im gesamten Run über *alle* Spieler hinweg nur **einmal** existieren.
   * *Ausnahme:* Static-Encounter.
   * *Reroll:* Kommt ein Pokémon, das schon gefangen oder verpasst wurde, wird weitergesucht (rerolled), bis ein neuer, gültiger Encounter auftaucht.
 * **Shiny Clause:** Shinys dürfen *immer* gefangen werden.
@@ -53,16 +53,16 @@ const en = `# 🔗 SoulLink Nuzlocke Cheat Sheet (FireRed)
 ## 💀 1. Core Rules
 * **Permadeath:** If a Pokémon drops to 0 HP, it's dead. (Permanently boxed or released).
 * **Set mode:** Set "Battle Style: Set" in the options (no free switch after a KO).
-* **Mandatory nicknames:** Every Pokémon needs a name. **Important:** The *other* player picks the name!
+* **Mandatory nicknames:** Every Pokémon needs a name. **Important:** *Another* player picks the name!
 
 ## 🤝 2. SoulLink Mechanic
-* **Soul partners:** Both players' catches on the same route are permanently linked.
-* **Shared fate:** If one partner dies, so does the other. Both leave the team.
-* **Team pairing:** A Pokémon may *only* be on the team if its link partner is on the other player's team too.
+* **Soul partners:** All players' catches on the same route are permanently linked.
+* **Shared fate:** If one partner dies, all the others die too. All of them leave the team.
+* **Team pairing:** A Pokémon may *only* be on the team if its link partners are on every other player's team too.
 
 ## 🎯 3. Encounters & Catching
 * **One catch per route:** Only the *first* wild Pokémon per area may be caught (fled or defeated = no second chance).
-* **Shared Species / Dupes Clause:** Each evolution line may exist only **once** across the entire run, over *both* players.
+* **Shared Species / Dupes Clause:** Each evolution line may exist only **once** across the entire run, over *all* players.
   * *Exception:* static encounters.
   * *Reroll:* If a Pokémon appears that was already caught or missed, keep searching (reroll) until a new, valid encounter shows up.
 * **Shiny Clause:** Shinies may *always* be caught.
@@ -97,16 +97,16 @@ const fr = `# 🔗 Aide-mémoire SoulLink Nuzlocke (Rouge Feu)
 ## 💀 1. Règles de base
 * **Permadeath :** Si un Pokémon tombe à 0 PV, il est mort. (Rangé définitivement dans la boîte ou relâché).
 * **Mode Sélection :** Dans les options, régler « Style de combat : Sélection » (pas de changement gratuit après un K.O.).
-* **Surnoms obligatoires :** Chaque Pokémon a besoin d'un nom. **Important :** c'est l'*autre* joueur qui choisit le nom !
+* **Surnoms obligatoires :** Chaque Pokémon a besoin d'un nom. **Important :** c'est un *autre* joueur qui choisit le nom !
 
 ## 🤝 2. Mécanique SoulLink
-* **Partenaires d'âme :** Les captures des deux joueurs sur la même route sont liées de façon permanente.
-* **Destin commun :** Si un partenaire meurt, l'autre meurt aussi. Les deux quittent l'équipe.
-* **Appariement d'équipe :** Un Pokémon ne peut être dans l'équipe *que* si son partenaire lié est également dans l'équipe de l'autre joueur.
+* **Partenaires d'âme :** Les captures de tous les joueurs sur la même route sont liées de façon permanente.
+* **Destin commun :** Si un partenaire meurt, tous les autres meurent aussi. Tous quittent l'équipe.
+* **Appariement d'équipe :** Un Pokémon ne peut être dans l'équipe *que* si ses partenaires liés sont également dans l'équipe de tous les autres joueurs.
 
 ## 🎯 3. Rencontres & captures
 * **Une capture par route :** Seul le *premier* Pokémon sauvage par zone peut être capturé (en fuite ou vaincu = pas de seconde chance).
-* **Clause d'espèces partagées / doublons :** Chaque lignée d'évolution ne peut exister qu'**une seule fois** dans toute la partie, pour les *deux* joueurs.
+* **Clause d'espèces partagées / doublons :** Chaque lignée d'évolution ne peut exister qu'**une seule fois** dans toute la partie, pour *tous* les joueurs.
   * *Exception :* rencontres statiques.
   * *Reroll :* Si un Pokémon déjà capturé ou manqué apparaît, on continue de chercher (reroll) jusqu'à une nouvelle rencontre valide.
 * **Clause Chromatique :** Les Pokémon chromatiques peuvent *toujours* être capturés.
@@ -141,16 +141,16 @@ const es = `# 🔗 Chuleta SoulLink Nuzlocke (Rojo Fuego)
 ## 💀 1. Reglas básicas
 * **Muerte permanente:** Si un Pokémon baja a 0 PS, está muerto. (Guardado en la caja para siempre o liberado).
 * **Modo Fijo:** En las opciones, ajusta "Estilo de combate: Fijo" (sin cambio gratis tras un K.O.).
-* **Apodos obligatorios:** Cada Pokémon necesita un nombre. **Importante:** ¡el *otro* jugador elige el nombre!
+* **Apodos obligatorios:** Cada Pokémon necesita un nombre. **Importante:** ¡*otro* jugador elige el nombre!
 
 ## 🤝 2. Mecánica SoulLink
-* **Compañeros de alma:** Las capturas de ambos jugadores en la misma ruta están enlazadas de forma permanente.
-* **Destino compartido:** Si un compañero muere, el otro también. Ambos salen del equipo.
-* **Emparejamiento de equipo:** Un Pokémon *solo* puede estar en el equipo si su compañero enlazado también está en el equipo del otro jugador.
+* **Compañeros de alma:** Las capturas de todos los jugadores en la misma ruta están enlazadas de forma permanente.
+* **Destino compartido:** Si un compañero muere, todos los demás también. Todos salen del equipo.
+* **Emparejamiento de equipo:** Un Pokémon *solo* puede estar en el equipo si sus compañeros enlazados también están en el equipo de todos los demás jugadores.
 
 ## 🎯 3. Encuentros y captura
 * **Una captura por ruta:** Solo se puede capturar el *primer* Pokémon salvaje de cada zona (huye o es derrotado = sin segunda oportunidad).
-* **Cláusula de especies compartidas / duplicados:** Cada línea evolutiva solo puede existir **una vez** en toda la partida, entre *ambos* jugadores.
+* **Cláusula de especies compartidas / duplicados:** Cada línea evolutiva solo puede existir **una vez** en toda la partida, entre *todos* los jugadores.
   * *Excepción:* encuentros estáticos.
   * *Reroll:* Si aparece un Pokémon ya capturado o perdido, se sigue buscando (reroll) hasta que aparezca un nuevo encuentro válido.
 * **Cláusula Shiny:** Los shinies *siempre* pueden capturarse.
@@ -185,16 +185,16 @@ const it = `# 🔗 Promemoria SoulLink Nuzlocke (Rosso Fuoco)
 ## 💀 1. Regole di base
 * **Permadeath:** Se un Pokémon scende a 0 PS, è morto. (Messo definitivamente nel box o rilasciato).
 * **Modalità Fissa:** Nelle opzioni imposta "Stile di lotta: Fisso" (nessun cambio gratuito dopo un K.O.).
-* **Soprannomi obbligatori:** Ogni Pokémon ha bisogno di un nome. **Importante:** è l'*altro* giocatore a scegliere il nome!
+* **Soprannomi obbligatori:** Ogni Pokémon ha bisogno di un nome. **Importante:** è un *altro* giocatore a scegliere il nome!
 
 ## 🤝 2. Meccanica SoulLink
-* **Partner d'anima:** Le catture di entrambi i giocatori nella stessa zona sono collegate in modo permanente.
-* **Destino condiviso:** Se un partner muore, muore anche l'altro. Entrambi lasciano la squadra.
-* **Abbinamento di squadra:** Un Pokémon può stare in squadra *solo* se il suo partner collegato è anch'esso nella squadra dell'altro giocatore.
+* **Partner d'anima:** Le catture di tutti i giocatori nella stessa zona sono collegate in modo permanente.
+* **Destino condiviso:** Se un partner muore, muoiono anche tutti gli altri. Tutti lasciano la squadra.
+* **Abbinamento di squadra:** Un Pokémon può stare in squadra *solo* se i suoi partner collegati sono anch'essi nella squadra di tutti gli altri giocatori.
 
 ## 🎯 3. Incontri e cattura
 * **Una cattura per zona:** Si può catturare solo il *primo* Pokémon selvatico di ogni zona (fuggito o sconfitto = nessuna seconda possibilità).
-* **Clausola specie condivise / doppioni:** Ogni linea evolutiva può esistere solo **una volta** nell'intera partita, tra *entrambi* i giocatori.
+* **Clausola specie condivise / doppioni:** Ogni linea evolutiva può esistere solo **una volta** nell'intera partita, tra *tutti* i giocatori.
   * *Eccezione:* incontri statici.
   * *Reroll:* Se compare un Pokémon già catturato o mancato, si continua a cercare (reroll) finché non appare un nuovo incontro valido.
 * **Clausola Shiny:** Gli shiny possono *sempre* essere catturati.

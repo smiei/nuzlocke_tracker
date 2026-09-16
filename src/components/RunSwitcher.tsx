@@ -41,11 +41,11 @@ export function RunSwitcher({ runs, games }: { runs: RunSummary[]; games: GameSu
     router.push(`${pathname}?run=${value}`);
   }
 
-  function handleCreate(name: string, mode: RunMode, gameId: string) {
+  function handleCreate(name: string, mode: RunMode, gameId: string, playerCount: number) {
     startTransition(async () => {
       // Inherit ruleset + rule toggles from the run that's on screen right
       // now, then land on the Rules tab so they can be reviewed first.
-      const result = await createRun(name, mode, activeId ?? null, gameId, lang);
+      const result = await createRun(name, mode, activeId ?? null, gameId, lang, playerCount);
       if (result.success) {
         setDialogOpen(false);
         router.push(`/rules?run=${result.runId}`);
@@ -66,7 +66,11 @@ export function RunSwitcher({ runs, games }: { runs: RunSummary[]; games: GameSu
         {runs.map((run) => (
           <option key={run.id} value={run.id}>
             {run.name}
-            {run.mode === RunMode.CLASSIC ? t.soloSuffix : ""}
+            {run.mode === RunMode.CLASSIC
+              ? t.soloSuffix
+              : run.playerCount > 2
+                ? t.playersSuffix(run.playerCount)
+                : ""}
             {gameSuffix(run)}
           </option>
         ))}

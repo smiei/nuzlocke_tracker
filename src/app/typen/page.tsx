@@ -48,7 +48,7 @@ export default async function AnalyzePage({
   searchParams: Promise<{ run?: string }>;
 }) {
   const { run } = await searchParams;
-  const { runId, mode, gameId, settings } = await resolveRunId(run);
+  const { runId, mode, players, gameId, settings } = await resolveRunId(run);
 
   const lang = await getLang();
   const game = getGameOrDefault(gameId);
@@ -88,7 +88,6 @@ export default async function AnalyzePage({
   const routes = (await getRoutesForRun(runId, gameId)).filter(
     (r) => !r.hidden && (settings.statics || r.type === "route"),
   );
-  const players = mode === RunMode.CLASSIC ? [Player.PLAYER1] : [Player.PLAYER1, Player.PLAYER2];
   const openSlots: OpenSlot[] = [];
   for (const player of players) {
     for (const route of routes) {
@@ -150,10 +149,7 @@ export default async function AnalyzePage({
     const pokemon = getPokemonByIdForGame(game, pokemonId);
     return pokemon ? movepoolId(pokemon, (id) => learnsetTable[String(id)] !== undefined) : pokemonId;
   };
-  const byPlayer = new Map<Player, TeamMember[]>([
-    [Player.PLAYER1, []],
-    [Player.PLAYER2, []],
-  ]);
+  const byPlayer = new Map<Player, TeamMember[]>(players.map((player) => [player, []]));
   for (const link of teamLinks) {
     for (const e of link.encounters) {
       if (isFoldedDonor(e, visibleEncounterIds)) continue;
@@ -174,13 +170,7 @@ export default async function AnalyzePage({
       });
     }
   }
-  const teams =
-    mode === RunMode.CLASSIC
-      ? [{ player: Player.PLAYER1, members: byPlayer.get(Player.PLAYER1) ?? [] }]
-      : [
-          { player: Player.PLAYER1, members: byPlayer.get(Player.PLAYER1) ?? [] },
-          { player: Player.PLAYER2, members: byPlayer.get(Player.PLAYER2) ?? [] },
-        ];
+  const teams = players.map((player) => ({ player, members: byPlayer.get(player) ?? [] }));
 
   const effectiveness = getEffectivenessForGame(game);
   const attackTypes = getAttackTypesForGame(game);
@@ -204,6 +194,7 @@ export default async function AnalyzePage({
           <AnalyzeView
             runId={runId}
             mode={mode}
+            players={players}
             pokemonList={pickableList}
             // The real battle-mechanics generation (ball list, catch formula),
             // deliberately NOT dataGeneration - see CatchRateView's use of it.

@@ -30,6 +30,7 @@ function runToBackupRun(run: RunWithRelations): BackupRun {
   return {
     name: run.name,
     mode: run.mode,
+    playerCount: run.playerCount,
     gameId: run.gameId,
     rulesMarkdown: run.rulesMarkdown,
     settingsJson: run.settingsJson,
@@ -140,6 +141,7 @@ export async function applyBackup(backup: BackupFile): Promise<number> {
           data: {
             name: run.name,
             mode: run.mode,
+            playerCount: run.playerCount,
             gameId: run.gameId,
             rulesMarkdown: run.rulesMarkdown,
             settingsJson: run.settingsJson,

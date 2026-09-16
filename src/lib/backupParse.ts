@@ -1,4 +1,5 @@
 import { EncounterStatus, LinkStatus, Player, RunMode } from "@/generated/prisma/enums";
+import { clampPlayerCount } from "@/lib/players";
 
 // Client-safe half of the backup format: types + parsing only, no Prisma
 // client import (unlike backup.ts, which needs the DB for buildBackup/
@@ -18,7 +19,9 @@ export const BACKUP_FORMAT = "nuzlocke-tracker-backup";
 // empty - and importBackup() warns when a file's OWN version is newer than
 // this constant (an older build reading a newer backup would silently drop
 // fields it doesn't know about, fusions included). 4 added `boundToRouteId` on
-// SoulLink (a split-off wild fusion body's link bound to its route's link).
+// SoulLink (a split-off wild fusion body's link bound to its route's link),
+// `playerCount` on the run and PLAYER3/PLAYER4 encounters - an older build
+// would read a four-player run as two players plus stray Player-1 rows.
 export const BACKUP_VERSION = 4;
 
 export type BackupSoulLink = {
@@ -95,6 +98,9 @@ export type BackupRouteEntry = {
 export type BackupRun = {
   name: string;
   mode: RunMode;
+  // Added in v4: SoulLink players (2-4). Absent in older files, which were
+  // all two-player runs.
+  playerCount: number;
   // Game data pack the run plays (data/games/<gameId>/). Old backups
   // without it restore as "firered" (the only game that existed back then).
   gameId: string;
@@ -170,6 +176,7 @@ export function parseBackup(json: string): BackupFile | null {
     runs.push({
       name: typeof rawRun.name === "string" ? rawRun.name : "Imported Run",
       mode: isEnumValue(RunMode, rawRun.mode) ? rawRun.mode : RunMode.SOULLINK,
+      playerCount: clampPlayerCount(rawRun.playerCount),
       gameId: typeof rawRun.gameId === "string" && rawRun.gameId ? rawRun.gameId : "firered",
       rulesMarkdown: typeof rawRun.rulesMarkdown === "string" ? rawRun.rulesMarkdown : "",
       settingsJson: typeof rawRun.settingsJson === "string" ? rawRun.settingsJson : "{}",

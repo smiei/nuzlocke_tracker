@@ -88,6 +88,34 @@ describe("parseBackup v3 fields", () => {
 });
 
 describe("parseBackup v4 fields", () => {
+  it("restores a run's player count and defaults an older or broken one to two", () => {
+    const counts = parseBackup(
+      envelope([
+        { name: "Four", playerCount: 4, soulLinks: [], encounters: [] },
+        { name: "Old", soulLinks: [], encounters: [] },
+        { name: "Broken", playerCount: 9, soulLinks: [], encounters: [] },
+      ]),
+    )!.runs.map((r) => r.playerCount);
+    expect(counts).toEqual([4, 2, 2]);
+  });
+
+  it("keeps encounters of players 3 and 4", () => {
+    const parsed = parseBackup(
+      envelope([
+        {
+          name: "Four",
+          playerCount: 4,
+          soulLinks: [],
+          encounters: [
+            { routeId: 3, player: "PLAYER3", pokemonId: 1, status: "CAUGHT" },
+            { routeId: 3, player: "PLAYER4", pokemonId: 4, status: "CAUGHT" },
+          ],
+        },
+      ]),
+    )!;
+    expect(parsed.runs[0].encounters.map((e) => e.player)).toEqual(["PLAYER3", "PLAYER4"]);
+  });
+
   const run = (soulLinks: unknown[]) => ({
     name: "Run",
     mode: "SOULLINK",

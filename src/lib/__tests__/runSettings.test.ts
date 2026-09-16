@@ -29,9 +29,14 @@ describe("parseRunSettings", () => {
     expect(s.playerNames.PLAYER2).toHaveLength(20);
   });
 
+  it("reads names for players 3 and 4 and leaves missing ones empty", () => {
+    const s = parseRunSettings('{"playerNames":{"PLAYER1":"Ash","PLAYER3":"Misty"}}');
+    expect(s.playerNames).toEqual({ PLAYER1: "Ash", PLAYER2: "", PLAYER3: "Misty", PLAYER4: "" });
+  });
+
   it("falls back to empty player names when malformed", () => {
     const s = parseRunSettings('{"playerNames":{"PLAYER1": 42}}');
-    expect(s.playerNames).toEqual({ PLAYER1: "", PLAYER2: "" });
+    expect(s.playerNames).toEqual({ PLAYER1: "", PLAYER2: "", PLAYER3: "", PLAYER4: "" });
   });
 
   it("defaults customSpritesOnly to off and parses it like any other toggle", () => {
@@ -85,6 +90,6 @@ describe("serializePresetSettings", () => {
     );
     const back = parseRunSettings(serializePresetSettings(settings));
     expect(back.shinyClause).toBe(false);
-    expect(back.playerNames).toEqual({ PLAYER1: "", PLAYER2: "" });
+    expect(back.playerNames).toEqual({ PLAYER1: "", PLAYER2: "", PLAYER3: "", PLAYER4: "" });
   });
 });

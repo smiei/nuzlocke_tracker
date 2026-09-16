@@ -202,6 +202,7 @@ function AnalyzeCard({
 export function AnalyzeView({
   runId,
   mode,
+  players,
   pokemonList,
   generation,
   versionGroup,
@@ -218,6 +219,8 @@ export function AnalyzeView({
 }: {
   runId: number;
   mode: RunMode;
+  // The run's players in order (src/lib/players.ts).
+  players: Player[];
   pokemonList: Pokemon[];
   generation: number;
   versionGroup: string;
@@ -240,6 +243,7 @@ export function AnalyzeView({
   const catchShared: CatchSharedProps = {
     runId,
     mode,
+    players,
     pokemonList,
     catchRates,
     lockedFamilies,

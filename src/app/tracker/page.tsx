@@ -28,7 +28,7 @@ export default async function TrackerPage({
   searchParams: Promise<{ run?: string }>;
 }) {
   const { run } = await searchParams;
-  const { runId, mode, gameId, settings } = await resolveRunId(run);
+  const { runId, players, gameId, settings } = await resolveRunId(run);
 
   const lang = await getLang();
   const game = getGameOrDefault(gameId);
@@ -63,7 +63,7 @@ export default async function TrackerPage({
           >
             <TrackerView
               runId={runId}
-              mode={mode}
+              players={players}
               lang={lang}
               settings={settings}
               routes={routes}

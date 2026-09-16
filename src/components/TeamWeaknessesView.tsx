@@ -242,7 +242,7 @@ export function TeamWeaknessesView({
         <p className="text-sm text-ink-muted">{t.weaknesses.empty}</p>
       ) : (
         <>
-          <div className="flex flex-col gap-8 xl:flex-row xl:gap-12">
+          <div className="flex flex-col gap-8 xl:flex-row xl:flex-wrap xl:gap-x-12">
             {teams.map(
               (team) =>
                 team.members.length > 0 && (

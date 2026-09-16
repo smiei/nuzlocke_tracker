@@ -25,6 +25,7 @@ import { formedLinks, groupSoulLinks, isFoldedDonor, teamLinkIds } from "@/lib/f
 import { computeLevelCapProgress, computeRouteProgress, eliteFourIndex } from "@/lib/progress";
 import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
+import { comparePlayers } from "@/lib/players";
 import { getRoutesForRun } from "@/lib/runRoutes";
 import { getLang } from "@/lib/i18n/getLang";
 import { localizeName, pokemonName, routeName } from "@/lib/i18n/localize";
@@ -46,7 +47,6 @@ import type { TeamMember } from "@/components/TeamWeaknessesView";
 
 export const dynamic = "force-dynamic";
 
-const PLAYERS = [Player.PLAYER1, Player.PLAYER2] as const;
 // Attack-type coverage below the first level cap (no cap defeated yet) is
 // judged against a starter-level team, not an empty one.
 const FALLBACK_LEVEL = 5;
@@ -57,7 +57,7 @@ export default async function OverviewPage({
   searchParams: Promise<{ run?: string }>;
 }) {
   const { run } = await searchParams;
-  const { runId, mode, gameId, settings } = await resolveRunId(run);
+  const { runId, mode, players, gameId, settings } = await resolveRunId(run);
   const game = getGameOrDefault(gameId);
   const lang = await getLang();
 
@@ -134,7 +134,7 @@ export default async function OverviewPage({
   };
 
   // --- Team (alive + on a slot) per player: defensive + offensive coverage.
-  const teamByPlayer = new Map<Player, TeamMember[]>(PLAYERS.map((p) => [p, []]));
+  const teamByPlayer = new Map<Player, TeamMember[]>(players.map((p) => [p, []]));
   for (const link of aliveLinks) {
     if (!onTeamLinkIds.has(link.id)) continue;
     for (const e of link.encounters) {
@@ -156,10 +156,7 @@ export default async function OverviewPage({
       });
     }
   }
-  const teams =
-    mode === RunMode.CLASSIC
-      ? [{ player: Player.PLAYER1, members: teamByPlayer.get(Player.PLAYER1) ?? [] }]
-      : PLAYERS.map((p) => ({ player: p, members: teamByPlayer.get(p) ?? [] }));
+  const teams = players.map((p) => ({ player: p, members: teamByPlayer.get(p) ?? [] }));
 
   // Level caps: last earned cap + the next one (computed early - the
   // offensive-gap coverage below is judged against the team's current cap,
@@ -178,7 +175,7 @@ export default async function OverviewPage({
   const routeProgress = computeRouteProgress(
     routes,
     allEncounters,
-    mode === RunMode.CLASSIC,
+    players,
     settings.statics,
   );
   const levelCapProgress = computeLevelCapProgress(levelCapItems);
@@ -213,12 +210,12 @@ export default async function OverviewPage({
   const capOrder = new Map(levelCapItems.map((cap, i) => [cap.id, i]));
 
   // --- Counts, team/bank BST, death tally and the memorial in one pass.
-  const caught = new Map<Player, number>(PLAYERS.map((p) => [p, 0]));
-  const caused = new Map<Player, number>(PLAYERS.map((p) => [p, 0]));
-  const teamSummePlayer = new Map<Player, number>(PLAYERS.map((p) => [p, 0]));
-  const teamSummeMaxPlayer = new Map<Player, number>(PLAYERS.map((p) => [p, 0]));
-  const bankSummePlayer = new Map<Player, number>(PLAYERS.map((p) => [p, 0]));
-  const bankSummeMaxPlayer = new Map<Player, number>(PLAYERS.map((p) => [p, 0]));
+  const caught = new Map<Player, number>(players.map((p) => [p, 0]));
+  const caused = new Map<Player, number>(players.map((p) => [p, 0]));
+  const teamSummePlayer = new Map<Player, number>(players.map((p) => [p, 0]));
+  const teamSummeMaxPlayer = new Map<Player, number>(players.map((p) => [p, 0]));
+  const bankSummePlayer = new Map<Player, number>(players.map((p) => [p, 0]));
+  const bankSummeMaxPlayer = new Map<Player, number>(players.map((p) => [p, 0]));
   let totalDeaths = 0;
   let unattributedDeaths = 0;
   let teamSumme = 0;
@@ -247,11 +244,11 @@ export default async function OverviewPage({
     const groupEncounters = members.flatMap((link) => link.encounters);
     const groupEncounterIds = new Set(groupEncounters.map((e) => e.id));
     totalDeaths++;
-    // Death-tally scoreboard: only pairs that actually formed (both
-    // players caught) count, same as the Journey tab's version did. A bound
-    // link (a split-off wild body) holds one Pokémon by design - its route's
-    // own link is what tells whether the pair formed.
-    if (members.every((link) => link.boundToId !== null || link.encounters.length >= 2)) {
+    // Death-tally scoreboard: only links that actually formed (every player
+    // caught) count, same as the Journey tab's version did. A bound link (a
+    // split-off wild body) holds one Pokémon by design - its route's own link
+    // is what tells whether the link formed.
+    if (members.every((link) => link.boundToId !== null || link.encounters.length >= players.length)) {
       if (first.deathPlayer) caused.set(first.deathPlayer, (caused.get(first.deathPlayer) ?? 0) + 1);
       else unattributedDeaths++;
     }
@@ -264,12 +261,12 @@ export default async function OverviewPage({
       )
         .map((link) => routeNameOf(link.routeId))
         .join(" + "),
-      // Player 1 above Player 2, then route order - same as the Team tab.
+      // Player 1 above Player 2 above ..., then route order - same as the Team tab.
       pokemon: groupEncounters
         .filter((e) => !isFoldedDonor(e, groupEncounterIds))
         .sort(
           (a, b) =>
-            (a.player === b.player ? 0 : a.player === Player.PLAYER1 ? -1 : 1) ||
+            comparePlayers(a.player, b.player) ||
             (routeOrder.get(a.routeId) ?? Number.MAX_SAFE_INTEGER) -
               (routeOrder.get(b.routeId) ?? Number.MAX_SAFE_INTEGER),
         )
@@ -352,14 +349,11 @@ export default async function OverviewPage({
     (a, b) => a.sortIndex - b.sortIndex || (a.diedAt ?? 0) - (b.diedAt ?? 0),
   );
 
-  const deathTallyTotal = (caused.get(Player.PLAYER1) ?? 0) + (caused.get(Player.PLAYER2) ?? 0) + unattributedDeaths;
+  const byPlayer = players.map((player) => ({ player, count: caused.get(player) ?? 0 }));
+  const deathTallyTotal = byPlayer.reduce((sum, row) => sum + row.count, 0) + unattributedDeaths;
   const deathTally: OverviewDeathTally | null =
     mode === RunMode.SOULLINK && deathTallyTotal > 0
-      ? {
-          PLAYER1: caused.get(Player.PLAYER1) ?? 0,
-          PLAYER2: caused.get(Player.PLAYER2) ?? 0,
-          unattributed: unattributedDeaths,
-        }
+      ? { byPlayer, unattributed: unattributedDeaths }
       : null;
 
   const stats: OverviewStats = {

@@ -1,4 +1,4 @@
-import { Player } from "@/generated/prisma/enums";
+import type { Player } from "@/generated/prisma/enums";
 import type { LevelCap } from "@/lib/data";
 
 export type ProgressStats = { done: number; total: number; percent: number };
@@ -7,16 +7,16 @@ type RouteLike = { id: number; type: string; postgame?: boolean; hidden?: boolea
 type EncounterLike = { routeId: number; player: Player };
 
 // A route counts as "done" once every player slot has an entry (any status):
-// both players in SoulLink, player 1 in Classic.
+// each of the run's players (src/lib/players.ts) - all 2-4 in SoulLink,
+// player 1 alone in Classic.
 export function isRouteDone(
   route: RouteLike,
   encounters: EncounterLike[],
-  isClassic: boolean,
+  players: readonly Player[],
 ): boolean {
-  const p1 = encounters.some((e) => e.routeId === route.id && e.player === Player.PLAYER1);
-  if (isClassic) return p1;
-  const p2 = encounters.some((e) => e.routeId === route.id && e.player === Player.PLAYER2);
-  return p1 && p2;
+  return players.every((player) =>
+    encounters.some((e) => e.routeId === route.id && e.player === player),
+  );
 }
 
 function toPercent(done: number, total: number): number {
@@ -29,7 +29,7 @@ function toPercent(done: number, total: number): number {
 export function computeRouteProgress(
   routes: RouteLike[],
   encounters: EncounterLike[],
-  isClassic: boolean,
+  players: readonly Player[],
   statics: boolean,
 ): ProgressStats {
   // `hidden` routes are free-team slots, not places the run goes: counting
@@ -37,7 +37,7 @@ export function computeRouteProgress(
   const visible = routes.filter((r) => !r.hidden);
   const trackable = statics ? visible : visible.filter((r) => r.type === "route");
   const nonPostgame = trackable.filter((r) => !r.postgame);
-  const done = nonPostgame.filter((r) => isRouteDone(r, encounters, isClassic)).length;
+  const done = nonPostgame.filter((r) => isRouteDone(r, encounters, players)).length;
   return { done, total: nonPostgame.length, percent: toPercent(done, nonPostgame.length) };
 }
 

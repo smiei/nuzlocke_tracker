@@ -14,7 +14,7 @@ export default async function RulesPage({
   searchParams: Promise<{ run?: string }>;
 }) {
   const { run } = await searchParams;
-  const { runId, mode, gameId, settings } = await resolveRunId(run);
+  const { runId, mode, players, gameId, settings } = await resolveRunId(run);
 
   const lang = await getLang();
 
@@ -38,6 +38,7 @@ export default async function RulesPage({
         runId={runId}
         lang={lang}
         mode={mode}
+        players={players}
         markdown={markdown}
         defaultMarkdown={defaultMarkdown}
         settings={settings}

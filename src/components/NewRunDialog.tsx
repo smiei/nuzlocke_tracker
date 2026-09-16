@@ -9,6 +9,12 @@ import type { GameSummary } from "@/lib/types";
 import { Button } from "@/components/ui/Button";
 import { FieldLabel, Input, Select } from "@/components/ui/Input";
 import { Modal } from "@/components/ui/Modal";
+import { MAX_SOULLINK_PLAYERS, MIN_SOULLINK_PLAYERS } from "@/lib/players";
+
+const PLAYER_COUNTS = Array.from(
+  { length: MAX_SOULLINK_PLAYERS - MIN_SOULLINK_PLAYERS + 1 },
+  (_, i) => MIN_SOULLINK_PLAYERS + i,
+);
 
 export function NewRunDialog({
   lang,
@@ -27,11 +33,12 @@ export function NewRunDialog({
   // the same cartridge).
   initialGameId: string;
   onClose: () => void;
-  onCreate: (name: string, mode: RunMode, gameId: string) => void;
+  onCreate: (name: string, mode: RunMode, gameId: string, playerCount: number) => void;
 }) {
   const t = translations[lang].runSwitcher;
   const [name, setName] = useState("");
   const [mode, setMode] = useState<RunMode>(RunMode.SOULLINK);
+  const [playerCount, setPlayerCount] = useState(MIN_SOULLINK_PLAYERS);
   const [gameId, setGameId] = useState(initialGameId);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -39,6 +46,7 @@ export function NewRunDialog({
     if (!open) return;
     setName("");
     setMode(RunMode.SOULLINK);
+    setPlayerCount(MIN_SOULLINK_PLAYERS);
     setGameId(initialGameId);
     const id = setTimeout(() => inputRef.current?.focus(), 0);
     return () => clearTimeout(id);
@@ -48,7 +56,7 @@ export function NewRunDialog({
     e.preventDefault();
     const trimmed = name.trim();
     if (!trimmed) return;
-    onCreate(trimmed, mode, gameId);
+    onCreate(trimmed, mode, gameId, playerCount);
   }
 
   return (
@@ -126,6 +134,27 @@ export function NewRunDialog({
           </Button>
         ))}
       </div>
+
+      {/* Fixed at creation too: a player joining or leaving mid-run would
+          leave routes with entries for players the run no longer has. */}
+      {mode === RunMode.SOULLINK && (
+        <>
+          <span className="mb-1 mt-3 block text-xs font-medium text-ink-muted">{t.playersLabel}</span>
+          <div className="grid grid-cols-3 gap-2" role="group" aria-label={t.playersLabel}>
+            {PLAYER_COUNTS.map((count) => (
+              <Button
+                key={count}
+                variant={playerCount === count ? "primary" : "secondary"}
+                aria-pressed={playerCount === count}
+                disabled={pending}
+                onClick={() => setPlayerCount(count)}
+              >
+                {count}
+              </Button>
+            ))}
+          </div>
+        </>
+      )}
     </Modal>
   );
 }

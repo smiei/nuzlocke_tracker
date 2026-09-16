@@ -2,6 +2,11 @@ import { describe, it, expect } from "vitest";
 import { Player } from "@/generated/prisma/enums";
 import { isRouteDone, computeRouteProgress, computeLevelCapProgress, eliteFourIndex } from "@/lib/progress";
 
+const CLASSIC = [Player.PLAYER1];
+const TWO = [Player.PLAYER1, Player.PLAYER2];
+const THREE = [Player.PLAYER1, Player.PLAYER2, Player.PLAYER3];
+type Entry = { routeId: number; player: Player };
+
 const routes = [
   { id: 1, type: "route" },
   { id: 2, type: "route" },
@@ -11,16 +16,26 @@ const routes = [
 
 describe("isRouteDone", () => {
   it("Classic: done once player 1 has an entry", () => {
-    const encounters = [{ routeId: 1, player: Player.PLAYER1 }];
-    expect(isRouteDone(routes[0], encounters, true)).toBe(true);
-    expect(isRouteDone(routes[1], encounters, true)).toBe(false);
+    const encounters: Entry[] = [{ routeId: 1, player: Player.PLAYER1 }];
+    expect(isRouteDone(routes[0], encounters, CLASSIC)).toBe(true);
+    expect(isRouteDone(routes[1], encounters, CLASSIC)).toBe(false);
   });
 
   it("SoulLink: done only once both players have an entry", () => {
-    const encounters = [{ routeId: 1, player: Player.PLAYER1 }];
-    expect(isRouteDone(routes[0], encounters, false)).toBe(false);
+    const encounters: Entry[] = [{ routeId: 1, player: Player.PLAYER1 }];
+    expect(isRouteDone(routes[0], encounters, TWO)).toBe(false);
     encounters.push({ routeId: 1, player: Player.PLAYER2 });
-    expect(isRouteDone(routes[0], encounters, false)).toBe(true);
+    expect(isRouteDone(routes[0], encounters, TWO)).toBe(true);
+  });
+
+  it("SoulLink with three players: done only once all three have an entry", () => {
+    const encounters: Entry[] = [
+      { routeId: 1, player: Player.PLAYER1 },
+      { routeId: 1, player: Player.PLAYER2 },
+    ];
+    expect(isRouteDone(routes[0], encounters, THREE)).toBe(false);
+    encounters.push({ routeId: 1, player: Player.PLAYER3 });
+    expect(isRouteDone(routes[0], encounters, THREE)).toBe(true);
   });
 });
 
@@ -28,7 +43,7 @@ describe("computeRouteProgress", () => {
   it("counts only non-postgame trackable routes, ignoring statics by default", () => {
     const encounters = [{ routeId: 1, player: Player.PLAYER1 }];
     // statics off -> route 4 excluded; route 3 excluded as postgame -> total 2 (routes 1,2)
-    expect(computeRouteProgress(routes, encounters, true, false)).toEqual({
+    expect(computeRouteProgress(routes, encounters, CLASSIC, false)).toEqual({
       done: 1,
       total: 2,
       percent: 50,
@@ -38,7 +53,7 @@ describe("computeRouteProgress", () => {
   it("includes statics when the rule is on", () => {
     const encounters = [{ routeId: 1, player: Player.PLAYER1 }];
     // statics on -> routes 1,2,4 count (3 is still excluded as postgame)
-    expect(computeRouteProgress(routes, encounters, true, true)).toEqual({
+    expect(computeRouteProgress(routes, encounters, CLASSIC, true)).toEqual({
       done: 1,
       total: 3,
       percent: 33,
@@ -46,7 +61,7 @@ describe("computeRouteProgress", () => {
   });
 
   it("returns 0% for an empty route list", () => {
-    expect(computeRouteProgress([], [], true, false)).toEqual({ done: 0, total: 0, percent: 0 });
+    expect(computeRouteProgress([], [], CLASSIC, false)).toEqual({ done: 0, total: 0, percent: 0 });
   });
 });
 
@@ -90,13 +105,13 @@ describe("computeRouteProgress with free-team slots", () => {
   ];
 
   it("leaves hidden routes out of the total", () => {
-    const stats = computeRouteProgress(routes, [], true, true);
+    const stats = computeRouteProgress(routes, [], CLASSIC, true);
     expect(stats.total).toBe(2);
   });
 
   it("leaves an encounter on a hidden route out of the count", () => {
     const encounters = [{ routeId: -1, player: Player.PLAYER1 }];
-    const stats = computeRouteProgress(routes, encounters, true, true);
+    const stats = computeRouteProgress(routes, encounters, CLASSIC, true);
     expect(stats.done).toBe(0);
     expect(stats.total).toBe(2);
     expect(stats.percent).toBe(0);

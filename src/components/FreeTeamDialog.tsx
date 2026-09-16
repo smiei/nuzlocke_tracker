@@ -3,7 +3,6 @@
 import { useState, useTransition, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import type { Pokemon } from "@/lib/data";
-import type { RunMode } from "@/generated/prisma/client";
 import { Player } from "@/generated/prisma/enums";
 import { addFreeTeamMember } from "@/lib/actions";
 import { formatActionError } from "@/lib/actionErrors";
@@ -28,14 +27,15 @@ export function FreeTeamDialog({
   open,
   onClose,
   runId,
-  mode,
+  players,
   lang,
   pokemonList,
 }: {
   open: boolean;
   onClose: () => void;
   runId: number;
-  mode: RunMode;
+  // The run's players in order (src/lib/players.ts).
+  players: Player[];
   lang: Lang;
   pokemonList: Pokemon[];
 }) {
@@ -50,7 +50,7 @@ export function FreeTeamDialog({
   const [nickname, setNickname] = useState("");
   const [pending, startTransition] = useTransition();
 
-  const isSoulLink = mode !== "CLASSIC";
+  const isSoulLink = players.length > 1;
   const picked = pokemonList.find((p) => p.id === pokemonId) ?? null;
 
   function handleSubmit(event: FormEvent) {
@@ -124,11 +124,14 @@ export function FreeTeamDialog({
               value={player}
               disabled={pending}
               onChange={(event) =>
-                setPlayer(event.target.value === Player.PLAYER2 ? Player.PLAYER2 : Player.PLAYER1)
+                setPlayer(players.find((p) => p === event.target.value) ?? Player.PLAYER1)
               }
             >
-              <option value={Player.PLAYER1}>{playerLabel(Player.PLAYER1)}</option>
-              <option value={Player.PLAYER2}>{playerLabel(Player.PLAYER2)}</option>
+              {players.map((p) => (
+                <option key={p} value={p}>
+                  {playerLabel(p)}
+                </option>
+              ))}
             </Select>
           </div>
         )}

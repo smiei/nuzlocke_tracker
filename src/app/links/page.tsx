@@ -17,7 +17,7 @@ import {
   isInDex,
 } from "@/lib/gameData";
 import { getRoutesForRun } from "@/lib/runRoutes";
-import { EncounterStatus, LinkStatus, Player, RunMode } from "@/generated/prisma/client";
+import { EncounterStatus, LinkStatus, RunMode } from "@/generated/prisma/client";
 import { SpriteSetProvider } from "@/components/SpriteSetProvider";
 import { CanonicalRun } from "@/components/CanonicalRun";
 import { BlindflugProvider } from "@/components/BlindflugProvider";
@@ -28,6 +28,7 @@ import { computePokemonRanks, rankForSumme } from "@/lib/ranking";
 import { displayNameWithForm, formLabel, formsOfSpecies } from "@/lib/forms";
 import { prisma } from "@/lib/prisma";
 import { resolveRunId } from "@/lib/runs";
+import { comparePlayers } from "@/lib/players";
 import { getLang } from "@/lib/i18n/getLang";
 import { translations } from "@/lib/i18n/dictionary";
 import { routeName, pokemonName } from "@/lib/i18n/localize";
@@ -45,7 +46,7 @@ export default async function LinksPage({
   searchParams: Promise<{ run?: string }>;
 }) {
   const { run } = await searchParams;
-  const { runId, mode, gameId, settings } = await resolveRunId(run);
+  const { runId, mode, players, gameId, settings } = await resolveRunId(run);
   // The two randomizer rules decide which override categories from the game
   // pack's evolution-overrides.json apply (vs. vanilla methods).
   const evoOptions = {
@@ -210,15 +211,12 @@ export default async function LinksPage({
       .flatMap((link) => (link.teamPosition === null ? [] : [link.teamPosition]))
       .sort((a, b) => a - b)
       .slice(0, teamSlotsNeeded(groupEncounters));
-    // Player 1 above Player 2, never by strength; within a player, route order.
+    // Player 1 above Player 2 above ..., never by strength; within a player,
+    // route order.
     const units = groupEncounters
       .filter((e) => !isFoldedDonor(e, groupEncounterIds))
-      .sort((a, b) =>
-        a.player !== b.player
-          ? a.player === Player.PLAYER1
-            ? -1
-            : 1
-          : orderOfRoute(a.routeId) - orderOfRoute(b.routeId),
+      .sort(
+        (a, b) => comparePlayers(a.player, b.player) || orderOfRoute(a.routeId) - orderOfRoute(b.routeId),
       );
 
     return {
@@ -352,6 +350,7 @@ export default async function LinksPage({
             <LinksView
               runId={runId}
               mode={mode}
+              players={players}
               lang={lang}
               soulLinks={views}
               freeTeam={settings.freeTeam}

@@ -8,9 +8,9 @@ import { formatActionError } from "@/lib/actionErrors";
 import { useDialog } from "@/components/DialogProvider";
 import type { Lang } from "@/lib/i18n/dictionary";
 import { translations } from "@/lib/i18n/dictionary";
-import type { RunSettings } from "@/lib/runSettings";
+import { PLAYER_NAME_MAX, type RunSettings } from "@/lib/runSettings";
 import { useDebugMode } from "@/lib/useDebugMode";
-import { RunMode } from "@/generated/prisma/enums";
+import { RunMode, type Player } from "@/generated/prisma/enums";
 import { useToast } from "@/components/ui/ToastProvider";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -155,6 +155,7 @@ export function RulesView({
   runId,
   lang,
   mode,
+  players,
   markdown,
   defaultMarkdown,
   settings,
@@ -164,6 +165,8 @@ export function RulesView({
   runId: number;
   lang: Lang;
   mode: RunMode;
+  // The run's players in order (src/lib/players.ts).
+  players: Player[];
   markdown: string;
   defaultMarkdown: string;
   settings: RunSettings;
@@ -210,8 +213,8 @@ export function RulesView({
     });
   }
 
-  function commitName(player: "PLAYER1" | "PLAYER2", value: string) {
-    const trimmed = value.trim().slice(0, 20);
+  function commitName(player: Player, value: string) {
+    const trimmed = value.trim().slice(0, PLAYER_NAME_MAX);
     if (trimmed === settings.playerNames[player]) return;
     const previous = names;
     const nextNames = { ...names, [player]: trimmed };
@@ -367,13 +370,13 @@ export function RulesView({
             <Section title={t.playerNamesHeading}>
               <Card>
                 <div className="grid gap-3 sm:grid-cols-2">
-                  {(["PLAYER1", "PLAYER2"] as const).map((player) => (
+                  {players.map((player) => (
                     <Input
                       key={player}
                       type="text"
                       defaultValue={names[player]}
                       disabled={pending}
-                      maxLength={20}
+                      maxLength={PLAYER_NAME_MAX}
                       placeholder={translations[lang].player[player]}
                       aria-label={translations[lang].player[player]}
                       onBlur={(e) => commitName(player, e.target.value)}

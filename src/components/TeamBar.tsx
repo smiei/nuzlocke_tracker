@@ -123,11 +123,13 @@ function SlotPicker({
 export function TeamBar({
   runId,
   mode,
+  players,
   lang,
   links,
 }: {
   runId: number;
   mode: RunMode;
+  players: Player[];
   lang: Lang;
   links: SoulLinkView[];
 }) {
@@ -267,7 +269,7 @@ export function TeamBar({
                             {t.links.whoLost}
                           </p>
                           <div className="flex flex-wrap gap-1.5">
-                            {[Player.PLAYER1, Player.PLAYER2].map((p) => (
+                            {players.map((p) => (
                               <Button
                                 key={p}
                                 size="sm"

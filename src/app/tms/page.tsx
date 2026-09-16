@@ -13,7 +13,7 @@ import { resolveRunId } from "@/lib/runs";
 import { getLang } from "@/lib/i18n/getLang";
 import { displayNameWithForm, movepoolId } from "@/lib/forms";
 import { teamLinkIds } from "@/lib/fusionGroups";
-import { EncounterStatus, LinkStatus, Player, RunMode } from "@/generated/prisma/client";
+import { EncounterStatus, LinkStatus, Player } from "@/generated/prisma/client";
 import { SpriteSetProvider } from "@/components/SpriteSetProvider";
 import { CanonicalRun } from "@/components/CanonicalRun";
 import { BlindflugProvider } from "@/components/BlindflugProvider";
@@ -30,7 +30,7 @@ export default async function TmsPage({
   searchParams: Promise<{ run?: string }>;
 }) {
   const { run } = await searchParams;
-  const { runId, mode, gameId, settings } = await resolveRunId(run);
+  const { runId, mode, players, gameId, settings } = await resolveRunId(run);
   const game = getGameOrDefault(gameId);
   const lang = await getLang();
 
@@ -51,14 +51,8 @@ export default async function TmsPage({
   const onTeamLinkIds = teamLinkIds(
     await prisma.soulLink.findMany({ where: { runId }, include: { encounters: true } }),
   );
-  const byPlayer = new Map<Player, TmTeamMember[]>([
-    [Player.PLAYER1, []],
-    [Player.PLAYER2, []],
-  ]);
-  const seen = new Map<Player, Set<number>>([
-    [Player.PLAYER1, new Set()],
-    [Player.PLAYER2, new Set()],
-  ]);
+  const byPlayer = new Map<Player, TmTeamMember[]>(players.map((player) => [player, []]));
+  const seen = new Map<Player, Set<number>>(players.map((player) => [player, new Set()]));
   for (const e of caught) {
     if (e.soulLink?.status === LinkStatus.DEAD) continue;
     const pokemon = getPokemonByIdForGame(game, e.currentPokemonId);
@@ -81,13 +75,7 @@ export default async function TmsPage({
     });
   }
 
-  const teams =
-    mode === RunMode.CLASSIC
-      ? [{ player: Player.PLAYER1, members: byPlayer.get(Player.PLAYER1) ?? [] }]
-      : [
-          { player: Player.PLAYER1, members: byPlayer.get(Player.PLAYER1) ?? [] },
-          { player: Player.PLAYER2, members: byPlayer.get(Player.PLAYER2) ?? [] },
-        ];
+  const teams = players.map((player) => ({ player, members: byPlayer.get(player) ?? [] }));
 
   // Selectable moves = the move universe of this game (level-up + machine +
   // tutor moves), localized and sorted by name.

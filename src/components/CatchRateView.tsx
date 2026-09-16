@@ -122,6 +122,7 @@ function BallPicker({
 export type CatchSharedProps = {
   runId: number;
   mode: RunMode;
+  players: Player[];
   pokemonList: Pokemon[];
   catchRates: Record<number, number>;
   lockedFamilies: Set<number>;
@@ -282,7 +283,7 @@ export function CatchCardBody({
   state: CatchBodyState;
   onChange: (patch: Partial<CatchBodyState>) => void;
 }) {
-  const { runId, mode, pokemonList, catchRates, generation, versionGroup, openSlots, effectiveness, attackTypes, settings } =
+  const { runId, players, pokemonList, catchRates, generation, versionGroup, openSlots, effectiveness, attackTypes, settings } =
     shared;
   const router = useRouter();
   const { lang } = useLanguage();
@@ -412,7 +413,6 @@ export function CatchCardBody({
     );
   };
 
-  const isSoulLink = mode === RunMode.SOULLINK;
 
   return (
     <>
@@ -631,19 +631,17 @@ export function CatchCardBody({
           <p className="text-xs text-ink-subtle">{t.caughtNoFusion}</p>
         ) : openSlots.length === 0 ? (
           <p className="text-xs text-ink-subtle">{t.caughtNoRoutes}</p>
-        ) : isSoulLink ? (
+        ) : players.length > 1 ? (
           <div className="grid gap-3 sm:grid-cols-2">
-            <div>
-              <label className={labelClass}>{playerLabel(Player.PLAYER1)}</label>
-              {renderQuickCatchPanel(Player.PLAYER1)}
-            </div>
-            <div>
-              <label className={labelClass}>{playerLabel(Player.PLAYER2)}</label>
-              {renderQuickCatchPanel(Player.PLAYER2)}
-            </div>
+            {players.map((player) => (
+              <div key={player}>
+                <label className={labelClass}>{playerLabel(player)}</label>
+                {renderQuickCatchPanel(player)}
+              </div>
+            ))}
           </div>
         ) : (
-          renderQuickCatchPanel(Player.PLAYER1)
+          renderQuickCatchPanel(players[0])
         )}
         {caughtMsg && (
           <p className="mt-2 text-xs text-success">{caughtMsg}</p>

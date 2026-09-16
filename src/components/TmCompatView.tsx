@@ -153,7 +153,7 @@ export function TmCompatView({
               {t.notLearnable}
             </p>
           )}
-          <div className="flex flex-col gap-6 xl:flex-row xl:items-start">
+          <div className="flex flex-col gap-6 xl:flex-row xl:flex-wrap xl:items-start">
             {teams.map((team) => {
               if (team.members.length === 0) return null;
               // Was recomputed three times per team (twice inline in the JSX).

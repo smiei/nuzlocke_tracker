@@ -5,6 +5,8 @@ export type RunSummary = {
   id: number;
   name: string;
   mode: RunMode;
+  // SoulLink players (2-4); meaningless for Classic.
+  playerCount: number;
   gameId: string;
 };
 

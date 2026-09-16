@@ -36,7 +36,8 @@ export type OverviewStats = {
   capNext: number | null;
 };
 
-export type OverviewDeathTally = { PLAYER1: number; PLAYER2: number; unattributed: number };
+// One count per player of the run, in player order.
+export type OverviewDeathTally = { byPlayer: { player: Player; count: number }[]; unattributed: number };
 
 export type OverviewBadge = { id: number; badge: LocalizedNames; defeated: boolean };
 
@@ -231,9 +232,9 @@ export function OverviewView({
                 label={`💀 ${t.totalDeaths}`}
                 parts={
                   deathTally
-                    ? ([Player.PLAYER1, Player.PLAYER2] as const).map((p) => ({
-                        label: playerLabel(p),
-                        value: deathTally[p],
+                    ? deathTally.byPlayer.map(({ player, count }) => ({
+                        label: playerLabel(player),
+                        value: count,
                       }))
                     : undefined
                 }

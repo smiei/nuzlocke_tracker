@@ -2,8 +2,8 @@
 
 import { useState, useTransition } from "react";
 import type { Route, Pokemon } from "@/lib/data";
-import type { Encounter, RunMode } from "@/generated/prisma/client";
-import { EncounterStatus, Player } from "@/generated/prisma/enums";
+import type { Encounter, Player } from "@/generated/prisma/client";
+import { EncounterStatus } from "@/generated/prisma/enums";
 import type { Lang } from "@/lib/i18n/dictionary";
 import { translations } from "@/lib/i18n/dictionary";
 import { routeName } from "@/lib/i18n/localize";
@@ -23,9 +23,18 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { EmptyState, PageHeader } from "@/components/ui/Page";
 
+// Tailwind only sees whole class names, so the column count per player count
+// is spelled out rather than built from a number.
+const EDITOR_GRID: Record<number, string> = {
+  1: "",
+  2: "sm:grid-cols-2",
+  3: "sm:grid-cols-2 lg:grid-cols-3",
+  4: "sm:grid-cols-2 lg:grid-cols-4",
+};
+
 export function TrackerView({
   runId,
-  mode,
+  players,
   lang,
   settings,
   routes,
@@ -34,7 +43,8 @@ export function TrackerView({
   fusionEnabled = false,
 }: {
   runId: number;
-  mode: RunMode;
+  // The run's players in order - one in Classic, 2-4 in SoulLink.
+  players: Player[];
   lang: Lang;
   settings: RunSettings;
   routes: Route[];
@@ -46,7 +56,10 @@ export function TrackerView({
 }) {
   const playerLabel = usePlayerLabel();
   const tTracker = translations[lang].tracker;
-  const isClassic = mode === "CLASSIC";
+  const isClassic = players.length === 1;
+  // From three players on, the route name sits above the editors instead of
+  // beside them: four columns next to a name column do not fit the page.
+  const nameAbove = players.length > 2;
   // Post-game areas (Sevii 4-7, Cerulean Cave) are collapsed by default so
   // the main-game list stays tidy until the league is beaten.
   const [showPostgame, setShowPostgame] = useState(false);
@@ -103,24 +116,22 @@ export function TrackerView({
   const onTheMap = routes.filter((r) => !r.hidden);
   const trackable = settings.statics ? onTheMap : onTheMap.filter((r) => r.type === "route");
   const visible = openOnly
-    ? trackable.filter((r) => !isRouteDone(r, encounters, isClassic) || r.id === lastTouchedRouteId)
+    ? trackable.filter((r) => !isRouteDone(r, encounters, players) || r.id === lastTouchedRouteId)
     : trackable;
   const mainRoutes = visible.filter((r) => !r.postgame);
   const postgameRoutes = visible.filter((r) => r.postgame);
 
   // Overall completion, independent of the "Nur offene" filter above -
   // post-game areas don't count toward "the run" until the league is beaten.
-  const progress = computeRouteProgress(routes, encounters, isClassic, settings.statics);
+  const progress = computeRouteProgress(routes, encounters, players, settings.statics);
 
   function renderRoute(route: Route) {
-    const p1 = encounters.find((e) => e.routeId === route.id && e.player === Player.PLAYER1);
-    const p2 = isClassic
-      ? undefined
-      : encounters.find((e) => e.routeId === route.id && e.player === Player.PLAYER2);
-    const filled = [p1, p2].filter((e): e is Encounter => e !== undefined);
-    // SoulLink: exactly one of the two players has an entry -> the other still
-    // owes theirs; the warning sign next to the route name says so.
-    const halfDone = !isClassic && filled.length === 1;
+    const filled = players
+      .map((player) => encounters.find((e) => e.routeId === route.id && e.player === player))
+      .filter((e): e is Encounter => e !== undefined);
+    // SoulLink: some but not all players have an entry -> the rest still owe
+    // theirs; the warning sign next to the route name says so.
+    const halfDone = !isClassic && filled.length > 0 && filled.length < players.length;
     // Every row carries a 4px rail on its left, grey until the route resolves.
     // One lost encounter settles the whole route - in SoulLink the pair can
     // never form, in Classic there is nothing else to wait for - so it outranks
@@ -128,7 +139,7 @@ export function TrackerView({
     // other player owes theirs. This is what tells two adjacent routes apart at
     // a glance; a hairline divider between two tall two-column rows does not.
     const lost = filled.some((e) => e.status !== EncounterStatus.CAUGHT);
-    const complete = filled.length === (isClassic ? 1 : 2);
+    const complete = filled.length === players.length;
     const tone = lost
       ? "border-l-danger-line bg-danger-bg/40"
       : complete
@@ -139,9 +150,9 @@ export function TrackerView({
     return (
       <div
         key={route.id}
-        className={`flex flex-col gap-3 border-l-4 p-3 sm:flex-row sm:items-start sm:gap-4 sm:p-4 ${tone}`}
+        className={`flex flex-col gap-3 border-l-4 p-3 sm:gap-4 sm:p-4 ${nameAbove ? "" : "sm:flex-row sm:items-start"} ${tone}`}
       >
-        <div className="shrink-0 pt-1.5 sm:w-40">
+        <div className={`shrink-0 pt-1.5 ${nameAbove ? "" : "sm:w-40"}`}>
           {halfDone && (
             <span className="mr-1 text-sm text-warning" title={tTracker.missingPlayer}>
               ⚠
@@ -155,7 +166,7 @@ export function TrackerView({
           )}
         </div>
         <div
-          className={`grid flex-1 grid-cols-1 gap-3 sm:gap-4 ${isClassic ? "" : "sm:grid-cols-2"}`}
+          className={`grid flex-1 grid-cols-1 gap-3 sm:gap-4 ${EDITOR_GRID[players.length] ?? ""}`}
         >
           {isClassic ? (
             <EncounterEditor
@@ -163,7 +174,7 @@ export function TrackerView({
               lang={lang}
               settings={settings}
               routeId={route.id}
-              player={Player.PLAYER1}
+              player={players[0]}
               routes={routes}
               pokemonList={pokemonList}
               encounters={encounters}
@@ -176,7 +187,7 @@ export function TrackerView({
                   a phone, a filled row is four controls tall per player, and
                   with nothing but a gap between them the two blocks read as one
                   long list - you cannot see where Player 1 ends. */}
-              {[Player.PLAYER1, Player.PLAYER2].map((player) => (
+              {players.map((player) => (
                 <div key={player} className="rounded-md border border-line p-2">
                   <span className="mb-1 block text-xs font-medium text-ink-subtle">
                     {playerLabel(player)}

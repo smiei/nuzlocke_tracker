@@ -38,6 +38,7 @@ export function LinksView({
   freeTeam,
   pokemonList,
   mode,
+  players,
   lang,
   soulLinks,
   fusionEnabled = false,
@@ -49,6 +50,8 @@ export function LinksView({
   freeTeam: boolean;
   pokemonList: Pokemon[];
   mode: RunMode;
+  // The run's players in order (src/lib/players.ts).
+  players: Player[];
   lang: Lang;
   soulLinks: SoulLinkView[];
   // Infinite Fusion only (see CLAUDE.md) - gates the fuse/swap/unfuse UI.
@@ -200,7 +203,7 @@ export function LinksView({
       open={freeOpen}
       onClose={() => setFreeOpen(false)}
       runId={runId}
-      mode={mode}
+      players={players}
       lang={lang}
       pokemonList={pokemonList}
     />
@@ -236,7 +239,7 @@ export function LinksView({
           customSpritesOnly={customSpritesOnly}
         />
       )}
-      <TeamBar runId={runId} mode={mode} lang={lang} links={soulLinks} />
+      <TeamBar runId={runId} mode={mode} players={players} lang={lang} links={soulLinks} />
       <div className="mb-6 flex flex-wrap items-center gap-2">
         <label htmlFor="links-sort" className="text-sm font-medium text-ink-muted">
           {t.links.sortLabel}
@@ -425,7 +428,7 @@ export function LinksView({
                           {t.links.whoLost}
                         </p>
                         <div className="flex flex-wrap gap-1.5">
-                          {[Player.PLAYER1, Player.PLAYER2].map((p) => (
+                          {players.map((p) => (
                             <Button
                               key={p}
                               size="sm"
