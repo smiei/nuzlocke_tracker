@@ -130,10 +130,14 @@ const de = {
     confirmDelete1: (name: string) =>
       `Run "${name}" wirklich löschen? Alle Encounters, Links und der Level-Cap-Fortschritt dieses Runs gehen unwiderruflich verloren.`,
     soloSuffix: " (Solo)",
+    playersLabel: "Spieler",
+    playersSuffix: (n: number) => ` (${n} Spieler)`,
   },
   player: {
     PLAYER1: "Spieler 1",
     PLAYER2: "Spieler 2",
+    PLAYER3: "Spieler 3",
+    PLAYER4: "Spieler 4",
   },
   status: {
     CAUGHT: "Gefangen",
@@ -183,7 +187,7 @@ const de = {
     typeStatic: "Static",
     openOnly: "Nur offene",
     openOnlyTitle: "Nur Routen ohne vollständigen Eintrag anzeigen",
-    missingPlayer: "Encounter fehlt noch für einen Spieler",
+    missingPlayer: "Encounter fehlt noch für mindestens einen Spieler",
     clear: "Leeren",
     clearConfirm: "Diesen Encounter wirklich löschen?",
     nicknamePlaceholder: "Spitzname",
@@ -348,7 +352,7 @@ const de = {
     loadDefaultConfirm: "Das aktuelle Regelwerk durch das Standard-Regelwerk ersetzen? (Wird erst mit „Speichern“ übernommen.)",
     settingsHeading: "Regel-Einstellungen",
     playerNamesHeading: "Spielernamen",
-    playerNamesHint: "Ersetzt „Spieler 1“ / „Spieler 2“ in diesem Run.",
+    playerNamesHint: "Ersetzt „Spieler 1“, „Spieler 2“ … in diesem Run.",
     presets: {
       label: "Regelwerk",
       placeholder: "Regelwerk laden…",
@@ -668,7 +672,7 @@ const de = {
     unknownRoute: (id: number) => `Unbekannte Routen-ID: ${id}`,
     speciesLocked: (pokemonName: string, playerLabel: string, routeName: string) =>
       `${pokemonName} ist durch die Species Clause gesperrt (bereits von ${playerLabel} auf ${routeName} verwendet).`,
-    classicNoSecondPlayer: "Dieser Run ist Solo/Classic - es gibt keinen zweiten Spieler.",
+    playerNotInRun: "Diesen Spieler gibt es in diesem Run nicht.",
     encounterNotFound: (id: number) => `Encounter #${id} nicht gefunden.`,
     soulLinkNotFound: (id: number) => `SoulLink #${id} nicht gefunden.`,
     runNotFound: (id: number) => `Run #${id} nicht gefunden.`,
@@ -820,10 +824,14 @@ const en: Dictionary = {
     confirmDelete1: (name: string) =>
       `Really delete run "${name}"? All encounters, links, and level cap progress for this run will be lost permanently.`,
     soloSuffix: " (Solo)",
+    playersLabel: "Players",
+    playersSuffix: (n: number) => ` (${n} players)`,
   },
   player: {
     PLAYER1: "Player 1",
     PLAYER2: "Player 2",
+    PLAYER3: "Player 3",
+    PLAYER4: "Player 4",
   },
   status: {
     CAUGHT: "Caught",
@@ -873,7 +881,7 @@ const en: Dictionary = {
     typeStatic: "Static",
     openOnly: "Open only",
     openOnlyTitle: "Show only routes without a complete entry",
-    missingPlayer: "Encounter still missing for one player",
+    missingPlayer: "Encounter still missing for at least one player",
     clear: "Clear",
     clearConfirm: "Really delete this encounter?",
     nicknamePlaceholder: "Nickname",
@@ -1037,7 +1045,7 @@ const en: Dictionary = {
     loadDefaultConfirm: "Replace the current rules with the default ruleset? (Applied only when you hit Save.)",
     settingsHeading: "Rule settings",
     playerNamesHeading: "Player names",
-    playerNamesHint: "Replaces “Player 1” / “Player 2” in this run.",
+    playerNamesHint: "Replaces “Player 1”, “Player 2” … in this run.",
     presets: {
       label: "Ruleset",
       placeholder: "Load ruleset…",
@@ -1352,7 +1360,7 @@ const en: Dictionary = {
     unknownRoute: (id: number) => `Unknown route id: ${id}`,
     speciesLocked: (pokemonName: string, playerLabel: string, routeName: string) =>
       `${pokemonName} is locked by the Species Clause (already used by ${playerLabel} on ${routeName}).`,
-    classicNoSecondPlayer: "This run is Solo/Classic - there is no second player.",
+    playerNotInRun: "This run has no such player.",
     encounterNotFound: (id: number) => `Encounter #${id} not found.`,
     soulLinkNotFound: (id: number) => `SoulLink #${id} not found.`,
     runNotFound: (id: number) => `Run #${id} not found.`,
@@ -1502,10 +1510,14 @@ const fr: Dictionary = {
     confirmDelete1: (name: string) =>
       `Vraiment supprimer le run « ${name} » ? Toutes les rencontres, tous les liens et la progression des level caps de ce run seront définitivement perdus.`,
     soloSuffix: " (Solo)",
+    playersLabel: "Joueurs",
+    playersSuffix: (n: number) => ` (${n} joueurs)`,
   },
   player: {
     PLAYER1: "Joueur 1",
     PLAYER2: "Joueur 2",
+    PLAYER3: "Joueur 3",
+    PLAYER4: "Joueur 4",
   },
   status: {
     CAUGHT: "Capturé",
@@ -1557,7 +1569,7 @@ const fr: Dictionary = {
     typeStatic: "Statique",
     openOnly: "Ouvertes",
     openOnlyTitle: "N'afficher que les routes sans entrée complète",
-    missingPlayer: "Rencontre encore manquante pour un joueur",
+    missingPlayer: "Rencontre encore manquante pour au moins un joueur",
     clear: "Vider",
     clearConfirm: "Vraiment supprimer cette rencontre ?",
     nicknamePlaceholder: "Surnom",
@@ -1723,7 +1735,7 @@ const fr: Dictionary = {
     loadDefaultConfirm: "Remplacer les règles actuelles par le règlement par défaut ? (Appliqué seulement en cliquant sur Enregistrer.)",
     settingsHeading: "Paramètres des règles",
     playerNamesHeading: "Noms des joueurs",
-    playerNamesHint: "Remplace « Joueur 1 » / « Joueur 2 » dans ce run.",
+    playerNamesHint: "Remplace « Joueur 1 », « Joueur 2 » … dans ce run.",
     presets: {
       label: "Règlement",
       placeholder: "Charger un règlement…",
@@ -2038,7 +2050,7 @@ const fr: Dictionary = {
     unknownRoute: (id: number) => `ID de route inconnu : ${id}`,
     speciesLocked: (pokemonName: string, playerLabel: string, routeName: string) =>
       `${pokemonName} est bloqué par la Species Clause (déjà utilisé par ${playerLabel} sur ${routeName}).`,
-    classicNoSecondPlayer: "Ce run est Solo/Classic - il n'y a pas de deuxième joueur.",
+    playerNotInRun: "Ce run n'a pas ce joueur.",
     encounterNotFound: (id: number) => `Rencontre #${id} introuvable.`,
     soulLinkNotFound: (id: number) => `SoulLink #${id} introuvable.`,
     runNotFound: (id: number) => `Run #${id} introuvable.`,
@@ -2189,10 +2201,14 @@ const es: Dictionary = {
     confirmDelete1: (name: string) =>
       `¿Eliminar de verdad el run "${name}"? Todos los encuentros, enlaces y el progreso de level caps de este run se perderán para siempre.`,
     soloSuffix: " (Solo)",
+    playersLabel: "Jugadores",
+    playersSuffix: (n: number) => ` (${n} jugadores)`,
   },
   player: {
     PLAYER1: "Jugador 1",
     PLAYER2: "Jugador 2",
+    PLAYER3: "Jugador 3",
+    PLAYER4: "Jugador 4",
   },
   status: {
     CAUGHT: "Capturado",
@@ -2244,7 +2260,7 @@ const es: Dictionary = {
     typeStatic: "Estático",
     openOnly: "Solo abiertas",
     openOnlyTitle: "Mostrar solo rutas sin entrada completa",
-    missingPlayer: "Aún falta el encuentro de un jugador",
+    missingPlayer: "Aún falta el encuentro de al menos un jugador",
     clear: "Vaciar",
     clearConfirm: "¿Eliminar este encuentro?",
     nicknamePlaceholder: "Mote",
@@ -2410,7 +2426,7 @@ const es: Dictionary = {
     loadDefaultConfirm: "¿Reemplazar las reglas actuales por el reglamento predeterminado? (Se aplica solo al pulsar Guardar.)",
     settingsHeading: "Ajustes de reglas",
     playerNamesHeading: "Nombres de jugadores",
-    playerNamesHint: "Sustituye «Jugador 1» / «Jugador 2» en este run.",
+    playerNamesHint: "Sustituye «Jugador 1», «Jugador 2» … en este run.",
     presets: {
       label: "Reglamento",
       placeholder: "Cargar reglamento…",
@@ -2725,7 +2741,7 @@ const es: Dictionary = {
     unknownRoute: (id: number) => `ID de ruta desconocido: ${id}`,
     speciesLocked: (pokemonName: string, playerLabel: string, routeName: string) =>
       `${pokemonName} está bloqueado por la Species Clause (ya usado por ${playerLabel} en ${routeName}).`,
-    classicNoSecondPlayer: "Este run es Solo/Classic - no hay segundo jugador.",
+    playerNotInRun: "Este run no tiene ese jugador.",
     encounterNotFound: (id: number) => `Encuentro #${id} no encontrado.`,
     soulLinkNotFound: (id: number) => `SoulLink #${id} no encontrado.`,
     runNotFound: (id: number) => `Run #${id} no encontrado.`,
@@ -2876,10 +2892,14 @@ const it: Dictionary = {
     confirmDelete1: (name: string) =>
       `Eliminare davvero il run "${name}"? Tutti gli incontri, i link e i progressi dei level cap di questo run andranno persi per sempre.`,
     soloSuffix: " (Solo)",
+    playersLabel: "Giocatori",
+    playersSuffix: (n: number) => ` (${n} giocatori)`,
   },
   player: {
     PLAYER1: "Giocatore 1",
     PLAYER2: "Giocatore 2",
+    PLAYER3: "Giocatore 3",
+    PLAYER4: "Giocatore 4",
   },
   status: {
     CAUGHT: "Catturato",
@@ -2931,7 +2951,7 @@ const it: Dictionary = {
     typeStatic: "Statico",
     openOnly: "Solo aperti",
     openOnlyTitle: "Mostra solo i percorsi senza voce completa",
-    missingPlayer: "Manca ancora l'incontro di un giocatore",
+    missingPlayer: "Manca ancora l'incontro di almeno un giocatore",
     clear: "Svuota",
     clearConfirm: "Eliminare davvero questo incontro?",
     nicknamePlaceholder: "Soprannome",
@@ -3097,7 +3117,7 @@ const it: Dictionary = {
     loadDefaultConfirm: "Sostituire le regole attuali con il regolamento predefinito? (Applicato solo premendo Salva.)",
     settingsHeading: "Impostazioni delle regole",
     playerNamesHeading: "Nomi dei giocatori",
-    playerNamesHint: "Sostituisce «Giocatore 1» / «Giocatore 2» in questo run.",
+    playerNamesHint: "Sostituisce «Giocatore 1», «Giocatore 2» … in questo run.",
     presets: {
       label: "Regolamento",
       placeholder: "Carica regolamento…",
@@ -3412,7 +3432,7 @@ const it: Dictionary = {
     unknownRoute: (id: number) => `ID percorso sconosciuto: ${id}`,
     speciesLocked: (pokemonName: string, playerLabel: string, routeName: string) =>
       `${pokemonName} è bloccato dalla Species Clause (già usato da ${playerLabel} su ${routeName}).`,
-    classicNoSecondPlayer: "Questo run è Solo/Classic - non c'è un secondo giocatore.",
+    playerNotInRun: "Questo run non ha quel giocatore.",
     encounterNotFound: (id: number) => `Incontro #${id} non trovato.`,
     soulLinkNotFound: (id: number) => `SoulLink #${id} non trovato.`,
     runNotFound: (id: number) => `Run #${id} non trovato.`,

@@ -2,6 +2,13 @@
 // has no Json scalar in Prisma, so it's a TEXT column parsed here). All
 // toggles are informational/UI-level rules - none of them make the server
 // reject writes, matching how the Species Clause has always worked.
+import type { Player } from "@/generated/prisma/enums";
+
+// One name per possible player; a run only shows the ones it has (see
+// src/lib/players.ts), the rest simply stay empty.
+export type PlayerNames = Record<Player, string>;
+export const PLAYER_NAME_MAX = 20;
+
 export type RunSettings = {
   // Show Species Clause warnings/lock markers (never blocks saving).
   speciesClause: boolean;
@@ -57,9 +64,9 @@ export type RunSettings = {
   // is why this is a rule on the Classic/Remix packs and not a pack of its own.
   randomizerFuseEverything: boolean;
   // Custom SoulLink player names (empty = fall back to the localized
-  // "Player 1"/"Player 2"). Not a toggle - handled separately from the
+  // "Player 1"/"Player 2"/...). Not a toggle - handled separately from the
   // boolean keys below.
-  playerNames: { PLAYER1: string; PLAYER2: string };
+  playerNames: PlayerNames;
 };
 
 // Defaults mirror the app's behavior before settings existed, so old runs
@@ -79,7 +86,7 @@ export const DEFAULT_RUN_SETTINGS: RunSettings = {
   wildFusionSplit: true,
   fusionLocksBothFamilies: true,
   randomizerFuseEverything: false,
-  playerNames: { PLAYER1: "", PLAYER2: "" },
+  playerNames: { PLAYER1: "", PLAYER2: "", PLAYER3: "", PLAYER4: "" },
 };
 
 // Only the boolean toggles - playerNames is handled separately.
@@ -111,16 +118,24 @@ export function parseRunSettings(json: string): RunSettings {
     const value = (raw as Record<string, unknown>)[key];
     if (typeof value === "boolean") (settings[key] as boolean) = value;
   }
-  const names = (raw as Record<string, unknown>).playerNames;
-  if (typeof names === "object" && names !== null) {
-    const p1 = (names as Record<string, unknown>).PLAYER1;
-    const p2 = (names as Record<string, unknown>).PLAYER2;
-    settings.playerNames = {
-      PLAYER1: typeof p1 === "string" ? p1.slice(0, 20) : "",
-      PLAYER2: typeof p2 === "string" ? p2.slice(0, 20) : "",
-    };
-  }
+  settings.playerNames = parsePlayerNames((raw as Record<string, unknown>).playerNames);
   return settings;
+}
+
+// Every name falls back to "" on its own, so a stored two-player object reads
+// as four names with the last two empty.
+export function parsePlayerNames(raw: unknown): PlayerNames {
+  const source = typeof raw === "object" && raw !== null ? (raw as Record<string, unknown>) : {};
+  const name = (key: Player) => {
+    const value = source[key];
+    return typeof value === "string" ? value.slice(0, PLAYER_NAME_MAX) : "";
+  };
+  return {
+    PLAYER1: name("PLAYER1"),
+    PLAYER2: name("PLAYER2"),
+    PLAYER3: name("PLAYER3"),
+    PLAYER4: name("PLAYER4"),
+  };
 }
 
 // Max length of a RulePreset name, enforced by the action and the input.

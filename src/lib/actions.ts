@@ -14,6 +14,7 @@ import { EncounterStatus, LinkStatus, Player, RunMode, type Prisma } from "@/gen
 import { getRouteForRun, getRoutesForRun, nextCustomRouteId } from "@/lib/runRoutes";
 import { CUSTOM_ROUTE_NAME_MAX, isCustomRouteId } from "@/lib/customRoutes";
 import { formedLinks, groupSoulLinks, teamSlotsNeeded } from "@/lib/fusionGroups";
+import { clampPlayerCount, runPlayers } from "@/lib/players";
 import { localizeName } from "@/lib/i18n/localize";
 import type { ActionError } from "@/lib/actionErrors";
 import type { BackupFile } from "@/lib/backup";
@@ -21,6 +22,7 @@ import { applyBackup, backupFilename, buildBackup, buildBackupZip, parseBackup }
 import { DEFAULT_RULES } from "@/lib/defaultRules";
 import {
   PRESET_NAME_MAX,
+  parsePlayerNames,
   parseRunSettings,
   serializePresetSettings,
   RUN_SETTING_KEYS,
@@ -135,8 +137,10 @@ export async function saveEncounter(
   // (routes.json `type`), not a per-catch user choice.
   const isStatic = route.type !== "route";
 
-  if (player === Player.PLAYER2 && run.mode === RunMode.CLASSIC) {
-    return { success: false, error: { key: "classicNoSecondPlayer" } };
+  // Only the run's own players (one in Classic, 2-4 in SoulLink) can catch.
+  // quickCatch and addFreeTeamMember come through here too.
+  if (!runPlayers(run.mode, run.playerCount).includes(player)) {
+    return { success: false, error: { key: "playerNotInRun" } };
   }
 
   // The Species Clause is deliberately NOT enforced here: locked picks save
@@ -1242,6 +1246,7 @@ export async function createRun(
   sourceRunId?: number | null,
   gameId?: string,
   lang?: Lang,
+  playerCount?: number,
 ): Promise<CreateRunResult> {
   const trimmed = name.trim();
   if (!trimmed) {
@@ -1267,7 +1272,16 @@ export async function createRun(
   const settingsJson = source?.settingsJson ?? "{}";
 
   const run = await prisma.run.create({
-    data: { name: trimmed, mode, gameId: game, rulesMarkdown, settingsJson },
+    data: {
+      name: trimmed,
+      mode,
+      // Fixed from here on, like the mode. Classic keeps the default and
+      // ignores it.
+      playerCount: mode === RunMode.SOULLINK ? clampPlayerCount(playerCount ?? 2) : 2,
+      gameId: game,
+      rulesMarkdown,
+      settingsJson,
+    },
   });
   revalidatePath("/", "layout");
   publishChange(run.id);
@@ -1312,10 +1326,8 @@ export async function updateRunSettings(
     if (typeof value === "boolean") (settings[key] as boolean) = value;
   }
   if (changes.playerNames) {
-    settings.playerNames = {
-      PLAYER1: (changes.playerNames.PLAYER1 ?? settings.playerNames.PLAYER1).slice(0, 20),
-      PLAYER2: (changes.playerNames.PLAYER2 ?? settings.playerNames.PLAYER2).slice(0, 20),
-    };
+    // Names the caller did not send keep their stored value.
+    settings.playerNames = parsePlayerNames({ ...settings.playerNames, ...changes.playerNames });
   }
 
   await prisma.run.update({

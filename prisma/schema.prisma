@@ -11,9 +11,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// A SoulLink run has 2-4 players (Run.playerCount), a Classic run only ever
+// PLAYER1. src/lib/players.ts turns a run into its list of players.
 enum Player {
   PLAYER1
   PLAYER2
+  PLAYER3
+  PLAYER4
 }
 
 enum EncounterStatus {
@@ -27,7 +31,7 @@ enum LinkStatus {
   DEAD
 }
 
-// SOULLINK = two players catching in parallel (original mode). CLASSIC =
+// SOULLINK = 2-4 players catching in parallel (Run.playerCount). CLASSIC =
 // solo play - only ever one Encounter (Player.PLAYER1) per route. Fixed at
 // Run creation, never changed afterwards.
 enum RunMode {
@@ -41,6 +45,10 @@ model Run {
   id               Int                @id @default(autoincrement())
   name             String
   mode             RunMode            @default(SOULLINK)
+  // How many players a SOULLINK run has (2-4), fixed at creation like `mode`.
+  // Ignored for CLASSIC, which is always one player. Every existing run was a
+  // two-player run, hence the default.
+  playerCount      Int                @default(2)
   // Which game data pack (data/games/<gameId>/) this run plays - fixed at
   // creation. Unknown ids fall back to "firered" at read time in data.ts.
   gameId           String             @default("firered")

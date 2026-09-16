@@ -8,7 +8,7 @@ import { translations } from "@/lib/i18n/dictionary";
 export type ActionError =
   | { key: "unknownPokemon"; id: number }
   | { key: "unknownRoute"; id: number }
-  | { key: "classicNoSecondPlayer" }
+  | { key: "playerNotInRun" }
   | { key: "encounterNotFound"; id: number }
   | { key: "soulLinkNotFound"; id: number }
   | { key: "runNotFound"; id: number }
@@ -40,8 +40,8 @@ export function formatActionError(error: ActionError, lang: Lang): string {
       return t.unknownPokemon(error.id);
     case "unknownRoute":
       return t.unknownRoute(error.id);
-    case "classicNoSecondPlayer":
-      return t.classicNoSecondPlayer;
+    case "playerNotInRun":
+      return t.playerNotInRun;
     case "encounterNotFound":
       return t.encounterNotFound(error.id);
     case "soulLinkNotFound":
